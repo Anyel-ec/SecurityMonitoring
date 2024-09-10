@@ -1,0 +1,40 @@
+version: "3.9"
+services:
+  grafana:
+    image: grafana/grafana
+    ports:
+      - 3000:3000
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: admin
+    volumes:
+      - 'grafana_storage:/var/lib/grafana'
+
+  prometheus:
+    image: prom/prometheus
+    ports:
+      - 9090:9090
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+
+  postgres:
+    image: postgres:latest
+    ports:
+      - 5433:5432
+    volumes:
+      - ./backup:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: postgrespassword
+      POSTGRES_DB: shop
+
+  postgres-exporter:
+    image: prometheuscommunity/postgres-exporter
+    ports:
+      - 9187:9187
+    environment:
+      DATA_SOURCE_NAME: "postgresql://postgres:postgrespassword@postgres:5432/shop?sslmode=disable"
+    links:
+      - postgres
+      - prometheus
+
+volumes:
+  grafana_storage:
