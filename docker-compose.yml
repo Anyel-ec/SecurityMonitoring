@@ -1,5 +1,6 @@
 version: "3.9"
 services:
+  # Grafana Service
   grafana:
     image: grafana/grafana
     ports:
@@ -9,6 +10,7 @@ services:
     volumes:
       - 'grafana_storage:/var/lib/grafana'
 
+  # Prometheus Service
   prometheus:
     image: prom/prometheus
     ports:
@@ -16,25 +18,71 @@ services:
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
 
+  # Postgres Service
   postgres:
     image: postgres:latest
     ports:
-      - 5433:5432
-    volumes:
-      - ./backup:/var/lib/postgresql/data
+      - "${POSTGRES_PORT}:${POSTGRES_PORT_CONTAINER}"
     environment:
-      POSTGRES_PASSWORD: postgrespassword
-      POSTGRES_DB: shop
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
 
+  # MongoDB Service
+  mongo_db:
+    image: mongo:latest
+    ports:
+      - "${MONGODB_PORT}:${MONGODB_PORT_CONTAINER}"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGODB_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGODB_PASSWORD}
+    volumes:
+      - mongo_data:/data/db
+
+  # MariaDB Service
+  mariadb:
+    image: mariadb:latest
+    ports:
+      - "${MARIADB_PORT}:${MARIADB_PORT_CONTAINER}"
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MARIADB_PASSWORD}
+      MYSQL_DATABASE: ${MARIADB_DB}
+      MYSQL_USER: ${MARIADB_USER}
+    volumes:
+      - mariadb_data:/var/lib/mysql
+
+  # Exporter Services with Prometheus
+  mongo-exporter:
+    image: ssheehy/mongodb-exporter:latest
+    ports:
+      - "9216:9216"
+    environment:
+      MONGODB_URI: "mongodb://${MONGODB_USER}:${MONGODB_PASSWORD}@${MONGODB_HOST}:${MONGODB_PORT}"
+    depends_on:
+      - mongo_db
+    
   postgres-exporter:
     image: prometheuscommunity/postgres-exporter
     ports:
       - 9187:9187
     environment:
-      DATA_SOURCE_NAME: "postgresql://postgres:postgrespassword@postgres:5432/shop?sslmode=disable"
-    links:
+      DATA_SOURCE_NAME: "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}?sslmode=disable"
+    depends_on:
       - postgres
-      - prometheus
+
+  mariadb-exporter:
+    image: prom/mysqld-exporter
+    ports:
+      - 9104:9104
+    environment:
+      DATA_SOURCE_NAME: "root:root@tcp(mariadb:3306)/"
+    depends_on:
+      - mariadb
 
 volumes:
   grafana_storage:
+  mongo_data:
+  mariadb_data:
+  postgres_data:
