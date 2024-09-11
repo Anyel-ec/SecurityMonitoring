@@ -1,88 +1,77 @@
-version: "3.9"
+version: '3.9'
+
 services:
-  # Grafana Service
   grafana:
     image: grafana/grafana
     ports:
-      - 3000:3000
+      - "3000:3000"
     environment:
       GF_SECURITY_ADMIN_PASSWORD: admin
     volumes:
-      - 'grafana_storage:/var/lib/grafana'
+      - grafana_storage:/var/lib/grafana
+    networks:
+      - eureka-network
 
-  # Prometheus Service
   prometheus:
     image: prom/prometheus
     ports:
-      - 9090:9090
+      - "9090:9090"
     volumes:
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro 
+    networks:
+      - eureka-network
 
-  # Postgres Service
-  postgres:
-    image: postgres:latest
+  postgres-exporter:
+    image: prometheuscommunity/postgres-exporter
     ports:
-      - "${POSTGRES_PORT}:${POSTGRES_PORT_CONTAINER}"
+      - "9187:9187"
     environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB}
-    volumes:
-      - ./postgres_data:/var/lib/postgresql/data
+      DATA_SOURCE_NAME: "postgresql://postgres:${POSTGRES_PASSWORD}@postgresql_db:5432/${POSTGRES_DB}?sslmode=disable"
+    depends_on:
+      - postgresql_db
+    networks:
+      - eureka-network
 
-  # MongoDB Service
-  mongo_db:
-    image: mongo:latest
-    ports:
-      - "${MONGODB_PORT}:${MONGODB_PORT_CONTAINER}"
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: ${MONGODB_USER}
-      MONGO_INITDB_ROOT_PASSWORD: ${MONGODB_PASSWORD}
-    volumes:
-      - mongo_data:/data/db
-
-  # MariaDB Service
-  mariadb:
-    image: mariadb:latest
-    ports:
-      - "${MARIADB_PORT}:${MARIADB_PORT_CONTAINER}"
-    environment:
-      MYSQL_ROOT_PASSWORD: ${MARIADB_PASSWORD}
-      MYSQL_DATABASE: ${MARIADB_DB}
-      MYSQL_USER: ${MARIADB_USER}
-    volumes:
-      - mariadb_data:/var/lib/mysql
-
-  # Exporter Services with Prometheus
   mongo-exporter:
     image: ssheehy/mongodb-exporter:latest
     ports:
       - "9216:9216"
     environment:
-      MONGODB_URI: "mongodb://${MONGODB_USER}:${MONGODB_PASSWORD}@${MONGODB_HOST}:${MONGODB_PORT}"
+      MONGODB_URI: "mongodb://mongo_db:27017"
     depends_on:
       - mongo_db
-    
-  postgres-exporter:
-    image: prometheuscommunity/postgres-exporter
-    ports:
-      - 9187:9187
-    environment:
-      DATA_SOURCE_NAME: "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}?sslmode=disable"
-    depends_on:
-      - postgres
+    networks:
+      - eureka-network
 
-  mariadb-exporter:
-    image: prom/mysqld-exporter
-    ports:
-      - 9104:9104
+    # PostgreSQL Service
+  postgresql_db:
+    image: postgres:latest
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
     environment:
-      DATA_SOURCE_NAME: "root:root@tcp(mariadb:3306)/"
-    depends_on:
-      - mariadb
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "5433:5432"
+    networks:
+      - eureka-network
 
+  # MongoDB Service
+  mongo_db:
+    image: mongo:latest
+    ports:
+      - "27020:27017"
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - eureka-network
+
+networks:
+  eureka-network:
+    driver: bridge
+  
 volumes:
   grafana_storage:
-  mongo_data:
-  mariadb_data:
   postgres_data:
+  mongo_data:
