@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import Header from './components/Layouts/Header'; // Asegúrate de tener la ruta correcta
-import './App.css'; // Para los estilos globales de tema oscuro y claro
+import Header from './components/Layouts/Header'; 
+import './App.css'; 
 
 export default function App() {
   const [darkMode, setDarkMode] = useState(() => {

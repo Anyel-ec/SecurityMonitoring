@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
-import '../App.css';  // Asegúrate de tener el archivo CSS correctamente importado
+import '../App.css'; 
 
 export default function DatabaseConnectionForm() {
   const [database, setDatabase] = useState('');
