@@ -1,0 +1,173 @@
+.custom-file-container {
+    box-sizing: border-box;
+    position: relative;
+    display: block;
+}
+.custom-file-container * {
+    box-sizing: border-box;
+}
+.custom-file-container label {
+    color: #4361ee;
+    font-size: 16px;
+}
+.custom-file-container .label-container {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+.custom-file-container .label-container .custom-file-container__image-clear {
+    color: #333;
+    font-size: 26px;
+    height: 26px;
+    line-height: 26px;
+    text-decoration: none;
+    transition: color 0.2s ease-in-out;
+}
+
+.custom-file-container .label-container .custom-file-container__image-clear:hover {
+    color: #777;
+}
+
+.custom-file-container__custom-file {
+    box-sizing: border-box;
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    height: calc(2.25rem + 4px);
+    margin-bottom: 8px;
+    margin-top: 0;
+}
+.custom-file-container__custom-file:hover {
+    cursor: pointer;
+}
+
+.custom-file-container__custom-file__custom-file-input {
+    box-sizing: border-box;
+    min-width: 14rem;
+    max-width: 100%;
+    height: calc(2.25rem + 4px);
+    margin: 0;
+    opacity: 0;
+}
+.custom-file-container__custom-file__custom-file-input:focus ~ span {
+    outline: none;
+}
+
+.custom-file-container__custom-file__custom-file-control {
+    background-clip: padding-box;
+    background-color: #f1f2f3;
+    border-radius: 4px;
+    border: 1px solid #f1f2f3;
+    color: #333;
+    height: 40px;
+    left: 0;
+    line-height: 1.5;
+    overflow: hidden;
+    padding: 8px 12px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    user-select: none;
+    z-index: 5;
+    font-size: 14px;
+}
+
+.custom-file-container__custom-file__custom-file-control {
+    @apply dark:border-[#17263c] dark:bg-[#121e32] dark:text-white-dark dark:focus:border-primary;
+}
+
+.custom-file-container__custom-file__custom-file-control__button {
+    box-sizing: border-box;
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 6;
+    display: block;
+    height: auto;
+    padding: 10px 16px;
+    line-height: 1.25;
+    background-color: rgba(27, 85, 226, 0.239216);
+    color: #4361ee;
+    border-left: 1px solid #e0e6ed;
+    box-sizing: border-box;
+}
+
+.custom-file-container__image-preview {
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    border-radius: 4px;
+    height: 300px;
+    overflow: auto;
+    padding: 4px;
+    transition: background 0.2s ease-in-out;
+    width: 100%;
+    margin-top: 54px;
+    margin-bottom: 40px;
+    background-color: transparent;
+}
+
+.custom-file-container__image-multi-preview {
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-radius: 4px;
+    box-shadow: 0 4px 10px 0 rgba(51, 51, 51, 0.25);
+    float: left;
+    height: 180px;
+    margin: 1.858736059%;
+    position: relative;
+    transition: background 0.2s ease-in-out, opacity 0.2s ease-in-out;
+    width: 29.615861214%;
+}
+
+.custom-file-container__image-multi-preview .multi-item-clear-animation {
+    opacity: 0;
+}
+
+.custom-file-container__image-multi-preview__single-image-clear {
+    background: #edede8;
+    border-radius: 50%;
+    box-shadow: 0 4px 10px 0 rgba(51, 51, 51, 0.25);
+    height: 20px;
+    left: -6px;
+    margin-top: -6px;
+    position: absolute;
+    text-align: center;
+    transition: background 0.2s ease-in-out, color 0.2s ease-in-out;
+    width: 20px;
+}
+.custom-file-container__image-multi-preview__single-image-clear:hover {
+    background: #e2e2da;
+    cursor: pointer;
+}
+
+.custom-file-container__image-multi-preview__single-image-clear__icon {
+    color: #333;
+    display: block;
+    margin-top: 0;
+}
+
+.custom-file-container__image-preview {
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    border-radius: 4px;
+    height: auto;
+    overflow: auto;
+    padding: 4px;
+    transition: background 0.2s ease-in-out;
+    width: 100%;
+    margin-top: 0;
+    margin-bottom: 0;
+    background-color: transparent;
+}
+
+.custom-file-container__image-preview img {
+    max-height: 300px;
+}
+
+.custom-file-container__custom-file__custom-file-control {
+    @apply ltr:text-left rtl:text-right top-9;
+}

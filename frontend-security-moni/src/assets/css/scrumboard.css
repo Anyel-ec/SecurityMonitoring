@@ -1,0 +1,11 @@
+.sortable-ghost {
+    @apply opacity-70;
+}
+
+.dark .sortable-ghost {
+    @apply opacity-40;
+}
+
+.dark .sortable-drag {
+    @apply rotate-[10deg] bg-black;
+}
