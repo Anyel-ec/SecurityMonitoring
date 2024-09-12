@@ -1,0 +1,16 @@
+.dragndrop .gu-transit {
+    opacity: 0.2;
+}
+.dragndrop .selected > div {
+    background-color: #E0E6ED;
+}
+.dark .dragndrop .selected > div {
+    background-color: #0E1726;
+}
+.icon-change .left svg.feather-heart,
+.icon-change .right svg.feather-star {
+    display: none;
+}
+.dragndrop .sortable-chosen {
+    @apply bg-white dark:bg-black;
+}
