@@ -1,42 +1,65 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+/* Modo claro (por defecto) */
+body {
+  background-color: #ffffff;
+  color: #000000;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.form-container {
+  background-color: #ffffff;
+  color: #000000;
+  border: 1px solid #ccc;
+  border-radius: 8px;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* Modo oscuro */
+body.dark-theme {
+  background-color: #333333;
+  color: #ffffff;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+body.dark-theme .form-container {
+  background-color: #444444;
+  color: #ffffff;
+  border: 1px solid #555;
 }
 
-.card {
-  padding: 2em;
+body.dark-theme input,
+body.dark-theme select,
+body.dark-theme textarea {
+  background-color: #555;
+  color: #ffffff;
+  border-color: #666;
 }
 
-.read-the-docs {
-  color: #888;
+body.dark-theme input::placeholder,
+body.dark-theme textarea::placeholder {
+  color: #aaaaaa; /* Placeholder en modo oscuro */
 }
+
+body.dark-theme .bi {
+  color: #ffffff; /* Cambia el color de los íconos en modo oscuro */
+}
+
+body.light-theme .bi {
+  color: #000000; /* Cambia el color de los íconos en modo claro */
+}
+
+/* Estilo para alinear íconos al lado de los inputs */
+.input-with-icon {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.input-with-icon i {
+  margin-right: 10px;
+  font-size: 1.2rem;
+}
+
+.input-with-icon input,
+.input-with-icon select,
+.input-with-icon textarea {
+  flex-grow: 1;
+}
+
