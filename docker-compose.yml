@@ -1,4 +1,4 @@
-version: '3.9'
+version: '3'
 
 services:
   grafana:
@@ -6,6 +6,7 @@ services:
     ports:
       - "3000:3000"
     environment:
+      GF_SECURITY_ADMIN_USER: admin
       GF_SECURITY_ADMIN_PASSWORD: admin
     volumes:
       - grafana_storage:/var/lib/grafana
@@ -21,6 +22,7 @@ services:
     networks:
       - eureka-network
 
+  # Exporter Services
   postgres-exporter:
     image: prometheuscommunity/postgres-exporter
     ports:
@@ -29,8 +31,6 @@ services:
       DATA_SOURCE_NAME: "postgresql://postgres:${POSTGRES_PASSWORD}@postgresql_db:5432/${POSTGRES_DB}?sslmode=disable"
     depends_on:
       - postgresql_db
-    networks:
-      - eureka-network
 
   mongo-exporter:
     image: ssheehy/mongodb-exporter:latest
@@ -40,10 +40,44 @@ services:
       MONGODB_URI: "mongodb://mongo_db:27017"
     depends_on:
       - mongo_db
-    networks:
-      - eureka-network
+#############################################################################################
 
-    # PostgreSQL Service
+
+  # MySQL Service
+  mysql_db:
+    image: mysql:latest
+    restart: always
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    ports:
+      - "3306:3306"
+    expose:
+      - "3306"
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 --silent"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    
+  # MySQL Exporter
+  mysql-exporter:
+    image: prom/mysqld-exporter
+    depends_on:
+      mysql_db:
+        condition: service_healthy
+    command: 
+      - --config.my-cnf=/cfg/.my.cnf
+      - --mysqld.address=192.168.0.215:3306
+    volumes:  
+      - "C:/Users/anyel/OneDrive/Documentos/APPD/SecurityMonitoring/.my.cnf:/cfg/.my.cnf"
+    ports:
+      - "9104:9104"
+
+#############################################################################################
+  # PostgreSQL Service
   postgresql_db:
     image: postgres:latest
     volumes:
@@ -54,8 +88,6 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
       - "5433:5432"
-    networks:
-      - eureka-network
 
   # MongoDB Service
   mongo_db:
@@ -64,22 +96,7 @@ services:
       - "27020:27017"
     volumes:
       - mongo_data:/data/db
-    networks:
-      - eureka-network
 
-  # MariaDB Service
-  maria_db:
-    image: mariadb:latest
-    environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}  
-      MYSQL_DATABASE: ${MYSQL_DATABASE}            
-      MYSQL_USER: ${MYSQL_USER}                    
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}           
-    ports:
-      - "${MYSQL_PORT_HOST}:${MYSQL_PORT_CONTAINER}"  
-    networks:
-      - eureka-network
-  
 networks:
   eureka-network:
     driver: bridge
