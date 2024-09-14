@@ -14,6 +14,6 @@ scrape_configs:
     static_configs:
       - targets: ['mongo-exporter:9216']
 
-  - job_name: 'mysql'
+  - job_name: 'mariadb'
     static_configs:
       - targets: ['192.168.0.215:9104']
