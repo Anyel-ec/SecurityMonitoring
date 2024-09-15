@@ -10,8 +10,7 @@ services:
       GF_SECURITY_ADMIN_PASSWORD: admin
     volumes:
       - grafana_storage:/var/lib/grafana
-    networks:
-      - eureka-network
+    
 
   prometheus:
     image: prom/prometheus
@@ -19,29 +18,16 @@ services:
       - "9090:9090"
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro 
-    networks:
-      - eureka-network
+    
 
-  # Exporter Services
-  postgres-exporter:
-    image: prometheuscommunity/postgres-exporter
+  # MongoDB Service
+  mongo_db:
+    image: mongo:latest
     ports:
-      - "9187:9187"
-    environment:
-      DATA_SOURCE_NAME: "postgresql://postgres:${POSTGRES_PASSWORD}@postgresql_db:5432/${POSTGRES_DB}?sslmode=disable"
-    depends_on:
-      - postgresql_db
-
-  mongo-exporter:
-    image: ssheehy/mongodb-exporter:latest
-    ports:
-      - "9216:9216"
-    environment:
-      MONGODB_URI: "mongodb://mongo_db:27017"
-    depends_on:
-      - mongo_db
-#############################################################################################
-
+      - "27020:27017"
+    volumes:
+      - mongo_data:/data/db
+  
   # MariaDB Service
   mariadb_db:
     image: mariadb:latest
@@ -55,21 +41,7 @@ services:
       - "3306:3306"
     expose:
       - "3306"
-    
-  # MariaDB Exporter
-  mariadb-exporter:
-    image: prom/mysqld-exporter
-    depends_on:
-      - mariadb_db
-    command:
-      - --config.my-cnf=/cfg/.my.cnf
-      - --mysqld.address=192.168.0.215:3306
-    volumes:
-      - "C:/Users/anyel/OneDrive/Documentos/APPD/SecurityMonitoring/.my.cnf:/cfg/.my.cnf"
-    ports:
-      - "9104:9104"
 
-#############################################################################################
   # PostgreSQL Service
   postgresql_db:
     image: postgres:latest
@@ -81,18 +53,38 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
       - "5433:5432"
-
-  # MongoDB Service
-  mongo_db:
-    image: mongo:latest
+  
+  ##############################################
+  # Exporter Services
+  mongo-exporter:
+    image: ssheehy/mongodb-exporter:latest
     ports:
-      - "27020:27017"
-    volumes:
-      - mongo_data:/data/db
+      - "9216:9216"
+    environment:
+      MONGODB_URI: "mongodb://mongo_db:27017"
+    depends_on:
+      - mongo_db
+  
+  postgres-exporter:
+    image: prometheuscommunity/postgres-exporter
+    ports:
+      - "9187:9187"
+    environment:
+      DATA_SOURCE_NAME: "postgresql://postgres:${POSTGRES_PASSWORD}@postgresql_db:5432/${POSTGRES_DB}?sslmode=disable"
+    depends_on:
+      - postgresql_db
 
-networks:
-  eureka-network:
-    driver: bridge
+  mariadb-exporter:
+    image: prom/mysqld-exporter
+    depends_on:
+      - mariadb_db
+    command:
+      - --config.my-cnf=/cfg/.my.cnf
+      - --mysqld.address=192.168.0.215:3306
+    volumes:
+      - "./.my.cnf:/cfg/.my.cnf"
+    ports:
+      - "9104:9104"
   
 volumes:
   grafana_storage:
