@@ -12,7 +12,7 @@ Security is one of our top priorities in this project. We appreciate anyone who 
 
 If you have discovered a security vulnerability in this project, please follow the steps below to report it responsibly:
 
-1. Send an email to [appatino@espe.edu.ec](Anyel EC) with the details of the vulnerability.
+1. Send an email to [Anyel EC](mailto:appatino@espe.edu.ec) with the details of the vulnerability.
 2. In the email, please include:
    - The version of the project affected.
    - A detailed description of the vulnerability.
@@ -33,4 +33,5 @@ This project provides security support for major versions for a reasonable amoun
 
 ## Additional Information
 
-For more information or questions about the security of this project, feel free to contact us at [appatino@espe.edu.ec](Anyel EC)
+For more information or questions about the security of this project, feel free to contact us at [Anyel EC](mailto:appatino@espe.edu.ec)
+
