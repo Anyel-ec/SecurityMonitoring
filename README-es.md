@@ -1,4 +1,4 @@
-# Monitoreo Dinámico de Bases de Datos: MongoDB, MariaDB y Mongo utilizando React, Spring Boot
+# Monitoreo Dinámico de Bases de Datos: MongoDB, MariaDB/MySQL y Mongo utilizando React, Spring Boot
 
 Este proyecto tiene como objetivo desarrollar una herramienta de código abierto para el monitoreo dinámico de tres bases de datos: **MongoDB**, **PostgreSQL** y **MariaDB**. La herramienta permite a los usuarios especificar las credenciales de conexión a través de una interfaz web en **React**, y posteriormente visualizar dashboards personalizados en **Grafana** para una o varias bases de datos de manera combinada. 
 
