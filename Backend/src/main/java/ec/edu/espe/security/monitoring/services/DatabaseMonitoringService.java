@@ -29,6 +29,7 @@ public class DatabaseMonitoringService {
 
         // Ejecutar Docker Compose con las credenciales
         dockerComposeService.runDockerCompose(
+
                 // PostgreSQL
                 credentials.getPostgresUser(),
                 credentials.getPostgresPassword(),
@@ -36,6 +37,7 @@ public class DatabaseMonitoringService {
                 credentials.getPostgresHost(),
                 credentials.getPostgresPortHost(),
                 credentials.getPostgresPortContainer(),
+
                 // MongoDB
                 credentials.getMongodbUser(),
                 credentials.getMongodbPassword(),
@@ -43,7 +45,8 @@ public class DatabaseMonitoringService {
                 credentials.getMongodbHost(),
                 credentials.getMongodbPortHost(),
                 credentials.getMongodbPortContainer(),
-                // MariaDB/MySQL
+
+                // MariaDB --> OpenSource / MySQL --> Oracle
                 credentials.getMysqlRootPassword(),
                 credentials.getMysqlDatabase(),
                 credentials.getMysqlUser(),

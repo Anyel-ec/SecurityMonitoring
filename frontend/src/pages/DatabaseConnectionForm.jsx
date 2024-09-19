@@ -48,12 +48,6 @@ export default function DatabaseConnectionForm() {
           <Form.Control type="password" placeholder="Contraseña" required />
         </div>
 
-        {/* Nombre de la Base de Datos */}
-        <div className="input-with-icon">
-          <i className="bi bi-file-earmark-text"></i>
-          <Form.Control type="text" placeholder="Nombre de la Base de Datos" required />
-        </div>
-
         {/* Nombre de la Conexión */}
         <div className="input-with-icon">
           <i className="bi bi-link"></i>

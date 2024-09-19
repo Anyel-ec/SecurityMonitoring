@@ -6,8 +6,8 @@ services:
     ports:
       - "3000:3000"
     environment:
-      GF_SECURITY_ADMIN_USER: admin
-      GF_SECURITY_ADMIN_PASSWORD: admin
+      GF_SECURITY_ADMIN_USER: anyel
+      GF_SECURITY_ADMIN_PASSWORD: anyel
     volumes:
       - grafana_storage:/var/lib/grafana
     
@@ -36,9 +36,7 @@ services:
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     ports:
-      - "3306:3306"
-    expose:
-      - "3306"
+      - "${MYSQL_PORT_HOST}:${MYSQL_PORT_CONTAINER}"
 
   # PostgreSQL Service
   postgresql_db:
@@ -50,7 +48,7 @@ services:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
-      - "5433:5432"
+      - "${POSTGRES_PORT_HOST}:${POSTGRES_PORT_CONTAINER}"
   
   ##############################################
   # Exporter Services
