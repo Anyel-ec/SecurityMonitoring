@@ -1,6 +1,8 @@
 package ec.edu.espe.security.monitoring.services;
 
+import ec.edu.espe.security.monitoring.models.ConnectionName;
 import ec.edu.espe.security.monitoring.models.PostgresCredentials;
+import ec.edu.espe.security.monitoring.repositories.ConnectionNameRepository;
 import ec.edu.espe.security.monitoring.repositories.PostgresCredentialsRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -8,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -16,42 +18,37 @@ public class PostgresCredentialsService {
 
     private final PasswordEncoder passwordEncoder;
     private final PostgresCredentialsRepository postgresCredentialsRepository;
-    private final DockerCredentialService dockerComposeService;  // Asumo que este es el servicio para ejecutar Docker Compose
+    private final ConnectionNameRepository nameConnectionRepository;
+    private final DockerService dockerService;
 
-    // Método para obtener todos los nombres de las credenciales
-    public List<String> getAllConnectionNames() {
-        // Obtener todos los PostgresCredentials y devolver solo los nombres de las conexiones
-        return postgresCredentialsRepository.findAll()
-                .stream()
-                .map(PostgresCredentials::getConnectionName)
-                .toList();
-    }
+    /// Guardar o actualizar credenciales de PostgreSQL y ejecutar Docker Compose
+    public void saveCredentialsAndRunCompose(PostgresCredentials credentials, String connectionName) throws IOException {
+        // Buscar la conexión por el nombre
+        Optional<ConnectionName> connectionOpt = nameConnectionRepository.findByConnectionName(connectionName);
 
-    public PostgresCredentials getCredentialsByProfile(String profile) {
-        return postgresCredentialsRepository.findByConnectionName(profile)
-                .orElseThrow(() -> new IllegalArgumentException("No se encontró el perfil: " + profile));
-    }
+        if (connectionOpt.isPresent()) {
+            ConnectionName connection = connectionOpt.get();
 
-    public void saveCredentialsAndRunCompose(PostgresCredentials credentials) throws IOException {
-        // Buscar si ya existe una entrada para el mismo connectionName
-        PostgresCredentials existingCredentials = postgresCredentialsRepository.findByConnectionName(credentials.getConnectionName()).orElse(null);
+            if (connection.getPostgresCredentials() != null) {
+                // Actualizar las credenciales existentes
+                PostgresCredentials existingCredentials = connection.getPostgresCredentials();
+                existingCredentials.setPassword(passwordEncoder.encode(credentials.getPassword()));
+                existingCredentials.setHost(credentials.getHost());
+                existingCredentials.setPort(credentials.getPort());
 
-        if (existingCredentials != null) {
-            // Si existe, actualizar las credenciales
-            existingCredentials.setPassword(passwordEncoder.encode(credentials.getPassword()));
-            existingCredentials.setHost(credentials.getHost());
-            existingCredentials.setPort(credentials.getPort());
-            existingCredentials.setDatabase(credentials.getDatabase());
-            existingCredentials.setComment(credentials.getComment());
+                postgresCredentialsRepository.save(existingCredentials);  // Actualizar en la base de datos
+            } else {
+                // Si no hay credenciales previas, asignar nuevas credenciales
+                credentials.setPassword(passwordEncoder.encode(credentials.getPassword()));
+                postgresCredentialsRepository.save(credentials);
+                connection.setPostgresCredentials(credentials);  // Asignar las credenciales a la conexión
+                nameConnectionRepository.save(connection);  // Guardar la conexión con las credenciales
+            }
 
-            postgresCredentialsRepository.save(existingCredentials);  // Actualizar en la base de datos
+            // Ejecutar Docker Compose con las credenciales proporcionadas o actualizadas
+            dockerService.runDockerCompose(credentials);
         } else {
-            // Si no existe, encriptar la contraseña y guardar las nuevas credenciales
-            credentials.setPassword(passwordEncoder.encode(credentials.getPassword()));
-            postgresCredentialsRepository.save(credentials);  // Guardar nuevas credenciales en la base de datos
+            throw new IllegalArgumentException("No se encontró la conexión con nombre: " + connectionName);
         }
-
-        // Ejecutar Docker Compose con las credenciales proporcionadas o actualizadas
-        dockerComposeService.runDockerCompose(credentials);
     }
 }

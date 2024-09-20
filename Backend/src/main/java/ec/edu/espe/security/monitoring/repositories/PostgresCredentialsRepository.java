@@ -9,6 +9,5 @@ import java.util.Optional;
 @Repository
 public interface PostgresCredentialsRepository extends JpaRepository<PostgresCredentials, Long> {
     Optional<PostgresCredentials> findTopByOrderByIdDesc();
-    Optional<PostgresCredentials> findByConnectionName(String connectionName);
 
 }

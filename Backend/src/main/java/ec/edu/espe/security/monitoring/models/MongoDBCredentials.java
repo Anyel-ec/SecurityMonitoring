@@ -16,9 +16,7 @@ public class MongoDBCredentials {
 
     private String mongodbUser;
     private String mongodbPassword;
-    private String mongodbDb;
     private String mongodbHost;
     private int mongodbPortHost;
-    private int mongodbPortContainer;
 
 }

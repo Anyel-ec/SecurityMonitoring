@@ -18,8 +18,5 @@ public class PostgresCredentials {
     private String password;
     private String host;
     private Integer port;
-    private String database;
-    private String connectionName;
-    private String comment;
 
 }

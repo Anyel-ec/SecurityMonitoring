@@ -15,11 +15,9 @@ public class MariaDBCredentials {
     private Long id;
 
     private String mysqlRootPassword;
-    private String mysqlDatabase;
     private String mysqlUser;
     private String mysqlPassword;
     private String mysqlHost;
     private int mysqlPortHost;
-    private int mysqlPortContainer;
 
 }
