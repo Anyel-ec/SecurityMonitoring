@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -77,6 +78,18 @@ public class ConnectionPgController {
                     .body(new JsonResponseDto(false, HttpStatus.INTERNAL_SERVER_ERROR.value(), "Error: " + e.getMessage(), null));
         }
     }
+
+    @GetMapping("/postgres/names")
+    public ResponseEntity<JsonResponseDto> getAllConnectionNames() {
+        try {
+            List<String> connectionNames = postgresCredentialsService.getAllConnectionNames();
+            return ResponseEntity.ok(new JsonResponseDto(true, HttpStatus.OK.value(), "Nombres de credenciales obtenidos exitosamente", connectionNames.toString()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new JsonResponseDto(false, HttpStatus.INTERNAL_SERVER_ERROR.value(), "Error al obtener los nombres de las credenciales", null));
+        }
+    }
+
 
 
 }

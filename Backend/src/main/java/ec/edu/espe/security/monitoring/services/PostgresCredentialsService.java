@@ -7,6 +7,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -15,6 +17,15 @@ public class PostgresCredentialsService {
     private final PasswordEncoder passwordEncoder;
     private final PostgresCredentialsRepository postgresCredentialsRepository;
     private final DockerCredentialService dockerComposeService;  // Asumo que este es el servicio para ejecutar Docker Compose
+
+    // Método para obtener todos los nombres de las credenciales
+    public List<String> getAllConnectionNames() {
+        // Obtener todos los PostgresCredentials y devolver solo los nombres de las conexiones
+        return postgresCredentialsRepository.findAll()
+                .stream()
+                .map(PostgresCredentials::getConnectionName)
+                .toList();
+    }
 
     public PostgresCredentials getCredentialsByProfile(String profile) {
         return postgresCredentialsRepository.findByConnectionName(profile)
