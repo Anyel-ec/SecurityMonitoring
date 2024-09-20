@@ -14,11 +14,12 @@ public class PostgresCredentials {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String postgresUser;
-    private String postgresPassword;
-    private String postgresDb;
-    private String postgresHost;
-    private int postgresPortHost;
-    private int postgresPortContainer;
+    private String username;
+    private String password;
+    private String host;
+    private Integer port;
+    private String database;
+    private String connectionName;
+    private String comment;
 
 }

@@ -1,10 +1,8 @@
 package ec.edu.espe.security.monitoring.dto;
 
-import lombok.Data;
 
-@Data
-public class JsonResponseDto {
-    private String codigoHttp;
-    private String mensaje;
-    private String resultado;
+public record JsonResponseDto(boolean respuesta,
+                              int codigoHttp,
+                              String mensaje,
+                              String resultado) {
 }
