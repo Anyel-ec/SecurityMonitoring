@@ -3,6 +3,7 @@ import MainLayout from '../Layouts/MainLayout';
 import { useState, useEffect } from 'react';
 
 const DatabaseConnectionForm = lazy(() => import("../pages/DatabaseConnectionForm"));
+const PostgresConnectionForm = lazy(() => import("../pages/PostgresConnectionForm"));
 
 const RoutesWrapper = ({ children }) => {
   const [darkMode, setDarkMode] = useState(() => {
@@ -31,14 +32,23 @@ const RoutesWrapper = ({ children }) => {
 };
 
 const routes = [
-    {
-        path: "/", 
-        element: (
-            <RoutesWrapper>
-                <DatabaseConnectionForm />
-            </RoutesWrapper>
-        ),
-    }
+  {
+    path: "/inicial",
+    element: (
+      <RoutesWrapper>
+        <DatabaseConnectionForm />
+      </RoutesWrapper>
+    ),
+  },
+
+  {
+    path: "/",
+    element: (
+      <RoutesWrapper>
+        <PostgresConnectionForm />
+      </RoutesWrapper>
+    ),
+  }
 ];
 
 export { routes };

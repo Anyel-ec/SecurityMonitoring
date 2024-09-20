@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import './SwitchToggle.css'; 
 
 export default function SwitchToggle({ isOn, handleToggle }) {
@@ -8,7 +7,6 @@ export default function SwitchToggle({ isOn, handleToggle }) {
         <input type="checkbox" checked={isOn} onChange={handleToggle} />
         <span className="slider"></span>
       </label>
-      <span>{isOn ? 'Encendido' : 'Apagado'}</span>
     </div>
   );
 }
