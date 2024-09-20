@@ -2,25 +2,28 @@ package ec.edu.espe.security.monitoring.controllers;
 
 import ec.edu.espe.security.monitoring.dto.JsonResponseDto;
 import ec.edu.espe.security.monitoring.models.PostgresCredentials;
+import ec.edu.espe.security.monitoring.services.DockerCredentialService;
+import ec.edu.espe.security.monitoring.services.PostgresCredentialsService;
 import ec.edu.espe.security.monitoring.utils.DatabaseUtils;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/config")
 public class ConnectionPgController {
 
     private final DatabaseUtils databaseUtils;
+    private final PostgresCredentialsService postgresCredentialsService;
+
     @PostMapping("/postgres")
     public ResponseEntity<JsonResponseDto> configurePostgres(@RequestBody PostgresCredentials config) {
-        // Usar el método de DatabaseUtils para verificar la conexión a la base de datos
+        // verificar la conexión a la base de datos
         if (!databaseUtils.testDatabaseConnection(config)) {
             JsonResponseDto response = new JsonResponseDto(
                     false,
@@ -32,7 +35,7 @@ public class ConnectionPgController {
         }
 
         try {
-            runDockerCompose(config);
+            postgresCredentialsService.saveCredentialsAndRunCompose(config);
             JsonResponseDto response = new JsonResponseDto(
                     true,
                     HttpStatus.OK.value(),
@@ -40,6 +43,7 @@ public class ConnectionPgController {
                     "Conexión configurada exitosamente"
             );
             return new ResponseEntity<>(response, HttpStatus.OK);
+
         } catch (Exception e) {
             JsonResponseDto response = new JsonResponseDto(
                     false,
@@ -48,24 +52,31 @@ public class ConnectionPgController {
                     null
             );
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+
         }
     }
 
-    // Método para ejecutar docker-compose con las variables dinámicas
-    private void runDockerCompose(PostgresCredentials config) throws IOException, InterruptedException {
-        ProcessBuilder processBuilder = new ProcessBuilder(
-                "docker-compose",
-                "-f", "../.container/docker-compose.yml",
-                "up", "-d"
-        );
+    @PostMapping("/postgres/{profile}")
+    public ResponseEntity<JsonResponseDto> configurePostgresByProfile(@PathVariable String profile) {
+        try {
+            // Obtener las credenciales del perfil
+            PostgresCredentials credentials = postgresCredentialsService.getCredentialsByProfile(profile);
 
-        // Establece las variables de entorno para PostgreSQL
-        processBuilder.environment().put("POSTGRES_USER", config.getUsername());
-        processBuilder.environment().put("POSTGRES_PASSWORD", config.getPassword());
-        processBuilder.environment().put("POSTGRES_DB", config.getDatabase());
-       // processBuilder.environment().put("POSTGRES_HOST", config.getHost());
-        processBuilder.environment().put("POSTGRES_PORT_HOST", String.valueOf(config.getPort()));
+            // Testear la conexión con las credenciales recuperadas
+            if (!databaseUtils.testDatabaseConnection(credentials)) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(new JsonResponseDto(false, HttpStatus.BAD_REQUEST.value(), "Error: No se pudo conectar a la base de datos.", null));
+            }
 
-        processBuilder.inheritIO().start();
+            // Ejecutar Docker Compose con las credenciales recuperadas
+            postgresCredentialsService.saveCredentialsAndRunCompose(credentials);
+            return ResponseEntity.ok(new JsonResponseDto(true, HttpStatus.OK.value(), "Conexión configurada exitosamente", "Conexión establecida con el perfil: " + profile));
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new JsonResponseDto(false, HttpStatus.INTERNAL_SERVER_ERROR.value(), "Error: " + e.getMessage(), null));
+        }
     }
+
+
 }

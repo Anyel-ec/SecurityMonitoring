@@ -9,7 +9,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 @Component
 public class DatabaseUtils {
-    public boolean testDatabaseConnection(@NotNull PostgresCredentials config) {
+    public boolean testDatabaseConnection(PostgresCredentials config) {
         String jdbcUrl = String.format("jdbc:postgresql://%s:%d/%s",
                 config.getHost(),
                 config.getPort(),

@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+
+  postgresql_db:
+    image: postgres:latest
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "${POSTGRES_PORT_HOST}:${POSTGRES_PORT_CONTAINER}"
+
+volumes:
+  postgres_data:
