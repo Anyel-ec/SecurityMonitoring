@@ -1,6 +1,7 @@
 import { lazy } from 'react';
 import MainLayout from '../Layouts/MainLayout';
 import { useState, useEffect } from 'react';
+import MainComponent from '../pages/MainComponent';
 
 const DatabaseConnectionForm = lazy(() => import("../pages/DatabaseConnectionForm"));
 const PostgresConnectionForm = lazy(() => import("../pages/PostgresConnectionForm"));
@@ -45,7 +46,7 @@ const routes = [
     path: "/",
     element: (
       <RoutesWrapper>
-        <PostgresConnectionForm />
+        <MainComponent />
       </RoutesWrapper>
     ),
   }

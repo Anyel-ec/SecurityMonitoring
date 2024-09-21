@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import Header from './components/Layouts/Header'; 
+import Header from './components/Layouts/Header';
+import MainComponent from './components/MainComponent'; 
 import './App.css'; 
 
 export default function App() {
@@ -10,7 +11,7 @@ export default function App() {
 
   useEffect(() => {
     if (darkMode) {
-      document.body.classList.add('dark-theme');
+      document.body.classList.add('dark-theme'); // Asegúrate de agregar la clase dark-theme al body
     } else {
       document.body.classList.remove('dark-theme');
     }
@@ -22,10 +23,10 @@ export default function App() {
   };
 
   return (
-    <div className="app-container">
+    <div className={`app-container ${darkMode ? 'dark-theme' : 'light-theme'}`}>
       <Header darkMode={darkMode} toggleTheme={toggleTheme} />
       <div className="content">
-        {/* Resto del contenido de tu aplicación */}
+        <MainComponent darkMode={darkMode} /> {/* Pasar darkMode como prop */}
       </div>
     </div>
   );
