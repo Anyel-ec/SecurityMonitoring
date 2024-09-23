@@ -4,6 +4,7 @@ package ec.edu.espe.security.monitoring.exceptions;
 import ec.edu.espe.security.monitoring.dto.JsonResponseDto;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
@@ -23,12 +24,8 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.util.List;
-import java.util.stream.Collectors;
-
-import static ec.edu.espe.security.monitoring.exceptions.ApiErrorResponse.*;
 
 
 @RestControllerAdvice
@@ -37,82 +34,120 @@ class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
 
     @Override
-    protected ResponseEntity handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
-                                                          HttpHeaders headers, HttpStatusCode status, WebRequest request) {
-        return badRequest("Solicitud JSON mal formada");
+    protected ResponseEntity<Object> handleHttpMessageNotReadable(@NotNull HttpMessageNotReadableException ex,
+                                                                  @NotNull HttpHeaders headers, @NotNull HttpStatusCode status, @NotNull WebRequest request) {
+        ResponseEntity<JsonResponseDto> response = ApiErrorResponse.badRequest("Solicitud JSON mal formada");
+        return ResponseEntity.status(response.getStatusCode())
+                .headers(headers)
+                .body(response.getBody());
     }
 
     @Override
-    protected ResponseEntity handleTypeMismatch(TypeMismatchException ex,
-                                                HttpHeaders headers, HttpStatusCode status, WebRequest request) {
-        return badRequest("Solicitud de no coincidencia de tipos");
+    protected ResponseEntity<Object> handleTypeMismatch(@NotNull TypeMismatchException ex,
+                                                        @NotNull HttpHeaders headers, @NotNull HttpStatusCode status, @NotNull WebRequest request) {
+
+        ResponseEntity<JsonResponseDto> response = ApiErrorResponse.badRequest("Solicitud de no coincidencia de tipos");
+        return ResponseEntity.status(response.getStatusCode())
+                .headers(headers)
+                .body(response.getBody());
     }
 
 
     @Override
-    protected ResponseEntity handleHttpRequestMethodNotSupported(HttpRequestMethodNotSupportedException exception,
-                                                                 HttpHeaders headers, HttpStatusCode status, WebRequest request) {
-
+    protected ResponseEntity<Object> handleHttpRequestMethodNotSupported(HttpRequestMethodNotSupportedException exception,
+                                                                         @NotNull HttpHeaders headers, @NotNull HttpStatusCode status, @NotNull WebRequest request) {
         var supportedMethods = exception.getSupportedHttpMethods();
-
         if (!CollectionUtils.isEmpty(supportedMethods)) {
             headers.setAllow(supportedMethods);
         }
-
-        return methodNotAllowed(headers, "Método de solicitud '" + exception.getMethod() + "' no soportado");
+        ResponseEntity<JsonResponseDto> response = ApiErrorResponse.methodNotAllowed(headers, "Método de solicitud '" + exception.getMethod() + "' no soportado");
+        return ResponseEntity.status(response.getStatusCode())
+                .headers(headers)
+                .body(response.getBody());
     }
 
+
     @Override
-    protected ResponseEntity handleHttpMediaTypeNotAcceptable(HttpMediaTypeNotAcceptableException exception,
-                                                              HttpHeaders headers, HttpStatusCode status, WebRequest request) {
-        return notAcceptable("No se pudo encontrar una representación aceptable");
+    protected ResponseEntity<Object> handleHttpMediaTypeNotAcceptable(@NotNull HttpMediaTypeNotAcceptableException exception,
+                                                                      @NotNull HttpHeaders headers, @NotNull HttpStatusCode status, @NotNull WebRequest request) {
+        ResponseEntity<JsonResponseDto> response = ApiErrorResponse.notAcceptable("No se pudo encontrar una representación aceptable");
+        return ResponseEntity.status(response.getStatusCode())
+                .headers(headers)
+                .body(response.getBody());
     }
 
-    @Override
-    protected ResponseEntity handleHttpMediaTypeNotSupported(HttpMediaTypeNotSupportedException exception,
-                                                             HttpHeaders headers, HttpStatusCode status, WebRequest request) {
 
+    @Override
+    protected ResponseEntity<Object> handleHttpMediaTypeNotSupported(HttpMediaTypeNotSupportedException exception,
+                                                                     @NotNull HttpHeaders headers, @NotNull HttpStatusCode status, @NotNull WebRequest request) {
         var mediaTypes = exception.getSupportedMediaTypes();
         if (!CollectionUtils.isEmpty(mediaTypes)) {
             headers.setAccept(mediaTypes);
         }
 
-        return unsupportedMediaType(headers, "Tipo de contenido '" + exception.getContentType() + "' no soportado");
+        ResponseEntity<JsonResponseDto> response = ApiErrorResponse.unsupportedMediaType(headers, "Tipo de contenido '" + exception.getContentType() + "' no soportado");
+        return ResponseEntity.status(response.getStatusCode())
+                .headers(headers)
+                .body(response.getBody());
     }
 
-
     @Override
-    protected ResponseEntity handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
-                                                          HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
+                                                                  @NotNull HttpHeaders headers, @NotNull HttpStatusCode status, @NotNull WebRequest request) {
+
         List<ApiError> errors = ex.getBindingResult().getFieldErrors()
                 .stream()
                 .map(fieldError -> ApiError.fieldApiError(fieldError.getField(), fieldError.getDefaultMessage(), fieldError.getRejectedValue()))
-                .collect(Collectors.toList());
-        return unprocessableEntity(errors, "Validación de argumentos fallida");
+                .toList();
+
+        ResponseEntity<JsonResponseDto> response = ApiErrorResponse.unprocessableEntity(errors, "Validación de argumentos fallida");
+
+        return ResponseEntity.status(response.getStatusCode())
+                .headers(headers)
+                .body(response.getBody());
+    }
+
+
+    @Override
+    protected ResponseEntity<Object> handleMissingPathVariable(MissingPathVariableException ex,
+                                                               @NotNull HttpHeaders headers, @NotNull HttpStatusCode status, @NotNull WebRequest request) {
+        ResponseEntity<JsonResponseDto> response = ApiErrorResponse.badRequest("Variable de ruta '" + ex.getVariableName() + "' faltante");
+
+        return ResponseEntity.status(response.getStatusCode())
+                .headers(headers)
+                .body(response.getBody());
+    }
+
+
+    @Override
+    protected ResponseEntity<Object> handleServletRequestBindingException(ServletRequestBindingException ex,
+                                                                          HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+        ResponseEntity<JsonResponseDto> response = ApiErrorResponse.badRequest("Error de vinculación de solicitud");
+
+        return ResponseEntity.status(response.getStatusCode())
+                .headers(headers)
+                .body(response.getBody());
+    }
+
+
+    @Override
+    protected ResponseEntity<Object> handleMissingServletRequestParameter(MissingServletRequestParameterException ex,
+                                                                          @NotNull HttpHeaders headers, @NotNull HttpStatusCode status, @NotNull WebRequest request) {
+        ResponseEntity<JsonResponseDto> response = ApiErrorResponse.badRequest("Parámetro de solicitud '" + ex.getParameterName() + "' faltante");
+
+        return ResponseEntity.status(response.getStatusCode())
+                .headers(headers)
+                .body(response.getBody());
     }
 
     @Override
-    protected ResponseEntity handleMissingPathVariable(MissingPathVariableException ex,
-                                                       HttpHeaders headers, HttpStatusCode status, WebRequest request) {
-        return badRequest("Variable de ruta '" + ex.getVariableName() + "' faltante");
-    }
+    protected ResponseEntity<Object> handleNoHandlerFoundException(NoHandlerFoundException ex,
+                                                                   @NotNull HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+        ResponseEntity<JsonResponseDto> response = ApiErrorResponse.notFound("No se encontró el controlador para la URL '" + ex.getRequestURL() + "'");
 
-    @Override
-    protected ResponseEntity handleServletRequestBindingException(ServletRequestBindingException ex,
-                                                                  HttpHeaders headers, HttpStatusCode status, WebRequest request) {
-        return badRequest("Error de vinculación de solicitud");
-    }
-
-    @Override
-    protected ResponseEntity handleMissingServletRequestParameter(MissingServletRequestParameterException ex,
-                                                                  HttpHeaders headers, HttpStatusCode status, WebRequest request) {
-        return badRequest("Parámetro de solicitud '" + ex.getParameterName() + "' faltante");
-    }
-
-    @Override
-    protected ResponseEntity handleNoHandlerFoundException(NoHandlerFoundException ex,
-                                                           HttpHeaders headers, HttpStatusCode status, WebRequest request) {
-        return notFound("No se encontró el controlador para la URL '" + ex.getRequestURL() + "'");
+        return ResponseEntity.status(response.getStatusCode())
+                .headers(headers)
+                .body(response.getBody());
     }
 
 
@@ -121,7 +156,7 @@ class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         List<ApiError> errors = exception.getConstraintViolations()
                 .stream()
                 .map(violation -> ApiError.fieldApiError(violation.getPropertyPath().toString(), violation.getMessage(), violation.getInvalidValue()))
-                .collect(Collectors.toList());
+                .toList();
         return ApiErrorResponse.unprocessableEntity(errors, "Validación de argumentos fallida");
     }
 

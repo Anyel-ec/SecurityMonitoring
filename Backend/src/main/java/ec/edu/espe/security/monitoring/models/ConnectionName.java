@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 @Entity
 public class ConnectionName {
 
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
