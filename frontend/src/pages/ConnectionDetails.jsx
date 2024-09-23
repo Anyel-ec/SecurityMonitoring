@@ -1,6 +1,5 @@
-// ConnectionDetails.js
 import React from 'react';
-import SwitchToggle from './../components/switch/SwitchToggle'; // Importa el SwitchToggle
+import SwitchToggle from './../components/switch/SwitchToggle';
 
 const ConnectionDetails = ({ selectedConnection, handleTypeChange, postgresEnabled, setPostgresEnabled, mariaDbEnabled, setMariaDbEnabled, mongoDbEnabled, setMongoDbEnabled, updateCredential, testConnection, testingConnection, handleSave, handleCancel }) => {
   return (
@@ -56,7 +55,7 @@ const ConnectionDetails = ({ selectedConnection, handleTypeChange, postgresEnabl
                         type="text"
                         className="form-control"
                         id={`${type}-host`}
-                        placeholder="Dirección IP"
+                        placeholder={type === 'PostgreSQL' ? '192.168.1.100' : type === 'MariaDB' ? '192.168.1.101' : '192.168.1.102'}
                         value={selectedConnection.credentials[type]?.host || ''}
                         onChange={(e) => updateCredential(type, 'host', e.target.value)}
                       />
@@ -67,10 +66,10 @@ const ConnectionDetails = ({ selectedConnection, handleTypeChange, postgresEnabl
                         Puerto
                       </label>
                       <input
-                        type="text"
+                        type="number" max={65535} min={1}
                         className="form-control"
                         id={`${type}-port`}
-                        placeholder="Puerto"
+                        placeholder={type === 'PostgreSQL' ? '5432' : type === 'MariaDB' ? '3306' : '27017'}
                         value={selectedConnection.credentials[type]?.port || ''}
                         onChange={(e) => updateCredential(type, 'port', e.target.value)}
                       />
@@ -84,7 +83,7 @@ const ConnectionDetails = ({ selectedConnection, handleTypeChange, postgresEnabl
                         type="text"
                         className="form-control"
                         id={`${type}-username`}
-                        placeholder="Usuario"
+                        placeholder={type === 'PostgreSQL' ? 'postgres_user' : type === 'MariaDB' ? 'mariadb_user' : 'mongodb_user'}
                         value={selectedConnection.credentials[type]?.username || ''}
                         onChange={(e) => updateCredential(type, 'username', e.target.value)}
                       />
@@ -98,7 +97,7 @@ const ConnectionDetails = ({ selectedConnection, handleTypeChange, postgresEnabl
                         type="password"
                         className="form-control"
                         id={`${type}-password`}
-                        placeholder="Contraseña"
+                        placeholder="******"
                         value={selectedConnection.credentials[type]?.password || ''}
                         onChange={(e) => updateCredential(type, 'password', e.target.value)}
                       />
