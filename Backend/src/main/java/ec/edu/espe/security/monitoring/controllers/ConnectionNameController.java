@@ -23,23 +23,14 @@ public class ConnectionNameController {
             PostgresCredentials credentials = connectionNameService.getCredentialsByProfile(connectionName);
 
             // Crear el objeto de respuesta con las credenciales incluidas
-            JsonResponseDto response = new JsonResponseDto(
-                    true,
-                    HttpStatus.OK.value(),
-                    "Conexión configurada exitosamente",
-                    credentials  // Incluir las credenciales en la respuesta
-            );
+            JsonResponseDto response = new JsonResponseDto(true,HttpStatus.OK.value(),"Conexión configurada exitosamente", credentials);
 
             return ResponseEntity.ok(response);
 
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new JsonResponseDto(
-                            false,
-                            HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                            "Error: " + e.getMessage(),
-                            null
-                    ));
+                    .body(new JsonResponseDto( false,HttpStatus.INTERNAL_SERVER_ERROR.value(),"Error: " + e.getMessage(), null));
+
         }
     }
 
