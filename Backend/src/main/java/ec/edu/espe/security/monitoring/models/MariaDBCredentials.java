@@ -1,5 +1,6 @@
 package ec.edu.espe.security.monitoring.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -16,6 +17,7 @@ public class MariaDBCredentials {
 
     private String mysqlRootPassword;
     private String mysqlUser;
+    @JsonIgnore
     private String mysqlPassword;
     private String mysqlHost;
     private int mysqlPortHost;

@@ -9,5 +9,4 @@ import java.util.Optional;
 
 public interface ConnectionNameRepository extends JpaRepository<ConnectionName, Long> {
     Optional<ConnectionName> findByConnectionName(String connectionName);
-
 }

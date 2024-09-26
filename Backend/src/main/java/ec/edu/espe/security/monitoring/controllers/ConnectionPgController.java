@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/config")
+@RequestMapping("/api/v1/config")
 public class ConnectionPgController {
 
     private final DatabaseUtils databaseUtils;
