@@ -2,6 +2,13 @@
 import React from 'react';
 import 'bootstrap-icons/font/bootstrap-icons.css'; // Para los iconos de Bootstrap
 
+// Función para formatear la fecha
+const formatDate = (dateString) => {
+  if (!dateString) return 'No disponible';
+  const date = new Date(dateString);
+  return date.toLocaleString('es-ES', { dateStyle: 'medium', timeStyle: 'short' });
+};
+
 const SavedConnections = ({ connections, selectedConnection, setSelectedConnection, handleDelete, handleSave, newConnectionName, setNewConnectionName, leftPanelWidth }) => {
   return (
     <div className="bg-light shadow-sm d-flex flex-column" style={{ width: leftPanelWidth }}>
@@ -10,23 +17,22 @@ const SavedConnections = ({ connections, selectedConnection, setSelectedConnecti
         <div className="list-group">
           {connections.map((conn) => (
             <button
-              key={conn.name}
+              key={conn.id}
               type="button"
-              className={`list-group-item list-group-item-action ${selectedConnection?.name === conn.name ? 'list-group-item-secondary' : ''
-                }`}
+              className={`list-group-item list-group-item-action ${selectedConnection?.id === conn.id ? 'list-group-item-secondary' : ''}`}
               onClick={() => setSelectedConnection(conn)}
             >
               <div className="d-flex justify-content-between">
                 <div>
                   <i className="bi bi-database me-2"></i> {/* Ícono de base de datos */}
-                  {conn.name}
+                  {conn.connectionName}
                 </div>
                 <small className="text-muted">
-                  {conn.types.map((type) => type.slice(0, 2)).join(', ')}
+                  {conn.postgresCredentials ? 'Pg' : ''}{conn.mariadbCredentials ? ', Mar' : ''}{conn.mongodbCredentials ? ', Mon' : ''}
                 </small>
               </div>
-              <small className="text-muted">{conn.lastConnected}</small>
-              <small className="text-truncate d-block">{conn.comment}</small>
+              <small className="text-muted">{formatDate(conn.lastConnection)}</small>
+              <small className="text-truncate d-block">{conn.comment || 'Sin comentarios'}</small>
             </button>
           ))}
         </div>

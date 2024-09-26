@@ -3,7 +3,6 @@ import SavedConnections from './SavedConnections';
 import ConnectionDetails from './ConnectionDetails';
 import { getConnectionNames } from '../services/connectionService'; // Asegúrate de importar correctamente el servicio
 
-
 export default function MainComponent() {
   const [connections, setConnections] = useState([]);
   const [selectedConnection, setSelectedConnection] = useState(null);
@@ -16,13 +15,13 @@ export default function MainComponent() {
   const containerRef = useRef(null);
   const isDragging = useRef(false);
 
-
   // Usamos useEffect para llamar al servicio al cargar el componente
   useEffect(() => {
     const fetchConnectionNames = async () => {
       try {
         const data = await getConnectionNames();
         console.log('Datos obtenidos del backend:', data); // Mostramos los datos por consola
+        setConnections(data.result); // Aquí actualizamos el estado con los datos del backend
       } catch (error) {
         console.error('Error al obtener los nombres de las conexiones:', error);
       }
@@ -30,8 +29,6 @@ export default function MainComponent() {
 
     fetchConnectionNames();
   }, []); // El array vacío asegura que esto solo se ejecuta al montar el componente
-
-
 
   useEffect(() => {
     const handleMouseMove = (e) => {
@@ -89,7 +86,7 @@ export default function MainComponent() {
 
   const handleDelete = () => {
     if (selectedConnection) {
-      setConnections(connections.filter((conn) => conn.name !== selectedConnection.name));
+      setConnections(connections.filter((conn) => conn.connectionName !== selectedConnection.connectionName));
       setSelectedConnection(null);
     }
   };
