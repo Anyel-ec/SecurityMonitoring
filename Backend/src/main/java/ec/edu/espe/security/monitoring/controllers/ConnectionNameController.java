@@ -35,15 +35,16 @@ public class ConnectionNameController {
     }
 
     @GetMapping("/names")
-    public ResponseEntity<JsonResponseDto> getAllConnectionNames() {
+    public ResponseEntity<JsonResponseDto> getAllConnections() {
         try {
-            List<String> connectionNames = connectionNameService.getAllConnectionNames();
-            return ResponseEntity.ok(new JsonResponseDto(true, HttpStatus.OK.value(), "Nombres de credenciales obtenidos exitosamente", connectionNames.toString()));
+            List<ConnectionName> connections = connectionNameService.getAllConnectionNames();
+            return ResponseEntity.ok(new JsonResponseDto(true, HttpStatus.OK.value(), "Conexiones obtenidas exitosamente", connections));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new JsonResponseDto(false, HttpStatus.INTERNAL_SERVER_ERROR.value(), "Error al obtener los nombres de las credenciales", null));
+                    .body(new JsonResponseDto(false, HttpStatus.INTERNAL_SERVER_ERROR.value(), "Error al obtener las conexiones", null));
         }
     }
+
 
     @PostMapping("/save")
     public ResponseEntity<JsonResponseDto> saveOrUpdateConnection(@RequestBody ConnectionName connection) {

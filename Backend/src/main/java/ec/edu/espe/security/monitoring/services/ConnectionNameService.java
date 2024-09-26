@@ -13,11 +13,8 @@ import java.util.Optional;
 @AllArgsConstructor
 public class ConnectionNameService {
     private final ConnectionNameRepository connectionNameRepository;
-    public List<String> getAllConnectionNames() {
-        return connectionNameRepository.findAll()  // Usar directamente el repositorio
-                .stream()
-                .map(ConnectionName::getConnectionName)
-                .toList();
+    public List<ConnectionName> getAllConnectionNames() {
+        return connectionNameRepository.findAll();
     }
 
     // Método para obtener las credenciales de PostgreSQL basadas en el nombre de la conexión

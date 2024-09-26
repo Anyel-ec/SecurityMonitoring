@@ -1,5 +1,6 @@
 package ec.edu.espe.security.monitoring.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -15,6 +16,7 @@ public class PostgresCredentials {
     private Long id;
 
     private String username;
+    @JsonIgnore
     private String password;
     private String host;
     private Integer port;

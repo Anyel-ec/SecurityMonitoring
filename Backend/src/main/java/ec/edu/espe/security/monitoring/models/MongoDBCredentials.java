@@ -1,5 +1,6 @@
 package ec.edu.espe.security.monitoring.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -15,6 +16,7 @@ public class MongoDBCredentials {
     private Long id;
 
     private String mongodbUser;
+    @JsonIgnore
     private String mongodbPassword;
     private String mongodbHost;
     private int mongodbPortHost;
