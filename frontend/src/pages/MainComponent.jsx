@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import SavedConnections from './SavedConnections';
 import ConnectionDetails from './ConnectionDetails';
+import { getConnectionNames } from '../services/connectionService'; // Asegúrate de importar correctamente el servicio
+
 
 export default function MainComponent() {
   const [connections, setConnections] = useState([]);
@@ -13,6 +15,23 @@ export default function MainComponent() {
   const [leftPanelWidth, setLeftPanelWidth] = useState(400); // Estado para el ancho del panel izquierdo
   const containerRef = useRef(null);
   const isDragging = useRef(false);
+
+
+  // Usamos useEffect para llamar al servicio al cargar el componente
+  useEffect(() => {
+    const fetchConnectionNames = async () => {
+      try {
+        const data = await getConnectionNames();
+        console.log('Datos obtenidos del backend:', data); // Mostramos los datos por consola
+      } catch (error) {
+        console.error('Error al obtener los nombres de las conexiones:', error);
+      }
+    };
+
+    fetchConnectionNames();
+  }, []); // El array vacío asegura que esto solo se ejecuta al montar el componente
+
+
 
   useEffect(() => {
     const handleMouseMove = (e) => {
