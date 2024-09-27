@@ -45,8 +45,8 @@ const ConnectionDetails = ({ selectedConnection, handleTypeChange, postgresEnabl
             {['PostgreSQL', 'MariaDB', 'MongoDB'].map(
               (type) =>
                 (selectedConnection.credentials[type] && postgresEnabled && type === 'PostgreSQL') ||
-                (mariaDbEnabled && type === 'MariaDB') ||
-                (mongoDbEnabled && type === 'MongoDB') ? (
+                  (mariaDbEnabled && type === 'MariaDB') ||
+                  (mongoDbEnabled && type === 'MongoDB') ? (
                   <div key={type} className="mb-4">
                     <h4>{type}</h4>
                     <div className="mb-3">
@@ -123,9 +123,10 @@ const ConnectionDetails = ({ selectedConnection, handleTypeChange, postgresEnabl
                 id="comment"
                 rows="3"
                 placeholder="Comentario"
-                value={selectedConnection.comment}
+                value={selectedConnection.comment || ""} // Usa una cadena vacía si el valor es null o undefined
                 onChange={(e) => updateCredential('comment', 'comment', e.target.value)}
               ></textarea>
+
             </div>
           </div>
 
