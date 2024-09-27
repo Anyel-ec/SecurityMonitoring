@@ -5,6 +5,7 @@ import ec.edu.espe.security.monitoring.models.PostgresCredentials;
 import ec.edu.espe.security.monitoring.services.PostgresCredentialsService;
 import ec.edu.espe.security.monitoring.utils.DatabaseUtils;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/config")
+@Slf4j
 public class ConnectionPgController {
 
     private final DatabaseUtils databaseUtils;

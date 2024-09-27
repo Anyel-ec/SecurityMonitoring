@@ -5,6 +5,7 @@ import ec.edu.espe.security.monitoring.models.ConnectionName;
 import ec.edu.espe.security.monitoring.models.PostgresCredentials;
 import ec.edu.espe.security.monitoring.services.ConnectionNameService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +14,7 @@ import java.util.List;
 @RestController
 @RequestMapping("api/v1/connection")
 @RequiredArgsConstructor
+@Slf4j
 public class ConnectionNameController {
     private final ConnectionNameService connectionNameService;
 
@@ -26,6 +28,7 @@ public class ConnectionNameController {
             JsonResponseDto response = new JsonResponseDto(true,HttpStatus.OK.value(),"Conexión configurada exitosamente", credentials);
 
             return ResponseEntity.ok(response);
+
 
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -57,11 +60,22 @@ public class ConnectionNameController {
             ConnectionName savedConnection = connectionNameService.saveOrUpdateConnection(connection);
             return ResponseEntity.ok(new JsonResponseDto(true, HttpStatus.OK.value(), "Conexión guardada o actualizada exitosamente", savedConnection));
         } catch (Exception e) {
-            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new JsonResponseDto(false, HttpStatus.INTERNAL_SERVER_ERROR.value(), "Error: " + e.getMessage(), null));
         }
     }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<JsonResponseDto> deleteConnection(@PathVariable Long id) {
+        try {
+            connectionNameService.deleteConnectionById(id);
+            return ResponseEntity.ok(new JsonResponseDto(true, HttpStatus.OK.value(), "Conexión eliminada exitosamente", null));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new JsonResponseDto(false, HttpStatus.INTERNAL_SERVER_ERROR.value(), "Error al eliminar la conexión: " + e.getMessage(), null));
+        }
+    }
+
 
 
 }

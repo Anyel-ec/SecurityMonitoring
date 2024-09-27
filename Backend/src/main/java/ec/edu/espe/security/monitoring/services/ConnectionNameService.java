@@ -4,7 +4,6 @@ import ec.edu.espe.security.monitoring.models.ConnectionName;
 import ec.edu.espe.security.monitoring.models.PostgresCredentials;
 import ec.edu.espe.security.monitoring.repositories.ConnectionNameRepository;
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -67,7 +66,8 @@ public class ConnectionNameService {
         }
     }
 
-
-
+    public void deleteConnectionById(Long id) {
+        connectionNameRepository.deleteById(id);
+    }
 
 }
