@@ -48,16 +48,20 @@ public class ConnectionNameController {
 
     @PostMapping("/save")
     public ResponseEntity<JsonResponseDto> saveOrUpdateConnection(@RequestBody ConnectionName connection) {
+        if (connection.getConnectionName() == null || connection.getConnectionName().isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new JsonResponseDto(false, HttpStatus.BAD_REQUEST.value(), "El nombre de la conexión no puede estar vacío", null));
+        }
+
         try {
-            // Llamar al método para guardar o actualizar la conexión
             ConnectionName savedConnection = connectionNameService.saveOrUpdateConnection(connection);
-
             return ResponseEntity.ok(new JsonResponseDto(true, HttpStatus.OK.value(), "Conexión guardada o actualizada exitosamente", savedConnection));
-
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new JsonResponseDto(false, HttpStatus.INTERNAL_SERVER_ERROR.value(), "Error: " + e.getMessage(), null));
         }
     }
+
 
 }

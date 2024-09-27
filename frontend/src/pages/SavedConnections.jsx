@@ -1,7 +1,7 @@
 import React from 'react';
 import 'bootstrap-icons/font/bootstrap-icons.css'; // Para los iconos de Bootstrap
 
-const SavedConnections = ({ connections, selectedConnection, setSelectedConnection, handleDelete, handleSave, newConnectionName, setNewConnectionName, leftPanelWidth }) => {
+const SavedConnections = ({ connections, selectedConnection, setSelectedConnection, handleDelete, handleSave, newConnection, setNewConnection, leftPanelWidth }) => {
   return (
     <div className="bg-light shadow-sm d-flex flex-column justify-content-between" style={{ width: leftPanelWidth, height: '90vh' }}>
       <div className="p-3 flex-grow-1 overflow-auto" style={{ maxHeight: 'calc(100vh - 150px)' }}> {/* Ajusta el maxHeight */}
@@ -35,8 +35,8 @@ const SavedConnections = ({ connections, selectedConnection, setSelectedConnecti
           type="text"
           className="form-control mb-3"
           placeholder="Nombre de nueva conexión"
-          value={newConnectionName}
-          onChange={(e) => setNewConnectionName(e.target.value)}
+          value={newConnection.connectionName}
+          onChange={(e) => setNewConnection({ ...newConnection, connectionName: e.target.value })}
         />
         <div className="d-flex justify-content-between">
           <button className="btn btn-primary" onClick={handleSave}>

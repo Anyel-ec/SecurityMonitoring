@@ -1,12 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react';
 import SavedConnections from './SavedConnections';
 import ConnectionDetails from './ConnectionDetails';
-import { getConnectionNames } from '../services/connectionService'; // Asegúrate de importar correctamente el servicio
+import { getConnectionNames, saveOrUpdateConnection } from '../services/connectionService'; // Asegúrate de importar correctamente el servicio
+import Swal from 'sweetalert2'; // Importa SweetAlert2
 
 export default function MainComponent() {
   const [connections, setConnections] = useState([]);
   const [selectedConnection, setSelectedConnection] = useState(null);
-  const [newConnectionName, setNewConnectionName] = useState('');
+  const [newConnection, setNewConnection] = useState({ connectionName: '' }); // Cambiado a un objeto
   const [testingConnection, setTestingConnection] = useState(null);
   const [postgresEnabled, setPostgresEnabled] = useState(false);
   const [mariaDbEnabled, setMariaDbEnabled] = useState(false);
@@ -77,28 +78,69 @@ export default function MainComponent() {
     setMongoDbEnabled(!!conn.mongodbCredentials);
   };
 
+  // Función para guardar la conexión
+  const handleSave = async () => {
+    try {
+      if (selectedConnection) {
+        // Imprime los datos a guardar
+        console.log('Guardando conexión:', selectedConnection);
 
-  const handleSave = () => {
-    if (selectedConnection) {
-      setConnections(
-        connections.map((conn) =>
-          conn.name === selectedConnection.name
-            ? { ...selectedConnection, lastConnected: new Date().toLocaleString() }
-            : conn
-        )
-      );
-    } else if (newConnectionName) {
-      setConnections([
-        ...connections,
-        {
-          name: newConnectionName,
-          types: [],
-          credentials: {},
-          comment: '',
-          lastConnected: new Date().toLocaleString(),
-        },
-      ]);
-      setNewConnectionName('');
+        await saveOrUpdateConnection(selectedConnection); // Llamar a la función para guardar la conexión
+        setConnections(
+          connections.map((conn) =>
+            conn.name === selectedConnection.name
+              ? { ...selectedConnection, lastConnected: new Date().toLocaleString() }
+              : conn
+          )
+        );
+
+        // Muestra un toast de éxito
+        Swal.fire({
+          toast: true,
+          position: 'top-right',
+          icon: 'success',
+          title: 'Guardado con éxito',
+          showConfirmButton: false,
+          timer: 3000
+        });
+      } else if (newConnection.connectionName) {
+        // Si se guarda una nueva conexión
+        console.log('Guardando nueva conexión:', newConnection.connectionName);
+        
+        await saveOrUpdateConnection(newConnection);
+        setConnections([
+          ...connections,
+          {
+            connectionName: newConnection.connectionName,
+            types: [],
+            credentials: {},
+            comment: '',
+            lastConnected: new Date().toLocaleString(),
+          },
+        ]);
+        setNewConnection({ connectionName: '' });
+
+        Swal.fire({
+          toast: true,
+          position: 'top-right',
+          icon: 'success',
+          title: 'Nueva conexión guardada con éxito',
+          showConfirmButton: false,
+          timer: 3000
+        });
+      }
+    } catch (error) {
+      console.error('Error al guardar la conexión:', error);
+
+      Swal.fire({
+        toast: true,
+        position: 'top-right',
+        icon: 'error',
+        title: 'No se pudo guardar la conexión',
+        text: error.message || 'Ocurrió un error',
+        showConfirmButton: false,
+        timer: 3000
+      });
     }
   };
 
@@ -155,9 +197,24 @@ export default function MainComponent() {
     const success = Math.random() > 0.3;
     setTestingConnection(null);
     if (success) {
-      alert(`La conexión a ${type} se ha establecido correctamente.`);
+      Swal.fire({
+        toast: true,
+        position: 'top-right',
+        icon: 'success',
+        title: `Conexión a ${type} exitosa`,
+        showConfirmButton: false,
+        timer: 3000
+      });
     } else {
-      alert(`No se pudo establecer la conexión a ${type}. Por favor, verifique sus credenciales.`);
+      Swal.fire({
+        toast: true,
+        position: 'top-right',
+        icon: 'error',
+        title: `Conexión a ${type} fallida`,
+        text: 'Por favor, verifica las credenciales.',
+        showConfirmButton: false,
+        timer: 3000
+      });
     }
   };
 
@@ -167,12 +224,12 @@ export default function MainComponent() {
       <SavedConnections
         connections={connections}
         selectedConnection={selectedConnection}
-        setSelectedConnection={handleSelectConnection} // Usa la nueva función para manejar la selección
+        setSelectedConnection={handleSelectConnection}
         handleDelete={handleDelete}
         handleSave={handleSave}
-        newConnectionName={newConnectionName}
-        setNewConnectionName={setNewConnectionName}
-        leftPanelWidth={leftPanelWidth} // Pasamos el ancho dinámico del panel izquierdo
+        newConnection={newConnection} // Cambiado a newConnection
+        setNewConnection={setNewConnection} // Cambiado a setNewConnection
+        leftPanelWidth={leftPanelWidth}
       />
 
       {/* Resizer */}

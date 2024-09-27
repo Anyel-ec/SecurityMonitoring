@@ -12,3 +12,16 @@ export const getConnectionNames = async () => {
     throw error;
   }
 };
+
+// Servicio para guardar o actualizar una conexión
+export const saveOrUpdateConnection = async (connection) => {
+  const BASE_URL = AppEnvironments.baseUrl; // Usamos la clase para obtener la URL base
+  try {
+    console.log('Datos que se envían:', connection); // Agregar log para ver qué se está enviando
+    const response = await axios.post(`${BASE_URL}/api/v1/connection/save`, connection); // Usamos la URL completa del backend
+    return response.data;
+  } catch (error) {
+    console.error('Error al guardar o actualizar la conexión:', error);
+    throw error;
+  }
+};
