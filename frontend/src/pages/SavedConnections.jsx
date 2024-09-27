@@ -1,18 +1,10 @@
-// SavedConnections.js
 import React from 'react';
 import 'bootstrap-icons/font/bootstrap-icons.css'; // Para los iconos de Bootstrap
 
-// Función para formatear la fecha
-const formatDate = (dateString) => {
-  if (!dateString) return 'No disponible';
-  const date = new Date(dateString);
-  return date.toLocaleString('es-ES', { dateStyle: 'medium', timeStyle: 'short' });
-};
-
 const SavedConnections = ({ connections, selectedConnection, setSelectedConnection, handleDelete, handleSave, newConnectionName, setNewConnectionName, leftPanelWidth }) => {
   return (
-    <div className="bg-light shadow-sm d-flex flex-column" style={{ width: leftPanelWidth }}>
-      <div className="p-3 flex-grow-1 overflow-auto">
+    <div className="bg-light shadow-sm d-flex flex-column justify-content-between" style={{ width: leftPanelWidth, height: '90vh' }}>
+      <div className="p-3 flex-grow-1 overflow-auto" style={{ maxHeight: 'calc(100vh - 150px)' }}> {/* Ajusta el maxHeight */}
         <h2 className="h5 mb-3">Conexiones guardadas</h2>
         <div className="list-group">
           {connections.map((conn) => (
@@ -20,7 +12,7 @@ const SavedConnections = ({ connections, selectedConnection, setSelectedConnecti
               key={conn.id}
               type="button"
               className={`list-group-item list-group-item-action ${selectedConnection?.id === conn.id ? 'list-group-item-secondary' : ''}`}
-              onClick={() => setSelectedConnection(conn)}
+              onClick={() => setSelectedConnection(conn)} // Llama a la función para seleccionar la conexión
             >
               <div className="d-flex justify-content-between">
                 <div>
@@ -31,14 +23,14 @@ const SavedConnections = ({ connections, selectedConnection, setSelectedConnecti
                   {conn.postgresCredentials ? 'Pg' : ''}{conn.mariadbCredentials ? ', Mar' : ''}{conn.mongodbCredentials ? ', Mon' : ''}
                 </small>
               </div>
-              <small className="text-muted">{formatDate(conn.lastConnection)}</small>
+              <small className="text-muted">{conn.lastConnection ? new Date(conn.lastConnection).toLocaleString() : 'No disponible'}</small>
               <small className="text-truncate d-block">{conn.comment || 'Sin comentarios'}</small>
             </button>
           ))}
         </div>
       </div>
 
-      <div className="p-3 border-top">
+      <div className="p-3 border-top mt-auto"> {/* mt-auto para empujar los botones al final */}
         <input
           type="text"
           className="form-control mb-3"

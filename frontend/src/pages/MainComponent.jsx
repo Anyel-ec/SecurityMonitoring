@@ -60,6 +60,24 @@ export default function MainComponent() {
     document.body.style.cursor = 'col-resize';
   };
 
+  // Maneja la selección de una conexión y habilita los switches
+  const handleSelectConnection = (conn) => {
+    setSelectedConnection({
+      ...conn,
+      credentials: {
+        PostgreSQL: conn.postgresCredentials || { host: '', port: '', username: '', password: '' },
+        MariaDB: conn.mariadbCredentials || { host: '', port: '', username: '', password: '' },
+        MongoDB: conn.mongodbCredentials || { host: '', port: '', username: '', password: '' }
+      }
+    });
+
+    // Activa los switches según las credenciales de la conexión seleccionada
+    setPostgresEnabled(!!conn.postgresCredentials);
+    setMariaDbEnabled(!!conn.mariadbCredentials);
+    setMongoDbEnabled(!!conn.mongodbCredentials);
+  };
+
+
   const handleSave = () => {
     if (selectedConnection) {
       setConnections(
@@ -149,7 +167,7 @@ export default function MainComponent() {
       <SavedConnections
         connections={connections}
         selectedConnection={selectedConnection}
-        setSelectedConnection={setSelectedConnection}
+        setSelectedConnection={handleSelectConnection} // Usa la nueva función para manejar la selección
         handleDelete={handleDelete}
         handleSave={handleSave}
         newConnectionName={newConnectionName}

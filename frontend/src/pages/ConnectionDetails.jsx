@@ -3,7 +3,7 @@ import SwitchToggle from './../components/switch/SwitchToggle';
 
 const ConnectionDetails = ({ selectedConnection, handleTypeChange, postgresEnabled, setPostgresEnabled, mariaDbEnabled, setMariaDbEnabled, mongoDbEnabled, setMongoDbEnabled, updateCredential, testConnection, testingConnection, handleSave, handleCancel }) => {
   return (
-    <div className="flex-grow-1 p-3">
+    <div className="flex-grow-1 d-flex flex-column p-3" style={{ height: '90vh' }}> {/* height ajustado */}
       {selectedConnection && (
         <>
           <div className="mb-4 d-flex">
@@ -41,10 +41,12 @@ const ConnectionDetails = ({ selectedConnection, handleTypeChange, postgresEnabl
             </div>
           </div>
 
-          <div className="credentials-area overflow-auto mb-4" style={{ maxHeight: 'calc(75vh - 200px)' }}>
+          <div className="flex-grow-1 overflow-auto mb-3" style={{ maxHeight: 'calc(100vh - 200px)' }}> {/* maxHeight ajustado */}
             {['PostgreSQL', 'MariaDB', 'MongoDB'].map(
               (type) =>
-                selectedConnection.types.includes(type) && (
+                (selectedConnection.credentials[type] && postgresEnabled && type === 'PostgreSQL') ||
+                (mariaDbEnabled && type === 'MariaDB') ||
+                (mongoDbEnabled && type === 'MongoDB') ? (
                   <div key={type} className="mb-4">
                     <h4>{type}</h4>
                     <div className="mb-3">
@@ -66,7 +68,9 @@ const ConnectionDetails = ({ selectedConnection, handleTypeChange, postgresEnabl
                         Puerto
                       </label>
                       <input
-                        type="number" max={65535} min={1}
+                        type="number"
+                        max={65535}
+                        min={1}
                         className="form-control"
                         id={`${type}-port`}
                         placeholder={type === 'PostgreSQL' ? '5432' : type === 'MariaDB' ? '3306' : '27017'}
@@ -107,25 +111,25 @@ const ConnectionDetails = ({ selectedConnection, handleTypeChange, postgresEnabl
                       {testingConnection === type ? 'Probando...' : 'Probar conexión'}
                     </button>
                   </div>
-                )
+                ) : null
             )}
+
+            <div className="mb-4">
+              <label className="form-label" htmlFor="comment">
+                Comentario
+              </label>
+              <textarea
+                className="form-control"
+                id="comment"
+                rows="3"
+                placeholder="Comentario"
+                value={selectedConnection.comment}
+                onChange={(e) => updateCredential('comment', 'comment', e.target.value)}
+              ></textarea>
+            </div>
           </div>
 
-          <div className="mb-4">
-            <label className="form-label" htmlFor="comment">
-              Comentario
-            </label>
-            <textarea
-              className="form-control"
-              id="comment"
-              rows="3"
-              placeholder="Comentario"
-              value={selectedConnection.comment}
-              onChange={(e) => updateCredential('comment', 'comment', e.target.value)}
-            ></textarea>
-          </div>
-
-          <div className="d-flex justify-content-end">
+          <div className="d-flex justify-content-end mt-auto">
             <button className="btn btn-primary me-2" onClick={handleSave}>
               Guardar
             </button>
