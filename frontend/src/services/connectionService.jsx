@@ -25,3 +25,16 @@ export const saveOrUpdateConnection = async (connection) => {
     throw error;
   }
 };
+
+
+// Servicio para eliminar una conexión por ID
+export const deleteConnectionById = async (id) => {
+  const BASE_URL = AppEnvironments.baseUrl; // Usamos la clase para obtener la URL base
+  try {
+    const response = await axios.delete(`${BASE_URL}/api/v1/connection/delete/${id}`); // Usamos DELETE con el ID
+    return response.data;
+  } catch (error) {
+    console.error('Error al eliminar la conexión:', error);
+    throw error;
+  }
+};

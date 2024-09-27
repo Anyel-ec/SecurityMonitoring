@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import SavedConnections from './SavedConnections';
 import ConnectionDetails from './ConnectionDetails';
-import { getConnectionNames, saveOrUpdateConnection } from '../services/connectionService'; // Asegúrate de importar correctamente el servicio
+import { getConnectionNames, saveOrUpdateConnection, deleteConnectionById } from '../services/connectionService'; // Asegúrate de importar correctamente el servicio
 import Swal from 'sweetalert2'; // Importa SweetAlert2
 
 export default function MainComponent() {
@@ -106,7 +106,7 @@ export default function MainComponent() {
       } else if (newConnection.connectionName) {
         // Si se guarda una nueva conexión
         console.log('Guardando nueva conexión:', newConnection.connectionName);
-        
+
         await saveOrUpdateConnection(newConnection);
         setConnections([
           ...connections,
@@ -144,10 +144,55 @@ export default function MainComponent() {
     }
   };
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     if (selectedConnection) {
-      setConnections(connections.filter((conn) => conn.connectionName !== selectedConnection.connectionName));
-      setSelectedConnection(null);
+      // Preguntar primero al usuario si desea eliminar
+      Swal.fire({
+        title: '¿Estás seguro?',
+        text: "No podrás deshacer esta acción",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí, eliminar',
+        cancelButtonText: 'Cancelar'
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          try {
+            // Llama al servicio para eliminar la conexión por ID
+            await deleteConnectionById(selectedConnection.id);
+
+            // Elimina la conexión del estado local
+            setConnections(connections.filter((conn) => conn.connectionName !== selectedConnection.connectionName));
+
+            // Restablece la conexión seleccionada
+            setSelectedConnection(null);
+
+            // Muestra un toast de éxito
+            Swal.fire({
+              toast: true,
+              position: 'top-right',
+              icon: 'success',
+              title: 'Conexión eliminada exitosamente',
+              showConfirmButton: false,
+              timer: 3000
+            });
+          } catch (error) {
+            console.error('Error al eliminar la conexión:', error);
+
+            // Muestra un toast de error
+            Swal.fire({
+              toast: true,
+              position: 'top-right',
+              icon: 'error',
+              title: 'No se pudo eliminar la conexión',
+              text: error.message || 'Ocurrió un error',
+              showConfirmButton: false,
+              timer: 3000
+            });
+          }
+        }
+      });
     }
   };
 
@@ -233,11 +278,15 @@ export default function MainComponent() {
       />
 
       {/* Resizer */}
-      <div
+      <button
         className="resizer"
         onMouseDown={handleMouseDown}
-        style={{ cursor: 'col-resize', width: '5px', backgroundColor: '#ddd' }}
-      />
+        style={{ cursor: 'col-resize', width: '5px', backgroundColor: '#ddd', border: 'none', padding: '0', outline: 'none' }}
+        aria-label="Resizer" // Proporciona una descripción accesible
+      >
+      </button>
+
+
 
       {/* Right panel - ConnectionDetails */}
       <ConnectionDetails
