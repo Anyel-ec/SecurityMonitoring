@@ -1,7 +1,7 @@
-import { lazy } from 'react';
 import MainLayout from '../Layouts/MainLayout';
 import { useState, useEffect } from 'react';
 import MainComponent from '../pages/MainComponent';
+import PropTypes from 'prop-types';
 
 
 const RoutesWrapper = ({ children }) => {
@@ -29,6 +29,12 @@ const RoutesWrapper = ({ children }) => {
     </MainLayout>
   );
 };
+// Validación de las props con PropTypes
+RoutesWrapper.propTypes = {
+  children: PropTypes.node.isRequired,  // Aquí estamos diciendo que 'children' es requerido y debe ser un nodo válido
+};
+
+export default RoutesWrapper;
 
 const routes = [
   

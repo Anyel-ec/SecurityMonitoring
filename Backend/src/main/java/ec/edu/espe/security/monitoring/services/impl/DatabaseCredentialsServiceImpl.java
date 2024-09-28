@@ -1,4 +1,4 @@
-package ec.edu.espe.security.monitoring.services;
+package ec.edu.espe.security.monitoring.services.impl;
 
 import ec.edu.espe.security.monitoring.models.*;
 import ec.edu.espe.security.monitoring.repositories.ConnectionNameRepository;
@@ -14,14 +14,14 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class DatabaseCredentialsService {
+public class DatabaseCredentialsServiceImpl {
 
     private final PasswordEncoder passwordEncoder;
     private final PostgresCredentialsRepository postgresCredentialsRepository;
     private final MariadbCredentialsRepository mariadbCredentialsRepository;
     private final MongodbCredentialsRepository mongodbCredentialsRepository;
     private final ConnectionNameRepository nameConnectionRepository;
-    private final DockerService dockerService;
+    private final DockerServiceImpl dockerService;
 
     /**
      * Guardar o actualizar credenciales de cualquier base de datos y ejecutar Docker Compose

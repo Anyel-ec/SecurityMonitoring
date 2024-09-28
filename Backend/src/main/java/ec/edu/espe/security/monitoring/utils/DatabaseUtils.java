@@ -29,16 +29,13 @@ public class DatabaseUtils {
     }
 
     private String buildJdbcUrl(DatabaseCredentials config, String dbType) {
-        switch (dbType.toLowerCase()) {
-            case "postgresql":
-                return String.format("jdbc:postgresql://%s:%d/", config.getHost(), config.getPort());
-            case "mariadb":
-                return String.format("jdbc:mariadb://%s:%d/", config.getHost(), config.getPort());
-            case "mongodb":
+        return switch (dbType.toLowerCase()) {
+            case "postgresql" -> String.format("jdbc:postgresql://%s:%d/", config.getHost(), config.getPort());
+            case "mariadb" -> String.format("jdbc:mariadb://%s:%d/", config.getHost(), config.getPort());
+            case "mongodb" ->
                 // Para MongoDB, normalmente no se usa JDBC directamente, pero puedes construir la URL estándar
-                return String.format("mongodb://%s:%d/", config.getHost(), config.getPort());
-            default:
-                return null;
-        }
+                    String.format("mongodb://%s:%d/", config.getHost(), config.getPort());
+            default -> null;
+        };
     }
 }

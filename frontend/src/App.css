@@ -1,65 +1,54 @@
-/* Modo claro (por defecto) */
-body {
+/* Estilos generales para el tema claro */
+.light-theme {
   background-color: #ffffff;
   color: #000000;
-  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.form-container {
-  background-color: #ffffff;
-  color: #000000;
-  border: 1px solid #ccc;
-  border-radius: 8px;
+/* Estilos generales para el tema oscuro */
+.dark-theme {
+  background-color: #121212;
+  color: #ffffff;
 }
 
-/* Modo oscuro */
-body.dark-theme {
+/* Estilos específicos para el tema oscuro */
+.dark-theme .navbar {
   background-color: #333333;
+}
+
+.dark-theme .main-layout {
+  background-color: #1e1e1e;
   color: #ffffff;
 }
 
-body.dark-theme .form-container {
-  background-color: #444444;
+.dark-theme .saved-connections {
+  background-color: #333;
   color: #ffffff;
-  border: 1px solid #555;
 }
 
-body.dark-theme input,
-body.dark-theme select,
-body.dark-theme textarea {
+.dark-theme .connection-details {
+  background-color: #444;
+  color: #ffffff;
+}
+
+/* Cambios visuales para botones o elementos de listas */
+.dark-theme .list-group-item {
+  background-color: #444;
+  color: #ffffff;
+}
+
+.dark-theme .list-group-item:hover {
   background-color: #555;
+}
+
+/* Ajustes para elementos de entrada */
+.dark-theme input {
+  background-color: #333;
   color: #ffffff;
-  border-color: #666;
+  border-color: #555;
 }
 
-body.dark-theme input::placeholder,
-body.dark-theme textarea::placeholder {
-  color: #aaaaaa; /* Placeholder en modo oscuro */
+.light-theme input {
+  background-color: #fff;
+  color: #000;
+  border-color: #ccc;
 }
-
-body.dark-theme .bi {
-  color: #ffffff; /* Cambia el color de los íconos en modo oscuro */
-}
-
-body.light-theme .bi {
-  color: #000000; /* Cambia el color de los íconos en modo claro */
-}
-
-/* Estilo para alinear íconos al lado de los inputs */
-.input-with-icon {
-  display: flex;
-  align-items: center;
-  margin-bottom: 1rem;
-}
-
-.input-with-icon i {
-  margin-right: 10px;
-  font-size: 1.2rem;
-}
-
-.input-with-icon input,
-.input-with-icon select,
-.input-with-icon textarea {
-  flex-grow: 1;
-}
-

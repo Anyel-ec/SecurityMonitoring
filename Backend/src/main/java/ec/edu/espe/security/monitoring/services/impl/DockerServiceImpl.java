@@ -1,4 +1,4 @@
-package ec.edu.espe.security.monitoring.services;
+package ec.edu.espe.security.monitoring.services.impl;
 
 import ec.edu.espe.security.monitoring.models.DatabaseCredentials;
 import lombok.extern.slf4j.Slf4j;
@@ -8,7 +8,7 @@ import java.io.IOException;
 
 @Service
 @Slf4j
-public class DockerService {
+public class DockerServiceImpl {
     public void runDockerCompose(DatabaseCredentials config, String dbType) throws IOException {
         ProcessBuilder processBuilder = new ProcessBuilder(
                 "docker-compose",

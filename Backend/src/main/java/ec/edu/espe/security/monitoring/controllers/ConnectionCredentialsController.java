@@ -3,7 +3,7 @@ package ec.edu.espe.security.monitoring.controllers;
 import ec.edu.espe.security.monitoring.dto.request.ConnectionRequestDto;
 import ec.edu.espe.security.monitoring.dto.response.JsonResponseDto;
 import ec.edu.espe.security.monitoring.models.DatabaseCredentials;
-import ec.edu.espe.security.monitoring.services.DatabaseCredentialsService;
+import ec.edu.espe.security.monitoring.services.impl.DatabaseCredentialsServiceImpl;
 import ec.edu.espe.security.monitoring.utils.DatabaseUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 public class ConnectionCredentialsController {
 
     private final DatabaseUtils databaseUtils;
-    private final DatabaseCredentialsService databaseCredentialsService;
+    private final DatabaseCredentialsServiceImpl databaseCredentialsService;
 
     /**
      * Método para configurar y guardar credenciales de base de datos.

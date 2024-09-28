@@ -19,12 +19,13 @@ export const saveOrUpdateConnectionName = async (connectionData) => {
     const response = await axios.post(`${BASE_URL}/api/v1/connection/save`, connectionData);
     return response.data;
   } catch (error) {
-    if (error.response && error.response.data) {
+    if (error.response?.data) {
       throw new Error(error.response.data.message || 'Ocurrió un error desconocido');
     } else {
       throw new Error('No se pudo conectar al servidor. Verifica tu conexión.');
     }
   }
+
 };
 
 // Servicio para guardar o actualizar la conexión
@@ -34,9 +35,11 @@ export const saveOrUpdateConnectionCredentials = async (connectionData) => {
     const response = await axios.post(`${BASE_URL}/api/v1/config/database`, connectionData);
     return response.data;
   } catch (error) {
-    if (error.response && error.response.data) {
+    if (error.response?.data) {
+      // Devolver el mensaje de error del servidor
       throw new Error(error.response.data.message || 'Ocurrió un error desconocido');
     } else {
+      // Si no hay respuesta del servidor, arrojar un error general
       throw new Error('No se pudo conectar al servidor. Verifica tu conexión.');
     }
   }
@@ -70,7 +73,7 @@ export const testPostgresConnection = async (credentials) => {
     }
 
   } catch (error) {
-    if (error.response && error.response.data) {
+    if (error.response?.data) {
       // Devolver el mensaje de error del servidor
       throw new Error(error.response.data.message || 'Ocurrió un error desconocido');
     } else {

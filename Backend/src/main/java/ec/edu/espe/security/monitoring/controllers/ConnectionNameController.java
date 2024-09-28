@@ -3,7 +3,7 @@ package ec.edu.espe.security.monitoring.controllers;
 import ec.edu.espe.security.monitoring.dto.response.JsonResponseDto;
 import ec.edu.espe.security.monitoring.models.ConnectionName;
 import ec.edu.espe.security.monitoring.models.PostgresCredentials;
-import ec.edu.espe.security.monitoring.services.ConnectionNameService;
+import ec.edu.espe.security.monitoring.services.impl.ConnectionNameServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -16,7 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public class ConnectionNameController {
-    private final ConnectionNameService connectionNameService;
+    private final ConnectionNameServiceImpl connectionNameService;
 
     @GetMapping("/name/{connectionName}")
     public ResponseEntity<JsonResponseDto> configurePostgresByProfile(@PathVariable String connectionName) {

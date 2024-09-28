@@ -1,4 +1,4 @@
-package ec.edu.espe.security.monitoring.services;
+package ec.edu.espe.security.monitoring.services.impl;
 
 import ec.edu.espe.security.monitoring.models.ConnectionName;
 import ec.edu.espe.security.monitoring.models.PostgresCredentials;
@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 @Service
 @AllArgsConstructor
-public class ConnectionNameService {
+public class ConnectionNameServiceImpl {
     private final ConnectionNameRepository connectionNameRepository;
     public List<ConnectionName> getAllConnectionNames() {
         return connectionNameRepository.findAll();

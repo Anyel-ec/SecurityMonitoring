@@ -1,5 +1,5 @@
 import React from 'react';
-import { Navbar, Container, Button } from 'react-bootstrap';
+import { Navbar, Container } from 'react-bootstrap';
 import SwitchToggle from '../components/switch/SwitchToggle';
 export default function Header({ darkMode, toggleTheme }) {
   return (
