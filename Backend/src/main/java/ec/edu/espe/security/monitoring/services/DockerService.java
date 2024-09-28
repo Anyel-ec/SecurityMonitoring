@@ -1,11 +1,13 @@
 package ec.edu.espe.security.monitoring.services;
 
 import ec.edu.espe.security.monitoring.models.DatabaseCredentials;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 
 @Service
+@Slf4j
 public class DockerService {
     public void runDockerCompose(DatabaseCredentials config, String dbType) throws IOException {
         ProcessBuilder processBuilder = new ProcessBuilder(
@@ -22,6 +24,7 @@ public class DockerService {
         // Ajustar las variables de entorno basadas en el tipo de base de datos
         switch (dbType.toLowerCase()) {
             case "postgresql":
+                log.error("Los datos son {}, {}, {}, {}", config.getUsername(), config.getPassword(), host, config.getPort());
                 processBuilder.environment().put("POSTGRES_USER", config.getUsername());
                 processBuilder.environment().put("POSTGRES_PASSWORD", config.getPassword());
                 processBuilder.environment().put("POSTGRES_HOST", host);

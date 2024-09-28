@@ -33,11 +33,14 @@ public class DatabaseCredentialsService {
         if (connectionOpt.isPresent()) {
             ConnectionName connection = connectionOpt.get();
 
-            // Guardar las credenciales según el tipo de base de datos
-            saveOrUpdateCredentials(connection, credentials, dbType);
-
-            // Ejecutar Docker Compose con las credenciales proporcionadas o actualizadas
+            // **1.** Ejecutar Docker Compose con las credenciales en texto claro
             dockerService.runDockerCompose(credentials, dbType);
+
+            // **2.** Encriptar la contraseña después de ejecutar Docker
+            credentials.setPassword(passwordEncoder.encode(credentials.getPassword()));
+
+            // **3.** Guardar las credenciales según el tipo de base de datos
+            saveOrUpdateCredentials(connection, credentials, dbType);
         } else {
             throw new IllegalArgumentException("No se encontró la conexión con nombre: " + connectionName);
         }
@@ -47,9 +50,6 @@ public class DatabaseCredentialsService {
      * Guardar o actualizar credenciales de cualquier tipo de base de datos en la conexión.
      */
     private void saveOrUpdateCredentials(ConnectionName connection, DatabaseCredentials credentials, String dbType) {
-        // Encriptar la contraseña antes de guardar
-        credentials.setPassword(passwordEncoder.encode(credentials.getPassword()));
-
         switch (dbType.toLowerCase()) {
             case "postgresql":
                 PostgresCredentials postgresCredentials = new PostgresCredentials();
@@ -100,7 +100,6 @@ public class DatabaseCredentialsService {
         existingCredentials.setUsername(newCredentials.getUsername());
         existingCredentials.setPassword(newCredentials.getPassword());
 
-        // Guardar según el tipo de credenciales (No necesitas el repositorio genérico, usa los repositorios específicos)
         if (existingCredentials instanceof PostgresCredentials postgresCredentials) {
             postgresCredentialsRepository.save(postgresCredentials);
         } else if (existingCredentials instanceof MariadbCredentials) {

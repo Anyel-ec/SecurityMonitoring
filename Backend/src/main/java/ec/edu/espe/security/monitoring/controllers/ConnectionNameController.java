@@ -1,6 +1,6 @@
 package ec.edu.espe.security.monitoring.controllers;
 
-import ec.edu.espe.security.monitoring.dto.JsonResponseDto;
+import ec.edu.espe.security.monitoring.dto.response.JsonResponseDto;
 import ec.edu.espe.security.monitoring.models.ConnectionName;
 import ec.edu.espe.security.monitoring.models.PostgresCredentials;
 import ec.edu.espe.security.monitoring.services.ConnectionNameService;
@@ -57,6 +57,7 @@ public class ConnectionNameController {
         }
 
         try {
+            log.error("Guardar nombre de conexion");
             ConnectionName savedConnection = connectionNameService.saveOrUpdateConnection(connection);
             return ResponseEntity.ok(new JsonResponseDto(true, HttpStatus.OK.value(), "Conexión guardada o actualizada exitosamente", savedConnection));
         } catch (Exception e) {

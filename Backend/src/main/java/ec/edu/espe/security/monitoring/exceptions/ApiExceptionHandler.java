@@ -1,7 +1,7 @@
 package ec.edu.espe.security.monitoring.exceptions;
 
 
-import ec.edu.espe.security.monitoring.dto.JsonResponseDto;
+import ec.edu.espe.security.monitoring.dto.response.JsonResponseDto;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;

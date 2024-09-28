@@ -1,6 +1,6 @@
 package ec.edu.espe.security.monitoring.exceptions;
 
-import ec.edu.espe.security.monitoring.dto.JsonResponseDto;
+import ec.edu.espe.security.monitoring.dto.response.JsonResponseDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;

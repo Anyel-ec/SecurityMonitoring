@@ -1,7 +1,7 @@
 package ec.edu.espe.security.monitoring.controllers;
 
-import ec.edu.espe.security.monitoring.dto.ConnectionRequestDto;
-import ec.edu.espe.security.monitoring.dto.JsonResponseDto;
+import ec.edu.espe.security.monitoring.dto.request.ConnectionRequestDto;
+import ec.edu.espe.security.monitoring.dto.response.JsonResponseDto;
 import ec.edu.espe.security.monitoring.models.DatabaseCredentials;
 import ec.edu.espe.security.monitoring.services.DatabaseCredentialsService;
 import ec.edu.espe.security.monitoring.utils.DatabaseUtils;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/v1/config")
 @Slf4j
-public class ConnectionController {
+public class ConnectionCredentialsController {
 
     private final DatabaseUtils databaseUtils;
     private final DatabaseCredentialsService databaseCredentialsService;
@@ -32,7 +32,7 @@ public class ConnectionController {
             @RequestBody DatabaseCredentials config,
             @RequestParam String connectionName,
             @PathVariable String type) {
-
+        log.error("Entra a guardar credenciales");
         // Verificar la conexión a la base de datos según el tipo
         if (!databaseUtils.testDatabaseConnection(config, type)) {
             JsonResponseDto response = new JsonResponseDto(
@@ -77,34 +77,40 @@ public class ConnectionController {
             @RequestBody ConnectionRequestDto request) {
 
         try {
-            // Iterar sobre los tipos de base de datos y guardar cada uno
+            // Iterar sobre los tipos de base de datos y guardar las credenciales
             for (String type : request.getTypes()) {
+                // Obtener las credenciales según el tipo de base de datos (PostgreSQL, MariaDB, etc.)
                 DatabaseCredentials credentials = request.getCredentials().get(type);
 
-                // Verificar la conexión a la base de datos según el tipo
-                if (!databaseUtils.testDatabaseConnection(credentials, type)) {
-                    JsonResponseDto response = new JsonResponseDto(
-                            false,
-                            HttpStatus.BAD_REQUEST.value(),
-                            "Error: No se pudo conectar a la base de datos " + type + " con las credenciales proporcionadas.",
-                            null
-                    );
-                    return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+                // Validar que las credenciales no sean nulas
+                if (credentials == null) {
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                            new JsonResponseDto(false, HttpStatus.BAD_REQUEST.value(),
+                                    "Credenciales no proporcionadas para el tipo " + type, null));
                 }
 
-                // Guardar las credenciales y ejecutar Docker Compose
+                // Probar la conexión con las credenciales proporcionadas
+                if (!databaseUtils.testDatabaseConnection(credentials, type)) {
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                            new JsonResponseDto(false, HttpStatus.BAD_REQUEST.value(),
+                                    "Error: No se pudo conectar a la base de datos " + type + " con las credenciales proporcionadas.", null));
+                }
+
+                // Guardar las credenciales junto al nombre de la conexión
                 databaseCredentialsService.saveCredentialsAndRunCompose(credentials, request.getConnectionName(), type);
             }
 
+            // Respuesta exitosa
             JsonResponseDto response = new JsonResponseDto(
                     true,
                     HttpStatus.OK.value(),
-                    "Configuración guardada y servicios reiniciados.",
+                    "Credenciales guardadas y servicios reiniciados correctamente.",
                     "Conexión configurada exitosamente"
             );
             return new ResponseEntity<>(response, HttpStatus.OK);
 
         } catch (Exception e) {
+            // Manejo de errores y respuesta en caso de excepción
             JsonResponseDto response = new JsonResponseDto(
                     false,
                     HttpStatus.INTERNAL_SERVER_ERROR.value(),
@@ -114,6 +120,7 @@ public class ConnectionController {
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
 
 
     /**
