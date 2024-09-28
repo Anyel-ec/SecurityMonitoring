@@ -64,28 +64,63 @@ export default function MainComponent() {
 
   // Maneja la selección de una conexión y habilita los switches
   const handleSelectConnection = (conn) => {
+    const updatedCredentials = {
+      PostgreSQL: conn.postgresCredentials || { host: '', port: '', username: '', password: '' },
+      MariaDB: conn.mariadbCredentials || { host: '', port: '', username: '', password: '' },
+      MongoDB: conn.mongodbCredentials || { host: '', port: '', username: '', password: '' }
+    };
+
     setSelectedConnection({
       ...conn,
-      types: conn.types || [],  // Asegúrate de que siempre haya un array en `types`
-      credentials: conn.credentials || { host: '', port: '', username: '', password: '' }
+      credentials: updatedCredentials,
+      types: conn.types || []
     });
-  
+
     // Activa los switches según las credenciales de la conexión seleccionada
-    setPostgresEnabled(conn.types?.includes('PostgreSQL') || false);
-    setMariaDbEnabled(conn.types?.includes('MariaDB') || false);
-    setMongoDbEnabled(conn.types?.includes('MongoDB') || false);
+    setPostgresEnabled(!!conn.postgresCredentials);
+    setMariaDbEnabled(!!conn.mariadbCredentials);
+    setMongoDbEnabled(!!conn.mongodbCredentials);
   };
+
 
   // Función para guardar la conexión
   const handleSave = async () => {
     try {
       if (selectedConnection) {
         console.log('Guardando conexión:', selectedConnection);
-        await saveOrUpdateConnection(selectedConnection); // Llamar a la función para guardar la conexión
+
+        // Prepara los datos para enviar al backend
+        const connectionData = {
+          connectionName: selectedConnection.connectionName,
+          types: [],
+          credentials: {},
+        };
+
+        // Añade los tipos seleccionados y sus credenciales
+        if (postgresEnabled) {
+          connectionData.types.push('PostgreSQL');
+          connectionData.credentials['PostgreSQL'] = selectedConnection.credentials['PostgreSQL'];
+        }
+        if (mariaDbEnabled) {
+          connectionData.types.push('MariaDB');
+          connectionData.credentials['MariaDB'] = selectedConnection.credentials['MariaDB'];
+        }
+        if (mongoDbEnabled) {
+          connectionData.types.push('MongoDB');
+          connectionData.credentials['MongoDB'] = selectedConnection.credentials['MongoDB'];
+        }
+
+        // Añade el comentario si existe
+        if (selectedConnection.comment) {
+          connectionData.comment = selectedConnection.comment;
+        }
+
+        // Llamar a la función para guardar la conexión
+        await saveOrUpdateConnection(connectionData);
 
         setConnections(
           connections.map((conn) =>
-            conn.name === selectedConnection.name
+            conn.connectionName === selectedConnection.connectionName
               ? { ...selectedConnection, lastConnected: new Date().toLocaleString() }
               : conn
           )
@@ -102,13 +137,22 @@ export default function MainComponent() {
       } else if (newConnection.connectionName) {
         console.log('Guardando nueva conexión:', newConnection.connectionName);
 
-        await saveOrUpdateConnection(newConnection);
+        // Prepara los datos para enviar al backend
+        const connectionData = {
+          connectionName: newConnection.connectionName,
+          types: [],
+          credentials: {},
+        };
+
+        // No hay credenciales aún, pero puedes añadirlas si es necesario
+
+        await saveOrUpdateConnection(connectionData);
         setConnections([
           ...connections,
           {
             connectionName: newConnection.connectionName,
             types: [],
-            credentials: { host: '', port: '', username: '', password: '' }, // Agrega credenciales vacías para nueva conexión
+            credentials: {},
             comment: '',
             lastConnected: new Date().toLocaleString(),
           },
@@ -138,6 +182,7 @@ export default function MainComponent() {
       });
     }
   };
+
 
   const handleDelete = async () => {
     if (selectedConnection) {
@@ -194,18 +239,18 @@ export default function MainComponent() {
       const newTypes = Array.isArray(selectedConnection.types)
         ? selectedConnection.types
         : [];  // Asegurarse de que types sea siempre un array
-  
+
       const updatedTypes = isEnabled
         ? [...newTypes, type]
         : newTypes.filter((t) => t !== type);
-  
+
       const newCredentials = { ...selectedConnection.credentials };
       if (!isEnabled) {
         delete newCredentials[type];
       } else if (!newCredentials[type]) {
         newCredentials[type] = { host: '', port: '', username: '', password: '' };
       }
-  
+
       setSelectedConnection({
         ...selectedConnection,
         types: updatedTypes,
@@ -236,13 +281,13 @@ export default function MainComponent() {
       password: '',
       port: 5432,
     };
-  
+
     try {
       setTestingConnection(type);
-  
+
       const response = await testPostgresConnection(config);
       console.log('Conexión exitosa:', response.message);
-  
+
       Swal.fire({
         toast: true,
         position: 'top-right',
@@ -253,7 +298,7 @@ export default function MainComponent() {
       });
     } catch (error) {
       console.error('Error al probar la conexión:', error.message);
-  
+
       Swal.fire({
         toast: true,
         position: 'top-right',
@@ -267,7 +312,7 @@ export default function MainComponent() {
       setTestingConnection(null);
     }
   };
-  
+
 
   return (
     <div ref={containerRef} className="d-flex h-100">

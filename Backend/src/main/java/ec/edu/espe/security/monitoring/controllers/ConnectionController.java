@@ -1,5 +1,6 @@
 package ec.edu.espe.security.monitoring.controllers;
 
+import ec.edu.espe.security.monitoring.dto.ConnectionRequestDto;
 import ec.edu.espe.security.monitoring.dto.JsonResponseDto;
 import ec.edu.espe.security.monitoring.models.DatabaseCredentials;
 import ec.edu.espe.security.monitoring.services.DatabaseCredentialsService;
@@ -64,6 +65,56 @@ public class ConnectionController {
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+
+    /**
+     * Método para configurar y guardar credenciales de base de datos.
+     * @param request Objeto que contiene el nombre de la conexión, los tipos y las credenciales.
+     * @return Respuesta con estado de éxito o error
+     */
+    @PostMapping("/database")
+    public ResponseEntity<JsonResponseDto> configureDatabase(
+            @RequestBody ConnectionRequestDto request) {
+
+        try {
+            // Iterar sobre los tipos de base de datos y guardar cada uno
+            for (String type : request.getTypes()) {
+                DatabaseCredentials credentials = request.getCredentials().get(type);
+
+                // Verificar la conexión a la base de datos según el tipo
+                if (!databaseUtils.testDatabaseConnection(credentials, type)) {
+                    JsonResponseDto response = new JsonResponseDto(
+                            false,
+                            HttpStatus.BAD_REQUEST.value(),
+                            "Error: No se pudo conectar a la base de datos " + type + " con las credenciales proporcionadas.",
+                            null
+                    );
+                    return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+                }
+
+                // Guardar las credenciales y ejecutar Docker Compose
+                databaseCredentialsService.saveCredentialsAndRunCompose(credentials, request.getConnectionName(), type);
+            }
+
+            JsonResponseDto response = new JsonResponseDto(
+                    true,
+                    HttpStatus.OK.value(),
+                    "Configuración guardada y servicios reiniciados.",
+                    "Conexión configurada exitosamente"
+            );
+            return new ResponseEntity<>(response, HttpStatus.OK);
+
+        } catch (Exception e) {
+            JsonResponseDto response = new JsonResponseDto(
+                    false,
+                    HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                    "Error al aplicar la configuración: " + e.getMessage(),
+                    null
+            );
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 
     /**
      * Método para probar la conexión a la base de datos.
