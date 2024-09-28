@@ -1,18 +1,19 @@
 import React, { useState, useRef, useEffect } from 'react';
 import SavedConnections from './SavedConnections';
 import ConnectionDetails from './ConnectionDetails';
-import { getConnectionNames, saveOrUpdateConnection, deleteConnectionById } from '../services/connectionService'; // Asegúrate de importar correctamente el servicio
+import { getConnectionNames, saveOrUpdateConnection, deleteConnectionById, testPostgresConnection } from '../services/connectionService'; // Asegúrate de importar correctamente el servicio
 import Swal from 'sweetalert2'; // Importa SweetAlert2
 
 export default function MainComponent() {
   const [connections, setConnections] = useState([]);
   const [selectedConnection, setSelectedConnection] = useState(null);
   const [newConnection, setNewConnection] = useState({ connectionName: '' }); // Cambiado a un objeto
-  const [testingConnection, setTestingConnection] = useState(null);
   const [postgresEnabled, setPostgresEnabled] = useState(false);
   const [mariaDbEnabled, setMariaDbEnabled] = useState(false);
   const [mongoDbEnabled, setMongoDbEnabled] = useState(false);
   const [leftPanelWidth, setLeftPanelWidth] = useState(400); // Estado para el ancho del panel izquierdo
+  const [testingConnection, setTestingConnection] = useState(null); // Definir el estado correctamente aquí
+
   const containerRef = useRef(null);
   const isDragging = useRef(false);
 
@@ -65,27 +66,23 @@ export default function MainComponent() {
   const handleSelectConnection = (conn) => {
     setSelectedConnection({
       ...conn,
-      credentials: {
-        PostgreSQL: conn.postgresCredentials || { host: '', port: '', username: '', password: '' },
-        MariaDB: conn.mariadbCredentials || { host: '', port: '', username: '', password: '' },
-        MongoDB: conn.mongodbCredentials || { host: '', port: '', username: '', password: '' }
-      }
+      types: conn.types || [],  // Asegúrate de que siempre haya un array en `types`
+      credentials: conn.credentials || { host: '', port: '', username: '', password: '' }
     });
-
+  
     // Activa los switches según las credenciales de la conexión seleccionada
-    setPostgresEnabled(!!conn.postgresCredentials);
-    setMariaDbEnabled(!!conn.mariadbCredentials);
-    setMongoDbEnabled(!!conn.mongodbCredentials);
+    setPostgresEnabled(conn.types?.includes('PostgreSQL') || false);
+    setMariaDbEnabled(conn.types?.includes('MariaDB') || false);
+    setMongoDbEnabled(conn.types?.includes('MongoDB') || false);
   };
 
   // Función para guardar la conexión
   const handleSave = async () => {
     try {
       if (selectedConnection) {
-        // Imprime los datos a guardar
         console.log('Guardando conexión:', selectedConnection);
-
         await saveOrUpdateConnection(selectedConnection); // Llamar a la función para guardar la conexión
+
         setConnections(
           connections.map((conn) =>
             conn.name === selectedConnection.name
@@ -94,7 +91,6 @@ export default function MainComponent() {
           )
         );
 
-        // Muestra un toast de éxito
         Swal.fire({
           toast: true,
           position: 'top-right',
@@ -104,7 +100,6 @@ export default function MainComponent() {
           timer: 3000
         });
       } else if (newConnection.connectionName) {
-        // Si se guarda una nueva conexión
         console.log('Guardando nueva conexión:', newConnection.connectionName);
 
         await saveOrUpdateConnection(newConnection);
@@ -113,7 +108,7 @@ export default function MainComponent() {
           {
             connectionName: newConnection.connectionName,
             types: [],
-            credentials: {},
+            credentials: { host: '', port: '', username: '', password: '' }, // Agrega credenciales vacías para nueva conexión
             comment: '',
             lastConnected: new Date().toLocaleString(),
           },
@@ -146,7 +141,6 @@ export default function MainComponent() {
 
   const handleDelete = async () => {
     if (selectedConnection) {
-      // Preguntar primero al usuario si desea eliminar
       Swal.fire({
         title: '¿Estás seguro?',
         text: "No podrás deshacer esta acción",
@@ -159,16 +153,12 @@ export default function MainComponent() {
       }).then(async (result) => {
         if (result.isConfirmed) {
           try {
-            // Llama al servicio para eliminar la conexión por ID
             await deleteConnectionById(selectedConnection.id);
 
-            // Elimina la conexión del estado local
             setConnections(connections.filter((conn) => conn.connectionName !== selectedConnection.connectionName));
 
-            // Restablece la conexión seleccionada
             setSelectedConnection(null);
 
-            // Muestra un toast de éxito
             Swal.fire({
               toast: true,
               position: 'top-right',
@@ -180,7 +170,6 @@ export default function MainComponent() {
           } catch (error) {
             console.error('Error al eliminar la conexión:', error);
 
-            // Muestra un toast de error
             Swal.fire({
               toast: true,
               position: 'top-right',
@@ -202,20 +191,24 @@ export default function MainComponent() {
 
   const handleTypeChange = (type, isEnabled) => {
     if (selectedConnection) {
-      const newTypes = isEnabled
-        ? [...selectedConnection.types, type]
-        : selectedConnection.types.filter((t) => t !== type);
-
+      const newTypes = Array.isArray(selectedConnection.types)
+        ? selectedConnection.types
+        : [];  // Asegurarse de que types sea siempre un array
+  
+      const updatedTypes = isEnabled
+        ? [...newTypes, type]
+        : newTypes.filter((t) => t !== type);
+  
       const newCredentials = { ...selectedConnection.credentials };
       if (!isEnabled) {
         delete newCredentials[type];
       } else if (!newCredentials[type]) {
         newCredentials[type] = { host: '', port: '', username: '', password: '' };
       }
-
+  
       setSelectedConnection({
         ...selectedConnection,
-        types: newTypes,
+        types: updatedTypes,
         credentials: newCredentials,
       });
     }
@@ -237,31 +230,44 @@ export default function MainComponent() {
   };
 
   const testConnection = async (type) => {
-    setTestingConnection(type);
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    const success = Math.random() > 0.3;
-    setTestingConnection(null);
-    if (success) {
+    const config = selectedConnection?.credentials[type] || {
+      host: '',
+      username: '',
+      password: '',
+      port: 5432,
+    };
+  
+    try {
+      setTestingConnection(type);
+  
+      const response = await testPostgresConnection(config);
+      console.log('Conexión exitosa:', response.message);
+  
       Swal.fire({
         toast: true,
         position: 'top-right',
         icon: 'success',
-        title: `Conexión a ${type} exitosa`,
+        title: `Conexión exitosa a ${type}`,
         showConfirmButton: false,
         timer: 3000
       });
-    } else {
+    } catch (error) {
+      console.error('Error al probar la conexión:', error.message);
+  
       Swal.fire({
         toast: true,
         position: 'top-right',
         icon: 'error',
-        title: `Conexión a ${type} fallida`,
-        text: 'Por favor, verifica las credenciales.',
+        title: `No se pudo conectar a ${type}`,
+        text: error.message || 'Ocurrió un error',
         showConfirmButton: false,
         timer: 3000
       });
+    } finally {
+      setTestingConnection(null);
     }
   };
+  
 
   return (
     <div ref={containerRef} className="d-flex h-100">
@@ -272,8 +278,8 @@ export default function MainComponent() {
         setSelectedConnection={handleSelectConnection}
         handleDelete={handleDelete}
         handleSave={handleSave}
-        newConnection={newConnection} // Cambiado a newConnection
-        setNewConnection={setNewConnection} // Cambiado a setNewConnection
+        newConnection={newConnection}
+        setNewConnection={setNewConnection}
         leftPanelWidth={leftPanelWidth}
       />
 
@@ -282,11 +288,9 @@ export default function MainComponent() {
         className="resizer"
         onMouseDown={handleMouseDown}
         style={{ cursor: 'col-resize', width: '5px', backgroundColor: '#ddd', border: 'none', padding: '0', outline: 'none' }}
-        aria-label="Resizer" // Proporciona una descripción accesible
+        aria-label="Resizer"
       >
       </button>
-
-
 
       {/* Right panel - ConnectionDetails */}
       <ConnectionDetails

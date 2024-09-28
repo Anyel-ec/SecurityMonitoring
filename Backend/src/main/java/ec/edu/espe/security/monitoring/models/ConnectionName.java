@@ -27,9 +27,9 @@ public class ConnectionName {
 
     @OneToOne
     @JoinColumn(name = "mariadb_credentials_id", referencedColumnName = "id")
-    private MariaDBCredentials mariadbCredentials;
+    private MariadbCredentials mariadbCredentials;
 
     @OneToOne
     @JoinColumn(name = "mongodb_credentials_id", referencedColumnName = "id")
-    private MongoDBCredentials mongodbCredentials;
+    private MongodbCredentials mongodbCredentials;
 }

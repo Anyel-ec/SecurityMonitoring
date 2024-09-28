@@ -10,13 +10,11 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Data
-public class MariaDBCredentials extends DatabaseCredentials {
+
+public class MongodbCredentials extends  DatabaseCredentials{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    private String mysqlRootPassword;
-
 
 }

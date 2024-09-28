@@ -1,14 +1,10 @@
 package ec.edu.espe.security.monitoring.services;
 
-import ec.edu.espe.security.monitoring.models.ConnectionName;
-import ec.edu.espe.security.monitoring.models.DatabaseCredentials;
-import ec.edu.espe.security.monitoring.models.PostgresCredentials;
-import ec.edu.espe.security.monitoring.models.MariaDBCredentials;
-import ec.edu.espe.security.monitoring.models.MongoDBCredentials;
+import ec.edu.espe.security.monitoring.models.*;
 import ec.edu.espe.security.monitoring.repositories.ConnectionNameRepository;
 import ec.edu.espe.security.monitoring.repositories.PostgresCredentialsRepository;
-import ec.edu.espe.security.monitoring.repositories.MariaDBCredentialsRepository;
-import ec.edu.espe.security.monitoring.repositories.MongoDBCredentialsRepository;
+import ec.edu.espe.security.monitoring.repositories.MariadbCredentialsRepository;
+import ec.edu.espe.security.monitoring.repositories.MongodbCredentialsRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -22,8 +18,8 @@ public class DatabaseCredentialsService {
 
     private final PasswordEncoder passwordEncoder;
     private final PostgresCredentialsRepository postgresCredentialsRepository;
-    private final MariaDBCredentialsRepository mariadbCredentialsRepository;
-    private final MongoDBCredentialsRepository mongodbCredentialsRepository;
+    private final MariadbCredentialsRepository mariadbCredentialsRepository;
+    private final MongodbCredentialsRepository mongodbCredentialsRepository;
     private final ConnectionNameRepository nameConnectionRepository;
     private final DockerService dockerService;
 
@@ -67,7 +63,7 @@ public class DatabaseCredentialsService {
                 break;
 
             case "mariadb":
-                MariaDBCredentials mariadbCredentials = new MariaDBCredentials();
+                MariadbCredentials mariadbCredentials = new MariadbCredentials();
                 copyDatabaseCredentials(mariadbCredentials, credentials);
                 if (connection.getMariadbCredentials() != null) {
                     updateExistingCredentials(connection.getMariadbCredentials(), mariadbCredentials);
@@ -78,7 +74,7 @@ public class DatabaseCredentialsService {
                 break;
 
             case "mongodb":
-                MongoDBCredentials mongodbCredentials = new MongoDBCredentials();
+                MongodbCredentials mongodbCredentials = new MongodbCredentials();
                 copyDatabaseCredentials(mongodbCredentials, credentials);
                 if (connection.getMongodbCredentials() != null) {
                     updateExistingCredentials(connection.getMongodbCredentials(), mongodbCredentials);
@@ -105,12 +101,12 @@ public class DatabaseCredentialsService {
         existingCredentials.setPassword(newCredentials.getPassword());
 
         // Guardar según el tipo de credenciales (No necesitas el repositorio genérico, usa los repositorios específicos)
-        if (existingCredentials instanceof PostgresCredentials) {
-            postgresCredentialsRepository.save((PostgresCredentials) existingCredentials);
-        } else if (existingCredentials instanceof MariaDBCredentials) {
-            mariadbCredentialsRepository.save((MariaDBCredentials) existingCredentials);
-        } else if (existingCredentials instanceof MongoDBCredentials) {
-            mongodbCredentialsRepository.save((MongoDBCredentials) existingCredentials);
+        if (existingCredentials instanceof PostgresCredentials postgresCredentials) {
+            postgresCredentialsRepository.save(postgresCredentials);
+        } else if (existingCredentials instanceof MariadbCredentials) {
+            mariadbCredentialsRepository.save((MariadbCredentials) existingCredentials);
+        } else if (existingCredentials instanceof MongodbCredentials) {
+            mongodbCredentialsRepository.save((MongodbCredentials) existingCredentials);
         }
     }
 
