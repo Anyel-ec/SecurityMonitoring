@@ -107,21 +107,9 @@ const ConnectionDetails = ({ selectedConnection, handleTypeChange, postgresEnabl
                       />
                     </div>
 
-                    <button
-                      className="btn btn-primary mb-3"
-                      onClick={() => testConnection(type)}
-                      disabled={testingConnection === type} // Deshabilitar el botón mientras se está probando
-                    >
-                      {testingConnection === type ? (
-                        <span>
-                          <i className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></i> {/* Indicador de carga */}
-                          Probando...
-                        </span>
-                      ) : (
-                        'Probar conexión'
-                      )}
+                    <button className="btn btn-primary mb-3" onClick={() => testConnection(type)}>
+                      {testingConnection === type ? 'Probando...' : 'Probar conexión'}
                     </button>
-
                   </div>
                 ) : null
             )}

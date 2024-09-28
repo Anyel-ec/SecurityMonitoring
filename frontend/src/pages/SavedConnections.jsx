@@ -9,11 +9,11 @@ const SavedConnections = ({ connections, selectedConnection, setSelectedConnecti
         <div className="list-group">
           {connections.map((conn, index) => (
             <button
-              key={conn.id || index} // Usa el id si existe, de lo contrario el índice
-              type="button"
-              className={`list-group-item list-group-item-action ${selectedConnection?.id === conn.id ? 'list-group-item-secondary' : ''}`}
-              onClick={() => setSelectedConnection(conn)}
-            >
+            key={`${conn.connectionName}-${index}`} // Genera una clave más única usando el nombre de conexión y el índice
+            type="button"
+            className={`list-group-item list-group-item-action ${selectedConnection?.id === conn.id ? 'list-group-item-secondary' : ''}`}
+            onClick={() => setSelectedConnection(conn)}
+          >
               <div className="d-flex justify-content-between">
                 <div>
                   <i className="bi bi-database me-2"></i>
@@ -27,6 +27,7 @@ const SavedConnections = ({ connections, selectedConnection, setSelectedConnecti
               <small className="text-truncate d-block">{conn.comment || 'Sin comentarios'}</small>
             </button>
           ))}
+
         </div>
       </div>
 

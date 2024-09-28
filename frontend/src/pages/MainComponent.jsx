@@ -1,36 +1,34 @@
 import React, { useState, useRef, useEffect } from 'react';
 import SavedConnections from './SavedConnections';
 import ConnectionDetails from './ConnectionDetails';
-import { getConnectionNames, saveOrUpdateConnection, deleteConnectionById, testPostgresConnection } from '../services/connectionService'; // Asegúrate de importar correctamente el servicio
-import Swal from 'sweetalert2'; // Importa SweetAlert2
+import { getConnectionNames, saveOrUpdateConnectionName, saveOrUpdateConnectionCredentials, deleteConnectionById, testPostgresConnection } from '../services/connectionService'; 
+import Swal from 'sweetalert2'; 
 
 export default function MainComponent() {
   const [connections, setConnections] = useState([]);
   const [selectedConnection, setSelectedConnection] = useState(null);
-  const [newConnection, setNewConnection] = useState({ connectionName: '' }); // Cambiado a un objeto
+  const [newConnection, setNewConnection] = useState({ connectionName: '' }); 
+  const [testingConnection, setTestingConnection] = useState(null);
   const [postgresEnabled, setPostgresEnabled] = useState(false);
   const [mariaDbEnabled, setMariaDbEnabled] = useState(false);
   const [mongoDbEnabled, setMongoDbEnabled] = useState(false);
-  const [leftPanelWidth, setLeftPanelWidth] = useState(400); // Estado para el ancho del panel izquierdo
-  const [testingConnection, setTestingConnection] = useState(null); // Definir el estado correctamente aquí
-
+  const [leftPanelWidth, setLeftPanelWidth] = useState(400);
   const containerRef = useRef(null);
   const isDragging = useRef(false);
 
-  // Usamos useEffect para llamar al servicio al cargar el componente
   useEffect(() => {
     const fetchConnectionNames = async () => {
       try {
         const data = await getConnectionNames();
-        console.log('Datos obtenidos del backend:', data); // Mostramos los datos por consola
-        setConnections(data.result); // Aquí actualizamos el estado con los datos del backend
+        console.log('Datos obtenidos del backend:', data); 
+        setConnections(data.result);
       } catch (error) {
         console.error('Error al obtener los nombres de las conexiones:', error);
       }
     };
 
     fetchConnectionNames();
-  }, []); // El array vacío asegura que esto solo se ejecuta al montar el componente
+  }, []); 
 
   useEffect(() => {
     const handleMouseMove = (e) => {
@@ -38,7 +36,7 @@ export default function MainComponent() {
       const containerRect = containerRef.current?.getBoundingClientRect();
       if (containerRect) {
         const newWidth = e.clientX - containerRect.left;
-        setLeftPanelWidth(newWidth); // Actualizamos el ancho del panel izquierdo
+        setLeftPanelWidth(newWidth);
       }
     };
 
@@ -64,63 +62,29 @@ export default function MainComponent() {
 
   // Maneja la selección de una conexión y habilita los switches
   const handleSelectConnection = (conn) => {
-    const updatedCredentials = {
-      PostgreSQL: conn.postgresCredentials || { host: '', port: '', username: '', password: '' },
-      MariaDB: conn.mariadbCredentials || { host: '', port: '', username: '', password: '' },
-      MongoDB: conn.mongodbCredentials || { host: '', port: '', username: '', password: '' }
-    };
-
     setSelectedConnection({
       ...conn,
-      credentials: updatedCredentials,
-      types: conn.types || []
+      types: conn.types || [],
+      credentials: {
+        PostgreSQL: conn.postgresCredentials || { host: '', port: '', username: '', password: '' },
+        MariaDB: conn.mariadbCredentials || { host: '', port: '', username: '', password: '' },
+        MongoDB: conn.mongodbCredentials || { host: '', port: '', username: '', password: '' }
+      }
     });
 
-    // Activa los switches según las credenciales de la conexión seleccionada
     setPostgresEnabled(!!conn.postgresCredentials);
     setMariaDbEnabled(!!conn.mariadbCredentials);
     setMongoDbEnabled(!!conn.mongodbCredentials);
   };
 
-
-  // Función para guardar la conexión
-  const handleSave = async () => {
+  // Función para guardar el nombre de la conexión
+  const handleSaveConnectionName = async () => {
     try {
       if (selectedConnection) {
-        console.log('Guardando conexión:', selectedConnection);
-
-        // Prepara los datos para enviar al backend
-        const connectionData = {
-          connectionName: selectedConnection.connectionName,
-          types: [],
-          credentials: {},
-        };
-
-        // Añade los tipos seleccionados y sus credenciales
-        if (postgresEnabled) {
-          connectionData.types.push('PostgreSQL');
-          connectionData.credentials['PostgreSQL'] = selectedConnection.credentials['PostgreSQL'];
-        }
-        if (mariaDbEnabled) {
-          connectionData.types.push('MariaDB');
-          connectionData.credentials['MariaDB'] = selectedConnection.credentials['MariaDB'];
-        }
-        if (mongoDbEnabled) {
-          connectionData.types.push('MongoDB');
-          connectionData.credentials['MongoDB'] = selectedConnection.credentials['MongoDB'];
-        }
-
-        // Añade el comentario si existe
-        if (selectedConnection.comment) {
-          connectionData.comment = selectedConnection.comment;
-        }
-
-        // Llamar a la función para guardar la conexión
-        await saveOrUpdateConnection(connectionData);
-
+        await saveOrUpdateConnectionName(selectedConnection); 
         setConnections(
           connections.map((conn) =>
-            conn.connectionName === selectedConnection.connectionName
+            conn.name === selectedConnection.name
               ? { ...selectedConnection, lastConnected: new Date().toLocaleString() }
               : conn
           )
@@ -130,23 +94,13 @@ export default function MainComponent() {
           toast: true,
           position: 'top-right',
           icon: 'success',
-          title: 'Guardado con éxito',
+          title: 'Conexión guardada con éxito',
           showConfirmButton: false,
           timer: 3000
         });
       } else if (newConnection.connectionName) {
-        console.log('Guardando nueva conexión:', newConnection.connectionName);
+        await saveOrUpdateConnectionName(newConnection);
 
-        // Prepara los datos para enviar al backend
-        const connectionData = {
-          connectionName: newConnection.connectionName,
-          types: [],
-          credentials: {},
-        };
-
-        // No hay credenciales aún, pero puedes añadirlas si es necesario
-
-        await saveOrUpdateConnection(connectionData);
         setConnections([
           ...connections,
           {
@@ -157,6 +111,7 @@ export default function MainComponent() {
             lastConnected: new Date().toLocaleString(),
           },
         ]);
+
         setNewConnection({ connectionName: '' });
 
         Swal.fire({
@@ -170,7 +125,6 @@ export default function MainComponent() {
       }
     } catch (error) {
       console.error('Error al guardar la conexión:', error);
-
       Swal.fire({
         toast: true,
         position: 'top-right',
@@ -183,6 +137,48 @@ export default function MainComponent() {
     }
   };
 
+  // Función para guardar las credenciales de la conexión
+  const handleSaveCredentials = async () => {
+    try {
+      if (selectedConnection) {
+        const enabledTypes = [];
+        if (postgresEnabled) enabledTypes.push('PostgreSQL');
+        if (mariaDbEnabled) enabledTypes.push('MariaDB');
+        if (mongoDbEnabled) enabledTypes.push('MongoDB');
+
+        const credentialsData = {
+          connectionName: selectedConnection.connectionName,
+          types: enabledTypes,
+          credentials: selectedConnection.credentials,
+        };
+        
+        // Muestra los datos que se van a enviar por consola
+        console.log('Datos que se envían al backend:', credentialsData);
+        
+        await saveOrUpdateConnectionCredentials(credentialsData); 
+
+        Swal.fire({
+          toast: true,
+          position: 'top-right',
+          icon: 'success',
+          title: 'Credenciales guardadas con éxito',
+          showConfirmButton: false,
+          timer: 3000
+        });
+      }
+    } catch (error) {
+      console.error('Error al guardar las credenciales:', error);
+      Swal.fire({
+        toast: true,
+        position: 'top-right',
+        icon: 'error',
+        title: 'No se pudo guardar las credenciales',
+        text: error.message || 'Ocurrió un error',
+        showConfirmButton: false,
+        timer: 3000
+      });
+    }
+  };
 
   const handleDelete = async () => {
     if (selectedConnection) {
@@ -199,11 +195,8 @@ export default function MainComponent() {
         if (result.isConfirmed) {
           try {
             await deleteConnectionById(selectedConnection.id);
-
             setConnections(connections.filter((conn) => conn.connectionName !== selectedConnection.connectionName));
-
             setSelectedConnection(null);
-
             Swal.fire({
               toast: true,
               position: 'top-right',
@@ -214,7 +207,6 @@ export default function MainComponent() {
             });
           } catch (error) {
             console.error('Error al eliminar la conexión:', error);
-
             Swal.fire({
               toast: true,
               position: 'top-right',
@@ -236,13 +228,9 @@ export default function MainComponent() {
 
   const handleTypeChange = (type, isEnabled) => {
     if (selectedConnection) {
-      const newTypes = Array.isArray(selectedConnection.types)
-        ? selectedConnection.types
-        : [];  // Asegurarse de que types sea siempre un array
-
-      const updatedTypes = isEnabled
-        ? [...newTypes, type]
-        : newTypes.filter((t) => t !== type);
+      const newTypes = isEnabled
+        ? [...selectedConnection.types, type]
+        : selectedConnection.types.filter((t) => t !== type);
 
       const newCredentials = { ...selectedConnection.credentials };
       if (!isEnabled) {
@@ -253,7 +241,7 @@ export default function MainComponent() {
 
       setSelectedConnection({
         ...selectedConnection,
-        types: updatedTypes,
+        types: newTypes,
         credentials: newCredentials,
       });
     }
@@ -275,36 +263,26 @@ export default function MainComponent() {
   };
 
   const testConnection = async (type) => {
-    const config = selectedConnection?.credentials[type] || {
-      host: '',
-      username: '',
-      password: '',
-      port: 5432,
-    };
-
+    setTestingConnection(type);
     try {
-      setTestingConnection(type);
-
+      const config = selectedConnection.credentials[type];
       const response = await testPostgresConnection(config);
-      console.log('Conexión exitosa:', response.message);
 
       Swal.fire({
         toast: true,
         position: 'top-right',
         icon: 'success',
-        title: `Conexión exitosa a ${type}`,
+        title: response.message,
         showConfirmButton: false,
         timer: 3000
       });
     } catch (error) {
-      console.error('Error al probar la conexión:', error.message);
-
       Swal.fire({
         toast: true,
         position: 'top-right',
         icon: 'error',
-        title: `No se pudo conectar a ${type}`,
-        text: error.message || 'Ocurrió un error',
+        title: 'Conexión fallida',
+        text: error.message || 'No se pudo conectar. Verifica las credenciales.',
         showConfirmButton: false,
         timer: 3000
       });
@@ -313,22 +291,19 @@ export default function MainComponent() {
     }
   };
 
-
   return (
     <div ref={containerRef} className="d-flex h-100">
-      {/* Left panel - SavedConnections */}
       <SavedConnections
         connections={connections}
         selectedConnection={selectedConnection}
         setSelectedConnection={handleSelectConnection}
         handleDelete={handleDelete}
-        handleSave={handleSave}
-        newConnection={newConnection}
-        setNewConnection={setNewConnection}
+        handleSave={handleSaveConnectionName} 
+        newConnection={newConnection} 
+        setNewConnection={setNewConnection} 
         leftPanelWidth={leftPanelWidth}
       />
 
-      {/* Resizer */}
       <button
         className="resizer"
         onMouseDown={handleMouseDown}
@@ -337,7 +312,6 @@ export default function MainComponent() {
       >
       </button>
 
-      {/* Right panel - ConnectionDetails */}
       <ConnectionDetails
         selectedConnection={selectedConnection}
         handleTypeChange={handleTypeChange}
@@ -350,9 +324,10 @@ export default function MainComponent() {
         updateCredential={updateCredential}
         testConnection={testConnection}
         testingConnection={testingConnection}
-        handleSave={handleSave}
+        handleSave={handleSaveCredentials} 
         handleCancel={handleCancel}
       />
     </div>
   );
 }
+ 
