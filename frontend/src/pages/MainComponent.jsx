@@ -1,13 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react';
 import SavedConnections from './SavedConnections';
 import ConnectionDetails from './ConnectionDetails';
-import { getConnectionNames, saveOrUpdateConnectionName, saveOrUpdateConnectionCredentials, deleteConnectionById, testPostgresConnection } from '../services/connectionService'; 
-import Swal from 'sweetalert2'; 
+import { getConnectionNames, saveOrUpdateConnectionName, saveOrUpdateConnectionCredentials, deleteConnectionById, testPostgresConnection } from '../services/connectionService';
+import Swal from 'sweetalert2';
 
 export default function MainComponent() {
   const [connections, setConnections] = useState([]);
   const [selectedConnection, setSelectedConnection] = useState(null);
-  const [newConnection, setNewConnection] = useState({ connectionName: '' }); 
+  const [newConnection, setNewConnection] = useState({ connectionName: '' });
   const [testingConnection, setTestingConnection] = useState(null);
   const [postgresEnabled, setPostgresEnabled] = useState(false);
   const [mariaDbEnabled, setMariaDbEnabled] = useState(false);
@@ -20,7 +20,7 @@ export default function MainComponent() {
     const fetchConnectionNames = async () => {
       try {
         const data = await getConnectionNames();
-        console.log('Datos obtenidos del backend:', data); 
+        console.log('Datos obtenidos del backend:', data);
         setConnections(data.result);
       } catch (error) {
         console.error('Error al obtener los nombres de las conexiones:', error);
@@ -28,7 +28,7 @@ export default function MainComponent() {
     };
 
     fetchConnectionNames();
-  }, []); 
+  }, []);
 
   useEffect(() => {
     const handleMouseMove = (e) => {
@@ -81,7 +81,7 @@ export default function MainComponent() {
   const handleSaveConnectionName = async () => {
     try {
       if (selectedConnection) {
-        await saveOrUpdateConnectionName(selectedConnection); 
+        await saveOrUpdateConnectionName(selectedConnection);
         setConnections(
           connections.map((conn) =>
             conn.name === selectedConnection.name
@@ -151,11 +151,11 @@ export default function MainComponent() {
           types: enabledTypes,
           credentials: selectedConnection.credentials,
         };
-        
+
         // Muestra los datos que se van a enviar por consola
         console.log('Datos que se envían al backend:', credentialsData);
-        
-        await saveOrUpdateConnectionCredentials(credentialsData); 
+
+        await saveOrUpdateConnectionCredentials(credentialsData);
 
         Swal.fire({
           toast: true,
@@ -165,6 +165,9 @@ export default function MainComponent() {
           showConfirmButton: false,
           timer: 3000
         });
+        // Abrir el dashboard de Grafana en una nueva pestaña
+        window.open('http://localhost:3000/d/000000039/postgresql-database?orgId=1&refresh=10s', '_blank');
+
       }
     } catch (error) {
       console.error('Error al guardar las credenciales:', error);
@@ -298,9 +301,9 @@ export default function MainComponent() {
         selectedConnection={selectedConnection}
         setSelectedConnection={handleSelectConnection}
         handleDelete={handleDelete}
-        handleSave={handleSaveConnectionName} 
-        newConnection={newConnection} 
-        setNewConnection={setNewConnection} 
+        handleSave={handleSaveConnectionName}
+        newConnection={newConnection}
+        setNewConnection={setNewConnection}
         leftPanelWidth={leftPanelWidth}
       />
 
@@ -324,10 +327,9 @@ export default function MainComponent() {
         updateCredential={updateCredential}
         testConnection={testConnection}
         testingConnection={testingConnection}
-        handleSave={handleSaveCredentials} 
+        handleSave={handleSaveCredentials}
         handleCancel={handleCancel}
       />
     </div>
   );
 }
- 

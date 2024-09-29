@@ -2,6 +2,7 @@ import MainLayout from '../Layouts/MainLayout';
 import { useState, useEffect } from 'react';
 import MainComponent from '../pages/MainComponent';
 import PropTypes from 'prop-types';
+import InstallationWizard from '../pages/installation/InstallationWizard';
 
 
 const RoutesWrapper = ({ children }) => {
@@ -43,6 +44,14 @@ const routes = [
     element: (
       <RoutesWrapper>
         <MainComponent />
+      </RoutesWrapper>
+    ),
+  }, 
+  {
+    path: "/instalacion",
+    element: (
+      <RoutesWrapper>
+        <InstallationWizard />
       </RoutesWrapper>
     ),
   }

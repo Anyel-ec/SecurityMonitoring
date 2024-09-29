@@ -1,6 +1,6 @@
 import React from 'react';
 import 'bootstrap-icons/font/bootstrap-icons.css'; // Para los iconos de Bootstrap
-
+import PropTypes from 'prop-types';
 const SavedConnections = ({ connections, selectedConnection, setSelectedConnection, handleDelete, handleSave, newConnection, setNewConnection, leftPanelWidth }) => {
   return (
     <div className="bg-light shadow-sm d-flex flex-column justify-content-between" style={{ width: leftPanelWidth, height: '90vh' }}>
@@ -51,5 +51,6 @@ const SavedConnections = ({ connections, selectedConnection, setSelectedConnecti
     </div>
   );
 };
+
 
 export default SavedConnections;
