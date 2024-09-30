@@ -12,9 +12,9 @@ import org.springframework.context.annotation.Configuration;
         info = @Info(
                 title = "Security Monitoring",
                 version = "1.0",
-                description = "This project aims to develop an open-source tool for dynamic monitoring of three databases: MongoDB, PostgreSQL, and MariaDB/MySQL.",
+                description = "Servicio de la herramienta de código abierto para el monitoreo dinámico de tres DBMS: MongoDB, PostgreSQL y MariaDB/MySQL.",
                 contact = @Contact(name = "Desarrollado por Anyel EC", email = "cyberdevmatrix@gmail.com"),
-                license = @License(name = "Apache 2.0", url = "https://github.com/Anyel-ec/SecurityMonitoring/blob/main/LICENSE")
+                license = @License(name = "Apache License 2.0", url = "https://github.com/Anyel-ec/SecurityMonitoring/blob/main/LICENSE")
         ),
         servers = @Server(url = "http://localhost:8080")
 )
