@@ -4,6 +4,7 @@ import { Button, Card, Form, ProgressBar } from 'react-bootstrap';
 import Swal from 'sweetalert2';
 import { CheckCircleFill, Check, Database, CardChecklist, FileEarmarkCheck, EyeFill, EyeSlashFill } from 'react-bootstrap-icons'; // Bootstrap icons
 import './installation.css';
+import {  } from 'react-bootstrap-icons';
 
 export default function InstallationWizard() {
   const [currentStep, setCurrentStep] = useState(1);
