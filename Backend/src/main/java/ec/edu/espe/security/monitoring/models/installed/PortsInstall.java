@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @MappedSuperclass
-public class Ports {
+public class PortsInstall {
     private int internalPort;
     private int externalPort;
 }

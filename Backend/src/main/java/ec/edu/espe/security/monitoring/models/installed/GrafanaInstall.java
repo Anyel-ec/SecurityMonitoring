@@ -8,7 +8,7 @@ import lombok.EqualsAndHashCode;
 @Entity
 @Table
 @Data
-public class GrafanaInstall extends Ports{
+public class GrafanaInstall extends PortsInstall {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

@@ -10,7 +10,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Entity
-public class PrometheusInstall extends Ports {
+public class PrometheusInstall extends PortsInstall {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
