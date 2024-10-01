@@ -1,6 +1,6 @@
 package ec.edu.espe.security.monitoring.repositories;
 
-import ec.edu.espe.security.monitoring.models.MariadbCredentials;
+import ec.edu.espe.security.monitoring.models.credentials.MariadbCredentials;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

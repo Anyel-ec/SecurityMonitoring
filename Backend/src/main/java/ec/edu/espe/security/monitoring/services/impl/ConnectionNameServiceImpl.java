@@ -1,7 +1,7 @@
 package ec.edu.espe.security.monitoring.services.impl;
 
 import ec.edu.espe.security.monitoring.models.ConnectionName;
-import ec.edu.espe.security.monitoring.models.PostgresCredentials;
+import ec.edu.espe.security.monitoring.models.credentials.PostgresCredentials;
 import ec.edu.espe.security.monitoring.repositories.ConnectionNameRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;

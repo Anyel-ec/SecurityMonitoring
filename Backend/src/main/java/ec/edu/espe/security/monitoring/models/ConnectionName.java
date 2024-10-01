@@ -1,5 +1,8 @@
 package ec.edu.espe.security.monitoring.models;
 
+import ec.edu.espe.security.monitoring.models.credentials.MariadbCredentials;
+import ec.edu.espe.security.monitoring.models.credentials.MongodbCredentials;
+import ec.edu.espe.security.monitoring.models.credentials.PostgresCredentials;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;

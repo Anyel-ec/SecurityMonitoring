@@ -1,4 +1,4 @@
-package ec.edu.espe.security.monitoring.models;
+package ec.edu.espe.security.monitoring.models.installed;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -8,11 +8,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode(callSuper = true)
-@Entity
 @Data
-
-public class MongodbCredentials extends  DatabaseCredentials{
-
+@Entity
+public class PrometheusInstall extends Ports {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

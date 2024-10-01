@@ -1,4 +1,4 @@
-package ec.edu.espe.security.monitoring.models;
+package ec.edu.espe.security.monitoring.models.credentials;
 
 import jakarta.persistence.*;
 import lombok.Data;

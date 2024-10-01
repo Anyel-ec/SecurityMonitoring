@@ -1,6 +1,10 @@
 package ec.edu.espe.security.monitoring.services.impl;
 
 import ec.edu.espe.security.monitoring.models.*;
+import ec.edu.espe.security.monitoring.models.credentials.DatabaseCredentials;
+import ec.edu.espe.security.monitoring.models.credentials.MariadbCredentials;
+import ec.edu.espe.security.monitoring.models.credentials.MongodbCredentials;
+import ec.edu.espe.security.monitoring.models.credentials.PostgresCredentials;
 import ec.edu.espe.security.monitoring.repositories.ConnectionNameRepository;
 import ec.edu.espe.security.monitoring.repositories.PostgresCredentialsRepository;
 import ec.edu.espe.security.monitoring.repositories.MariadbCredentialsRepository;

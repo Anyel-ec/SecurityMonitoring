@@ -1,6 +1,6 @@
 package ec.edu.espe.security.monitoring.services.impl;
 
-import ec.edu.espe.security.monitoring.models.DatabaseCredentials;
+import ec.edu.espe.security.monitoring.models.credentials.DatabaseCredentials;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 

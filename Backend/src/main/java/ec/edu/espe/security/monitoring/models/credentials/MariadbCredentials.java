@@ -1,4 +1,4 @@
-package ec.edu.espe.security.monitoring.models;
+package ec.edu.espe.security.monitoring.models.credentials;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -10,10 +10,13 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Data
-public class PostgresCredentials extends DatabaseCredentials{
+public class MariadbCredentials extends DatabaseCredentials {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    private String mysqlRootPassword;
+
 
 }

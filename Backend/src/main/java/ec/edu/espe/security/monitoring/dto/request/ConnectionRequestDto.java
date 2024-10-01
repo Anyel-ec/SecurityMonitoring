@@ -1,6 +1,6 @@
 package ec.edu.espe.security.monitoring.dto.request;
 
-import ec.edu.espe.security.monitoring.models.DatabaseCredentials;
+import ec.edu.espe.security.monitoring.models.credentials.DatabaseCredentials;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 

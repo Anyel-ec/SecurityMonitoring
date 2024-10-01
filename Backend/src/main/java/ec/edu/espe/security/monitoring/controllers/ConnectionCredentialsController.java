@@ -2,7 +2,7 @@ package ec.edu.espe.security.monitoring.controllers;
 
 import ec.edu.espe.security.monitoring.dto.request.ConnectionRequestDto;
 import ec.edu.espe.security.monitoring.dto.response.JsonResponseDto;
-import ec.edu.espe.security.monitoring.models.DatabaseCredentials;
+import ec.edu.espe.security.monitoring.models.credentials.DatabaseCredentials;
 import ec.edu.espe.security.monitoring.services.impl.DatabaseCredentialsServiceImpl;
 import ec.edu.espe.security.monitoring.utils.DatabaseUtils;
 import lombok.RequiredArgsConstructor;

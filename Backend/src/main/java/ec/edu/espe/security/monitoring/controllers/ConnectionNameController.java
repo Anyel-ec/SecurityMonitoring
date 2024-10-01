@@ -2,7 +2,7 @@ package ec.edu.espe.security.monitoring.controllers;
 
 import ec.edu.espe.security.monitoring.dto.response.JsonResponseDto;
 import ec.edu.espe.security.monitoring.models.ConnectionName;
-import ec.edu.espe.security.monitoring.models.PostgresCredentials;
+import ec.edu.espe.security.monitoring.models.credentials.PostgresCredentials;
 import ec.edu.espe.security.monitoring.services.impl.ConnectionNameServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
