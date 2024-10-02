@@ -12,6 +12,9 @@ import java.sql.SQLException;
 @Slf4j
 public class DatabaseUtils {
 
+    /**
+     * Tests the connection to a database using the provided credentials and database type.
+     */
     public boolean testDatabaseConnection(DatabaseCredentials config, String dbType) {
         String jdbcUrl = buildJdbcUrl(config, dbType);
 
@@ -28,12 +31,16 @@ public class DatabaseUtils {
         }
     }
 
+    /**
+     * Builds the JDBC URL based on the provided database type and credentials.
+     */
+
     private String buildJdbcUrl(DatabaseCredentials config, String dbType) {
         return switch (dbType.toLowerCase()) {
             case "postgresql" -> String.format("jdbc:postgresql://%s:%d/", config.getHost(), config.getPort());
             case "mariadb" -> String.format("jdbc:mariadb://%s:%d/", config.getHost(), config.getPort());
             case "mongodb" ->
-                // Para MongoDB, normalmente no se usa JDBC directamente, pero puedes construir la URL estándar
+                // to MongoDB, not using direct JDBC directamente
                     String.format("mongodb://%s:%d/", config.getHost(), config.getPort());
             default -> null;
         };

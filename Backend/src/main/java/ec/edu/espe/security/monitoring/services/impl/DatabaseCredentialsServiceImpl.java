@@ -28,30 +28,30 @@ public class DatabaseCredentialsServiceImpl {
     private final DockerServiceImpl dockerService;
 
     /**
-     * Guardar o actualizar credenciales de cualquier base de datos y ejecutar Docker Compose
+     * Save or update credentials for any database and run Docker Compose
      */
     public void saveCredentialsAndRunCompose(DatabaseCredentials credentials, String connectionName, String dbType) throws IOException {
-        // Buscar la conexión por el nombre
+        // Search for the connection by name
         Optional<ConnectionName> connectionOpt = nameConnectionRepository.findByConnectionName(connectionName);
 
         if (connectionOpt.isPresent()) {
             ConnectionName connection = connectionOpt.get();
 
-            // **1.** Ejecutar Docker Compose con las credenciales en texto claro
+            // **1.** Run Docker Compose with the credentials in plain text
             dockerService.runDockerCompose(credentials, dbType);
 
-            // **2.** Encriptar la contraseña después de ejecutar Docker
+            // **2.** Encrypt the password after running Docker
             credentials.setPassword(passwordEncoder.encode(credentials.getPassword()));
 
-            // **3.** Guardar las credenciales según el tipo de base de datos
+            // **3.** Save the credentials based on the database type
             saveOrUpdateCredentials(connection, credentials, dbType);
         } else {
-            throw new IllegalArgumentException("No se encontró la conexión con nombre: " + connectionName);
+            throw new IllegalArgumentException("No connection found with name: " + connectionName);
         }
     }
 
     /**
-     * Guardar o actualizar credenciales de cualquier tipo de base de datos en la conexión.
+     * Save or update credentials for any database type in the connection.
      */
     private void saveOrUpdateCredentials(ConnectionName connection, DatabaseCredentials credentials, String dbType) {
         switch (dbType.toLowerCase()) {
@@ -92,11 +92,11 @@ public class DatabaseCredentialsServiceImpl {
                 throw new IllegalArgumentException("Tipo de base de datos no soportado: " + dbType);
         }
 
-        nameConnectionRepository.save(connection);  // Guardar la conexión con las credenciales actualizadas
+        nameConnectionRepository.save(connection);  // Save the connection with updated credentials
     }
 
     /**
-     * Actualizar credenciales existentes.
+     * Update existing credentials.
      */
     private void updateExistingCredentials(DatabaseCredentials existingCredentials, DatabaseCredentials newCredentials) {
         existingCredentials.setHost(newCredentials.getHost());
@@ -114,7 +114,7 @@ public class DatabaseCredentialsServiceImpl {
     }
 
     /**
-     * Método auxiliar para copiar las propiedades genéricas de DatabaseCredentials a credenciales específicas
+     * Helper method to copy generic properties from DatabaseCredentials to specific credentials
      */
     private void copyDatabaseCredentials(DatabaseCredentials target, DatabaseCredentials source) {
         target.setHost(source.getHost());

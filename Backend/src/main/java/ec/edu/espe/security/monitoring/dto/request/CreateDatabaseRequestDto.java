@@ -7,7 +7,7 @@ import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-@Schema(description = "DTO de petición para la creación de una base de datos según el servidor especificado, utilizando las credenciales correspondientes.")
+@Schema(description = "Request DTO for creating a database on the specified server, using the corresponding credentials.")
 public class CreateDatabaseRequestDto extends DatabaseCredentials {
     private String nameDatabase;
 }

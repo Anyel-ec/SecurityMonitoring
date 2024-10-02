@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.List;
 
 @Data
-@Schema(description = "DTO de petición para crear una conexión, especificar los tipos de DBMS y guardar las credenciales asociadas")
+@Schema(description = "Request DTO for creating a connection, specifying the types of DBMS, and saving the associated credentials")
 public class ConnectionRequestDto {
     private String connectionName;
     private List<String> types = new ArrayList<>();

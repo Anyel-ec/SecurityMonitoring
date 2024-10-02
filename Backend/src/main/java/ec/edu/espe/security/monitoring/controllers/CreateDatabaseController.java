@@ -15,10 +15,20 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("api/v1/installation")
 @Slf4j
 @RequiredArgsConstructor
-@Tag(name = "Gestión de instalación de bases de datos", description = "Controlador para la creación y manejo de bases de datos según el tipo de DBMS especificado.")
+@Tag(name = "Database Installation Management", description = "Controller for the creation and management of databases based on the specified DBMS type.")
 public class CreateDatabaseController {
+
     private final CreateDatabaseServiceImpl databaseService;
 
+    /**
+     * Operation to create a database on the specified server according to the DBMS type.
+     * This method interacts with the service layer to handle the database creation process
+     * based on the information provided in the request and the type of DBMS.
+     *
+     * @param request Contains details such as database name, user credentials, and other configurations
+     * @param dbType The type of the DBMS (e.g., postgresql, mariadb, etc.)
+     * @return ResponseEntity with a success or failure message in the JsonResponseDto
+     */
     @Operation(summary = "Crear una base de datos en el servidor especificado según el tipo de DBMS")
     @PostMapping("/{dbType}/create")
     public ResponseEntity<JsonResponseDto> createDatabase(@RequestBody CreateDatabaseRequestDto request,
@@ -33,7 +43,7 @@ public class CreateDatabaseController {
             }
 
         } catch (Exception e) {
-            // Si ocurre una excepción inesperada, se devuelve un mensaje de error general
+            // If an unexpected exception occurs, return a general error message
             String errorMessage = String.format("Error al intentar crear la base de datos '%s' en el servidor %s: %s", request.getNameDatabase(), dbType, e.getMessage());
             log.error(errorMessage);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

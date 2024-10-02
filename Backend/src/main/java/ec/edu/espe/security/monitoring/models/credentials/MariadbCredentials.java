@@ -16,7 +16,7 @@ public class MariadbCredentials extends DatabaseCredentials {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String mysqlRootPassword; // mysql_root_password
+    private String mysqlRootPassword;
 
 
 }

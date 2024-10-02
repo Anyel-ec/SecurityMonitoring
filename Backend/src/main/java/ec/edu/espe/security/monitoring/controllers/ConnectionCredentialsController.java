@@ -21,11 +21,11 @@ public class ConnectionCredentialsController {
     private final DatabaseCredentialsServiceImpl databaseCredentialsService;
 
     /**
-     * Método para configurar y guardar credenciales de base de datos.
-     * @param config Credenciales de la base de datos (host, puerto, usuario, contraseña)
-     * @param connectionName Nombre de la conexión
-     * @param type Tipo de la base de datos (postgresql, mariadb, mongodb, etc.)
-     * @return Respuesta con estado de éxito o error
+     * Method to configure and save database credentials.
+     * @param config Database credentials (host, port, username, password)
+     * @param connectionName Name of the connection
+     * @param type Type of the database (postgresql, mariadb, mongodb, etc.)
+     * @return Response with success or error status
      */
     @PostMapping("/database/{type}")
     public ResponseEntity<JsonResponseDto> configureDatabase(
@@ -33,7 +33,7 @@ public class ConnectionCredentialsController {
             @RequestParam String connectionName,
             @PathVariable String type) {
         log.error("Entra a guardar credenciales");
-        // Verificar la conexión a la base de datos según el tipo
+        // Verify the connection to the database based on the type
         if (!databaseUtils.testDatabaseConnection(config, type)) {
             JsonResponseDto response = new JsonResponseDto(
                     false,
@@ -45,7 +45,7 @@ public class ConnectionCredentialsController {
         }
 
         try {
-            // Guardar las credenciales y ejecutar Docker Compose
+            // Save the credentials and run Docker Compose
             databaseCredentialsService.saveCredentialsAndRunCompose(config, connectionName, type);
             JsonResponseDto response = new JsonResponseDto(
                     true,
@@ -68,39 +68,39 @@ public class ConnectionCredentialsController {
 
 
     /**
-     * Método para configurar y guardar credenciales de base de datos.
-     * @param request Objeto que contiene el nombre de la conexión, los tipos y las credenciales.
-     * @return Respuesta con estado de éxito o error
+     * Method to configure and save database credentials.
+     * @param request Object containing the connection name, types, and credentials.
+     * @return Response with success or error status
      */
     @PostMapping("/database")
     public ResponseEntity<JsonResponseDto> configureDatabase(
             @RequestBody ConnectionRequestDto request) {
 
         try {
-            // Iterar sobre los tipos de base de datos y guardar las credenciales
+            // Iterate over the database types and save credentials
             for (String type : request.getTypes()) {
-                // Obtener las credenciales según el tipo de base de datos (PostgreSQL, MariaDB, etc.)
+                // Get the credentials for the database type (PostgreSQL, MariaDB, etc.)
                 DatabaseCredentials credentials = request.getCredentials().get(type);
 
-                // Validar que las credenciales no sean nulas
+                // Validate that the credentials are not null
                 if (credentials == null) {
                     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
                             new JsonResponseDto(false, HttpStatus.BAD_REQUEST.value(),
                                     "Credenciales no proporcionadas para el tipo " + type, null));
                 }
 
-                // Probar la conexión con las credenciales proporcionadas
+                // Test the connection with the provided credentials
                 if (!databaseUtils.testDatabaseConnection(credentials, type)) {
                     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
                             new JsonResponseDto(false, HttpStatus.BAD_REQUEST.value(),
                                     "Error: No se pudo conectar a la base de datos " + type + " con las credenciales proporcionadas.", null));
                 }
 
-                // Guardar las credenciales junto al nombre de la conexión
+                // Save the credentials along with the connection name
                 databaseCredentialsService.saveCredentialsAndRunCompose(credentials, request.getConnectionName(), type);
             }
 
-            // Respuesta exitosa
+            // Successful response
             JsonResponseDto response = new JsonResponseDto(
                     true,
                     HttpStatus.OK.value(),
@@ -110,7 +110,7 @@ public class ConnectionCredentialsController {
             return new ResponseEntity<>(response, HttpStatus.OK);
 
         } catch (Exception e) {
-            // Manejo de errores y respuesta en caso de excepción
+            // Error handling and response in case of an exception
             JsonResponseDto response = new JsonResponseDto(
                     false,
                     HttpStatus.INTERNAL_SERVER_ERROR.value(),
@@ -124,10 +124,10 @@ public class ConnectionCredentialsController {
 
 
     /**
-     * Método para probar la conexión a la base de datos.
-     * @param config Credenciales de la base de datos
-     * @param type Tipo de la base de datos (postgresql, mariadb, mongodb, etc.)
-     * @return Respuesta con estado de éxito o error
+     * Method to test the database connection.
+     * @param config Database credentials
+     * @param type Type of the database (postgresql, mariadb, mongodb, etc.)
+     * @return Response with success or error status
      */
     @PostMapping("/testConnection/{type}")
     public ResponseEntity<JsonResponseDto> testConnection(

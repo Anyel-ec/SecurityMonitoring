@@ -8,38 +8,53 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+
 @Service
 @AllArgsConstructor
 public class ConnectionNameServiceImpl {
     private final ConnectionNameRepository connectionNameRepository;
+
+    /**
+     * Retrieves a list of all connection names from the database.
+     */
     public List<ConnectionName> getAllConnectionNames() {
         return connectionNameRepository.findAll();
     }
 
-    // Método para obtener las credenciales de PostgreSQL basadas en el nombre de la conexión
+    /**
+     * Deletes a connection from the database by its ID.
+     **/
+    public void deleteConnectionById(Long id) {
+        connectionNameRepository.deleteById(id);
+    }
+
+    /**
+     * Method to get PostgreSQL credentials based on the connection name
+     */
     public PostgresCredentials getCredentialsByProfile(String connectionName) {
-        // Buscar la conexión por nombre usando el repositorio
+        // Find the connection by name using the repository
         Optional<ConnectionName> connectionOpt = connectionNameRepository.findByConnectionName(connectionName);
 
         if (connectionOpt.isEmpty() || connectionOpt.get().getPostgresCredentials() == null) {
-            throw new IllegalArgumentException("No se encontró el perfil o las credenciales de PostgreSQL para la conexión: " + connectionName);
+            throw new IllegalArgumentException("Perfil o credenciales de PostgreSQL no encontrados para la conexión: " + connectionName);
         }
 
-        // Devolver las credenciales de PostgreSQL asociadas a la conexión
+        // Return the PostgreSQL credentials associated with the connection
         return connectionOpt.get().getPostgresCredentials();
     }
 
-
-    // Método para guardar o actualizar una conexión
+    /**
+     * Method to save or update a connection
+     */
     public ConnectionName saveOrUpdateConnection(ConnectionName newConnection) {
-        // Buscar si ya existe una conexión con el mismo nombre
+        // Check if a connection with the same name already exists
         Optional<ConnectionName> existingConnectionOpt = connectionNameRepository.findByConnectionName(newConnection.getConnectionName());
 
         if (existingConnectionOpt.isPresent()) {
-            // Si la conexión ya existe, actualizar los campos existentes
+            // If the connection already exists, update the existing fields
             ConnectionName existingConnection = existingConnectionOpt.get();
 
-            // Actualizar las credenciales si se proporcionan nuevas
+            // Update credentials if new ones are provided
             if (newConnection.getPostgresCredentials() != null) {
                 existingConnection.setPostgresCredentials(newConnection.getPostgresCredentials());
             }
@@ -50,24 +65,21 @@ public class ConnectionNameServiceImpl {
                 existingConnection.setMongodbCredentials(newConnection.getMongodbCredentials());
             }
 
-            // Actualizar el comentario si es necesario
+            // Update the comment if necessary
             if (newConnection.getComment() != null) {
                 existingConnection.setComment(newConnection.getComment());
             }
 
-            // Actualizar el tiempo de la última conexión
+            // Update the last connection time
             existingConnection.setLastConnection(newConnection.getLastConnection());
 
-            // Guardar la conexión actualizada en la base de datos
+            // Save the updated connection in the database
             return connectionNameRepository.save(existingConnection);
         } else {
-            // Si no existe, crear una nueva conexión
+            // If not, create a new connection
             return connectionNameRepository.save(newConnection);
         }
     }
 
-    public void deleteConnectionById(Long id) {
-        connectionNameRepository.deleteById(id);
-    }
 
 }

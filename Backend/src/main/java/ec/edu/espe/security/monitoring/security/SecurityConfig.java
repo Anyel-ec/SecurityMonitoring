@@ -16,16 +16,17 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/h2-console/**").permitAll() // Permitir acceso a la consola H2
-                        .anyRequest().permitAll() // Permitir acceso a otros endpoints sin restricciones
+                        .requestMatchers("/h2-console/**").permitAll() // Allow access to the H2 console
+                        .anyRequest().permitAll() // Allow access to other endpoints without restrictions
                 )
                 .headers(headers -> headers
-                        .frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin) // Permitir que la consola de H2 se ejecute en un iframe solo desde el mismo origen
+                        .frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin) // Allow the H2 console to run in an iframe only from the same origin
                 );
 
         return http.build();

@@ -18,13 +18,22 @@ import java.util.List;
 public class ConnectionNameController {
     private final ConnectionNameServiceImpl connectionNameService;
 
+    /**
+     * Retrieves the PostgreSQL credentials for a given profile by the connection name.
+     * This method interacts with the service layer to fetch the corresponding
+     * credentials associated with the provided profile name.
+     *
+     * @param connectionName the name of the connection or profile to fetch credentials for
+     * @return a ResponseEntity containing the JsonResponseDto with the credentials if successful,
+     *         or an error message in case of failure.
+     */
     @GetMapping("/name/{connectionName}")
     public ResponseEntity<JsonResponseDto> configurePostgresByProfile(@PathVariable String connectionName) {
         try {
-            // Obtener las credenciales del perfil
+            // Obtain credentials by profile
             PostgresCredentials credentials = connectionNameService.getCredentialsByProfile(connectionName);
 
-            // Crear el objeto de respuesta con las credenciales incluidas
+            // Create a response object including the credentials
             JsonResponseDto response = new JsonResponseDto(true,HttpStatus.OK.value(),"Conexión configurada exitosamente", credentials);
 
             return ResponseEntity.ok(response);
@@ -37,6 +46,14 @@ public class ConnectionNameController {
         }
     }
 
+    /**
+     * Retrieves a list of all saved connection names.
+     * This method fetches all the connection names stored in the system and
+     * returns them to the client.
+     *
+     * @return a ResponseEntity containing a JsonResponseDto with the list of connection names,
+     *         or an error message if retrieval fails.
+     */
     @GetMapping("/names")
     public ResponseEntity<JsonResponseDto> getAllConnections() {
         try {
@@ -49,6 +66,15 @@ public class ConnectionNameController {
     }
 
 
+    /**
+     * Saves or updates a connection name.
+     * If the connection name is valid, it will either create a new entry or update an existing one.
+     * The connection name must not be null or empty.
+     *
+     * @param connection the connection name object to be saved or updated
+     * @return a ResponseEntity containing a JsonResponseDto with the result of the operation,
+     *         or an error message if the save or update fails.
+     */
     @PostMapping("/save")
     public ResponseEntity<JsonResponseDto> saveOrUpdateConnection(@RequestBody ConnectionName connection) {
         if (connection.getConnectionName() == null || connection.getConnectionName().isEmpty()) {
@@ -66,6 +92,13 @@ public class ConnectionNameController {
         }
     }
 
+    /**
+     * Deletes a connection by its ID.
+     * This method removes the connection entry associated with the provided ID from the system.
+     *
+     * @param id the ID of the connection to be deleted
+     * @return a ResponseEntity containing a JsonResponseDto indicating success or failure of the deletion
+     */
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<JsonResponseDto> deleteConnection(@PathVariable Long id) {
         try {

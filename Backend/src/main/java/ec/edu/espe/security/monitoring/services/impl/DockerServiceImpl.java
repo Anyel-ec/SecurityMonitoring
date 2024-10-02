@@ -9,6 +9,9 @@ import java.io.IOException;
 @Service
 @Slf4j
 public class DockerServiceImpl {
+    /**
+     * Runs a Docker Compose process to set up a database container based on the provided DBMS type and credentials.
+     */
     public void runDockerCompose(DatabaseCredentials config, String dbType) throws IOException {
         ProcessBuilder processBuilder = new ProcessBuilder(
                 "docker-compose",
@@ -21,7 +24,6 @@ public class DockerServiceImpl {
             host = "host.docker.internal";
         }
 
-        // Ajustar las variables de entorno basadas en el tipo de base de datos
         switch (dbType.toLowerCase()) {
             case "postgresql":
                 log.error("Los datos son {}, {}, {}, {}", config.getUsername(), config.getPassword(), host, config.getPort());
