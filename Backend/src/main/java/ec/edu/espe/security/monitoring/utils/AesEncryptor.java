@@ -1,6 +1,7 @@
 package ec.edu.espe.security.monitoring.utils;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import javax.crypto.*;
 import javax.crypto.spec.GCMParameterSpec;
@@ -11,6 +12,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Base64;
 
+@Component
 public class AesEncryptor {
 
     // AES key (32 bytes = 256 bits)
@@ -19,7 +21,6 @@ public class AesEncryptor {
 
     private static final String ALGORITHM = "AES/GCM/NoPadding";
     private static final int GCM_TAG_LENGTH = 16; // Length of authentication tag (in bytes)
-    // Método para establecer la clave secreta manualmente (para pruebas)
     public void setSecretKey(String secretKey) {
         this.secretKey = secretKey;
     }

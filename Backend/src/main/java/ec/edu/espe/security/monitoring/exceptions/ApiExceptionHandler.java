@@ -107,6 +107,14 @@ class ApiExceptionHandler extends ResponseEntityExceptionHandler {
                 .body(response.getBody());
     }
 
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<JsonResponseDto> handleGeneralException(Exception ex) {
+        log.error("Internal Server Error: ", ex);
+        ResponseEntity<JsonResponseDto> response = ApiErrorResponse.internalServerError("An unexpected error occurred");
+        return ResponseEntity.status(response.getStatusCode())
+                .body(response.getBody());
+    }
+
 
     @Override
     protected ResponseEntity<Object> handleMissingPathVariable(MissingPathVariableException ex,
