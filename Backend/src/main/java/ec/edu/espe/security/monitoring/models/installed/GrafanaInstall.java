@@ -17,5 +17,4 @@ public class GrafanaInstall extends PortsInstall {
     private String userAdmin;
     private String passwordAdmin;
 
-
 }
