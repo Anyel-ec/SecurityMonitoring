@@ -9,8 +9,12 @@ public class DotenvConfig {
 
     @Bean
     public Dotenv dotenv() {
+        // Dynamically gets the project's directory
+        String projectDir = System.getProperty("user.dir");
+
         return Dotenv.configure()
-                .directory("../.devcontainer")
+                .directory(projectDir)  // Sets the dynamic path here
                 .load();
     }
+
 }
