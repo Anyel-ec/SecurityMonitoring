@@ -13,6 +13,8 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @Slf4j
 @AllArgsConstructor
@@ -40,6 +42,7 @@ public class InstallationConfigServiceImpl implements InstallationConfigService 
                     .internalPort(grafanaInstallDto.getInternalPort())
                     .externalPort(grafanaInstallDto.getExternalPort())
                     .systemParameter(systemParameter)
+                    .isActive(true)
                     .build();
 
             // Save the InstallationConfig entity to the database
@@ -66,6 +69,7 @@ public class InstallationConfigServiceImpl implements InstallationConfigService 
                     .internalPort(prometheusInstallDto.getInternalPort())
                     .externalPort(prometheusInstallDto.getExternalPort())
                     .systemParameter(systemParameter)
+                    .isActive(true)
                     .build();
 
             // Save the InstallationConfig entity to the database
@@ -97,6 +101,7 @@ public class InstallationConfigServiceImpl implements InstallationConfigService 
                     .numberPhone(userInstallDto.getNumberPhone())
                     .email(userInstallDto.getEmail())
                     .systemParameter(systemParameter)
+                    .isActive(true)
                     .build();
 
             // Save the InstallationConfig entity to the database
@@ -108,6 +113,10 @@ public class InstallationConfigServiceImpl implements InstallationConfigService 
             log.error("Error inesperado al guardar el registro de usuario", e);
             throw new IllegalStateException("Error interno del servidor al guardar el registro de usuario", e); // Handle unexpected errors (500)
         }
+    }
+
+    public List<InstallationConfig> getActiveInstallations() {
+        return installationConfigRepository.findByIsActiveTrue();
     }
 
 

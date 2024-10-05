@@ -34,7 +34,7 @@ public class InstallationConfig {
     @CreationTimestamp
     private LocalDateTime createdAt;
 
-    @Column(columnDefinition = "boolean default false")
+    @Column(columnDefinition = "boolean default true")
     private Boolean isActive;
 
 }
