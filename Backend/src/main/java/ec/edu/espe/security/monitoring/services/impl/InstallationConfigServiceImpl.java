@@ -109,24 +109,36 @@ public class InstallationConfigServiceImpl implements InstallationConfigService 
                     .findByNameAndIsActiveTrue("PROMETHEUS_INSTALL")
                     .orElseThrow(() -> new IllegalArgumentException("El parámetro PROMETHEUS_INSTALL no fue encontrado"));
 
-            // Build the InstallationConfig for Prometheus
-            InstallationConfig prometheusInstall = InstallationConfig.builder()
-                    .internalPort(prometheusInstallDto.getInternalPort())
-                    .externalPort(prometheusInstallDto.getExternalPort())
-                    .systemParameter(systemParameter)
-                    .isActive(true)
-                    .build();
+            // Check if a Prometheus installation with this parameter already exists
+            InstallationConfig prometheusInstall = installationConfigRepository
+                    .findFirstBySystemParameterAndIsActiveTrue(systemParameter)
+                    .orElse(null);
 
-            // Save the InstallationConfig entity to the database
+            // If it exists, update the necessary fields
+            if (prometheusInstall != null) {
+                prometheusInstall.setInternalPort(prometheusInstallDto.getInternalPort());
+                prometheusInstall.setExternalPort(prometheusInstallDto.getExternalPort());
+            } else {
+                // If it doesn't exist, create a new installation
+                prometheusInstall = InstallationConfig.builder()
+                        .internalPort(prometheusInstallDto.getInternalPort())
+                        .externalPort(prometheusInstallDto.getExternalPort())
+                        .systemParameter(systemParameter)
+                        .isActive(true)
+                        .build();
+            }
+
+            // Save or update the installation in the database
             return installationConfigRepository.save(prometheusInstall);
         } catch (IllegalArgumentException e) {
             log.error(e.getMessage());
             throw e; // Rethrow to handle specific exception (400 Bad Request)
         } catch (Exception e) {
             log.error("Error inesperado al guardar la instalación de Prometheus", e);
-            throw new IllegalStateException("Error interno del servidor al guardar la instalación de Prometheus", e); // Manejar errores inesperados (500)
+            throw new IllegalStateException("Error interno del servidor al guardar la instalación de Prometheus", e); // Handle unexpected errors (500)
         }
     }
+
 
     @Override
     public InstallationConfig getPrometheusInstall() {

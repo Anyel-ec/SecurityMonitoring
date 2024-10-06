@@ -4,7 +4,7 @@ import { Button, Card, Form, ProgressBar } from 'react-bootstrap';
 import Swal from 'sweetalert2';
 import { CheckCircleFill, Check, Database, FileEarmarkCheck } from 'react-bootstrap-icons'; // Bootstrap icons
 import './installation.css';
-import { saveGrafanaInstallService } from '../../services/installationService'; // Asegúrate de que la ruta es correcta
+import { saveGrafanaInstallService, savePrometheusInstallService } from '../../services/installationService'; // Asegúrate de que la ruta es correcta
 import * as Yup from 'yup'; // Yup para validaciones
 
 export default function InstallationWizard() {
@@ -13,18 +13,18 @@ export default function InstallationWizard() {
   const [errors, setErrors] = useState({});
   const [touched, setTouched] = useState({});
 
-  // Step 1 state
+  // Step 1 state (Grafana)
   const [grafanaAdmin, setGrafanaAdmin] = useState('admin'); // Usuario por defecto
   const [grafanaPassword, setGrafanaPassword] = useState(''); // Contraseña por defecto
   const [grafanaPasswordConfirm, setGrafanaPasswordConfirm] = useState(''); // Confirmar contraseña por defecto
   const [grafanaLocalPort, setGrafanaLocalPort] = useState('3000'); // Local port por defecto
   const [grafanaDockerPort, setGrafanaDockerPort] = useState('3000'); // Docker port por defecto
 
-  // Step 2 state
+  // Step 2 state (Prometheus)
   const [prometheusLocalPort, setPrometheusLocalPort] = useState('9090');
   const [prometheusDockerPort, setPrometheusDockerPort] = useState('9090');
 
-  // Validación con Yup
+  // Validation Schema for Grafana
   const validationSchema = Yup.object().shape({
     grafanaAdmin: Yup.string()
       .min(3, 'El nombre de usuario debe tener al menos 3 caracteres')
@@ -45,6 +45,18 @@ export default function InstallationWizard() {
       .required('El puerto es requerido'),
   });
 
+  // Validation Schema for Prometheus
+  const prometheusValidationSchema = Yup.object().shape({
+    prometheusLocalPort: Yup.number()
+      .min(1, 'El puerto debe ser mayor a 0')
+      .max(65535, 'El puerto no puede exceder 65535')
+      .required('El puerto local es requerido'),
+    prometheusDockerPort: Yup.number()
+      .min(1, 'El puerto debe ser mayor a 0')
+      .max(65535, 'El puerto no puede exceder 65535')
+      .required('El puerto Docker es requerido'),
+  });
+
   // Validación automática de contraseñas mientras se escriben
   useEffect(() => {
     if (touched.grafanaPasswordConfirm) {
@@ -54,7 +66,7 @@ export default function InstallationWizard() {
     }
   }, [grafanaPassword, grafanaPasswordConfirm, touched]);
 
-  // Función para guardar los valores en el backend
+  // Save Grafana Install
   const saveGrafanaInstall = async () => {
     try {
       const grafanaInstallData = {
@@ -63,30 +75,64 @@ export default function InstallationWizard() {
         internalPort: parseInt(grafanaLocalPort),
         externalPort: parseInt(grafanaDockerPort),
       };
-  
+
       await saveGrafanaInstallService(grafanaInstallData);
-  
-      // Mostrar toast de éxito
+
       Swal.fire({
         icon: 'success',
         title: 'Instalación Guardada',
         text: 'La instalación de Grafana se ha guardado correctamente.',
         toast: true,
-        position: 'bottom-start', // Muestra el toast en la esquina inferior izquierda
+        position: 'bottom-start',
         showConfirmButton: false,
         timer: 3000,
         timerProgressBar: true,
       });
-  
+
       setCurrentStep((prev) => Math.min(prev + 1, 3));
     } catch (error) {
-      // Mostrar toast de error
       Swal.fire({
         icon: 'error',
         title: 'Error',
         text: 'Hubo un problema al guardar la instalación de Grafana.',
         toast: true,
-        position: 'bottom-start', // Muestra el toast en la esquina inferior izquierda
+        position: 'bottom-start',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+      });
+    }
+  };
+
+  // Save Prometheus Install
+  const savePrometheusInstall = async () => {
+    try {
+      const prometheusInstallData = {
+        internalPort: parseInt(prometheusLocalPort),
+        externalPort: parseInt(prometheusDockerPort),
+      };
+
+      await savePrometheusInstallService(prometheusInstallData);
+
+      Swal.fire({
+        icon: 'success',
+        title: 'Instalación Guardada',
+        text: 'La instalación de Prometheus se ha guardado correctamente.',
+        toast: true,
+        position: 'bottom-start',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+      });
+
+      setCurrentStep((prev) => Math.min(prev + 1, 3));
+    } catch (error) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Hubo un problema al guardar la instalación de Prometheus.',
+        toast: true,
+        position: 'bottom-start',
         showConfirmButton: false,
         timer: 3000,
         timerProgressBar: true,
@@ -95,40 +141,73 @@ export default function InstallationWizard() {
   };
 
   const nextStep = () => {
-    setTouched({
-      grafanaAdmin: true,
-      grafanaPassword: true,
-      grafanaPasswordConfirm: true,
-      grafanaLocalPort: true,
-      grafanaDockerPort: true,
-    }); // Marca que los campos han sido tocados
-    validationSchema
-      .validate(
-        {
-          grafanaAdmin,
-          grafanaPassword,
-          grafanaPasswordConfirm,
-          grafanaLocalPort,
-          grafanaDockerPort,
-        },
-        { abortEarly: false }
-      )
-      .then(() => {
-        setErrors({}); // Limpiar errores si la validación es exitosa
-        saveGrafanaInstall(); // Guardar los valores actualizados en cada avance
-      })
-      .catch((validationErrors) => {
-        const errorObject = {};
-        validationErrors.inner.forEach((error) => {
-          errorObject[error.path] = error.message;
-        });
-        setErrors(errorObject); // Guardar los errores en el estado
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: 'Corrige los campos marcados.',
-        });
+    if (currentStep === 1) {
+      setTouched({
+        grafanaAdmin: true,
+        grafanaPassword: true,
+        grafanaPasswordConfirm: true,
+        grafanaLocalPort: true,
+        grafanaDockerPort: true,
       });
+
+      validationSchema
+        .validate(
+          {
+            grafanaAdmin,
+            grafanaPassword,
+            grafanaPasswordConfirm,
+            grafanaLocalPort,
+            grafanaDockerPort,
+          },
+          { abortEarly: false }
+        )
+        .then(() => {
+          setErrors({});
+          saveGrafanaInstall();
+        })
+        .catch((validationErrors) => {
+          const errorObject = {};
+          validationErrors.inner.forEach((error) => {
+            errorObject[error.path] = error.message;
+          });
+          setErrors(errorObject);
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Corrige los campos marcados.',
+          });
+        });
+    } else if (currentStep === 2) {
+      setTouched({
+        prometheusLocalPort: true,
+        prometheusDockerPort: true,
+      });
+
+      prometheusValidationSchema
+        .validate(
+          {
+            prometheusLocalPort,
+            prometheusDockerPort,
+          },
+          { abortEarly: false }
+        )
+        .then(() => {
+          setErrors({});
+          savePrometheusInstall();
+        })
+        .catch((validationErrors) => {
+          const errorObject = {};
+          validationErrors.inner.forEach((error) => {
+            errorObject[error.path] = error.message;
+          });
+          setErrors(errorObject);
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Corrige los campos marcados.',
+          });
+        });
+    }
   };
 
   const prevStep = () => setCurrentStep((prev) => Math.max(prev - 1, 1));
@@ -230,7 +309,9 @@ export default function InstallationWizard() {
                 placeholder="Enter local port"
                 value={prometheusLocalPort}
                 onChange={(e) => setPrometheusLocalPort(e.target.value)}
+                className={touched.prometheusLocalPort && errors.prometheusLocalPort ? 'is-invalid' : touched.prometheusLocalPort ? 'is-valid' : ''}
               />
+              {touched.prometheusLocalPort && errors.prometheusLocalPort && <div className="invalid-feedback">{errors.prometheusLocalPort}</div>}
             </Form.Group>
             <Form.Group controlId="prometheusDockerPort" className="mt-3">
               <Form.Label>Prometheus Docker Port</Form.Label>
@@ -239,7 +320,9 @@ export default function InstallationWizard() {
                 placeholder="Enter Docker port"
                 value={prometheusDockerPort}
                 onChange={(e) => setPrometheusDockerPort(e.target.value)}
+                className={touched.prometheusDockerPort && errors.prometheusDockerPort ? 'is-invalid' : touched.prometheusDockerPort ? 'is-valid' : ''}
               />
+              {touched.prometheusDockerPort && errors.prometheusDockerPort && <div className="invalid-feedback">{errors.prometheusDockerPort}</div>}
             </Form.Group>
           </Form>
         );
