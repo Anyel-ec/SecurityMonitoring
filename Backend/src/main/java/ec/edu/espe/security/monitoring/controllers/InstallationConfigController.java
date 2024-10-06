@@ -66,16 +66,16 @@ public class InstallationConfigController {
 
             // If the configuration is found, return 200 OK with the configuration
             if (grafanaInstall != null) {
-                JsonResponseDto response = new JsonResponseDto(true, 200, "Grafana installation retrieved successfully", grafanaInstall);
+                JsonResponseDto response = new JsonResponseDto(true, 200, "Instalación de Grafana recuperada exitosamente", grafanaInstall);
                 return ResponseEntity.ok(response);
             } else {
                 // If the configuration is not found, return 404 Not Found
-                JsonResponseDto response = new JsonResponseDto(false, 404, "Grafana installation not found", null);
+                JsonResponseDto response = new JsonResponseDto(false, 404, "Instalación de Grafana no encontrada", null);
                 return ResponseEntity.status(404).body(response);
             }
         } catch (Exception e) {
             // Handle any unexpected exceptions
-            JsonResponseDto response = new JsonResponseDto(false, 500, "Internal server error while retrieving Grafana installation", null);
+            JsonResponseDto response = new JsonResponseDto(false, 500, "Error interno del servidor al recuperar la instalación de Grafana", null);
             return ResponseEntity.status(500).body(response);
         }
     }

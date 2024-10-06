@@ -3,17 +3,25 @@ version: '3'
 services:
 
   grafana:
-      image: grafana/grafana
-      ports:
-        - "3000:3000"
-      environment:
-        GF_SECURITY_ADMIN_USER: anyel
-        GF_SECURITY_ADMIN_PASSWORD: anyel
-      volumes:
-        - grafana_storage:/var/lib/grafana
-      networks:
-        - monitoring
-  
+    image: grafana/grafana
+    ports:
+      - "${GRAFANA_PORT_EXTERNAL}:${GRAFANA_PORT_INTERNAL}"
+    environment:
+      GF_SECURITY_ADMIN_USER: "${GRAFANA_USER}"
+      GF_SECURITY_ADMIN_PASSWORD: "${GRAFANA_PASSWORD}"
+    volumes:
+      - grafana_storage:/var/lib/grafana
+    networks:
+      - monitoring
+
+  prometheus:
+    image: prom/prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro 
+    ports:
+      - "${PROMETHEUS_PORT_EXTERNAL}:${PROMETHEUS_PORT_INTERNAL}"
+    networks:
+      - monitoring
 
   postgres-exporter:
     image: quay.io/prometheuscommunity/postgres-exporter
@@ -24,14 +32,7 @@ services:
     networks:
       - monitoring
 
-  prometheus:
-    image: prom/prometheus
-    volumes:
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro 
-    ports:
-      - "9090:9090"
-    networks:
-      - monitoring
+  
 
 networks:
   monitoring:
