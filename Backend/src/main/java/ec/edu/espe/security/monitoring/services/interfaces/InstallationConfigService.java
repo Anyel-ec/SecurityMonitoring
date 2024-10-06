@@ -1,22 +1,23 @@
 package ec.edu.espe.security.monitoring.services.interfaces;
 
-import ec.edu.espe.security.monitoring.dto.request.GrafanaInstallDto;
-import ec.edu.espe.security.monitoring.dto.request.PrometheusInstallDto;
-import ec.edu.espe.security.monitoring.dto.request.UserInstallDto;
+import ec.edu.espe.security.monitoring.dto.request.GrafanaInstallRequestDto;
+import ec.edu.espe.security.monitoring.dto.request.PrometheusInstallRequestDto;
+import ec.edu.espe.security.monitoring.dto.request.UserInstallRequestDto;
 import ec.edu.espe.security.monitoring.models.InstallationConfig;
+import ec.edu.espe.security.monitoring.models.SystemParameters;
 
 import java.util.List;
 
 public interface InstallationConfigService {
 
    // Save Grafana installation configuration
-   InstallationConfig saveGrafanaInstall(GrafanaInstallDto grafanaInstallDto);
+   InstallationConfig saveGrafanaInstall(GrafanaInstallRequestDto grafanaInstallRequestDto);
 
    // Save Prometheus installation configuration
-   InstallationConfig savePrometheusInstall(PrometheusInstallDto prometheusInstallDto);
+   InstallationConfig savePrometheusInstall(PrometheusInstallRequestDto prometheusInstallRequestDto);
 
    // Save User installation configuration
-   InstallationConfig saveUserInstall(UserInstallDto userInstallDto);
+   InstallationConfig saveUserInstall(UserInstallRequestDto userInstallRequestDto);
 
    // Retrieve a list of all active installations
    List<InstallationConfig> getActiveInstallations();
@@ -29,4 +30,7 @@ public interface InstallationConfigService {
 
    // Method to check installation status
    boolean isInstallationComplete();
+
+   // Update the complete installation parameter
+   SystemParameters updateCompleteInstallParameter();
 }

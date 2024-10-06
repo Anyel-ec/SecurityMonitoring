@@ -1,6 +1,5 @@
 package ec.edu.espe.security.monitoring.exceptions;
 
-
 import ec.edu.espe.security.monitoring.dto.response.JsonResponseDto;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
@@ -27,11 +26,27 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import java.util.List;
 
-
 @RestControllerAdvice
 @Slf4j
-class ApiExceptionHandler extends ResponseEntityExceptionHandler {
+public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
+    // Handle 404 errors when no handler is found
+    @Override
+    protected ResponseEntity<Object> handleNoHandlerFoundException(NoHandlerFoundException ex,
+                                                                   @NotNull HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+        log.warn("No handler found for URL: " + ex.getRequestURL());
+        JsonResponseDto response = new JsonResponseDto(false, 404, "No se encontró el recurso solicitado: " + ex.getRequestURL(), null);
+        return ResponseEntity.status(404).body(response);
+    }
+
+    @Override
+    protected ResponseEntity<Object> handleExceptionInternal(@NotNull Exception ex, Object body,
+                                                             @NotNull HttpHeaders headers, HttpStatusCode statusCode, WebRequest request) {
+        log.error("Internal error handling request: " + request.getDescription(false), ex);
+
+        JsonResponseDto response = new JsonResponseDto(false, statusCode.value(), "Error interno: " + ex.getMessage(), null);
+        return ResponseEntity.status(statusCode).headers(headers).body(response);
+    }
 
     @Override
     protected ResponseEntity<Object> handleHttpMessageNotReadable(@NotNull HttpMessageNotReadableException ex,
@@ -52,7 +67,6 @@ class ApiExceptionHandler extends ResponseEntityExceptionHandler {
                 .body(response.getBody());
     }
 
-
     @Override
     protected ResponseEntity<Object> handleHttpRequestMethodNotSupported(HttpRequestMethodNotSupportedException exception,
                                                                          @NotNull HttpHeaders headers, @NotNull HttpStatusCode status, @NotNull WebRequest request) {
@@ -66,7 +80,6 @@ class ApiExceptionHandler extends ResponseEntityExceptionHandler {
                 .body(response.getBody());
     }
 
-
     @Override
     protected ResponseEntity<Object> handleHttpMediaTypeNotAcceptable(@NotNull HttpMediaTypeNotAcceptableException exception,
                                                                       @NotNull HttpHeaders headers, @NotNull HttpStatusCode status, @NotNull WebRequest request) {
@@ -75,7 +88,6 @@ class ApiExceptionHandler extends ResponseEntityExceptionHandler {
                 .headers(headers)
                 .body(response.getBody());
     }
-
 
     @Override
     protected ResponseEntity<Object> handleHttpMediaTypeNotSupported(HttpMediaTypeNotSupportedException exception,
@@ -115,7 +127,6 @@ class ApiExceptionHandler extends ResponseEntityExceptionHandler {
                 .body(response.getBody());
     }
 
-
     @Override
     protected ResponseEntity<Object> handleMissingPathVariable(MissingPathVariableException ex,
                                                                @NotNull HttpHeaders headers, @NotNull HttpStatusCode status, @NotNull WebRequest request) {
@@ -125,7 +136,6 @@ class ApiExceptionHandler extends ResponseEntityExceptionHandler {
                 .headers(headers)
                 .body(response.getBody());
     }
-
 
     @Override
     protected ResponseEntity<Object> handleServletRequestBindingException(ServletRequestBindingException ex,
@@ -137,7 +147,6 @@ class ApiExceptionHandler extends ResponseEntityExceptionHandler {
                 .body(response.getBody());
     }
 
-
     @Override
     protected ResponseEntity<Object> handleMissingServletRequestParameter(MissingServletRequestParameterException ex,
                                                                           @NotNull HttpHeaders headers, @NotNull HttpStatusCode status, @NotNull WebRequest request) {
@@ -147,17 +156,6 @@ class ApiExceptionHandler extends ResponseEntityExceptionHandler {
                 .headers(headers)
                 .body(response.getBody());
     }
-
-    @Override
-    protected ResponseEntity<Object> handleNoHandlerFoundException(NoHandlerFoundException ex,
-                                                                   @NotNull HttpHeaders headers, HttpStatusCode status, WebRequest request) {
-        ResponseEntity<JsonResponseDto> response = ApiErrorResponse.notFound("No se encontró el controlador para la URL '" + ex.getRequestURL() + "'");
-
-        return ResponseEntity.status(response.getStatusCode())
-                .headers(headers)
-                .body(response.getBody());
-    }
-
 
     @ExceptionHandler(ConstraintViolationException.class)
     ResponseEntity<JsonResponseDto> handleConstraintViolationException(ConstraintViolationException exception) {
@@ -178,5 +176,4 @@ class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         log.error("Request handling failed", throwable);
         return ApiErrorResponse.internalServerError("ocurrió un error inesperado");
     }
-
 }

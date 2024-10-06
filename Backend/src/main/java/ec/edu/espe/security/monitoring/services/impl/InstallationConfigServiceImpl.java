@@ -1,8 +1,8 @@
 package ec.edu.espe.security.monitoring.services.impl;
 
-import ec.edu.espe.security.monitoring.dto.request.GrafanaInstallDto;
-import ec.edu.espe.security.monitoring.dto.request.PrometheusInstallDto;
-import ec.edu.espe.security.monitoring.dto.request.UserInstallDto;
+import ec.edu.espe.security.monitoring.dto.request.GrafanaInstallRequestDto;
+import ec.edu.espe.security.monitoring.dto.request.PrometheusInstallRequestDto;
+import ec.edu.espe.security.monitoring.dto.request.UserInstallRequestDto;
 import ec.edu.espe.security.monitoring.models.InstallationConfig;
 import ec.edu.espe.security.monitoring.models.SystemParameters;
 import ec.edu.espe.security.monitoring.repositories.InstallationConfigRepository;
@@ -27,14 +27,14 @@ public class InstallationConfigServiceImpl implements InstallationConfigService 
 
     // Save Grafana installation credentials with encrypted password
     @Override
-    public InstallationConfig saveGrafanaInstall(GrafanaInstallDto grafanaInstallDto) {
+    public InstallationConfig saveGrafanaInstall(GrafanaInstallRequestDto grafanaInstallRequestDto) {
         try {
             SystemParameters systemParameter = systemParametersRepository
                     .findByNameAndIsActiveTrue("GRAFANA_INSTALL")
                     .orElseThrow(() -> new IllegalArgumentException("GRAFANA_INSTALL parameter not found"));
 
             // Encrypt the password
-            String encryptedPassword = aesEncryptor.encrypt(grafanaInstallDto.getPassword());
+            String encryptedPassword = aesEncryptor.encrypt(grafanaInstallRequestDto.getPassword());
 
             InstallationConfig grafanaInstall = installationConfigRepository
                     .findFirstBySystemParameterAndIsActiveTrue(systemParameter)
@@ -42,17 +42,17 @@ public class InstallationConfigServiceImpl implements InstallationConfigService 
 
             if (grafanaInstall != null) {
                 grafanaInstall.setPassword(encryptedPassword);
-                grafanaInstall.setInternalPort(grafanaInstallDto.getInternalPort());
-                grafanaInstall.setExternalPort(grafanaInstallDto.getExternalPort());
+                grafanaInstall.setInternalPort(grafanaInstallRequestDto.getInternalPort());
+                grafanaInstall.setExternalPort(grafanaInstallRequestDto.getExternalPort());
                 grafanaInstall.setSystemParameter(systemParameter);
                 grafanaInstall.setIsActive(true);
                 log.error("Se actualiza las credenciales de Grafana");
             } else {
                 grafanaInstall = InstallationConfig.builder()
-                        .usuario(grafanaInstallDto.getUsuario())
+                        .usuario(grafanaInstallRequestDto.getUsuario())
                         .password(encryptedPassword)
-                        .internalPort(grafanaInstallDto.getInternalPort())
-                        .externalPort(grafanaInstallDto.getExternalPort())
+                        .internalPort(grafanaInstallRequestDto.getInternalPort())
+                        .externalPort(grafanaInstallRequestDto.getExternalPort())
                         .systemParameter(systemParameter)
                         .isActive(true)
                         .build();
@@ -102,7 +102,7 @@ public class InstallationConfigServiceImpl implements InstallationConfigService 
 
 
     @Override
-    public InstallationConfig savePrometheusInstall(PrometheusInstallDto prometheusInstallDto) {
+    public InstallationConfig savePrometheusInstall(PrometheusInstallRequestDto prometheusInstallRequestDto) {
         try {
             // Fetch the PROMETHEUS_INSTALL system parameter
             SystemParameters systemParameter = systemParametersRepository
@@ -116,13 +116,13 @@ public class InstallationConfigServiceImpl implements InstallationConfigService 
 
             // If it exists, update the necessary fields
             if (prometheusInstall != null) {
-                prometheusInstall.setInternalPort(prometheusInstallDto.getInternalPort());
-                prometheusInstall.setExternalPort(prometheusInstallDto.getExternalPort());
+                prometheusInstall.setInternalPort(prometheusInstallRequestDto.getInternalPort());
+                prometheusInstall.setExternalPort(prometheusInstallRequestDto.getExternalPort());
             } else {
                 // If it doesn't exist, create a new installation
                 prometheusInstall = InstallationConfig.builder()
-                        .internalPort(prometheusInstallDto.getInternalPort())
-                        .externalPort(prometheusInstallDto.getExternalPort())
+                        .internalPort(prometheusInstallRequestDto.getInternalPort())
+                        .externalPort(prometheusInstallRequestDto.getExternalPort())
                         .systemParameter(systemParameter)
                         .isActive(true)
                         .build();
@@ -163,7 +163,7 @@ public class InstallationConfigServiceImpl implements InstallationConfigService 
 
 
 
-    public InstallationConfig saveUserInstall(UserInstallDto userInstallDto) {
+    public InstallationConfig saveUserInstall(UserInstallRequestDto userInstallRequestDto) {
         try {
             // Fetch the USERS_INSTALL system parameter
             SystemParameters systemParameter = systemParametersRepository
@@ -171,14 +171,14 @@ public class InstallationConfigServiceImpl implements InstallationConfigService 
                     .orElseThrow(() -> new IllegalArgumentException("El parámetro USERS_INSTALL no fue encontrado"));
 
             // Encrypt the password
-            String encryptedPassword = aesEncryptor.encrypt(userInstallDto.getPassword());
+            String encryptedPassword = aesEncryptor.encrypt(userInstallRequestDto.getPassword());
 
             // Build the InstallationConfig for user registration
             InstallationConfig userInstall = InstallationConfig.builder()
-                    .usuario(userInstallDto.getUsuario())
+                    .usuario(userInstallRequestDto.getUsuario())
                     .password(encryptedPassword)
-                    .numberPhone(userInstallDto.getNumberPhone())
-                    .email(userInstallDto.getEmail())
+                    .numberPhone(userInstallRequestDto.getNumberPhone())
+                    .email(userInstallRequestDto.getEmail())
                     .systemParameter(systemParameter)
                     .isActive(true)
                     .build();
@@ -208,11 +208,26 @@ public class InstallationConfigServiceImpl implements InstallationConfigService 
                     .orElseThrow(() -> new IllegalArgumentException("El parámetro COMPLETE_INSTALL no fue encontrado"));
 
             // Check if the installation is marked as complete (case-insensitive comparison)
-            return completeInstallParam.getValor() != null && completeInstallParam.getValor().equalsIgnoreCase("1");
+            return completeInstallParam.getParamValue() != null && completeInstallParam.getParamValue().equalsIgnoreCase("1");
 
         } catch (Exception e) {
             log.error("Error al verificar el estado de la instalación", e);
             throw new IllegalStateException("Error interno del servidor al verificar el estado de la instalación", e);
+        }
+    }
+
+
+    public SystemParameters updateCompleteInstallParameter() {
+        try {
+            SystemParameters completeInstallParam = systemParametersRepository
+                    .findByNameAndIsActiveTrue("COMPLETE_INSTALL")
+                    .orElseThrow(() -> new IllegalArgumentException("El parámetro COMPLETE_INSTALL no fue encontrado"));
+
+            completeInstallParam.setParamValue("1");
+
+            return systemParametersRepository.save(completeInstallParam);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalStateException("No se pudo actualizar el parámetro COMPLETE_INSTALL", e);
         }
     }
 

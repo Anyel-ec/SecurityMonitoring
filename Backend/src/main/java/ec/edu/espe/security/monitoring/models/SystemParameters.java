@@ -20,7 +20,8 @@ public class SystemParameters {
     private String name;
 
     private String description;
-    private String valor;
+
+    private String paramValue;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
