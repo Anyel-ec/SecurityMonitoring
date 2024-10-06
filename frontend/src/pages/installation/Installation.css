@@ -1,94 +1,110 @@
 body {
-    font-family: Arial, sans-serif;
-    transition: background-color 0.3s, color 0.3s;
+  font-family: Arial, sans-serif;
+  transition: background-color 0.3s, color 0.3s;
 }
 
 body.dark-mode {
-    background-color: #121212;
-    color: #fff;
+  background-color: #121212;
+  color: #fff;
 }
 
 .card-fixed-size {
-    height: 600px;
-    /* Tamaño fijo para la tarjeta */
-    display: flex;
-    flex-direction: column;
+  height: 600px; /* Tamaño fijo para la tarjeta */
+  width: 100%;   /* Asegura que la tarjeta ocupe todo el ancho disponible */
+  max-width: 900px; /* Limitar el ancho máximo de la tarjeta */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* Espaciar uniformemente los elementos */
 }
 
 .step-icons {
-    display: flex;
-    justify-content: space-around;
-    margin-bottom: 20px;
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 20px;
 }
 
 .step-icons .step {
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .step-icons .step div {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    font-size: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  font-size: 24px;
 }
 
 .icon-active {
-    background-color: #0d6efd;
-    color: #fff;
+  background-color: #0d6efd;
+  color: #fff;
 }
 
 .icon-inactive {
-    background-color: #adb5bd;
-    color: #fff;
+  background-color: #adb5bd;
+  color: #fff;
 }
 
 .progress-bar {
-    background-color: #0d6efd;
-    height: 10px;
-    margin-bottom: 20px;
-    border-radius: 5px;
+  background-color: #0d6efd;
+  height: 10px;
+  margin-bottom: 20px;
+  border-radius: 5px;
 }
 
 .scrollable-content {
-    flex-grow: 1;
-    /* El contenido ocupando el espacio restante */
-    overflow-y: auto;
-    /* Hacer que el contenido sea desplazable */
-    padding-right: 15px;
-    padding-bottom: 15px;
+  flex-grow: 1;
+  overflow-y: auto;
+  max-height: 400px; /* Ajusta la altura máxima del contenido desplazable */
+  padding-right: 15px;
+  padding-bottom: 15px;
 }
 
 .input-group {
-    position: relative;
-    display: flex;
-    align-items: center;
-  }
-  
-  .input-group .form-control {
-    flex: 1;
-  }
-  .password-toggle svg {
-    font-size: 24px; /* Adjust the font size to match the input field height */
-    vertical-align: middle; /* Vertically center the icon */
-  }
-  .grafana-password-icon svg,
-  .grafana-confirm-password-icon svg {
-    font-size: 20px; /* Ajusta el tamaño del ícono */
-    color: #007bff; /* Color azul para el ícono */
-    transition: color 0.3s;
-  }
-  
-  .grafana-password-icon:hover svg,
-  .grafana-confirm-password-icon:hover svg {
-    color: #0056b3; /* Un tono más oscuro en hover */
-  }
-  
-  .password-toggle:focus {
-    outline: none; /* Elimina el contorno al hacer clic */
-  }
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-group .form-control {
+  flex: 1;
+}
+
+.password-toggle svg {
+  font-size: 24px; /* Adjust the font size to match the input field height */
+  vertical-align: middle; /* Vertically center the icon */
+}
+
+.grafana-password-icon svg,
+.grafana-confirm-password-icon svg {
+  font-size: 20px; /* Ajusta el tamaño del ícono */
+  color: #007bff; /* Color azul para el ícono */
+  transition: color 0.3s;
+}
+
+.grafana-password-icon:hover svg,
+.grafana-confirm-password-icon:hover svg {
+  color: #0056b3; /* Un tono más oscuro en hover */
+}
+
+.password-toggle:focus {
+  outline: none; /* Elimina el contorno al hacer clic */
+}
+.is-valid {
+  border-color: #28a745 !important;
+}
+
+.is-invalid {
+  border-color: #dc3545 !important;
+}
+
+.invalid-feedback {
+  color: #dc3545;
+  font-size: 0.875em;
+  margin-top: 0.25rem;
+}

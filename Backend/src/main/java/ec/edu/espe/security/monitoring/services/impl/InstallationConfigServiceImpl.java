@@ -36,16 +36,28 @@ public class InstallationConfigServiceImpl implements InstallationConfigService 
             // Encrypt the password
             String encryptedPassword = aesEncryptor.encrypt(grafanaInstallDto.getPassword());
 
-            // Use the Builder to create the InstallationConfig object
-            InstallationConfig grafanaInstall = InstallationConfig.builder()
-                    .usuario(grafanaInstallDto.getUsuario())
-                    .password(encryptedPassword)
-                    .internalPort(grafanaInstallDto.getInternalPort())
-                    .externalPort(grafanaInstallDto.getExternalPort())
-                    .systemParameter(systemParameter)
-                    .isActive(true)
-                    .build();
+            InstallationConfig grafanaInstall = installationConfigRepository
+                    .findFirstBySystemParameterAndIsActiveTrue(systemParameter)
+                    .orElse(null);
 
+            if (grafanaInstall != null) {
+                grafanaInstall.setPassword(encryptedPassword);
+                grafanaInstall.setInternalPort(grafanaInstallDto.getInternalPort());
+                grafanaInstall.setExternalPort(grafanaInstallDto.getExternalPort());
+                grafanaInstall.setSystemParameter(systemParameter);
+                grafanaInstall.setIsActive(true);
+                log.error("Se actualiza las credenciales de Grafana");
+            } else {
+                grafanaInstall = InstallationConfig.builder()
+                        .usuario(grafanaInstallDto.getUsuario())
+                        .password(encryptedPassword)
+                        .internalPort(grafanaInstallDto.getInternalPort())
+                        .externalPort(grafanaInstallDto.getExternalPort())
+                        .systemParameter(systemParameter)
+                        .isActive(true)
+                        .build();
+            }
+            log.info("Lo que se va ha instalar de grafana es: {}", grafanaInstall);
             // Save the InstallationConfig entity to the database
             return installationConfigRepository.save(grafanaInstall);
         } catch (IllegalArgumentException e) {

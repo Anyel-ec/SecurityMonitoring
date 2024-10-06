@@ -26,5 +26,5 @@ public class SystemParameters {
     private LocalDateTime createdAt;
 
     @Column(columnDefinition = "boolean default true")
-    private Boolean isActive;
+    private boolean isActive;
 }

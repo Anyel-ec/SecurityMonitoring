@@ -11,7 +11,7 @@ public class GrafanaInstallDto {
     private String usuario;
 
     @NotNull(message = "La contraseña no puede ser nula")
-    @Size(min = 6, message = "La contraseña debe tener al menos 6 caracteres")
+    @Size(min = 5, message = "La contraseña debe tener al menos 5 caracteres")
     private String password;
 
     @Min(value = 1, message = "El puerto interno debe ser mayor a 0")

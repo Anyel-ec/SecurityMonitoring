@@ -2,15 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button, Card, Form, ProgressBar } from 'react-bootstrap';
 import Swal from 'sweetalert2';
-import { CheckCircleFill, Check, Database, CardChecklist, FileEarmarkCheck, EyeFill, EyeSlashFill } from 'react-bootstrap-icons'; // Bootstrap icons
+import { CheckCircleFill, Check, Database, FileEarmarkCheck } from 'react-bootstrap-icons'; // Bootstrap icons
 import './installation.css';
-import {  } from 'react-bootstrap-icons';
+import { saveGrafanaInstallService } from '../../services/installationService'; // Asegúrate de que la ruta es correcta
+import * as Yup from 'yup'; // Yup para validaciones
 
 export default function InstallationWizard() {
   const [currentStep, setCurrentStep] = useState(1);
   const [darkMode, setDarkMode] = useState(false);
-  const [showPassword, setShowPassword] = useState(false); 
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [errors, setErrors] = useState({});
+  const [touched, setTouched] = useState({});
 
   // Step 1 state
   const [grafanaAdmin, setGrafanaAdmin] = useState('admin'); // Usuario por defecto
@@ -19,38 +20,124 @@ export default function InstallationWizard() {
   const [grafanaLocalPort, setGrafanaLocalPort] = useState('3000'); // Local port por defecto
   const [grafanaDockerPort, setGrafanaDockerPort] = useState('3000'); // Docker port por defecto
 
-
   // Step 2 state
   const [prometheusLocalPort, setPrometheusLocalPort] = useState('9090');
   const [prometheusDockerPort, setPrometheusDockerPort] = useState('9090');
 
-  // Step 3 state
-  const [dbType, setDbType] = useState('');
-  const [dbUser, setDbUser] = useState('');
-  const [dbPort, setDbPort] = useState('');
-  const [dbHost, setDbHost] = useState('');
+  // Validación con Yup
+  const validationSchema = Yup.object().shape({
+    grafanaAdmin: Yup.string()
+      .min(3, 'El nombre de usuario debe tener al menos 3 caracteres')
+      .required('Nombre de usuario es requerido'),
+    grafanaPassword: Yup.string()
+      .min(5, 'La contraseña debe tener al menos 5 caracteres')
+      .required('La contraseña es requerida'),
+    grafanaPasswordConfirm: Yup.string()
+      .oneOf([Yup.ref('grafanaPassword')], 'Las contraseñas no coinciden')
+      .required('Debes confirmar la contraseña'),
+    grafanaLocalPort: Yup.number()
+      .min(1, 'El puerto debe ser mayor a 0')
+      .max(65535, 'El puerto no puede exceder 65535')
+      .required('El puerto es requerido'),
+    grafanaDockerPort: Yup.number()
+      .min(1, 'El puerto debe ser mayor a 0')
+      .max(65535, 'El puerto no puede exceder 65535')
+      .required('El puerto es requerido'),
+  });
 
-  // Function to advance to the next step
-  const nextStep = () => {
-    if (currentStep === 1 && grafanaPassword !== grafanaPasswordConfirm) {
+  // Validación automática de contraseñas mientras se escriben
+  useEffect(() => {
+    if (touched.grafanaPasswordConfirm) {
+      const errorMessage =
+        grafanaPassword !== grafanaPasswordConfirm ? 'Las contraseñas no coinciden' : '';
+      setErrors((prev) => ({ ...prev, grafanaPasswordConfirm: errorMessage }));
+    }
+  }, [grafanaPassword, grafanaPasswordConfirm, touched]);
+
+  // Función para guardar los valores en el backend
+  const saveGrafanaInstall = async () => {
+    try {
+      const grafanaInstallData = {
+        usuario: grafanaAdmin,
+        password: grafanaPassword,
+        internalPort: parseInt(grafanaLocalPort),
+        externalPort: parseInt(grafanaDockerPort),
+      };
+  
+      await saveGrafanaInstallService(grafanaInstallData);
+  
+      // Mostrar toast de éxito
+      Swal.fire({
+        icon: 'success',
+        title: 'Instalación Guardada',
+        text: 'La instalación de Grafana se ha guardado correctamente.',
+        toast: true,
+        position: 'bottom-start', // Muestra el toast en la esquina inferior izquierda
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+      });
+  
+      setCurrentStep((prev) => Math.min(prev + 1, 3));
+    } catch (error) {
+      // Mostrar toast de error
       Swal.fire({
         icon: 'error',
         title: 'Error',
-        text: 'Las contraseñas de Grafana no coinciden',
+        text: 'Hubo un problema al guardar la instalación de Grafana.',
         toast: true,
-        position: 'top-end',
+        position: 'bottom-start', // Muestra el toast en la esquina inferior izquierda
         showConfirmButton: false,
         timer: 3000,
+        timerProgressBar: true,
       });
-      return;
     }
-    setCurrentStep((prev) => Math.min(prev + 1, 4));
   };
 
-  // Function to return to the previous step
+  const nextStep = () => {
+    setTouched({
+      grafanaAdmin: true,
+      grafanaPassword: true,
+      grafanaPasswordConfirm: true,
+      grafanaLocalPort: true,
+      grafanaDockerPort: true,
+    }); // Marca que los campos han sido tocados
+    validationSchema
+      .validate(
+        {
+          grafanaAdmin,
+          grafanaPassword,
+          grafanaPasswordConfirm,
+          grafanaLocalPort,
+          grafanaDockerPort,
+        },
+        { abortEarly: false }
+      )
+      .then(() => {
+        setErrors({}); // Limpiar errores si la validación es exitosa
+        saveGrafanaInstall(); // Guardar los valores actualizados en cada avance
+      })
+      .catch((validationErrors) => {
+        const errorObject = {};
+        validationErrors.inner.forEach((error) => {
+          errorObject[error.path] = error.message;
+        });
+        setErrors(errorObject); // Guardar los errores en el estado
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Corrige los campos marcados.',
+        });
+      });
+  };
+
   const prevStep = () => setCurrentStep((prev) => Math.max(prev - 1, 1));
 
-  const steps = ['Grafana', 'Prometheus', 'Database', 'Finish'];
+  const handleBlur = (field) => {
+    setTouched((prev) => ({ ...prev, [field]: true }));
+  };
+
+  const steps = ['Grafana', 'Prometheus', 'Finish'];
 
   // Update dark mode state
   useEffect(() => {
@@ -65,32 +152,28 @@ export default function InstallationWizard() {
             <Form.Group controlId="grafanaAdmin" className="mt-3">
               <Form.Label>Grafana Admin User</Form.Label>
               <Form.Control
-
                 type="text"
                 placeholder="Enter username"
                 value={grafanaAdmin}
                 onChange={(e) => setGrafanaAdmin(e.target.value)}
+                onBlur={() => handleBlur('grafanaAdmin')}
+                className={touched.grafanaAdmin && errors.grafanaAdmin ? 'is-invalid' : touched.grafanaAdmin ? 'is-valid' : ''}
               />
+              {touched.grafanaAdmin && errors.grafanaAdmin && <div className="invalid-feedback">{errors.grafanaAdmin}</div>}
             </Form.Group>
-
-
 
             <Form.Group controlId="grafanaPassword" className="mt-3 position-relative">
               <Form.Label>Grafana Admin Password</Form.Label>
               <div className="input-group">
                 <Form.Control
-                  type={showPassword ? 'text' : 'password'}
+                  type="password"
                   placeholder="Enter password"
                   value={grafanaPassword}
                   onChange={(e) => setGrafanaPassword(e.target.value)}
+                  onBlur={() => handleBlur('grafanaPassword')}
+                  className={touched.grafanaPassword && errors.grafanaPassword ? 'is-invalid' : touched.grafanaPassword ? 'is-valid' : ''}
                 />
-                <Button
-                  variant="link"
-                  className="password-toggle grafana-password-icon"
-                  onClick={() => setShowPassword(!showPassword)}
-                >
-                  {showPassword ? <EyeSlashFill /> : <EyeFill />}
-                </Button>
+                {touched.grafanaPassword && errors.grafanaPassword && <div className="invalid-feedback">{errors.grafanaPassword}</div>}
               </div>
             </Form.Group>
 
@@ -98,22 +181,18 @@ export default function InstallationWizard() {
               <Form.Label>Confirm Grafana Admin Password</Form.Label>
               <div className="input-group">
                 <Form.Control
-                  type={showConfirmPassword ? 'text' : 'password'}
+                  type="password"
                   placeholder="Confirm password"
                   value={grafanaPasswordConfirm}
                   onChange={(e) => setGrafanaPasswordConfirm(e.target.value)}
+                  onBlur={() => handleBlur('grafanaPasswordConfirm')}
+                  className={touched.grafanaPasswordConfirm && errors.grafanaPasswordConfirm ? 'is-invalid' : touched.grafanaPasswordConfirm ? 'is-valid' : ''}
                 />
-                <Button
-                  variant="link"
-                  className="password-toggle grafana-confirm-password-icon"
-                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                >
-                  {showConfirmPassword ? <EyeSlashFill /> : <EyeFill />}
-                </Button>
+                {touched.grafanaPasswordConfirm && errors.grafanaPasswordConfirm && (
+                  <div className="invalid-feedback">{errors.grafanaPasswordConfirm}</div>
+                )}
               </div>
             </Form.Group>
-
-
 
             <Form.Group controlId="grafanaLocalPort" className="mt-3">
               <Form.Label>Grafana Local Port</Form.Label>
@@ -122,7 +201,10 @@ export default function InstallationWizard() {
                 placeholder="e.g., 3000"
                 value={grafanaLocalPort}
                 onChange={(e) => setGrafanaLocalPort(e.target.value)}
+                onBlur={() => handleBlur('grafanaLocalPort')}
+                className={touched.grafanaLocalPort && errors.grafanaLocalPort ? 'is-invalid' : touched.grafanaLocalPort ? 'is-valid' : ''}
               />
+              {touched.grafanaLocalPort && errors.grafanaLocalPort && <div className="invalid-feedback">{errors.grafanaLocalPort}</div>}
             </Form.Group>
             <Form.Group controlId="grafanaDockerPort" className="mt-3">
               <Form.Label>Grafana Docker Port</Form.Label>
@@ -131,9 +213,12 @@ export default function InstallationWizard() {
                 placeholder="e.g., 3000"
                 value={grafanaDockerPort}
                 onChange={(e) => setGrafanaDockerPort(e.target.value)}
+                onBlur={() => handleBlur('grafanaDockerPort')}
+                className={touched.grafanaDockerPort && errors.grafanaDockerPort ? 'is-invalid' : touched.grafanaDockerPort ? 'is-valid' : ''}
               />
+              {touched.grafanaDockerPort && errors.grafanaDockerPort && <div className="invalid-feedback">{errors.grafanaDockerPort}</div>}
             </Form.Group>
-          </Form >
+          </Form>
         );
       case 2:
         return (
@@ -159,97 +244,6 @@ export default function InstallationWizard() {
           </Form>
         );
       case 3:
-        return (
-          <Form>
-            <Form.Group controlId="dbType">
-              <Form.Label>Database Type</Form.Label>
-              <div>
-                <Form.Check
-                  inline
-                  type="radio"
-                  label="MongoDB"
-                  value="MongoDB"
-                  checked={dbType === 'MongoDB'}
-                  onChange={(e) => setDbType(e.target.value)}
-                />
-                <Form.Check
-                  inline
-                  type="radio"
-                  label="MySQL/MariaDB"
-                  value="MySQL/MariaDB"
-                  checked={dbType === 'MySQL/MariaDB'}
-                  onChange={(e) => setDbType(e.target.value)}
-                />
-                <Form.Check
-                  inline
-                  type="radio"
-                  label="PostgreSQL"
-                  value="PostgreSQL"
-                  checked={dbType === 'PostgreSQL'}
-                  onChange={(e) => setDbType(e.target.value)}
-                />
-              </div>
-            </Form.Group>
-            <Form.Group controlId="dbUser" className="mt-3">
-              <Form.Label>Database User</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Enter database user"
-                value={dbUser}
-                onChange={(e) => setDbUser(e.target.value)}
-              />
-            </Form.Group>
-            <Form.Group controlId="grafanaPassword" className="mt-3 position-relative">
-              <Form.Label>Password</Form.Label>
-              <div className="input-group">
-                <Form.Control
-                  type={showPassword ? 'text' : 'password'}
-                  placeholder="Enter password"
-                  value={grafanaPassword}
-                  onChange={(e) => setGrafanaPassword(e.target.value)}
-                />
-                <Button
-                  variant="link"
-                  className="password-toggle grafana-password-icon"
-                  onClick={() => setShowPassword(!showPassword)}
-                >
-                  {showPassword ? <EyeSlashFill /> : <EyeFill />}
-                </Button>
-              </div>
-            </Form.Group>
-
-            
-            <Form.Group controlId="dbHost" className="mt-3">
-              <Form.Label>Database Host</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="e.g., localhost or 127.0.0.1"
-                value={dbHost}
-                onChange={(e) => setDbHost(e.target.value)}
-              />
-            </Form.Group>
-            <Form.Group controlId="dbPort" className="mt-3">
-              <Form.Label>Database Port</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="e.g., 3306 for MySQL, 5432 for PostgreSQL"
-                value={dbPort}
-                onChange={(e) => setDbPort(e.target.value)}
-              />
-            </Form.Group>
-            <Form.Group controlId="dbHost" className="mt-3">
-              <Form.Label>Nombre de la Base de datos</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="e.g., localhost or 127.0.0.1"
-                value={dbHost}
-                onChange={(e) => setDbHost(e.target.value)}
-              />
-            </Form.Group>
-
-          </Form>
-        );
-      case 4:
         return (
           <div className="text-center">
             <h2>Installation Complete!</h2>
@@ -286,13 +280,7 @@ export default function InstallationWizard() {
           </div>
           <div className="step">
             <div className={currentStep >= 3 ? 'icon-active' : 'icon-inactive'}>
-              {currentStep > 3 ? <Check /> : <CardChecklist />}
-            </div>
-            <span>Database</span>
-          </div>
-          <div className="step">
-            <div className={currentStep >= 4 ? 'icon-active' : 'icon-inactive'}>
-              {currentStep > 4 ? <Check /> : <FileEarmarkCheck />}
+              {currentStep > 3 ? <Check /> : <FileEarmarkCheck />}
             </div>
             <span>Finish</span>
           </div>
@@ -321,7 +309,7 @@ export default function InstallationWizard() {
             </Button>
           )}
           <Button onClick={nextStep} className="ml-auto">
-            {currentStep < 4 ? 'Next' : 'Finish'}
+            {currentStep < 3 ? 'Next' : 'Finish'}
           </Button>
         </div>
       </Card>
