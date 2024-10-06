@@ -5,7 +5,7 @@ import ec.edu.espe.security.monitoring.dto.request.PrometheusInstallDto;
 import ec.edu.espe.security.monitoring.dto.request.UserInstallDto;
 import ec.edu.espe.security.monitoring.dto.response.JsonResponseDto;
 import ec.edu.espe.security.monitoring.models.InstallationConfig;
-import ec.edu.espe.security.monitoring.services.interfaces.installation.InstallationConfigService;
+import ec.edu.espe.security.monitoring.services.interfaces.InstallationConfigService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -54,6 +54,33 @@ public class InstallationConfigController {
         }
     }
 
+    /*
+     * GET endpoint to retrieve Grafana installation parameters
+     * @return ResponseEntity<InstallationConfig>
+     */
+    @GetMapping("/grafana")
+    public ResponseEntity<JsonResponseDto> getGrafanaInstall() {
+        try {
+            // Retrieve Grafana installation configuration
+            InstallationConfig grafanaInstall = installationConfigService.getGrafanaInstall();
+
+            // If the configuration is found, return 200 OK with the configuration
+            if (grafanaInstall != null) {
+                JsonResponseDto response = new JsonResponseDto(true, 200, "Grafana installation retrieved successfully", grafanaInstall);
+                return ResponseEntity.ok(response);
+            } else {
+                // If the configuration is not found, return 404 Not Found
+                JsonResponseDto response = new JsonResponseDto(false, 404, "Grafana installation not found", null);
+                return ResponseEntity.status(404).body(response);
+            }
+        } catch (Exception e) {
+            // Handle any unexpected exceptions
+            JsonResponseDto response = new JsonResponseDto(false, 500, "Internal server error while retrieving Grafana installation", null);
+            return ResponseEntity.status(500).body(response);
+        }
+    }
+
+
 
     /*
      * POST endpoint to save Prometheus installation parameters
@@ -85,6 +112,33 @@ public class InstallationConfigController {
             return ResponseEntity.status(500).body(response);  // Return 500 Internal Server Error
         }
     }
+
+    @GetMapping("/prometheus")
+    public ResponseEntity<JsonResponseDto> getPrometheusInstall() {
+        try {
+            // Retrieve Prometheus installation configuration
+            InstallationConfig prometheusInstall = installationConfigService.getPrometheusInstall();
+
+            // If the configuration is found, return 200 OK with the configuration
+            if (prometheusInstall != null) {
+                JsonResponseDto response = new JsonResponseDto(true, 200, "Instalación de Prometheus recuperada exitosamente", prometheusInstall);
+                return ResponseEntity.ok(response);
+            } else {
+                // If the configuration is not found, return 404 Not Found
+                JsonResponseDto response = new JsonResponseDto(false, 404, "Instalación de Prometheus no encontrada", null);
+                return ResponseEntity.status(404).body(response);
+            }
+        } catch (IllegalArgumentException e) {
+            // Handle error if parameters are not found, return 400 Bad Request
+            JsonResponseDto response = new JsonResponseDto(false, 400, e.getMessage(), null);
+            return ResponseEntity.badRequest().body(response);
+        } catch (Exception e) {
+            // Handle any unexpected exception, return 500 Internal Server Error
+            JsonResponseDto response = new JsonResponseDto(false, 500, "Error interno del servidor al recuperar la instalación de Prometheus", null);
+            return ResponseEntity.status(500).body(response);
+        }
+    }
+
 
     /*
      * POST endpoint to save user registration

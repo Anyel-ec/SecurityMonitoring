@@ -7,13 +7,14 @@ import ec.edu.espe.security.monitoring.models.InstallationConfig;
 import ec.edu.espe.security.monitoring.models.SystemParameters;
 import ec.edu.espe.security.monitoring.repositories.InstallationConfigRepository;
 import ec.edu.espe.security.monitoring.repositories.SystemParametersRepository;
-import ec.edu.espe.security.monitoring.services.interfaces.installation.InstallationConfigService;
+import ec.edu.espe.security.monitoring.services.interfaces.InstallationConfigService;
 import ec.edu.espe.security.monitoring.utils.AesEncryptor;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -57,6 +58,38 @@ public class InstallationConfigServiceImpl implements InstallationConfigService 
     }
 
     @Override
+    public InstallationConfig getGrafanaInstall() {
+        try {
+            // Search for the system parameter "GRAFANA_INSTALL"
+            SystemParameters systemParameter = systemParametersRepository
+                    .findByNameAndIsActiveTrue("GRAFANA_INSTALL")
+                    .orElseThrow(() -> new IllegalArgumentException("GRAFANA_INSTALL parameter not found"));
+
+            // Search for the active installation associated with the found SystemParameter
+            Optional<InstallationConfig> optionalInstall = installationConfigRepository
+                    .findFirstBySystemParameterAndIsActiveTrue(systemParameter);
+
+            // If no installation is found, throw an exception
+            if (optionalInstall.isEmpty()) {
+                throw new IllegalArgumentException("No se encontró una instalación activa para GRAFANA_INSTALL");
+            }
+
+            InstallationConfig grafanaInstall = optionalInstall.get();
+
+            // Decrypt the password
+            String decryptedPassword = aesEncryptor.decrypt(grafanaInstall.getPassword());
+            grafanaInstall.setPassword(decryptedPassword);
+
+            // Return the InstallationConfig object with the decrypted password
+            return grafanaInstall;
+        } catch (Exception e) {
+            throw new IllegalStateException("Error al obtener la instalación de Grafana", e);
+        }
+    }
+
+
+
+    @Override
     public InstallationConfig savePrometheusInstall(PrometheusInstallDto prometheusInstallDto) {
         try {
             // Fetch the PROMETHEUS_INSTALL system parameter
@@ -82,6 +115,28 @@ public class InstallationConfigServiceImpl implements InstallationConfigService 
             throw new IllegalStateException("Error interno del servidor al guardar la instalación de Prometheus", e); // Manejar errores inesperados (500)
         }
     }
+
+    @Override
+    public InstallationConfig getPrometheusInstall() {
+        try {
+            // Search for the active system parameter PROMETHEUS_INSTALL
+            SystemParameters systemParameter = systemParametersRepository
+                    .findByNameAndIsActiveTrue("PROMETHEUS_INSTALL")
+                    .orElseThrow(() -> new IllegalArgumentException("El parámetro PROMETHEUS_INSTALL no fue encontrado"));
+
+            // Search for the Prometheus installation configuration using the system parameter
+            return installationConfigRepository
+                    .findFirstBySystemParameterAndIsActiveTrue(systemParameter)
+                    .orElseThrow(() -> new IllegalArgumentException("No se encontró la configuración de instalación de Prometheus"));
+        } catch (IllegalArgumentException e) {
+            log.error(e.getMessage());
+            throw e; // Throw specific exception (400 Bad Request)
+        } catch (Exception e) {
+            log.error("Error inesperado al recuperar la instalación de Prometheus", e);
+            throw new IllegalStateException("Error interno del servidor al recuperar la instalación de Prometheus", e); // Error 500
+        }
+    }
+
 
 
     public InstallationConfig saveUserInstall(UserInstallDto userInstallDto) {
