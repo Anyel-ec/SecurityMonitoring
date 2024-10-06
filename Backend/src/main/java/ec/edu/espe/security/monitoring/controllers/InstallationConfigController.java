@@ -179,4 +179,28 @@ public class InstallationConfigController {
         return ResponseEntity.ok(response);
     }
 
+    /*
+     * GET endpoint to check if the installation is complete
+     * @return ResponseEntity<JsonResponseDto>
+     */
+    @GetMapping("/status")
+    public ResponseEntity<JsonResponseDto> getInstallationCompleteStatus() {
+        try {
+            // Use the service to check if the installation is complete
+            boolean isComplete = installationConfigService.isInstallationComplete();
+
+            // Return the installation status in a JsonResponseDto
+            JsonResponseDto response = new JsonResponseDto(true, 200, "Estado de la instalación recuperado exitosamente", isComplete);
+            return ResponseEntity.ok(response);
+        } catch (IllegalArgumentException e) {
+            // Handle error if the system parameter is not found
+            JsonResponseDto response = new JsonResponseDto(false, 400, e.getMessage(), null);
+            return ResponseEntity.badRequest().body(response);
+        } catch (Exception e) {
+            // Handle any unexpected errors
+            JsonResponseDto response = new JsonResponseDto(false, 500, "Error interno del servidor al recuperar el estado de instalación", null);
+            return ResponseEntity.status(500).body(response);
+        }
+    }
+
 }

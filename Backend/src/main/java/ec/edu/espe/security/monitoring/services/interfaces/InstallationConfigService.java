@@ -26,4 +26,7 @@ public interface InstallationConfigService {
 
    // Retrieve Prometheus installation configuration
    InstallationConfig getPrometheusInstall();
+
+   // Method to check installation status
+   boolean isInstallationComplete();
 }

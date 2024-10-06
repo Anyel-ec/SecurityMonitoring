@@ -3,6 +3,9 @@ import { useState, useEffect } from 'react';
 import MainComponent from '../pages/MainComponent';
 import PropTypes from 'prop-types';
 import InstallationWizard from '../pages/installation/InstallationWizard';
+import { useNavigate } from 'react-router-dom'; 
+import { checkInstallationStatusService } from '../services/installationService'; // Importar el servicio
+import Swal from 'sweetalert2';  // Importar SweetAlert2
 
 
 const RoutesWrapper = ({ children }) => {
@@ -10,6 +13,40 @@ const RoutesWrapper = ({ children }) => {
     const savedTheme = localStorage.getItem('darkMode');
     return savedTheme ? JSON.parse(savedTheme) : false;
   });
+
+  const [isInstalled, setIsInstalled] = useState(null);  // Estado de instalación, inicia en null
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Mostrar el diálogo de carga
+    Swal.fire({
+      title: 'Cargando...',
+      text: 'Por favor, espera mientras verificamos el estado de la instalación',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading(); // Mostrar el spinner de carga
+      }
+    });
+
+    // Verificar si el sistema está instalado usando el servicio
+    const checkInstallationStatus = async () => {
+      try {
+        const data = await checkInstallationStatusService();  // Llamada al servicio
+        setIsInstalled(data.result);  // Almacena el valor del campo "result"
+        Swal.close();  // Cerrar el diálogo de carga cuando llega la respuesta
+
+        if (!data.result) {  // Si no está instalado, redirige a la página de instalación
+          navigate('/instalacion');
+        }
+      } catch (error) {
+        console.error('Error al verificar el estado de instalación:', error);
+        Swal.close();  // Cerrar el diálogo en caso de error
+        Swal.fire('Error', 'Hubo un problema al verificar el estado de instalación.', 'error');
+      }
+    };
+
+    checkInstallationStatus();
+  }, [navigate]);
 
   useEffect(() => {
     if (darkMode) {
@@ -23,6 +60,11 @@ const RoutesWrapper = ({ children }) => {
   const toggleTheme = () => {
     setDarkMode(!darkMode);
   };
+
+  // Mostrar un loading o nada mientras se carga el estado de instalación
+  if (isInstalled === null) {
+    return null;  // Oculta la interfaz hasta que se resuelva el estado
+  }
 
   return (
     <MainLayout darkMode={darkMode} toggleTheme={toggleTheme}>

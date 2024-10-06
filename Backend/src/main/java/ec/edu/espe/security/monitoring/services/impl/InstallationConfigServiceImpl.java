@@ -170,9 +170,28 @@ public class InstallationConfigServiceImpl implements InstallationConfigService 
         }
     }
 
+    @Override
     public List<InstallationConfig> getActiveInstallations() {
         return installationConfigRepository.findByIsActiveTrue();
     }
+
+    @Override
+    public boolean isInstallationComplete() {
+        try {
+            // Fetch the system parameter COMPLETE_INSTALL
+            SystemParameters completeInstallParam = systemParametersRepository
+                    .findByNameAndIsActiveTrue("COMPLETE_INSTALL")
+                    .orElseThrow(() -> new IllegalArgumentException("El parámetro COMPLETE_INSTALL no fue encontrado"));
+
+            // Check if the installation is marked as complete (case-insensitive comparison)
+            return completeInstallParam.getValor() != null && completeInstallParam.getValor().equalsIgnoreCase("1");
+
+        } catch (Exception e) {
+            log.error("Error al verificar el estado de la instalación", e);
+            throw new IllegalStateException("Error interno del servidor al verificar el estado de la instalación", e);
+        }
+    }
+
 
 
 }
