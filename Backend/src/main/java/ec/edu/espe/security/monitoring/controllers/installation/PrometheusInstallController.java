@@ -3,7 +3,7 @@ package ec.edu.espe.security.monitoring.controllers.installation;
 import ec.edu.espe.security.monitoring.dto.request.PrometheusInstallRequestDto;
 import ec.edu.espe.security.monitoring.dto.response.JsonResponseDto;
 import ec.edu.espe.security.monitoring.models.InstallationConfig;
-import ec.edu.espe.security.monitoring.services.interfaces.InstallationConfigService;
+import ec.edu.espe.security.monitoring.services.interfaces.installation.PrometheusInstallService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("api/v1/install/prometheus")
 public class PrometheusInstallController {
 
-    private final InstallationConfigService installationConfigService;
+    private final PrometheusInstallService prometheusInstallService;
 
 
     /*
@@ -28,7 +28,7 @@ public class PrometheusInstallController {
     public ResponseEntity<JsonResponseDto> savePrometheusInstall(@Valid @RequestBody PrometheusInstallRequestDto prometheusInstallRequestDto) {
         try {
             // Try to save the Prometheus installation
-            InstallationConfig savedPrometheusInstall = installationConfigService.savePrometheusInstall(prometheusInstallRequestDto);
+            InstallationConfig savedPrometheusInstall = prometheusInstallService.savePrometheusInstall(prometheusInstallRequestDto);
 
             // Check if the installation was successfully saved
             if (savedPrometheusInstall != null) {
@@ -54,7 +54,7 @@ public class PrometheusInstallController {
     public ResponseEntity<JsonResponseDto> getPrometheusInstall() {
         try {
             // Retrieve Prometheus installation configuration
-            InstallationConfig prometheusInstall = installationConfigService.getPrometheusInstall();
+            InstallationConfig prometheusInstall = prometheusInstallService.getPrometheusInstall();
 
             // If the configuration is found, return 200 OK with the configuration
             if (prometheusInstall != null) {

@@ -3,7 +3,7 @@ package ec.edu.espe.security.monitoring.controllers.installation;
 import ec.edu.espe.security.monitoring.dto.response.JsonResponseDto;
 import ec.edu.espe.security.monitoring.models.InstallationConfig;
 import ec.edu.espe.security.monitoring.models.SystemParameters;
-import ec.edu.espe.security.monitoring.services.interfaces.InstallationConfigService;
+import ec.edu.espe.security.monitoring.services.interfaces.installation.ConfigInstallService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -19,11 +19,11 @@ import java.util.List;
 @RequestMapping("api/v1/install")
 public class ConfigInstallController {
 
-    private final InstallationConfigService installationConfigService;
+    private final ConfigInstallService configInstallService;
 
     @GetMapping("/active")
     public ResponseEntity<JsonResponseDto> getActiveInstallations() {
-        List<InstallationConfig> activeInstallations = installationConfigService.getActiveInstallations();
+        List<InstallationConfig> activeInstallations = configInstallService.getActiveInstallations();
         JsonResponseDto response = new JsonResponseDto(true, 200, "Active installations retrieved successfully", activeInstallations);
         return ResponseEntity.ok(response);
     }
@@ -36,7 +36,7 @@ public class ConfigInstallController {
     public ResponseEntity<JsonResponseDto> getInstallationCompleteStatus() {
         try {
             // Use the service to check if the installation is complete
-            boolean isComplete = installationConfigService.isInstallationComplete();
+            boolean isComplete = configInstallService.isInstallationComplete();
 
             // Return the installation status in a JsonResponseDto
             JsonResponseDto response = new JsonResponseDto(true, 200, "Estado de la instalación recuperado exitosamente", isComplete);
@@ -60,7 +60,7 @@ public class ConfigInstallController {
     public ResponseEntity<JsonResponseDto> updateCompleteInstall() {
         try {
             // Update the COMPLETE_INSTALL parameter using the service
-            SystemParameters updatedParam = installationConfigService.updateCompleteInstallParameter();
+            SystemParameters updatedParam = configInstallService.updateCompleteInstallParameter();
 
             // Create a success response using JsonResponseDto
             JsonResponseDto response = new JsonResponseDto(true, 200, "El parámetro COMPLETE_INSTALL fue actualizado exitosamente.", updatedParam);

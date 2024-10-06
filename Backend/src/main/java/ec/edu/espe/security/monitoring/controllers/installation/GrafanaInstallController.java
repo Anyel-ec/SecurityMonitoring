@@ -3,7 +3,7 @@ package ec.edu.espe.security.monitoring.controllers.installation;
 import ec.edu.espe.security.monitoring.dto.request.GrafanaInstallRequestDto;
 import ec.edu.espe.security.monitoring.dto.response.JsonResponseDto;
 import ec.edu.espe.security.monitoring.models.InstallationConfig;
-import ec.edu.espe.security.monitoring.services.interfaces.InstallationConfigService;
+import ec.edu.espe.security.monitoring.services.interfaces.installation.GrafanaInstallService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 public class GrafanaInstallController
 {
 
-    private final InstallationConfigService installationConfigService;
+    private final GrafanaInstallService grafanaInstallService;
 
     /*
      * POST endpoint to save Grafana installation parameters
@@ -28,7 +28,7 @@ public class GrafanaInstallController
     public ResponseEntity<JsonResponseDto> saveGrafanaInstall(@Valid @RequestBody GrafanaInstallRequestDto grafanaInstallRequestDTO) {
         try {
             // Try to save the Grafana installation
-            InstallationConfig savedGrafanaInstall = installationConfigService.saveGrafanaInstall(grafanaInstallRequestDTO);
+            InstallationConfig savedGrafanaInstall = grafanaInstallService.saveGrafanaInstall(grafanaInstallRequestDTO);
 
             // Check if the installation was successfully saved
             if (savedGrafanaInstall != null) {
@@ -58,7 +58,7 @@ public class GrafanaInstallController
     public ResponseEntity<JsonResponseDto> getGrafanaInstall() {
         try {
             // Retrieve Grafana installation configuration
-            InstallationConfig grafanaInstall = installationConfigService.getGrafanaInstall();
+            InstallationConfig grafanaInstall = grafanaInstallService.getGrafanaInstall();
 
             // If the configuration is found, return 200 OK with the configuration
             if (grafanaInstall != null) {

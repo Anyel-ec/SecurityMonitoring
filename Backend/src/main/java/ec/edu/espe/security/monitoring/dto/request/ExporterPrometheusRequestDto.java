@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
-public class PrometheusExporterRequestDto {
+public class ExporterPrometheusRequestDto {
 
     @NotNull(message = "El puerto interno de Postgres no puede ser nulo")
     @Min(value = 1, message = "El puerto interno de Postgres debe ser mayor a 0")

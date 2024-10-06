@@ -3,7 +3,7 @@ package ec.edu.espe.security.monitoring.controllers.installation;
 import ec.edu.espe.security.monitoring.dto.request.UserInstallRequestDto;
 import ec.edu.espe.security.monitoring.dto.response.JsonResponseDto;
 import ec.edu.espe.security.monitoring.models.InstallationConfig;
-import ec.edu.espe.security.monitoring.services.interfaces.InstallationConfigService;
+import ec.edu.espe.security.monitoring.services.interfaces.installation.UserInstallService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 @AllArgsConstructor
 @RequestMapping("api/v1/install/user")
 public class UserInstallController {
-    private final InstallationConfigService installationConfigService;
+    private final UserInstallService userInstallService;
 
     /*
      * POST endpoint to save user registration
@@ -29,7 +29,7 @@ public class UserInstallController {
     public ResponseEntity<JsonResponseDto> saveUserInstall(@Valid @RequestBody UserInstallRequestDto userInstallRequestDto) {
         try {
             // Try to save the user registration
-            InstallationConfig savedUserInstall = installationConfigService.saveUserInstall(userInstallRequestDto);
+            InstallationConfig savedUserInstall = userInstallService.saveUserInstall(userInstallRequestDto);
 
             // Check if the registration was successfully saved
             if (savedUserInstall != null) {
