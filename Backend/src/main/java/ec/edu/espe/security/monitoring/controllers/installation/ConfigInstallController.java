@@ -63,7 +63,7 @@ public class ConfigInstallController {
             SystemParameters updatedParam = installationConfigService.updateCompleteInstallParameter();
 
             // Create a success response using JsonResponseDto
-            JsonResponseDto response = new JsonResponseDto(true, 200, "The COMPLETE_INSTALL parameter was successfully updated.", updatedParam);
+            JsonResponseDto response = new JsonResponseDto(true, 200, "El parámetro COMPLETE_INSTALL fue actualizado exitosamente.", updatedParam);
             return ResponseEntity.ok(response);
         } catch (IllegalArgumentException e) {
             // Handle error if the parameter was not found
@@ -71,7 +71,8 @@ public class ConfigInstallController {
             return ResponseEntity.badRequest().body(response);
         } catch (Exception e) {
             // Handle any unexpected errors
-            return ResponseEntity.status(500).body(new JsonResponseDto(false, 500, "Internal server error while updating the COMPLETE_INSTALL parameter.", null));
+            return ResponseEntity.status(500).body(new JsonResponseDto(false, 500, "Error interno del servidor al actualizar el parámetro COMPLETE_INSTALL.", null));
         }
     }
+
 }

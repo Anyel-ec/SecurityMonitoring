@@ -115,3 +115,20 @@ export const getActiveInstallationsService = async () => {
     throw error;
   }
 };
+
+
+// Servicio para completar la instalación
+export const completeInstallService = async () => {
+  const BASE_URL = AppEnvironments.baseUrl;
+
+  try {
+    const response = await axios.put(`${BASE_URL}/api/v1/install/complete`);
+    return response.data;
+  } catch (error) {
+    if (error.response?.data) {
+      throw new Error(error.response.data.message || 'Error al completar la instalación');
+    } else {
+      throw new Error('No se pudo conectar al servidor. Verifica tu conexión.');
+    }
+  }
+};

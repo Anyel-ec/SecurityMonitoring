@@ -4,8 +4,9 @@ import { Button, Card, Form, ProgressBar } from 'react-bootstrap';
 import Swal from 'sweetalert2';
 import { CheckCircleFill, Check, Database, FileEarmarkCheck } from 'react-bootstrap-icons'; // Bootstrap icons
 import './installation.css';
-import { saveGrafanaInstallService, savePrometheusInstallService } from '../../services/installationService'; // Asegúrate de que la ruta es correcta
+import { saveGrafanaInstallService, savePrometheusInstallService } from '../../services/installationService';
 import * as Yup from 'yup'; // Yup para validaciones
+import { completeInstallService } from '../../services/installationService'; 
 
 export default function InstallationWizard() {
   const [currentStep, setCurrentStep] = useState(1);
@@ -140,6 +141,36 @@ export default function InstallationWizard() {
     }
   };
 
+  // Función para completar la instalación
+  const completeInstallation = async () => {
+    try {
+      await completeInstallService();
+
+      Swal.fire({
+        icon: 'success',
+        title: 'Instalación Completa',
+        text: 'La instalación se ha completado exitosamente.',
+        toast: true,
+        position: 'bottom-start',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+      });
+    } catch (error) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Hubo un problema al completar la instalación.',
+        toast: true,
+        position: 'bottom-start',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+      });
+    }
+  };
+
+
   const nextStep = () => {
     if (currentStep === 1) {
       setTouched({
@@ -207,8 +238,13 @@ export default function InstallationWizard() {
             text: 'Corrige los campos marcados.',
           });
         });
+    } else if (currentStep === 3) {
+      // Aquí se llama a completeInstallation cuando el paso es 3 y se hace clic en el botón "Finish"
+      completeInstallation();
     }
   };
+
+
 
   const prevStep = () => setCurrentStep((prev) => Math.max(prev - 1, 1));
 
