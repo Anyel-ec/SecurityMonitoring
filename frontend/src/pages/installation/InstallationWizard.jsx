@@ -2,14 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button, Card, Form, ProgressBar } from 'react-bootstrap';
 import Swal from 'sweetalert2';
-import { CheckCircleFill, Check, Database, FileEarmarkCheck } from 'react-bootstrap-icons'; // Bootstrap icons
+import { CheckCircleFill, Check, Database, FileEarmarkCheck, PersonFill } from 'react-bootstrap-icons'; // Bootstrap icons
 import './installation.css';
-import { saveGrafanaInstallService, savePrometheusInstallService, saveOrUpdatePrometheusExportersService } from '../../services/installationService';
+import { saveGrafanaInstallService, savePrometheusInstallService, saveOrUpdatePrometheusExportersService, saveUserInstallService } from '../../services/installationService';
 import * as Yup from 'yup'; // Yup para validaciones
 import { completeInstallService } from '../../services/installationService';
 import GrafanaStep from './GrafanaStep'; // Importe el componente
 import PrometheusStep from './PrometheusStep'; // Importe el componente de Prometheus
 import ExporterStep from './ExporterStep'; // Importa el componente de configuración de exportadores
+import UserInstallStep from './UserInstallStep'; // Importa el componente de instalación de usuario
+import { grafanaValidationSchema, prometheusValidationSchema, exportersValidationSchema, userInstallValidationSchema } from './validationSchemas';
 
 export default function InstallationWizard() {
   const [currentStep, setCurrentStep] = useState(1);
@@ -18,95 +20,30 @@ export default function InstallationWizard() {
   const [touched, setTouched] = useState({});
 
   const [formState, setFormState] = useState({
-    // Step 1 state (Grafana)
-    grafanaAdmin: 'admin',
-    grafanaPassword: '',
-    grafanaPasswordConfirm: '',
-    grafanaLocalPort: '3000',
-    grafanaDockerPort: '3000',
+    // Step 1: User Installation
+    usuario: '', password: '', passwordConfirm: '', numberPhone: '', email: '',
+
+    // Step 2 state (Grafana)
+    grafanaAdmin: 'admin', grafanaPassword: '', grafanaPasswordConfirm: '', grafanaLocalPort: '3000', grafanaDockerPort: '3000',
 
     // Step 2 state (Prometheus)
-    prometheusLocalPort: '9090',
-    prometheusDockerPort: '9090',
+    prometheusLocalPort: '9090', prometheusDockerPort: '9090',
 
     // Step 3 state (Ports for PostgreSQL, MongoDB, MariaDB)
-    internalPortPostgres: '5432',
-    externalPortPostgres: '5432',
-    internalPortMariadb: '3306',
-    externalPortMariadb: '3306',
-    internalPortMongodb: '27017',
+    internalPortPostgres: '5432', externalPortPostgres: '5432', internalPortMariadb: '3306', externalPortMariadb: '3306', internalPortMongodb: '27017',
     externalPortMongodb: '27020',
-  });
-
-
-  // Validation Schema for Grafana
-  const validationSchema = Yup.object().shape({
-    grafanaAdmin: Yup.string()
-      .min(3, 'El nombre de usuario debe tener al menos 3 caracteres')
-      .required('Nombre de usuario es requerido'),
-    grafanaPassword: Yup.string()
-      .min(5, 'La contraseña debe tener al menos 5 caracteres')
-      .required('La contraseña es requerida'),
-    grafanaPasswordConfirm: Yup.string()
-      .oneOf([Yup.ref('grafanaPassword')], 'Las contraseñas no coinciden')
-      .required('Debes confirmar la contraseña'),
-    grafanaLocalPort: Yup.number()
-      .min(1, 'El puerto debe ser mayor a 0')
-      .max(65535, 'El puerto no puede exceder 65535')
-      .required('El puerto es requerido'),
-    grafanaDockerPort: Yup.number()
-      .min(1, 'El puerto debe ser mayor a 0')
-      .max(65535, 'El puerto no puede exceder 65535')
-      .required('El puerto es requerido'),
-  });
-  // Validation Schema for Prometheus
-  const prometheusValidationSchema = Yup.object().shape({
-    prometheusLocalPort: Yup.number()
-      .min(1, 'El puerto debe ser mayor a 0')
-      .max(65535, 'El puerto no puede exceder 65535')
-      .required('El puerto local es requerido'),
-    prometheusDockerPort: Yup.number()
-      .min(1, 'El puerto debe ser mayor a 0')
-      .max(65535, 'El puerto no puede exceder 65535')
-      .required('El puerto Docker es requerido'),
-  });
-
-  // Validation Schema for Exporters
-  const exportersValidationSchema = Yup.object().shape({
-    internalPortPostgres: Yup.number()
-      .min(1, 'El puerto debe ser mayor a 0')
-      .max(65535, 'El puerto no puede exceder 65535')
-      .required('El puerto de PostgreSQL es requerido'),
-    externalPortPostgres: Yup.number()
-      .min(1, 'El puerto debe ser mayor a 0')
-      .max(65535, 'El puerto no puede exceder 65535')
-      .required('El puerto de PostgreSQL es requerido'),
-    internalPortMariadb: Yup.number()
-      .min(1, 'El puerto debe ser mayor a 0')
-      .max(65535, 'El puerto no puede exceder 65535')
-      .required('El puerto de MariaDB es requerido'),
-    externalPortMariadb: Yup.number()
-      .min(1, 'El puerto debe ser mayor a 0')
-      .max(65535, 'El puerto no puede exceder 65535')
-      .required('El puerto de MariaDB es requerido'),
-    internalPortMongodb: Yup.number()
-      .min(1, 'El puerto debe ser mayor a 0')
-      .max(65535, 'El puerto no puede exceder 65535')
-      .required('El puerto de MongoDB es requerido'),
-    externalPortMongodb: Yup.number()
-      .min(1, 'El puerto debe ser mayor a 0')
-      .max(65535, 'El puerto no puede exceder 65535')
-      .required('El puerto de MongoDB es requerido'),
   });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormState((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setFormState((prev) => ({ ...prev, [name]: value }));
 
-    // Validación reactiva solo del campo que está cambiando
+    let validationSchema;
+    if (currentStep === 1) validationSchema = userInstallValidationSchema;
+    if (currentStep === 2) validationSchema = grafanaValidationSchema;
+    if (currentStep === 3) validationSchema = prometheusValidationSchema;
+    if (currentStep === 4) validationSchema = exportersValidationSchema;
+
     Yup.reach(validationSchema, name)
       .validate(value)
       .then(() => {
@@ -126,6 +63,80 @@ export default function InstallationWizard() {
       ...prevTouched,
       [name]: true,
     }));
+  };
+
+  // Validación reactiva de la confirmación de contraseña
+  useEffect(() => {
+    if (touched.passwordConfirm) {
+      const errorMessage =
+        formState.password !== formState.passwordConfirm ? 'Las contraseñas no coinciden' : '';
+      setErrors((prev) => ({ ...prev, passwordConfirm: errorMessage }));
+    }
+  }, [formState.password, formState.passwordConfirm, touched]);
+
+  const handleStepValidationAndSave = (validationSchema, saveFunction) => {
+    validationSchema
+      .validate(formState, { abortEarly: false })
+      .then(() => {
+        setErrors({});
+        saveFunction(); // Ejecuta la función de guardado proporcionada
+      })
+      .catch((validationErrors) => {
+        const errorObject = {};
+        validationErrors.inner.forEach((error) => {
+          errorObject[error.path] = error.message;
+        });
+        setErrors(errorObject);
+
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Corrige los campos marcados.',
+          toast: true,
+          position: 'bottom-start',
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true
+        });
+      });
+  };
+
+  const saveUserInstall = async () => {
+    try {
+      const userInstallData = {
+        usuario: formState.usuario,
+        password: formState.password,
+        numberPhone: formState.numberPhone,
+        email: formState.email,
+      };
+
+      console.log("Datos enviados a User Install Service:", userInstallData); // Imprime los datos
+      await saveUserInstallService(userInstallData);
+
+      Swal.fire({
+        icon: 'success',
+        title: 'Usuario Guardado',
+        text: 'El usuario se ha guardado correctamente.',
+        toast: true,
+        position: 'bottom-start',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+      });
+
+      setCurrentStep((prev) => Math.min(prev + 1, 4));
+    } catch (error) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Hubo un problema al guardar el usuario.',
+        toast: true,
+        position: 'bottom-start',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+      });
+    }
   };
 
 
@@ -169,7 +180,6 @@ export default function InstallationWizard() {
       });
     }
   };
-
 
   // Validación automática de contraseñas mientras se escriben
   useEffect(() => {
@@ -258,7 +268,6 @@ export default function InstallationWizard() {
     }
   };
 
-
   // Función para completar la instalación
   const completeInstallation = async () => {
     try {
@@ -288,122 +297,47 @@ export default function InstallationWizard() {
     }
   };
 
-
   const nextStep = () => {
     if (currentStep === 1) {
       setTouched({
-        grafanaAdmin: true,
-        grafanaPassword: true,
-        grafanaPasswordConfirm: true,
-        grafanaLocalPort: true,
-        grafanaDockerPort: true,
+        usuario: true,
+        password: true,
+        passwordConfirm: true, // Asegurarse de tocar la confirmación de contraseña
+        numberPhone: true,
+        email: true,
       });
+      handleStepValidationAndSave(userInstallValidationSchema, saveUserInstall);
+    } else
 
-      validationSchema
-        .validate(
-          {
-            grafanaAdmin: formState.grafanaAdmin,
-            grafanaPassword: formState.grafanaPassword, // Acceso correcto
-            grafanaPasswordConfirm: formState.grafanaPasswordConfirm, // Acceso correcto
-            grafanaLocalPort: formState.grafanaLocalPort, // Acceso correcto
-            grafanaDockerPort: formState.grafanaDockerPort, // Acceso correcto
-          },
-          { abortEarly: false }
-        )
-        .then(() => {
-          setErrors({});
-          saveGrafanaInstall(); // Llama a la función modificada
-        })
-        .catch((validationErrors) => {
-          const errorObject = {};
-          validationErrors.inner.forEach((error) => {
-            errorObject[error.path] = error.message;
-          });
-          setErrors(errorObject);
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'Corrige los campos marcados.',
-          });
+      if (currentStep === 2) {
+        setTouched({
+          grafanaAdmin: true,
+          grafanaPassword: true,
+          grafanaPasswordConfirm: true,
+          grafanaLocalPort: true,
+          grafanaDockerPort: true,
         });
-    }
-
-
-    else if (currentStep === 2) {
-      setTouched({
-        prometheusLocalPort: true,
-        prometheusDockerPort: true,
-      });
-
-      prometheusValidationSchema
-        .validate(
-          {
-            prometheusLocalPort: formState.prometheusLocalPort,  // Cambia aquí
-            prometheusDockerPort: formState.prometheusDockerPort,  // Cambia aquí
-          },
-          { abortEarly: false }
-        )
-        .then(() => {
-          setErrors({});
-          savePrometheusInstall();
-        })
-        .catch((validationErrors) => {
-          const errorObject = {};
-          validationErrors.inner.forEach((error) => {
-            errorObject[error.path] = error.message;
-          });
-          setErrors(errorObject);
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'Corrige los campos marcados.',
-          });
+        handleStepValidationAndSave(grafanaValidationSchema, saveGrafanaInstall);
+      } else if (currentStep === 3) {
+        setTouched({
+          prometheusLocalPort: true,
+          prometheusDockerPort: true,
         });
-    } else if (currentStep === 3) {
-      setTouched({
-        internalPortPostgres: true,
-        externalPortPostgres: true,
-        internalPortMariadb: true,
-        externalPortMariadb: true,
-        internalPortMongodb: true,
-        externalPortMongodb: true,
-      });
-
-      exportersValidationSchema
-        .validate(
-          {
-            internalPortPostgres: formState.internalPortPostgres,
-            externalPortPostgres: formState.externalPortPostgres,
-            internalPortMariadb: formState.internalPortMariadb,
-            externalPortMariadb: formState.externalPortMariadb,
-            internalPortMongodb: formState.internalPortMongodb,
-            externalPortMongodb: formState.externalPortMongodb,
-          },
-          { abortEarly: false }
-        )
-        .then(() => {
-          setErrors({});
-          savePrometheusExporters(); // Llama a la función que guarda los exportadores
-        })
-        .catch((validationErrors) => {
-          const errorObject = {};
-          validationErrors.inner.forEach((error) => {
-            errorObject[error.path] = error.message;
-          });
-          setErrors(errorObject);
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'Corrige los campos marcados.',
-          });
+        handleStepValidationAndSave(prometheusValidationSchema, savePrometheusInstall);
+      } else if (currentStep === 4) {
+        setTouched({
+          internalPortPostgres: true,
+          externalPortPostgres: true,
+          internalPortMariadb: true,
+          externalPortMariadb: true,
+          internalPortMongodb: true,
+          externalPortMongodb: true,
         });
-    } else if (currentStep === 4) {
-      // Aquí se llama a completeInstallation cuando el paso es 4 y se hace clic en el botón "Finish"
-      completeInstallation();
-    }
+        handleStepValidationAndSave(exportersValidationSchema, savePrometheusExporters);
+      } else if (currentStep === 5) {
+        completeInstallation();
+      }
   };
-
-
 
   const prevStep = () => setCurrentStep((prev) => Math.max(prev - 1, 1));
 
@@ -421,18 +355,13 @@ export default function InstallationWizard() {
   const renderStepContent = () => {
     switch (currentStep) {
       case 1:
-        return <GrafanaStep values={formState} errors={errors} touched={touched} handleBlur={handleBlur} handleChange={handleChange} />;
+        return <UserInstallStep values={formState} errors={errors} touched={touched} handleBlur={handleBlur} handleChange={handleChange} />;
       case 2:
-        return <PrometheusStep values={formState} errors={errors} touched={touched} handleBlur={handleBlur} handleChange={handleChange} />;
+        return <GrafanaStep values={formState} errors={errors} touched={touched} handleBlur={handleBlur} handleChange={handleChange} />;
       case 3:
-        return <ExporterStep values={formState} errors={errors} touched={touched} handleBlur={handleBlur} handleChange={handleChange} />;
+        return <PrometheusStep values={formState} errors={errors} touched={touched} handleBlur={handleBlur} handleChange={handleChange} />;
       case 4:
-        return (
-          <div className="text-center">
-            <h2>Installation Complete!</h2>
-            <p>Your setup is ready.</p>
-          </div>
-        );
+        return <ExporterStep values={formState} errors={errors} touched={touched} handleBlur={handleBlur} handleChange={handleChange} />;
       default:
         return null;
     }
@@ -448,45 +377,38 @@ export default function InstallationWizard() {
           </Button>
         </div>
 
-        {/* Step progress bar */}
         <div className="step-icons">
           <div className="step">
             <div className={currentStep >= 1 ? 'icon-active' : 'icon-inactive'}>
-              {currentStep > 1 ? <Check /> : <CheckCircleFill />}
+              {currentStep > 1 ? <Check /> : <PersonFill />} {/* Cambiado a PersonFill */}
             </div>
-            <span>Grafana</span>
+            <span>User Install</span>
           </div>
           <div className="step">
             <div className={currentStep >= 2 ? 'icon-active' : 'icon-inactive'}>
               {currentStep > 2 ? <Check /> : <Database />}
             </div>
-            <span>Prometheus</span>
+            <span>Grafana</span>
           </div>
           <div className="step">
             <div className={currentStep >= 3 ? 'icon-active' : 'icon-inactive'}>
               {currentStep > 3 ? <Check /> : <FileEarmarkCheck />}
             </div>
-            <span>Ports Configuration</span> {/* Actualización del tercer paso */}
+            <span>Prometheus</span>
           </div>
           <div className="step">
             <div className={currentStep >= 4 ? 'icon-active' : 'icon-inactive'}>
               {currentStep > 4 ? <Check /> : <FileEarmarkCheck />}
             </div>
-            <span>Finish</span>
+            <span>Exporters</span>
           </div>
         </div>
 
-        {/* Update progress bar based on step */}
         <ProgressBar now={(currentStep / 4) * 100} className="progress-bar" style={{ width: `${(currentStep / 4) * 100}%` }} />
 
         <div className="scrollable-content">
           <AnimatePresence>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.5 }}
-            >
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.5 }}>
               {renderStepContent()}
             </motion.div>
           </AnimatePresence>

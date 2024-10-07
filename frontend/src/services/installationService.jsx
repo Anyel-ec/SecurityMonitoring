@@ -3,6 +3,7 @@ import AppEnvironments from '../config/AppEnvironments';
 import { createGrafanaInstallDto } from '../dto/GrafanaInstallDto';
 import { createPrometheusInstallDto } from '../dto/PrometheusInstallDto';
 import { createInstallationConfig } from '../models/InstallationConfig';
+import { createUserInstallRequestDto } from '../dto/UserInstallRequestDto';
 
 // Servicio para verificar el estado de la instalación
 export const checkInstallationStatusService = async () => {
@@ -142,5 +143,30 @@ export const saveOrUpdatePrometheusExportersService = async (exporterData) => {
   } catch (error) {
     console.error('Error al actualizar los exportadores de Prometheus:', error);
     throw error.response?.data || new Error('Error al conectar con el servidor');
+  }
+};
+
+// Service to save the user installation
+export const saveUserInstallService = async (userInstallData) => {
+  const BASE_URL = AppEnvironments.baseUrl;
+
+  // Create the User Install DTO
+  const userInstallDto = createUserInstallRequestDto(
+    userInstallData.usuario,
+    userInstallData.password,
+    userInstallData.numberPhone,
+    userInstallData.email
+  );
+
+  try {
+    console.log('userInstallDto en servicio:', userInstallDto);	
+    const response = await axios.post(`${BASE_URL}/api/v1/install/user`, userInstallDto);
+    return response.data;
+  } catch (error) {
+    if (error.response?.data) {
+      throw new Error(error.response.data.message || 'Error al guardar el registro de usuario');
+    } else {
+      throw new Error('No se pudo conectar al servidor. Verifica tu conexión.');
+    }
   }
 };
