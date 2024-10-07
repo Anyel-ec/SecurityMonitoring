@@ -44,7 +44,7 @@ public class PrometheusInstallServiceImpl implements PrometheusInstallService {
                         .isActive(true)
                         .build();
             }
-
+            log.info("Los datos a guardar de prometheus es: {}", prometheusInstall);
             // Save or update the installation in the database
             return installationConfigRepository.save(prometheusInstall);
         } catch (IllegalArgumentException e) {

@@ -74,5 +74,4 @@ public class ConfigInstallController {
             return ResponseEntity.status(500).body(new JsonResponseDto(false, 500, "Error interno del servidor al actualizar el parámetro COMPLETE_INSTALL.", null));
         }
     }
-
 }

@@ -35,6 +35,7 @@ public class GrafanaInstallServiceImpl implements GrafanaInstallService {
                     .orElse(null);
 
             if (grafanaInstall != null) {
+                grafanaInstall.setUsuario(grafanaInstallRequestDto.getUsuario());
                 grafanaInstall.setPassword(encryptedPassword);
                 grafanaInstall.setInternalPort(grafanaInstallRequestDto.getInternalPort());
                 grafanaInstall.setExternalPort(grafanaInstallRequestDto.getExternalPort());

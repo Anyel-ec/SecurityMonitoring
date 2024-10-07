@@ -7,6 +7,9 @@ import './installation.css';
 import { saveGrafanaInstallService, savePrometheusInstallService, saveOrUpdatePrometheusExportersService } from '../../services/installationService';
 import * as Yup from 'yup'; // Yup para validaciones
 import { completeInstallService } from '../../services/installationService';
+import GrafanaStep from './GrafanaStep'; // Importe el componente
+import PrometheusStep from './PrometheusStep'; // Importe el componente de Prometheus
+import ExporterStep from './ExporterStep'; // Importa el componente de configuración de exportadores
 
 export default function InstallationWizard() {
   const [currentStep, setCurrentStep] = useState(1);
@@ -14,28 +17,26 @@ export default function InstallationWizard() {
   const [errors, setErrors] = useState({});
   const [touched, setTouched] = useState({});
 
-  // Step 1 state (Grafana)
-  const [grafanaAdmin, setGrafanaAdmin] = useState('admin'); // Usuario por defecto
-  const [grafanaPassword, setGrafanaPassword] = useState(''); // Contraseña por defecto
-  const [grafanaPasswordConfirm, setGrafanaPasswordConfirm] = useState(''); // Confirmar contraseña por defecto
-  const [grafanaLocalPort, setGrafanaLocalPort] = useState('3000'); // Local port por defecto
-  const [grafanaDockerPort, setGrafanaDockerPort] = useState('3000'); // Docker port por defecto
+  const [formState, setFormState] = useState({
+    // Step 1 state (Grafana)
+    grafanaAdmin: 'admin',
+    grafanaPassword: '',
+    grafanaPasswordConfirm: '',
+    grafanaLocalPort: '3000',
+    grafanaDockerPort: '3000',
 
-  // Step 2 state (Prometheus)
-  const [prometheusLocalPort, setPrometheusLocalPort] = useState('9090');
-  const [prometheusDockerPort, setPrometheusDockerPort] = useState('9090');
+    // Step 2 state (Prometheus)
+    prometheusLocalPort: '9090',
+    prometheusDockerPort: '9090',
 
-  // Step 3 state (Ports for PostgreSQL, MongoDB, MariaDB)
-  // Step 3 state (Ports for PostgreSQL, MongoDB, MariaDB)
-  const [internalPortPostgres, setInternalPortPostgres] = useState('5432'); // Puerto interno para PostgreSQL
-  const [externalPortPostgres, setExternalPortPostgres] = useState('5432'); // Puerto externo (en este caso, igual al interno)
-
-  const [internalPortMariadb, setInternalPortMariadb] = useState('3306'); // Puerto interno para MariaDB
-  const [externalPortMariadb, setExternalPortMariadb] = useState('3306'); // Puerto externo (según se usa en la propiedad "mysqld.address")
-
-  const [internalPortMongodb, setInternalPortMongodb] = useState('27017'); // Puerto interno para MongoDB
-  const [externalPortMongodb, setExternalPortMongodb] = useState('27020'); // Puerto externo definido en "docker-compose"
-
+    // Step 3 state (Ports for PostgreSQL, MongoDB, MariaDB)
+    internalPortPostgres: '5432',
+    externalPortPostgres: '5432',
+    internalPortMariadb: '3306',
+    externalPortMariadb: '3306',
+    internalPortMongodb: '27017',
+    externalPortMongodb: '27020',
+  });
 
 
   // Validation Schema for Grafana
@@ -58,7 +59,6 @@ export default function InstallationWizard() {
       .max(65535, 'El puerto no puede exceder 65535')
       .required('El puerto es requerido'),
   });
-
   // Validation Schema for Prometheus
   const prometheusValidationSchema = Yup.object().shape({
     prometheusLocalPort: Yup.number()
@@ -99,17 +99,26 @@ export default function InstallationWizard() {
       .required('El puerto de MongoDB es requerido'),
   });
 
-
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormState((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+  
   const savePrometheusExporters = async () => {
     try {
       const exportersData = {
-        internalPortPostgres: parseInt(internalPortPostgres),
-        externalPortPostgres: parseInt(externalPortPostgres),
-        internalPortMariadb: parseInt(internalPortMariadb),
-        externalPortMariadb: parseInt(externalPortMariadb),
-        internalPortMongodb: parseInt(internalPortMongodb),
-        externalPortMongodb: parseInt(externalPortMongodb),
+        internalPortPostgres: parseInt(formState.internalPortPostgres),
+        externalPortPostgres: parseInt(formState.externalPortPostgres),
+        internalPortMariadb: parseInt(formState.internalPortMariadb),
+        externalPortMariadb: parseInt(formState.externalPortMariadb),
+        internalPortMongodb: parseInt(formState.internalPortMongodb),
+        externalPortMongodb: parseInt(formState.externalPortMongodb),
       };
+
+      console.log("Datos enviados a Exporters Service:", exportersData); // Imprime los datos
 
       await saveOrUpdatePrometheusExportersService(exportersData);
 
@@ -124,7 +133,7 @@ export default function InstallationWizard() {
         timerProgressBar: true,
       });
 
-      setCurrentStep((prev) => Math.min(prev + 1, 3));
+      setCurrentStep((prev) => Math.min(prev + 1, 4)); // Asegúrate de avanzar al paso 4
     } catch (error) {
       Swal.fire({
         icon: 'error',
@@ -144,20 +153,22 @@ export default function InstallationWizard() {
   useEffect(() => {
     if (touched.grafanaPasswordConfirm) {
       const errorMessage =
-        grafanaPassword !== grafanaPasswordConfirm ? 'Las contraseñas no coinciden' : '';
+        formState.grafanaPassword !== formState.grafanaPasswordConfirm ? 'Las contraseñas no coinciden' : '';
       setErrors((prev) => ({ ...prev, grafanaPasswordConfirm: errorMessage }));
     }
-  }, [grafanaPassword, grafanaPasswordConfirm, touched]);
+  }, [formState.grafanaPassword, formState.grafanaPasswordConfirm, touched]);
+
 
   // Save Grafana Install
   const saveGrafanaInstall = async () => {
     try {
       const grafanaInstallData = {
-        usuario: grafanaAdmin,
-        password: grafanaPassword,
-        internalPort: parseInt(grafanaLocalPort),
-        externalPort: parseInt(grafanaDockerPort),
+        usuario: formState.grafanaAdmin, // Usa formState.grafanaAdmin
+        password: formState.grafanaPassword, // Usa formState.grafanaPassword
+        internalPort: parseInt(formState.grafanaLocalPort), // Usa formState.grafanaLocalPort
+        externalPort: parseInt(formState.grafanaDockerPort), // Usa formState.grafanaDockerPort
       };
+      console.log("Datos enviados a Grafana Install Service:", grafanaInstallData);
 
       await saveGrafanaInstallService(grafanaInstallData);
 
@@ -191,12 +202,14 @@ export default function InstallationWizard() {
   const savePrometheusInstall = async () => {
     try {
       const prometheusInstallData = {
-        internalPort: parseInt(prometheusLocalPort),
-        externalPort: parseInt(prometheusDockerPort),
+        internalPort: parseInt(formState.prometheusLocalPort), 
+        externalPort: parseInt(formState.prometheusDockerPort),
       };
-
+  
+      console.log("Datos enviados a Prometheus Install Service:", prometheusInstallData);
+  
       await savePrometheusInstallService(prometheusInstallData);
-
+  
       Swal.fire({
         icon: 'success',
         title: 'Instalación Guardada',
@@ -207,7 +220,7 @@ export default function InstallationWizard() {
         timer: 3000,
         timerProgressBar: true,
       });
-
+  
       setCurrentStep((prev) => Math.min(prev + 1, 3));
     } catch (error) {
       Swal.fire({
@@ -222,6 +235,7 @@ export default function InstallationWizard() {
       });
     }
   };
+  
 
   // Función para completar la instalación
   const completeInstallation = async () => {
@@ -266,17 +280,17 @@ export default function InstallationWizard() {
       validationSchema
         .validate(
           {
-            grafanaAdmin,
-            grafanaPassword,
-            grafanaPasswordConfirm,
-            grafanaLocalPort,
-            grafanaDockerPort,
+            grafanaAdmin: formState.grafanaAdmin,
+            grafanaPassword: formState.grafanaPassword, // Acceso correcto
+            grafanaPasswordConfirm: formState.grafanaPasswordConfirm, // Acceso correcto
+            grafanaLocalPort: formState.grafanaLocalPort, // Acceso correcto
+            grafanaDockerPort: formState.grafanaDockerPort, // Acceso correcto
           },
           { abortEarly: false }
         )
         .then(() => {
           setErrors({});
-          saveGrafanaInstall();
+          saveGrafanaInstall(); // Llama a la función modificada
         })
         .catch((validationErrors) => {
           const errorObject = {};
@@ -290,7 +304,10 @@ export default function InstallationWizard() {
             text: 'Corrige los campos marcados.',
           });
         });
-    } else if (currentStep === 2) {
+    }
+
+
+    else if (currentStep === 2) {
       setTouched({
         prometheusLocalPort: true,
         prometheusDockerPort: true,
@@ -299,8 +316,8 @@ export default function InstallationWizard() {
       prometheusValidationSchema
         .validate(
           {
-            prometheusLocalPort,
-            prometheusDockerPort,
+            prometheusLocalPort: formState.prometheusLocalPort,  // Cambia aquí
+            prometheusDockerPort: formState.prometheusDockerPort,  // Cambia aquí
           },
           { abortEarly: false }
         )
@@ -320,8 +337,7 @@ export default function InstallationWizard() {
             text: 'Corrige los campos marcados.',
           });
         });
-    }
-    else if (currentStep === 3) {
+    } else if (currentStep === 3) {
       setTouched({
         internalPortPostgres: true,
         externalPortPostgres: true,
@@ -334,18 +350,18 @@ export default function InstallationWizard() {
       exportersValidationSchema
         .validate(
           {
-            internalPortPostgres,
-            externalPortPostgres,
-            internalPortMariadb,
-            externalPortMariadb,
-            internalPortMongodb,
-            externalPortMongodb,
+            internalPortPostgres: formState.internalPortPostgres,
+            externalPortPostgres: formState.externalPortPostgres,
+            internalPortMariadb: formState.internalPortMariadb,
+            externalPortMariadb: formState.externalPortMariadb,
+            internalPortMongodb: formState.internalPortMongodb,
+            externalPortMongodb: formState.externalPortMongodb,
           },
           { abortEarly: false }
         )
         .then(() => {
           setErrors({});
-          savePrometheusExporters();
+          savePrometheusExporters(); // Llama a la función que guarda los exportadores
         })
         .catch((validationErrors) => {
           const errorObject = {};
@@ -359,12 +375,8 @@ export default function InstallationWizard() {
             text: 'Corrige los campos marcados.',
           });
         });
-    }
-
-
-
-    else if (currentStep === 4) {
-      // Aquí se llama a completeInstallation cuando el paso es 3 y se hace clic en el botón "Finish"
+    } else if (currentStep === 4) {
+      // Aquí se llama a completeInstallation cuando el paso es 4 y se hace clic en el botón "Finish"
       completeInstallation();
     }
   };
@@ -387,183 +399,11 @@ export default function InstallationWizard() {
   const renderStepContent = () => {
     switch (currentStep) {
       case 1:
-        return (
-          <Form>
-            <Form.Group controlId="grafanaAdmin" className="mt-3">
-              <Form.Label>Grafana Admin User</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Enter username"
-                value={grafanaAdmin}
-                onChange={(e) => setGrafanaAdmin(e.target.value)}
-                onBlur={() => handleBlur('grafanaAdmin')}
-                className={touched.grafanaAdmin && errors.grafanaAdmin ? 'is-invalid' : touched.grafanaAdmin ? 'is-valid' : ''}
-              />
-              {touched.grafanaAdmin && errors.grafanaAdmin && <div className="invalid-feedback">{errors.grafanaAdmin}</div>}
-            </Form.Group>
-
-            <Form.Group controlId="grafanaPassword" className="mt-3 position-relative">
-              <Form.Label>Grafana Admin Password</Form.Label>
-              <div className="input-group">
-                <Form.Control
-                  type="password"
-                  placeholder="Enter password"
-                  value={grafanaPassword}
-                  onChange={(e) => setGrafanaPassword(e.target.value)}
-                  onBlur={() => handleBlur('grafanaPassword')}
-                  className={touched.grafanaPassword && errors.grafanaPassword ? 'is-invalid' : touched.grafanaPassword ? 'is-valid' : ''}
-                />
-                {touched.grafanaPassword && errors.grafanaPassword && <div className="invalid-feedback">{errors.grafanaPassword}</div>}
-              </div>
-            </Form.Group>
-
-            <Form.Group controlId="grafanaPasswordConfirm" className="mt-3 position-relative">
-              <Form.Label>Confirm Grafana Admin Password</Form.Label>
-              <div className="input-group">
-                <Form.Control
-                  type="password"
-                  placeholder="Confirm password"
-                  value={grafanaPasswordConfirm}
-                  onChange={(e) => setGrafanaPasswordConfirm(e.target.value)}
-                  onBlur={() => handleBlur('grafanaPasswordConfirm')}
-                  className={touched.grafanaPasswordConfirm && errors.grafanaPasswordConfirm ? 'is-invalid' : touched.grafanaPasswordConfirm ? 'is-valid' : ''}
-                />
-                {touched.grafanaPasswordConfirm && errors.grafanaPasswordConfirm && (
-                  <div className="invalid-feedback">{errors.grafanaPasswordConfirm}</div>
-                )}
-              </div>
-            </Form.Group>
-
-            <Form.Group controlId="grafanaLocalPort" className="mt-3">
-              <Form.Label>Grafana Local Port</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="e.g., 3000"
-                value={grafanaLocalPort}
-                onChange={(e) => setGrafanaLocalPort(e.target.value)}
-                onBlur={() => handleBlur('grafanaLocalPort')}
-                className={touched.grafanaLocalPort && errors.grafanaLocalPort ? 'is-invalid' : touched.grafanaLocalPort ? 'is-valid' : ''}
-              />
-              {touched.grafanaLocalPort && errors.grafanaLocalPort && <div className="invalid-feedback">{errors.grafanaLocalPort}</div>}
-            </Form.Group>
-            <Form.Group controlId="grafanaDockerPort" className="mt-3">
-              <Form.Label>Grafana Docker Port</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="e.g., 3000"
-                value={grafanaDockerPort}
-                onChange={(e) => setGrafanaDockerPort(e.target.value)}
-                onBlur={() => handleBlur('grafanaDockerPort')}
-                className={touched.grafanaDockerPort && errors.grafanaDockerPort ? 'is-invalid' : touched.grafanaDockerPort ? 'is-valid' : ''}
-              />
-              {touched.grafanaDockerPort && errors.grafanaDockerPort && <div className="invalid-feedback">{errors.grafanaDockerPort}</div>}
-            </Form.Group>
-          </Form>
-        );
+        return <GrafanaStep values={formState} errors={errors} touched={touched} handleBlur={handleBlur} handleChange={handleChange} />;
       case 2:
-        return (
-          <Form>
-            <Form.Group controlId="prometheusLocalPort">
-              <Form.Label>Prometheus Local Port</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Enter local port"
-                value={prometheusLocalPort}
-                onChange={(e) => setPrometheusLocalPort(e.target.value)}
-                className={touched.prometheusLocalPort && errors.prometheusLocalPort ? 'is-invalid' : touched.prometheusLocalPort ? 'is-valid' : ''}
-              />
-              {touched.prometheusLocalPort && errors.prometheusLocalPort && <div className="invalid-feedback">{errors.prometheusLocalPort}</div>}
-            </Form.Group>
-            <Form.Group controlId="prometheusDockerPort" className="mt-3">
-              <Form.Label>Prometheus Docker Port</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Enter Docker port"
-                value={prometheusDockerPort}
-                onChange={(e) => setPrometheusDockerPort(e.target.value)}
-                className={touched.prometheusDockerPort && errors.prometheusDockerPort ? 'is-invalid' : touched.prometheusDockerPort ? 'is-valid' : ''}
-              />
-              {touched.prometheusDockerPort && errors.prometheusDockerPort && <div className="invalid-feedback">{errors.prometheusDockerPort}</div>}
-            </Form.Group>
-          </Form>
-        );
+        return <PrometheusStep values={formState} errors={errors} touched={touched} handleBlur={handleBlur} handleChange={handleChange} />;
       case 3:
-        return (
-          <Form>
-            <Form.Group controlId="internalPortPostgres">
-              <Form.Label>PostgreSQL Internal Port</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="e.g., 5432"
-                value={internalPortPostgres}
-                onChange={(e) => setInternalPortPostgres(e.target.value)}
-                className={touched.internalPortPostgres && errors.internalPortPostgres ? 'is-invalid' : touched.internalPortPostgres ? 'is-valid' : ''}
-              />
-              {touched.internalPortPostgres && errors.internalPortPostgres && <div className="invalid-feedback">{errors.internalPortPostgres}</div>}
-            </Form.Group>
-
-            <Form.Group controlId="externalPortPostgres">
-              <Form.Label>PostgreSQL External Port</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="e.g., 5432"
-                value={externalPortPostgres}
-                onChange={(e) => setExternalPortPostgres(e.target.value)}
-                className={touched.externalPortPostgres && errors.externalPortPostgres ? 'is-invalid' : touched.externalPortPostgres ? 'is-valid' : ''}
-              />
-              {touched.externalPortPostgres && errors.externalPortPostgres && <div className="invalid-feedback">{errors.externalPortPostgres}</div>}
-            </Form.Group>
-
-            <Form.Group controlId="internalPortMariadb" className="mt-3">
-              <Form.Label>MariaDB Internal Port</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="e.g., 3306"
-                value={internalPortMariadb}
-                onChange={(e) => setInternalPortMariadb(e.target.value)}
-                className={touched.internalPortMariadb && errors.internalPortMariadb ? 'is-invalid' : touched.internalPortMariadb ? 'is-valid' : ''}
-              />
-              {touched.internalPortMariadb && errors.internalPortMariadb && <div className="invalid-feedback">{errors.internalPortMariadb}</div>}
-            </Form.Group>
-
-            <Form.Group controlId="externalPortMariadb" className="mt-3">
-              <Form.Label>MariaDB External Port</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="e.g., 3306"
-                value={externalPortMariadb}
-                onChange={(e) => setExternalPortMariadb(e.target.value)}
-                className={touched.externalPortMariadb && errors.externalPortMariadb ? 'is-invalid' : touched.externalPortMariadb ? 'is-valid' : ''}
-              />
-              {touched.externalPortMariadb && errors.externalPortMariadb && <div className="invalid-feedback">{errors.externalPortMariadb}</div>}
-            </Form.Group>
-
-            <Form.Group controlId="internalPortMongodb" className="mt-3">
-              <Form.Label>MongoDB Internal Port</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="e.g., 27017"
-                value={internalPortMongodb}
-                onChange={(e) => setInternalPortMongodb(e.target.value)}
-                className={touched.internalPortMongodb && errors.internalPortMongodb ? 'is-invalid' : touched.internalPortMongodb ? 'is-valid' : ''}
-              />
-              {touched.internalPortMongodb && errors.internalPortMongodb && <div className="invalid-feedback">{errors.internalPortMongodb}</div>}
-            </Form.Group>
-
-            <Form.Group controlId="externalPortMongodb" className="mt-3">
-              <Form.Label>MongoDB External Port</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="e.g., 27017"
-                value={externalPortMongodb}
-                onChange={(e) => setExternalPortMongodb(e.target.value)}
-                className={touched.externalPortMongodb && errors.externalPortMongodb ? 'is-invalid' : touched.externalPortMongodb ? 'is-valid' : ''}
-              />
-              {touched.externalPortMongodb && errors.externalPortMongodb && <div className="invalid-feedback">{errors.externalPortMongodb}</div>}
-            </Form.Group>
-          </Form>
-        );
-
+        return <ExporterStep values={formState} errors={errors} touched={touched} handleBlur={handleBlur} handleChange={handleChange} />;
       case 4:
         return (
           <div className="text-center">
@@ -575,6 +415,7 @@ export default function InstallationWizard() {
         return null;
     }
   };
+
 
   return (
     <div className={`min-h-screen d-flex align-items-center justify-content-center ${darkMode ? 'bg-dark text-white' : 'bg-light text-dark'}`}>

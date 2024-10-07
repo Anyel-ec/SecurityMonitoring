@@ -25,20 +25,16 @@ public class ExporterPrometheusInstallController {
     public ResponseEntity<JsonResponseDto> saveOrUpdatePrometheusExporters(
             @RequestBody ExporterPrometheusRequestDto requestDto) {
         try {
-            // Llamamos al servicio para guardar o actualizar los exportadores
             prometheusExporterInstallService.saveOrUpdatePrometheusExporters(requestDto);
 
-            // Si odo sale bien, respondemos con un éxito
             JsonResponseDto response = new JsonResponseDto(true, 200, "Exportadores de Prometheus actualizados correctamente", null);
             return ResponseEntity.ok(response);
 
         } catch (IllegalArgumentException e) {
-            // En caso de error con los parámetros
             JsonResponseDto response = new JsonResponseDto(false, 400, e.getMessage(), null);
             return ResponseEntity.badRequest().body(response);
 
         } catch (Exception e) {
-            // En caso de error interno
             log.error("Error inesperado al actualizar exportadores de Prometheus", e);
             JsonResponseDto response = new JsonResponseDto(false, 500, "Error interno del servidor", null);
             return ResponseEntity.status(500).body(response);
