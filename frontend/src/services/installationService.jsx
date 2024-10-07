@@ -132,3 +132,15 @@ export const completeInstallService = async () => {
     }
   }
 };
+
+
+export const saveOrUpdatePrometheusExportersService = async (exporterData) => {
+  const BASE_URL = AppEnvironments.baseUrl;
+  try {
+    const response = await axios.put(`${BASE_URL}/api/v1/install/prometheus-exporters`, exporterData);
+    return response.data;
+  } catch (error) {
+    console.error('Error al actualizar los exportadores de Prometheus:', error);
+    throw error.response?.data || new Error('Error al conectar con el servidor');
+  }
+};

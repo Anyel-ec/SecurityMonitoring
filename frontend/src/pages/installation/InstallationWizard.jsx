@@ -4,9 +4,9 @@ import { Button, Card, Form, ProgressBar } from 'react-bootstrap';
 import Swal from 'sweetalert2';
 import { CheckCircleFill, Check, Database, FileEarmarkCheck } from 'react-bootstrap-icons'; // Bootstrap icons
 import './installation.css';
-import { saveGrafanaInstallService, savePrometheusInstallService } from '../../services/installationService';
+import { saveGrafanaInstallService, savePrometheusInstallService, saveOrUpdatePrometheusExportersService } from '../../services/installationService';
 import * as Yup from 'yup'; // Yup para validaciones
-import { completeInstallService } from '../../services/installationService'; 
+import { completeInstallService } from '../../services/installationService';
 
 export default function InstallationWizard() {
   const [currentStep, setCurrentStep] = useState(1);
@@ -24,6 +24,19 @@ export default function InstallationWizard() {
   // Step 2 state (Prometheus)
   const [prometheusLocalPort, setPrometheusLocalPort] = useState('9090');
   const [prometheusDockerPort, setPrometheusDockerPort] = useState('9090');
+
+  // Step 3 state (Ports for PostgreSQL, MongoDB, MariaDB)
+  // Step 3 state (Ports for PostgreSQL, MongoDB, MariaDB)
+  const [internalPortPostgres, setInternalPortPostgres] = useState('5432'); // Puerto interno para PostgreSQL
+  const [externalPortPostgres, setExternalPortPostgres] = useState('5432'); // Puerto externo (en este caso, igual al interno)
+
+  const [internalPortMariadb, setInternalPortMariadb] = useState('3306'); // Puerto interno para MariaDB
+  const [externalPortMariadb, setExternalPortMariadb] = useState('3306'); // Puerto externo (según se usa en la propiedad "mysqld.address")
+
+  const [internalPortMongodb, setInternalPortMongodb] = useState('27017'); // Puerto interno para MongoDB
+  const [externalPortMongodb, setExternalPortMongodb] = useState('27020'); // Puerto externo definido en "docker-compose"
+
+
 
   // Validation Schema for Grafana
   const validationSchema = Yup.object().shape({
@@ -57,6 +70,75 @@ export default function InstallationWizard() {
       .max(65535, 'El puerto no puede exceder 65535')
       .required('El puerto Docker es requerido'),
   });
+
+  // Validation Schema for Exporters
+  const exportersValidationSchema = Yup.object().shape({
+    internalPortPostgres: Yup.number()
+      .min(1, 'El puerto debe ser mayor a 0')
+      .max(65535, 'El puerto no puede exceder 65535')
+      .required('El puerto de PostgreSQL es requerido'),
+    externalPortPostgres: Yup.number()
+      .min(1, 'El puerto debe ser mayor a 0')
+      .max(65535, 'El puerto no puede exceder 65535')
+      .required('El puerto de PostgreSQL es requerido'),
+    internalPortMariadb: Yup.number()
+      .min(1, 'El puerto debe ser mayor a 0')
+      .max(65535, 'El puerto no puede exceder 65535')
+      .required('El puerto de MariaDB es requerido'),
+    externalPortMariadb: Yup.number()
+      .min(1, 'El puerto debe ser mayor a 0')
+      .max(65535, 'El puerto no puede exceder 65535')
+      .required('El puerto de MariaDB es requerido'),
+    internalPortMongodb: Yup.number()
+      .min(1, 'El puerto debe ser mayor a 0')
+      .max(65535, 'El puerto no puede exceder 65535')
+      .required('El puerto de MongoDB es requerido'),
+    externalPortMongodb: Yup.number()
+      .min(1, 'El puerto debe ser mayor a 0')
+      .max(65535, 'El puerto no puede exceder 65535')
+      .required('El puerto de MongoDB es requerido'),
+  });
+
+
+  const savePrometheusExporters = async () => {
+    try {
+      const exportersData = {
+        internalPortPostgres: parseInt(internalPortPostgres),
+        externalPortPostgres: parseInt(externalPortPostgres),
+        internalPortMariadb: parseInt(internalPortMariadb),
+        externalPortMariadb: parseInt(externalPortMariadb),
+        internalPortMongodb: parseInt(internalPortMongodb),
+        externalPortMongodb: parseInt(externalPortMongodb),
+      };
+
+      await saveOrUpdatePrometheusExportersService(exportersData);
+
+      Swal.fire({
+        icon: 'success',
+        title: 'Puertos Guardados',
+        text: 'Los puertos de los exportadores de Prometheus se han guardado correctamente.',
+        toast: true,
+        position: 'bottom-start',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+      });
+
+      setCurrentStep((prev) => Math.min(prev + 1, 3));
+    } catch (error) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Hubo un problema al guardar los exportadores de Prometheus.',
+        toast: true,
+        position: 'bottom-start',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+      });
+    }
+  };
+
 
   // Validación automática de contraseñas mientras se escriben
   useEffect(() => {
@@ -238,7 +320,50 @@ export default function InstallationWizard() {
             text: 'Corrige los campos marcados.',
           });
         });
-    } else if (currentStep === 3) {
+    }
+    else if (currentStep === 3) {
+      setTouched({
+        internalPortPostgres: true,
+        externalPortPostgres: true,
+        internalPortMariadb: true,
+        externalPortMariadb: true,
+        internalPortMongodb: true,
+        externalPortMongodb: true,
+      });
+
+      exportersValidationSchema
+        .validate(
+          {
+            internalPortPostgres,
+            externalPortPostgres,
+            internalPortMariadb,
+            externalPortMariadb,
+            internalPortMongodb,
+            externalPortMongodb,
+          },
+          { abortEarly: false }
+        )
+        .then(() => {
+          setErrors({});
+          savePrometheusExporters();
+        })
+        .catch((validationErrors) => {
+          const errorObject = {};
+          validationErrors.inner.forEach((error) => {
+            errorObject[error.path] = error.message;
+          });
+          setErrors(errorObject);
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Corrige los campos marcados.',
+          });
+        });
+    }
+
+
+
+    else if (currentStep === 4) {
       // Aquí se llama a completeInstallation cuando el paso es 3 y se hace clic en el botón "Finish"
       completeInstallation();
     }
@@ -364,6 +489,83 @@ export default function InstallationWizard() {
         );
       case 3:
         return (
+          <Form>
+            <Form.Group controlId="internalPortPostgres">
+              <Form.Label>PostgreSQL Internal Port</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="e.g., 5432"
+                value={internalPortPostgres}
+                onChange={(e) => setInternalPortPostgres(e.target.value)}
+                className={touched.internalPortPostgres && errors.internalPortPostgres ? 'is-invalid' : touched.internalPortPostgres ? 'is-valid' : ''}
+              />
+              {touched.internalPortPostgres && errors.internalPortPostgres && <div className="invalid-feedback">{errors.internalPortPostgres}</div>}
+            </Form.Group>
+
+            <Form.Group controlId="externalPortPostgres">
+              <Form.Label>PostgreSQL External Port</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="e.g., 5432"
+                value={externalPortPostgres}
+                onChange={(e) => setExternalPortPostgres(e.target.value)}
+                className={touched.externalPortPostgres && errors.externalPortPostgres ? 'is-invalid' : touched.externalPortPostgres ? 'is-valid' : ''}
+              />
+              {touched.externalPortPostgres && errors.externalPortPostgres && <div className="invalid-feedback">{errors.externalPortPostgres}</div>}
+            </Form.Group>
+
+            <Form.Group controlId="internalPortMariadb" className="mt-3">
+              <Form.Label>MariaDB Internal Port</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="e.g., 3306"
+                value={internalPortMariadb}
+                onChange={(e) => setInternalPortMariadb(e.target.value)}
+                className={touched.internalPortMariadb && errors.internalPortMariadb ? 'is-invalid' : touched.internalPortMariadb ? 'is-valid' : ''}
+              />
+              {touched.internalPortMariadb && errors.internalPortMariadb && <div className="invalid-feedback">{errors.internalPortMariadb}</div>}
+            </Form.Group>
+
+            <Form.Group controlId="externalPortMariadb" className="mt-3">
+              <Form.Label>MariaDB External Port</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="e.g., 3306"
+                value={externalPortMariadb}
+                onChange={(e) => setExternalPortMariadb(e.target.value)}
+                className={touched.externalPortMariadb && errors.externalPortMariadb ? 'is-invalid' : touched.externalPortMariadb ? 'is-valid' : ''}
+              />
+              {touched.externalPortMariadb && errors.externalPortMariadb && <div className="invalid-feedback">{errors.externalPortMariadb}</div>}
+            </Form.Group>
+
+            <Form.Group controlId="internalPortMongodb" className="mt-3">
+              <Form.Label>MongoDB Internal Port</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="e.g., 27017"
+                value={internalPortMongodb}
+                onChange={(e) => setInternalPortMongodb(e.target.value)}
+                className={touched.internalPortMongodb && errors.internalPortMongodb ? 'is-invalid' : touched.internalPortMongodb ? 'is-valid' : ''}
+              />
+              {touched.internalPortMongodb && errors.internalPortMongodb && <div className="invalid-feedback">{errors.internalPortMongodb}</div>}
+            </Form.Group>
+
+            <Form.Group controlId="externalPortMongodb" className="mt-3">
+              <Form.Label>MongoDB External Port</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="e.g., 27017"
+                value={externalPortMongodb}
+                onChange={(e) => setExternalPortMongodb(e.target.value)}
+                className={touched.externalPortMongodb && errors.externalPortMongodb ? 'is-invalid' : touched.externalPortMongodb ? 'is-valid' : ''}
+              />
+              {touched.externalPortMongodb && errors.externalPortMongodb && <div className="invalid-feedback">{errors.externalPortMongodb}</div>}
+            </Form.Group>
+          </Form>
+        );
+
+      case 4:
+        return (
           <div className="text-center">
             <h2>Installation Complete!</h2>
             <p>Your setup is ready.</p>
@@ -401,12 +603,18 @@ export default function InstallationWizard() {
             <div className={currentStep >= 3 ? 'icon-active' : 'icon-inactive'}>
               {currentStep > 3 ? <Check /> : <FileEarmarkCheck />}
             </div>
+            <span>Ports Configuration</span> {/* Actualización del tercer paso */}
+          </div>
+          <div className="step">
+            <div className={currentStep >= 4 ? 'icon-active' : 'icon-inactive'}>
+              {currentStep > 4 ? <Check /> : <FileEarmarkCheck />}
+            </div>
             <span>Finish</span>
           </div>
         </div>
 
         {/* Update progress bar based on step */}
-        <ProgressBar now={(currentStep / steps.length) * 100} className="progress-bar" style={{ width: `${(currentStep / steps.length) * 100}%` }} />
+        <ProgressBar now={(currentStep / 4) * 100} className="progress-bar" style={{ width: `${(currentStep / 4) * 100}%` }} />
 
         <div className="scrollable-content">
           <AnimatePresence>
@@ -428,7 +636,7 @@ export default function InstallationWizard() {
             </Button>
           )}
           <Button onClick={nextStep} className="ml-auto">
-            {currentStep < 3 ? 'Next' : 'Finish'}
+            {currentStep < 4 ? 'Next' : 'Finish'}
           </Button>
         </div>
       </Card>
