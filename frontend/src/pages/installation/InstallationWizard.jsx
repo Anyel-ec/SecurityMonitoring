@@ -105,8 +105,30 @@ export default function InstallationWizard() {
       ...prev,
       [name]: value,
     }));
+
+    // Validación reactiva solo del campo que está cambiando
+    Yup.reach(validationSchema, name)
+      .validate(value)
+      .then(() => {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          [name]: '',  // Limpia el error del campo actual
+        }));
+      })
+      .catch((validationError) => {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          [name]: validationError.message,  // Actualiza el error del campo actual
+        }));
+      });
+
+    setTouched((prevTouched) => ({
+      ...prevTouched,
+      [name]: true,
+    }));
   };
-  
+
+
   const savePrometheusExporters = async () => {
     try {
       const exportersData = {
@@ -202,14 +224,14 @@ export default function InstallationWizard() {
   const savePrometheusInstall = async () => {
     try {
       const prometheusInstallData = {
-        internalPort: parseInt(formState.prometheusLocalPort), 
+        internalPort: parseInt(formState.prometheusLocalPort),
         externalPort: parseInt(formState.prometheusDockerPort),
       };
-  
+
       console.log("Datos enviados a Prometheus Install Service:", prometheusInstallData);
-  
+
       await savePrometheusInstallService(prometheusInstallData);
-  
+
       Swal.fire({
         icon: 'success',
         title: 'Instalación Guardada',
@@ -220,7 +242,7 @@ export default function InstallationWizard() {
         timer: 3000,
         timerProgressBar: true,
       });
-  
+
       setCurrentStep((prev) => Math.min(prev + 1, 3));
     } catch (error) {
       Swal.fire({
@@ -235,7 +257,7 @@ export default function InstallationWizard() {
       });
     }
   };
-  
+
 
   // Función para completar la instalación
   const completeInstallation = async () => {
