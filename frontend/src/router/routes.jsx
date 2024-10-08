@@ -7,7 +7,6 @@ import { useNavigate } from 'react-router-dom';
 import { checkInstallationStatusService } from '../services/installationService'; // Importar el servicio
 import Swal from 'sweetalert2';  // Importar SweetAlert2
 
-
 const RoutesWrapper = ({ children }) => {
   const [darkMode, setDarkMode] = useState(() => {
     const savedTheme = localStorage.getItem('darkMode');
@@ -35,8 +34,12 @@ const RoutesWrapper = ({ children }) => {
         setIsInstalled(data.result);  // Almacena el valor del campo "result"
         Swal.close();  // Cerrar el diálogo de carga cuando llega la respuesta
 
-        if (!data.result) {  // Si no está instalado, redirige a la página de instalación
+        if (!data.result && window.location.pathname !== '/instalacion') {
+          // Si no está instalado y no está en la página de instalación, redirige a instalación
           navigate('/instalacion');
+        } else if (data.result && window.location.pathname === '/instalacion') {
+          // Si ya está instalado y trata de acceder a la página de instalación, redirige a la página principal
+          navigate('/');
         }
       } catch (error) {
         console.error('Error al verificar el estado de instalación:', error);
@@ -72,6 +75,7 @@ const RoutesWrapper = ({ children }) => {
     </MainLayout>
   );
 };
+
 // Validación de las props con PropTypes
 RoutesWrapper.propTypes = {
   children: PropTypes.node.isRequired,  // Aquí estamos diciendo que 'children' es requerido y debe ser un nodo válido
@@ -97,7 +101,6 @@ const routes = [
       </RoutesWrapper>
     ),
   }
-  
 ];
 
 export { routes };
