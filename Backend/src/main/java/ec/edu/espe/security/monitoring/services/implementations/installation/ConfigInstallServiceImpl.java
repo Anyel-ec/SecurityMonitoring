@@ -5,6 +5,7 @@ import ec.edu.espe.security.monitoring.models.SystemParameters;
 import ec.edu.espe.security.monitoring.repositories.InstallationConfigRepository;
 import ec.edu.espe.security.monitoring.repositories.SystemParametersRepository;
 import ec.edu.espe.security.monitoring.services.interfaces.installation.ConfigInstallService;
+import ec.edu.espe.security.monitoring.utils.AesEncryptor;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -17,10 +18,33 @@ import java.util.List;
 public class ConfigInstallServiceImpl implements ConfigInstallService {
     private final InstallationConfigRepository installationConfigRepository;
     private final SystemParametersRepository systemParametersRepository;
+    private final AesEncryptor aesEncryptor;
+
     @Override
     public List<InstallationConfig> getActiveInstallations() {
-        return installationConfigRepository.findByIsActiveTrue();
+        // get all config active
+        List<InstallationConfig> activeInstallations = installationConfigRepository.findByIsActiveTrue();
+
+        // Iterate over each configuration to decrypt the password
+        for (InstallationConfig config : activeInstallations) {
+            try {
+                // if a password is present, it is decrypted
+                if (config.getPassword() != null) {
+                    String decryptedPassword = aesEncryptor.decrypt(config.getPassword());
+                    config.setPassword(decryptedPassword);
+                }
+            } catch (IllegalArgumentException e) {
+                log.error("Error: {}", e.getMessage());
+                throw e;
+            } catch (Exception e) {
+                log.error("Error inesperado al recuperar", e);
+                throw new IllegalStateException("Error interno del servidor", e);
+            }
+        }
+        // return the decrypted active installations
+        return activeInstallations;
     }
+
 
     @Override
     public boolean isInstallationComplete() {

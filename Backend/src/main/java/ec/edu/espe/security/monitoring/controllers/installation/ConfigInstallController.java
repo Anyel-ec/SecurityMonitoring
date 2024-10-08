@@ -43,7 +43,7 @@ public class ConfigInstallController {
             return ResponseEntity.ok(response);
         } catch (IllegalArgumentException e) {
             // Handle error if the system parameter is not found
-            JsonResponseDto response = new JsonResponseDto(false, 400, e.getMessage(), null);
+            JsonResponseDto response = new JsonResponseDto(false, 400, "No se encuentra", null);
             return ResponseEntity.badRequest().body(response);
         } catch (Exception e) {
             // Handle any unexpected errors
