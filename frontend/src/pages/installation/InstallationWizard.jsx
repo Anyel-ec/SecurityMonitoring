@@ -1,23 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Button, Card, Form, ProgressBar } from 'react-bootstrap';
+import { Button, Card, ProgressBar } from 'react-bootstrap';
 import Swal from 'sweetalert2';
-import { CheckCircleFill, Check, Database, FileEarmarkCheck, PersonFill } from 'react-bootstrap-icons'; // Bootstrap icons
+import { Check, Database, FileEarmarkCheck, PersonFill } from 'react-bootstrap-icons'; // Bootstrap icons
 import './installation.css';
-import { saveGrafanaInstallService, savePrometheusInstallService, saveOrUpdatePrometheusExportersService, saveUserInstallService } from '../../services/installationService';
+import { completeInstallService, saveGrafanaInstallService, savePrometheusInstallService, saveOrUpdatePrometheusExportersService, saveUserInstallService } from '../../services/installationService';
 import * as Yup from 'yup'; // Yup para validaciones
-import { completeInstallService } from '../../services/installationService';
-import GrafanaStep from './GrafanaStep'; // Importe el componente
-import PrometheusStep from './PrometheusStep'; // Importe el componente de Prometheus
-import ExporterStep from './ExporterStep'; // Importa el componente de configuración de exportadores
-import UserInstallStep from './UserInstallStep'; // Importa el componente de instalación de usuario
+import GrafanaStep from './step/GrafanaStep'; // Importe el componente de Grafana 
+import PrometheusStep from './step/PrometheusStep'; // Importe el componente de Prometheus
+import ExporterStep from './step/ExporterStep'; // Importa el componente de configuración de exportadores
+import UserInstallStep from './step/UserInstallStep'; // Importa el componente de instalación de usuario
 import { grafanaValidationSchema, prometheusValidationSchema, exportersValidationSchema, userInstallValidationSchema } from './validationSchemas';
+import { useNavigate } from 'react-router-dom'; // Importa useNavigate
 
 export default function InstallationWizard() {
   const [currentStep, setCurrentStep] = useState(1);
   const [darkMode, setDarkMode] = useState(false);
   const [errors, setErrors] = useState({});
   const [touched, setTouched] = useState({});
+  
+  // Hook de react-router-dom para redirigir
+  const navigate = useNavigate(); // Añade useNavigate aquí
 
   const [formState, setFormState] = useState({
     // Step 1: User Installation
@@ -26,13 +29,23 @@ export default function InstallationWizard() {
     // Step 2 state (Grafana)
     grafanaAdmin: 'admin', grafanaPassword: '', grafanaPasswordConfirm: '', grafanaLocalPort: '3000', grafanaDockerPort: '3000',
 
-    // Step 2 state (Prometheus)
+    // Step 3 state (Prometheus)
     prometheusLocalPort: '9090', prometheusDockerPort: '9090',
 
-    // Step 3 state (Ports for PostgreSQL, MongoDB, MariaDB)
+    // Step 4 state (Ports for PostgreSQL, MongoDB, MariaDB)
     internalPortPostgres: '5432', externalPortPostgres: '5432', internalPortMariadb: '3306', externalPortMariadb: '3306', internalPortMongodb: '27017',
     externalPortMongodb: '27020',
   });
+
+
+  useEffect(() => {
+    if (touched.grafanaPasswordConfirm) {
+      const errorMessage =
+        formState.grafanaPassword !== formState.grafanaPasswordConfirm ? 'Las contraseñas no coinciden' : '';
+      setErrors((prev) => ({ ...prev, grafanaPasswordConfirm: errorMessage }));
+    }
+  }, [formState.grafanaPassword, formState.grafanaPasswordConfirm, touched]);
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -63,6 +76,34 @@ export default function InstallationWizard() {
       ...prevTouched,
       [name]: true,
     }));
+  };
+
+  const saveStep = async (data, serviceFunction, successMessage) => {
+    try {
+      await serviceFunction(data);  // Llama al servicio con los datos proporcionados
+      Swal.fire({
+        icon: 'success',
+        title: 'Guardado exitoso',
+        text: successMessage,
+        toast: true,
+        position: 'bottom-start',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+      });
+      setCurrentStep((prev) => prev + 1);  // Avanza al siguiente paso
+    } catch (error) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Hubo un problema al guardar los datos.',
+        toast: true,
+        position: 'bottom-start',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+      });
+    }
   };
 
   // Validación reactiva de la confirmación de contraseña
@@ -101,174 +142,53 @@ export default function InstallationWizard() {
       });
   };
 
-  const saveUserInstall = async () => {
-    try {
-      const userInstallData = {
-        usuario: formState.usuario,
-        password: formState.password,
-        numberPhone: formState.numberPhone,
-        email: formState.email,
-      };
+  const saveUserInstall = () => {
+    const userInstallData = {
+      usuario: formState.usuario,
+      password: formState.password,
+      numberPhone: formState.numberPhone,
+      email: formState.email,
+    };
 
-      console.log("Datos enviados a User Install Service:", userInstallData); // Imprime los datos
-      await saveUserInstallService(userInstallData);
-
-      Swal.fire({
-        icon: 'success',
-        title: 'Usuario Guardado',
-        text: 'El usuario se ha guardado correctamente.',
-        toast: true,
-        position: 'bottom-start',
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true,
-      });
-
-      setCurrentStep((prev) => Math.min(prev + 1, 4));
-    } catch (error) {
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: 'Hubo un problema al guardar el usuario.',
-        toast: true,
-        position: 'bottom-start',
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true,
-      });
-    }
+    saveStep(userInstallData, saveUserInstallService, 'Usuario guardado correctamente');
   };
-
-
-  const savePrometheusExporters = async () => {
-    try {
-      const exportersData = {
-        internalPortPostgres: parseInt(formState.internalPortPostgres),
-        externalPortPostgres: parseInt(formState.externalPortPostgres),
-        internalPortMariadb: parseInt(formState.internalPortMariadb),
-        externalPortMariadb: parseInt(formState.externalPortMariadb),
-        internalPortMongodb: parseInt(formState.internalPortMongodb),
-        externalPortMongodb: parseInt(formState.externalPortMongodb),
-      };
-
-      console.log("Datos enviados a Exporters Service:", exportersData); // Imprime los datos
-
-      await saveOrUpdatePrometheusExportersService(exportersData);
-
-      Swal.fire({
-        icon: 'success',
-        title: 'Puertos Guardados',
-        text: 'Los puertos de los exportadores de Prometheus se han guardado correctamente.',
-        toast: true,
-        position: 'bottom-start',
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true,
-      });
-
-      setCurrentStep((prev) => Math.min(prev + 1, 4)); // Asegúrate de avanzar al paso 4
-    } catch (error) {
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: 'Hubo un problema al guardar los exportadores de Prometheus.',
-        toast: true,
-        position: 'bottom-start',
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true,
-      });
-    }
-  };
-
-  // Validación automática de contraseñas mientras se escriben
-  useEffect(() => {
-    if (touched.grafanaPasswordConfirm) {
-      const errorMessage =
-        formState.grafanaPassword !== formState.grafanaPasswordConfirm ? 'Las contraseñas no coinciden' : '';
-      setErrors((prev) => ({ ...prev, grafanaPasswordConfirm: errorMessage }));
-    }
-  }, [formState.grafanaPassword, formState.grafanaPasswordConfirm, touched]);
-
 
   // Save Grafana Install
-  const saveGrafanaInstall = async () => {
-    try {
-      const grafanaInstallData = {
-        usuario: formState.grafanaAdmin, // Usa formState.grafanaAdmin
-        password: formState.grafanaPassword, // Usa formState.grafanaPassword
-        internalPort: parseInt(formState.grafanaLocalPort), // Usa formState.grafanaLocalPort
-        externalPort: parseInt(formState.grafanaDockerPort), // Usa formState.grafanaDockerPort
-      };
-      console.log("Datos enviados a Grafana Install Service:", grafanaInstallData);
+  const saveGrafanaInstall = () => {
+    const grafanaInstallData = {
+      usuario: formState.grafanaAdmin,
+      password: formState.grafanaPassword,
+      internalPort: parseInt(formState.grafanaLocalPort),
+      externalPort: parseInt(formState.grafanaDockerPort),
+    };
 
-      await saveGrafanaInstallService(grafanaInstallData);
-
-      Swal.fire({
-        icon: 'success',
-        title: 'Instalación Guardada',
-        text: 'La instalación de Grafana se ha guardado correctamente.',
-        toast: true,
-        position: 'bottom-start',
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true,
-      });
-
-      setCurrentStep((prev) => Math.min(prev + 1, 3));
-    } catch (error) {
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: 'Hubo un problema al guardar la instalación de Grafana.',
-        toast: true,
-        position: 'bottom-start',
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true,
-      });
-    }
+    saveStep(grafanaInstallData, saveGrafanaInstallService, 'Instalación de Grafana guardada correctamente');
   };
 
   // Save Prometheus Install
-  const savePrometheusInstall = async () => {
-    try {
-      const prometheusInstallData = {
-        internalPort: parseInt(formState.prometheusLocalPort),
-        externalPort: parseInt(formState.prometheusDockerPort),
-      };
+  const savePrometheusInstall = () => {
+    const prometheusInstallData = {
+      internalPort: parseInt(formState.prometheusLocalPort),
+      externalPort: parseInt(formState.prometheusDockerPort),
+    };
 
-      console.log("Datos enviados a Prometheus Install Service:", prometheusInstallData);
-
-      await savePrometheusInstallService(prometheusInstallData);
-
-      Swal.fire({
-        icon: 'success',
-        title: 'Instalación Guardada',
-        text: 'La instalación de Prometheus se ha guardado correctamente.',
-        toast: true,
-        position: 'bottom-start',
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true,
-      });
-
-      setCurrentStep((prev) => Math.min(prev + 1, 3));
-    } catch (error) {
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: 'Hubo un problema al guardar la instalación de Prometheus.',
-        toast: true,
-        position: 'bottom-start',
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true,
-      });
-    }
+    saveStep(prometheusInstallData, savePrometheusInstallService, 'Instalación de Prometheus guardada correctamente');
   };
 
-  // Función para completar la instalación
+  const savePrometheusExporters = () => {
+    const exportersData = {
+      internalPortPostgres: parseInt(formState.internalPortPostgres),
+      externalPortPostgres: parseInt(formState.externalPortPostgres),
+      internalPortMariadb: parseInt(formState.internalPortMariadb),
+      externalPortMariadb: parseInt(formState.externalPortMariadb),
+      internalPortMongodb: parseInt(formState.internalPortMongodb),
+      externalPortMongodb: parseInt(formState.externalPortMongodb),
+    };
+
+    saveStep(exportersData, saveOrUpdatePrometheusExportersService, 'Puertos de los exportadores guardados correctamente');
+  };
+  
+  // Completar instalación
   const completeInstallation = async () => {
     try {
       await completeInstallService();
@@ -283,6 +203,7 @@ export default function InstallationWizard() {
         timer: 3000,
         timerProgressBar: true,
       });
+      navigate('/');  // Redirecciona al home ("/")
     } catch (error) {
       Swal.fire({
         icon: 'error',
@@ -298,18 +219,18 @@ export default function InstallationWizard() {
   };
 
   const nextStep = () => {
-    if (currentStep === 1) {
-      setTouched({
-        usuario: true,
-        password: true,
-        passwordConfirm: true, // Asegurarse de tocar la confirmación de contraseña
-        numberPhone: true,
-        email: true,
-      });
-      handleStepValidationAndSave(userInstallValidationSchema, saveUserInstall);
-    } else
-
-      if (currentStep === 2) {
+    switch (currentStep) {
+      case 1:
+        setTouched({
+          usuario: true,
+          password: true,
+          passwordConfirm: true,
+          numberPhone: true,
+          email: true,
+        });
+        handleStepValidationAndSave(userInstallValidationSchema, saveUserInstall);
+        break;
+      case 2:
         setTouched({
           grafanaAdmin: true,
           grafanaPassword: true,
@@ -318,13 +239,15 @@ export default function InstallationWizard() {
           grafanaDockerPort: true,
         });
         handleStepValidationAndSave(grafanaValidationSchema, saveGrafanaInstall);
-      } else if (currentStep === 3) {
+        break;
+      case 3:
         setTouched({
           prometheusLocalPort: true,
           prometheusDockerPort: true,
         });
         handleStepValidationAndSave(prometheusValidationSchema, savePrometheusInstall);
-      } else if (currentStep === 4) {
+        break;
+      case 4:
         setTouched({
           internalPortPostgres: true,
           externalPortPostgres: true,
@@ -334,9 +257,13 @@ export default function InstallationWizard() {
           externalPortMongodb: true,
         });
         handleStepValidationAndSave(exportersValidationSchema, savePrometheusExporters);
-      } else if (currentStep === 5) {
+        break;
+      case 5:
         completeInstallation();
-      }
+        break;
+      default:
+        break;
+    }
   };
 
   const prevStep = () => setCurrentStep((prev) => Math.max(prev - 1, 1));
@@ -344,8 +271,6 @@ export default function InstallationWizard() {
   const handleBlur = (field) => {
     setTouched((prev) => ({ ...prev, [field]: true }));
   };
-
-  const steps = ['Grafana', 'Prometheus', 'Finish'];
 
   // Update dark mode state
   useEffect(() => {
@@ -362,6 +287,13 @@ export default function InstallationWizard() {
         return <PrometheusStep values={formState} errors={errors} touched={touched} handleBlur={handleBlur} handleChange={handleChange} />;
       case 4:
         return <ExporterStep values={formState} errors={errors} touched={touched} handleBlur={handleBlur} handleChange={handleChange} />;
+      case 5:
+        return (
+          <div className="text-center">
+            <h2>Installation Complete!</h2>
+            <p>Your setup is ready.</p>
+          </div>
+        );
       default:
         return null;
     }
@@ -402,9 +334,15 @@ export default function InstallationWizard() {
             </div>
             <span>Exporters</span>
           </div>
+          <div className="step">
+            <div className={currentStep >= 5 ? 'icon-active' : 'icon-inactive'}>
+              {currentStep > 5 ? <Check /> : <FileEarmarkCheck />}
+            </div>
+            <span>Complete</span>
+          </div>
         </div>
 
-        <ProgressBar now={(currentStep / 4) * 100} className="progress-bar" style={{ width: `${(currentStep / 4) * 100}%` }} />
+        <ProgressBar now={(currentStep / 5) * 100} className="progress-bar" style={{ width: `${(currentStep / 5) * 100}%` }} />
 
         <div className="scrollable-content">
           <AnimatePresence>
@@ -421,7 +359,7 @@ export default function InstallationWizard() {
             </Button>
           )}
           <Button onClick={nextStep} className="ml-auto">
-            {currentStep < 4 ? 'Next' : 'Finish'}
+            {currentStep < 5 ? 'Next' : 'Finish'}
           </Button>
         </div>
       </Card>
