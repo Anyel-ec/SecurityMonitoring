@@ -1,5 +1,5 @@
-package ec.edu.espe.security.monitoring.services.impl.installation;
-import ec.edu.espe.security.monitoring.dto.request.ExporterPrometheusRequestDto;
+package ec.edu.espe.security.monitoring.services.implementations.installation;
+import ec.edu.espe.security.monitoring.dto.request.installation.ExporterPrometheusInstallRequestDto;
 import ec.edu.espe.security.monitoring.models.InstallationConfig;
 import ec.edu.espe.security.monitoring.models.SystemParameters;
 import ec.edu.espe.security.monitoring.repositories.InstallationConfigRepository;
@@ -19,7 +19,7 @@ public class ExporterPrometheusInstallServiceImpl implements PrometheusExporterI
     private final SystemParametersRepository systemParametersRepository;
 
     @Override
-    public void saveOrUpdatePrometheusExporters(ExporterPrometheusRequestDto requestDto) {
+    public void saveOrUpdatePrometheusExporters(ExporterPrometheusInstallRequestDto requestDto) {
         saveOrUpdateExporter("PROMETHEUS_EXPORTER_POSTGRESQL", requestDto.getInternalPortPostgres(), requestDto.getExternalPortPostgres());
         saveOrUpdateExporter("PROMETHEUS_EXPORTER_MARIADB", requestDto.getInternalPortMariadb(), requestDto.getExternalPortMariadb());
         saveOrUpdateExporter("PROMETHEUS_EXPORTER_MONGODB", requestDto.getInternalPortMongodb(), requestDto.getExternalPortMongodb());

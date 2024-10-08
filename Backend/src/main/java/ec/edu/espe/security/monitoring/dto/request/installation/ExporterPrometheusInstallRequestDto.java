@@ -1,4 +1,4 @@
-package ec.edu.espe.security.monitoring.dto.request;
+package ec.edu.espe.security.monitoring.dto.request.installation;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
-public class ExporterPrometheusRequestDto {
+public class ExporterPrometheusInstallRequestDto {
 
     @NotNull(message = "El puerto interno de Postgres no puede ser nulo")
     @Min(value = 1, message = "El puerto interno de Postgres debe ser mayor a 0")

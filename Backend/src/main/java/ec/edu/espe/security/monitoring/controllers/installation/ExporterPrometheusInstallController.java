@@ -1,6 +1,6 @@
 package ec.edu.espe.security.monitoring.controllers.installation;
 
-import ec.edu.espe.security.monitoring.dto.request.ExporterPrometheusRequestDto;
+import ec.edu.espe.security.monitoring.dto.request.installation.ExporterPrometheusInstallRequestDto;
 import ec.edu.espe.security.monitoring.dto.response.JsonResponseDto;
 import ec.edu.espe.security.monitoring.services.interfaces.installation.PrometheusExporterInstallService;
 import lombok.AllArgsConstructor;
@@ -23,7 +23,7 @@ public class ExporterPrometheusInstallController {
      */
     @PutMapping()
     public ResponseEntity<JsonResponseDto> saveOrUpdatePrometheusExporters(
-            @RequestBody ExporterPrometheusRequestDto requestDto) {
+            @RequestBody ExporterPrometheusInstallRequestDto requestDto) {
         try {
             prometheusExporterInstallService.saveOrUpdatePrometheusExporters(requestDto);
 

@@ -1,6 +1,6 @@
 package ec.edu.espe.security.monitoring.controllers.installation;
 
-import ec.edu.espe.security.monitoring.dto.request.GrafanaInstallRequestDto;
+import ec.edu.espe.security.monitoring.dto.request.installation.GrafanaInstallRequestDto;
 import ec.edu.espe.security.monitoring.dto.response.JsonResponseDto;
 import ec.edu.espe.security.monitoring.models.InstallationConfig;
 import ec.edu.espe.security.monitoring.services.interfaces.installation.GrafanaInstallService;

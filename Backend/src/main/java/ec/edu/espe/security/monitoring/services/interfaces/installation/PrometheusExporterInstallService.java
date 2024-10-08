@@ -1,8 +1,8 @@
 package ec.edu.espe.security.monitoring.services.interfaces.installation;
 
-import ec.edu.espe.security.monitoring.dto.request.ExporterPrometheusRequestDto;
+import ec.edu.espe.security.monitoring.dto.request.installation.ExporterPrometheusInstallRequestDto;
 
 public interface PrometheusExporterInstallService {
-    void saveOrUpdatePrometheusExporters(ExporterPrometheusRequestDto requestDto);
+    void saveOrUpdatePrometheusExporters(ExporterPrometheusInstallRequestDto requestDto);
 
 }

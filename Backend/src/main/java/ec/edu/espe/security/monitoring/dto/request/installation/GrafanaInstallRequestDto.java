@@ -1,4 +1,4 @@
-package ec.edu.espe.security.monitoring.dto.request;
+package ec.edu.espe.security.monitoring.dto.request.installation;
 
 import jakarta.validation.constraints.*;
 import lombok.Data;
