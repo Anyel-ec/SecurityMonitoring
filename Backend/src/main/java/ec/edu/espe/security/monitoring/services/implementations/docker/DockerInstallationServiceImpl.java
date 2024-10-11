@@ -1,7 +1,8 @@
-package ec.edu.espe.security.monitoring.services.implementations;
+package ec.edu.espe.security.monitoring.services.implementations.docker;
 
 import ec.edu.espe.security.monitoring.models.InstallationConfig;
 import ec.edu.espe.security.monitoring.repositories.InstallationConfigRepository;
+import ec.edu.espe.security.monitoring.services.interfaces.docker.DockerInstallationService;
 import ec.edu.espe.security.monitoring.utils.AesEncryptor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +14,7 @@ import java.util.List;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class DockerInstallationServiceImpl {
+public class DockerInstallationServiceImpl implements DockerInstallationService {
     private final InstallationConfigRepository installationConfigRepository;
     private final AesEncryptor aesEncryptor;
 

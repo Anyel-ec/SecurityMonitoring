@@ -9,6 +9,7 @@ import ec.edu.espe.security.monitoring.repositories.ConnectionNameRepository;
 import ec.edu.espe.security.monitoring.repositories.PostgresCredentialsRepository;
 import ec.edu.espe.security.monitoring.repositories.MariadbCredentialsRepository;
 import ec.edu.espe.security.monitoring.repositories.MongodbCredentialsRepository;
+import ec.edu.espe.security.monitoring.services.implementations.docker.DockerComposeServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -25,7 +26,7 @@ public class DatabaseCredentialsServiceImpl {
     private final MariadbCredentialsRepository mariadbCredentialsRepository;
     private final MongodbCredentialsRepository mongodbCredentialsRepository;
     private final ConnectionNameRepository nameConnectionRepository;
-    private final DockerServiceImpl dockerService;
+    private final DockerComposeServiceImpl dockerService;
 
     /**
      * Save or update credentials for any database and run Docker Compose
@@ -38,7 +39,7 @@ public class DatabaseCredentialsServiceImpl {
             ConnectionName connection = connectionOpt.get();
 
             // **1.** Run Docker Compose with the credentials in plain text
-            dockerService.runDockerCompose(credentials, dbType);
+            dockerService.runDockerComposeWithDatabase(credentials, dbType);
 
             // **2.** Encrypt the password after running Docker
             credentials.setPassword(passwordEncoder.encode(credentials.getPassword()));

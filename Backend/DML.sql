@@ -8,7 +8,7 @@ INSERT INTO system_parameters (name, description, param_value, is_active, create
 VALUES ('USERS_INSTALL', 'Configuration for installing user accounts', null, true, NOW());
 
 INSERT INTO system_parameters (name, description, param_value, is_active, created_at)
-VALUES ('COMPLETE_INSTALL', 'Configuration for installing user accounts', '0', true, NOW());
+VALUES ('COMPLETE_INSTALL', 'Configuration for installing complete', '0', true, NOW());
 
 INSERT INTO system_parameters (name, description, param_value, is_active, created_at)
 VALUES ('PROMETHEUS_EXPORTER_POSTGRESQL', 'Configuration for Prometheus PostgreSQL exporter', null, true, NOW());
