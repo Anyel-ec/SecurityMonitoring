@@ -13,6 +13,7 @@ import UserInstallStep from './step/UserInstallStep'; // Importa el componente d
 import { grafanaValidationSchema, prometheusValidationSchema, exportersValidationSchema, userInstallValidationSchema } from './validationSchemas';
 import { useNavigate } from 'react-router-dom'; // Importa useNavigate
 import { runDockerInstallService } from '../../services/dockerComposeService'; // Importa el servicio que ejecuta Docker Compose
+import { completeInstallation } from '../../pages/installation/helper/installationHelper'; // Importa la función completa desde el archivo helper
 
 export default function InstallationWizard() {
   const [currentStep, setCurrentStep] = useState(1);
@@ -189,60 +190,8 @@ export default function InstallationWizard() {
     saveStep(exportersData, saveOrUpdatePrometheusExportersService, 'Puertos de los exportadores guardados correctamente');
   };
   
-  // Completar instalación
-  const completeInstallation = async () => {
-    try {
-      // Completa la instalación
-      await completeInstallService();
-  
-      // Ejecuta Docker Compose
-      Swal.fire({
-        icon: 'info',
-        title: 'Ejecutando Docker...',
-        text: 'Por favor, espera mientras se ejecuta Docker Compose.',
-        showConfirmButton: false,
-        allowOutsideClick: false, // No permitir cerrar la alerta mientras se ejecuta Docker
-        willOpen: () => {
-          Swal.showLoading(); // Muestra el spinner de carga
-        },
-      });
-  
-      // Llama al servicio que ejecuta Docker
-      await runDockerInstallService();
-  
-      // Cerrar la alerta de carga y mostrar mensaje de éxito
-      Swal.close();
-  
-      Swal.fire({
-        icon: 'success',
-        title: 'Instalación Completa',
-        text: 'Docker Compose se ejecutó y la instalación se ha completado exitosamente.',
-        toast: true,
-        position: 'bottom-start',
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true,
-      });
-  
-      // Redirige a la raíz solo si Docker Compose fue exitoso
-      navigate('/');
-      
-    } catch (error) {
-      // Cierra la alerta de carga si hay un error
-      Swal.close();
-  
-      // Mostrar una alerta de error
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: error.message || 'Hubo un problema al completar la instalación o ejecutar Docker Compose.',
-        toast: true,
-        position: 'bottom-start',
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true,
-      });
-    }
+  const handleCompleteInstallation = async () => {
+    await completeInstallation(navigate); // Llama a la función importada y pasa el hook de navegación
   };
 
   const nextStep = () => {
@@ -286,7 +235,7 @@ export default function InstallationWizard() {
         handleStepValidationAndSave(exportersValidationSchema, savePrometheusExporters);
         break;
       case 5:
-        completeInstallation();
+        handleCompleteInstallation();
         break;
       default:
         break;
