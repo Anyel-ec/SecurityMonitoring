@@ -5,7 +5,6 @@ import ec.edu.espe.security.monitoring.repositories.InstallationConfigRepository
 import ec.edu.espe.security.monitoring.utils.AesEncryptor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -18,22 +17,21 @@ public class DockerInstallationServiceImpl {
     private final InstallationConfigRepository installationConfigRepository;
     private final AesEncryptor aesEncryptor;
 
-
     /**
      * Runs a Docker Compose process to set up the services based on the active installation configurations.
      */
     public void runDockerComposeWithActiveInstallations() throws IOException {
-        // Obtener todas las instalaciones activas
+        // Retrieve all active installations
         List<InstallationConfig> activeInstallations = installationConfigRepository.findByIsActiveTrue();
 
-        // Crear el ProcessBuilder para docker-compose
+        // Create the ProcessBuilder for docker-compose
         ProcessBuilder processBuilder = new ProcessBuilder(
                 "docker-compose",
                 "-f", "../.container/docker-compose.yml",
                 "up", "-d"
         );
 
-        // Configurar las variables de entorno según las instalaciones activas
+        // Configure the environment variables based on the active installations
         for (InstallationConfig config : activeInstallations) {
             String decryptedPassword = null;
             try {
@@ -41,34 +39,43 @@ public class DockerInstallationServiceImpl {
                     decryptedPassword = aesEncryptor.decrypt(config.getPassword());
                 }
             } catch (Exception e) {
-                log.error("Error al desencriptar la contraseña para la instalación con ID: {}", config.getId(), e);
-                throw new IllegalStateException("Error al desencriptar la contraseña", e);
+                log.error("Error decrypting the password for the installation with ID: {}", config.getId(), e);
+                throw new IllegalStateException("Error decrypting the password", e);
             }
 
-            switch (config.getSystemParameter().getName()) {
-                case "GRAFANA_INSTALL":
-                    processBuilder.environment().put("GRAFANA_PORT_EXTERNAL", String.valueOf(config.getExternalPort()));
-                    processBuilder.environment().put("GRAFANA_PORT_INTERNAL", String.valueOf(config.getInternalPort()));
-                    processBuilder.environment().put("GRAFANA_USER", config.getUsuario());
-                    processBuilder.environment().put("GRAFANA_PASSWORD", decryptedPassword);
-                    break;
-                case "PROMETHEUS_INSTALL":
-                    processBuilder.environment().put("PROMETHEUS_PORT_EXTERNAL", String.valueOf(config.getExternalPort()));
-                    processBuilder.environment().put("PROMETHEUS_PORT_INTERNAL", String.valueOf(config.getInternalPort()));
-                    break;
-                case "PROMETHEUS_EXPORTER_POSTGRESQL":
-                    processBuilder.environment().put("EXPORT_POSTGRES_PORT_EXTERNAL", String.valueOf(config.getExternalPort()));
-                    processBuilder.environment().put("EXPORT_POSTGRES_PORT_INTERNAL", String.valueOf(config.getInternalPort()));
-                    processBuilder.environment().put("POSTGRES_USER", config.getUsuario());
-                    processBuilder.environment().put("POSTGRES_PASSWORD", decryptedPassword);
-                    break;
-                default:
-                    log.warn("No hay variables de entorno configuradas para el parámetro: {}", config.getSystemParameter().getName());
-                    break;
+            // Only configure environment variables for known installation types
+            if ("GRAFANA_INSTALL".equals(config.getSystemParameter().getName())) {
+                addEnvVariable(processBuilder, "GRAFANA_PORT_EXTERNAL", String.valueOf(config.getExternalPort()));
+                addEnvVariable(processBuilder, "GRAFANA_PORT_INTERNAL", String.valueOf(config.getInternalPort()));
+                addEnvVariable(processBuilder, "GRAFANA_USER", config.getUsuario());
+                addEnvVariable(processBuilder, "GRAFANA_PASSWORD", decryptedPassword);
+            } else if ("PROMETHEUS_INSTALL".equals(config.getSystemParameter().getName())) {
+                addEnvVariable(processBuilder, "PROMETHEUS_PORT_EXTERNAL", String.valueOf(config.getExternalPort()));
+                addEnvVariable(processBuilder, "PROMETHEUS_PORT_INTERNAL", String.valueOf(config.getInternalPort()));
+            } else if ("PROMETHEUS_EXPORTER_POSTGRESQL".equals(config.getSystemParameter().getName())) {
+                addEnvVariable(processBuilder, "EXPORT_POSTGRES_PORT_EXTERNAL", String.valueOf(config.getExternalPort()));
+                addEnvVariable(processBuilder, "EXPORT_POSTGRES_PORT_INTERNAL", String.valueOf(config.getInternalPort()));
+                addEnvVariable(processBuilder, "POSTGRES_USER", config.getUsuario());
+                addEnvVariable(processBuilder, "POSTGRES_PASSWORD", decryptedPassword);
+            } else {
+                log.warn("No environment variables configured for the parameter: {}", config.getSystemParameter().getName());
             }
         }
 
-        // Ejecutar docker-compose
+        // Execute docker-compose
         processBuilder.inheritIO().start();
     }
+
+    /**
+     * Adds environment variable to the ProcessBuilder and logs the value.
+     */
+    private void addEnvVariable(ProcessBuilder processBuilder, String key, String value) {
+        if (value != null && !value.isEmpty()) {
+            processBuilder.environment().put(key, value);
+            log.info("Setting environment variable: {} = {}", key, value);  // Log the environment variable
+        } else {
+            log.warn("Environment variable {} not set because value is null or empty", key);
+        }
+    }
+
 }
