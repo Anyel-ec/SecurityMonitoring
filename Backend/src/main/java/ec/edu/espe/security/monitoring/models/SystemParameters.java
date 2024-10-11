@@ -2,7 +2,9 @@ package ec.edu.espe.security.monitoring.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
@@ -11,6 +13,8 @@ import java.time.LocalDateTime;
 @Entity
 @JsonIgnoreProperties(value = {"createdAt", "updatedAt"},
         allowGetters = true)
+@AllArgsConstructor
+@NoArgsConstructor
 public class SystemParameters {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,4 +32,11 @@ public class SystemParameters {
 
     @Column(columnDefinition = "boolean default true")
     private boolean isActive;
+
+    public SystemParameters(String name, String description, String paramValue, boolean isActive) {
+        this.name = name;
+        this.description = description;
+        this.paramValue = paramValue;
+        this.isActive = isActive;
+    }
 }

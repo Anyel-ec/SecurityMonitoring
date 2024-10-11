@@ -9,6 +9,5 @@ import java.util.Optional;
 @Repository
 public interface SystemParametersRepository extends JpaRepository<SystemParameters, Long> {
 
-    // Método para buscar por nombre
     Optional<SystemParameters> findByNameAndIsActiveTrue(String name);
 }
