@@ -1,71 +1,71 @@
-# Security Monitoring API
+# API de Monitoreo de Seguridad
 
-This project is an API for monitoring connections to databases such as PostgreSQL, MariaDB, MongoDB, and additional services like Prometheus and Grafana, using Spring Boot. The API allows the configuration, storage, and update of database credentials, installation of Prometheus exporters, and execution of Docker Compose commands to start containers with these configurations.
+Este proyecto es una API para monitorear conexiones a bases de datos como PostgreSQL, MariaDB, MongoDB, y servicios adicionales como Prometheus y Grafana, utilizando Spring Boot. La API permite la configuración, almacenamiento y actualización de credenciales de bases de datos, la instalación de exportadores de Prometheus y la ejecución de comandos Docker Compose para iniciar contenedores con estas configuraciones.
 
-## Features
+## Características
 
-- **Connection Configuration**: Manages connections for multiple databases, allowing saving and updating credentials.
-- **Docker Compatibility**: Executes Docker Compose commands to initialize PostgreSQL databases using the configured credentials.
-- **Prometheus Exporter Installation**: Allows configuring Prometheus exporters for PostgreSQL, MongoDB, and MariaDB.
-- **Grafana Installation**: Manages the configuration and installation of Grafana.
-- **Basic Authentication**: Implements basic security using Spring Security and BCrypt for password encoding.
-- **Connection Testing**: Provides utilities to test the connection to configured databases.
-- **Installation Status**: Allows querying the installation status, including whether it's complete or not.
+- **Configuración de Conexiones**: Administra conexiones para múltiples bases de datos, permitiendo guardar y actualizar credenciales.
+- **Compatibilidad con Docker**: Ejecuta comandos Docker Compose para inicializar bases de datos PostgreSQL utilizando las credenciales configuradas.
+- **Instalación de Exportadores de Prometheus**: Permite configurar exportadores de Prometheus para PostgreSQL, MongoDB y MariaDB.
+- **Instalación de Grafana**: Administra la configuración e instalación de Grafana.
+- **Autenticación Básica**: Implementa seguridad básica usando Spring Security y BCrypt para el cifrado de contraseñas.
+- **Prueba de Conexión**: Proporciona utilidades para probar la conexión a bases de datos configuradas.
+- **Estado de la Instalación**: Permite consultar el estado de la instalación, incluyendo si está completa o no.
 
-## Technologies Used
+## Tecnologías Utilizadas
 
 - **Java 17**
 - **Spring Boot 3**
-- **Spring Security**: For security configuration.
-- **JPA / Hibernate**: For data persistence.
-- **Docker**: For handling databases via Docker Compose.
-- **Lombok**: To reduce boilerplate code.
+- **Spring Security**: Para la configuración de seguridad.
+- **JPA / Hibernate**: Para la persistencia de datos.
+- **Docker**: Para gestionar bases de datos a través de Docker Compose.
+- **Lombok**: Para reducir el código repetitivo.
 
-## Project Structure
+## Estructura del Proyecto
 
-- **Controllers**: Contains the REST controllers for managing connections, installations, and exporters.
-  - **ConnectionNameController**: Manages connections, including fetching, storing, and updating credentials.
-  - **ConfigInstallController**: Manages service installation and configuration, checking installation status, and updating parameters.
-  - **ExporterPrometheusInstallController**: Manages the configuration and installation of Prometheus exporters for PostgreSQL, MariaDB, and MongoDB.
-  - **GrafanaInstallController**: Manages the installation and configuration of Grafana.
-  - **PrometheusInstallController**: Manages the installation and configuration of Prometheus.
-  - **UserInstallController**: Manages the installation and configuration of users.
+- **Controladores**: Contiene los controladores REST para gestionar conexiones, instalaciones y exportadores.
+  - **ConnectionNameController**: Administra las conexiones, incluyendo la obtención, almacenamiento y actualización de credenciales.
+  - **ConfigInstallController**: Administra la instalación y configuración de servicios, verifica el estado de la instalación y actualiza parámetros.
+  - **ExporterPrometheusInstallController**: Administra la configuración e instalación de exportadores de Prometheus para PostgreSQL, MariaDB y MongoDB.
+  - **GrafanaInstallController**: Administra la instalación y configuración de Grafana.
+  - **PrometheusInstallController**: Administra la instalación y configuración de Prometheus.
+  - **UserInstallController**: Administra la instalación y configuración de usuarios.
 
-- **Models**: Defines the entities representing connections, credentials, and installation configurations.
-  - **ConnectionName**: Entity representing a database connection.
-  - **InstallationConfig**: Entity representing the installation configuration for services such as Grafana and Prometheus.
-  - **PostgresCredentials, MariaDBCredentials, MongoDBCredentials**: Represent credentials for the different databases.
-  - **SystemParameters**: Entity representing system parameters, such as those used to define installation status.
+- **Modelos**: Define las entidades que representan conexiones, credenciales y configuraciones de instalación.
+  - **ConnectionName**: Entidad que representa una conexión a base de datos.
+  - **InstallationConfig**: Entidad que representa la configuración de instalación para servicios como Grafana y Prometheus.
+  - **PostgresCredentials, MariaDBCredentials, MongoDBCredentials**: Representan credenciales para las diferentes bases de datos.
+  - **SystemParameters**: Entidad que representa parámetros del sistema, tales como los utilizados para definir el estado de la instalación.
 
-- **Services**: Contains the business logic.
-  - **ConnectionNameService**: Provides operations to fetch, save, and update connections.
-  - **DockerService**: Executes Docker Compose commands to start PostgreSQL containers with the provided credentials.
-  - **PostgresCredentialsService**: Manages PostgreSQL credentials and runs Docker Compose for the databases.
-  - **ConfigInstallService**: Manages system installations and checks installation status.
-  - **PrometheusExporterInstallService**: Manages the installation and update of Prometheus exporters.
-  - **GrafanaInstallService**: Manages the installation and update of Grafana.
-  - **PrometheusInstallService**: Manages the installation and update of Prometheus.
-  - **UserInstallService**: Manages the installation of users.
+- **Servicios**: Contiene la lógica de negocio.
+  - **ConnectionNameService**: Proporciona operaciones para obtener, guardar y actualizar conexiones.
+  - **DockerService**: Ejecuta comandos Docker Compose para iniciar contenedores PostgreSQL con las credenciales proporcionadas.
+  - **PostgresCredentialsService**: Administra las credenciales de PostgreSQL y ejecuta Docker Compose para las bases de datos.
+  - **ConfigInstallService**: Administra las instalaciones del sistema y verifica el estado de la instalación.
+  - **PrometheusExporterInstallService**: Administra la instalación y actualización de exportadores de Prometheus.
+  - **GrafanaInstallService**: Administra la instalación y actualización de Grafana.
+  - **PrometheusInstallService**: Administra la instalación y actualización de Prometheus.
+  - **UserInstallService**: Administra la instalación de usuarios.
 
-- **Repositories**: Interacts with the database using JPA.
-  - **ConnectionNameRepository, PostgresCredentialsRepository, MariaDBCredentialsRepository, MongoDBCredentialsRepository**: Repositories for the respective entities.
-  - **InstallationConfigRepository**: Manages installation configurations.
+- **Repositorios**: Interactúa con la base de datos utilizando JPA.
+  - **ConnectionNameRepository, PostgresCredentialsRepository, MariaDBCredentialsRepository, MongoDBCredentialsRepository**: Repositorios para las respectivas entidades.
+  - **InstallationConfigRepository**: Administra las configuraciones de instalación.
 
-- **Security**: Configures basic security using Spring Security.
-  - **SecurityConfig**: Allows access to the H2 console and disables CSRF for open endpoints.
+- **Seguridad**: Configura la seguridad básica usando Spring Security.
+  - **SecurityConfig**: Permite el acceso a la consola de H2 y desactiva CSRF para los endpoints abiertos.
 
-- **Utils**: Contains utility classes.
-  - **AesEncryptor**: Provides methods to encrypt and decrypt passwords using AES/GCM.
-  - **DatabaseUtils**: Provides methods to test database connections.
+- **Utilidades**: Contiene clases de utilidad.
+  - **AesEncryptor**: Proporciona métodos para cifrar y descifrar contraseñas usando AES/GCM.
+  - **DatabaseUtils**: Proporciona métodos para probar conexiones a bases de datos.
 
 ## Endpoints
 
-### Prometheus Exporter Installation
+### Instalación de Exportadores de Prometheus
 
 #### `PUT /api/v1/install/prometheus-exporters`
-Updates or saves the configuration of Prometheus exporters for PostgreSQL, MariaDB, and MongoDB.
+Actualiza o guarda la configuración de los exportadores de Prometheus para PostgreSQL, MariaDB y MongoDB.
 
-- **Request Body**:
+- **Cuerpo de la solicitud**:
   ```json
   {
     "postgresPort": 9187,
@@ -73,21 +73,21 @@ Updates or saves the configuration of Prometheus exporters for PostgreSQL, Maria
     "mariaPort": 9104
   }
   ```
-- **Response**:
+- **Respuesta**:
   ```json
   {
     "success": true,
     "code": 200,
-    "message": "Prometheus exporters updated successfully"
+    "message": "Exportadores de Prometheus actualizados correctamente"
   }
   ```
 
-### Grafana Installation
+### Instalación de Grafana
 
 #### `POST /api/v1/install/grafana`
-Saves the Grafana installation configuration.
+Guarda la configuración de la instalación de Grafana.
 
-- **Request Body**:
+- **Cuerpo de la solicitud**:
   ```json
   {
     "usuario": "admin",
@@ -96,12 +96,12 @@ Saves the Grafana installation configuration.
     "externalPort": 8080
   }
   ```
-- **Response**:
+- **Respuesta**:
   ```json
   {
     "success": true,
     "code": 200,
-    "message": "Grafana installation saved successfully",
+    "message": "Instalación de Grafana guardada exitosamente",
     "data": {
       "id": 1,
       "internalPort": 3000,
@@ -112,14 +112,14 @@ Saves the Grafana installation configuration.
   ```
 
 #### `GET /api/v1/install/grafana`
-Fetches the Grafana installation configuration.
+Obtiene la configuración de la instalación de Grafana.
 
-- **Response**:
+- **Respuesta**:
   ```json
   {
     "success": true,
     "code": 200,
-    "message": "Grafana installation retrieved successfully",
+    "message": "Instalación de Grafana recuperada exitosamente",
     "data": {
       "id": 1,
       "internalPort": 3000,
@@ -129,12 +129,12 @@ Fetches the Grafana installation configuration.
   }
   ```
 
-### Prometheus Installation
+### Instalación de Prometheus
 
 #### `POST /api/v1/install/prometheus`
-Saves the Prometheus installation configuration.
+Guarda la configuración de la instalación de Prometheus.
 
-- **Request Body**:
+- **Cuerpo de la solicitud**:
   ```json
   {
     "usuario": "prometheus",
@@ -143,24 +143,24 @@ Saves the Prometheus installation configuration.
     "externalPort": 9090
   }
   ```
-- **Response**:
+- **Respuesta**:
   ```json
   {
     "success": true,
     "code": 200,
-    "message": "Prometheus installation saved successfully"
+    "message": "Instalación de Prometheus guardada exitosamente"
   }
   ```
 
 #### `GET /api/v1/install/prometheus`
-Fetches the Prometheus installation configuration.
+Obtiene la configuración de la instalación de Prometheus.
 
-- **Response**:
+- **Respuesta**:
   ```json
   {
     "success": true,
     "code": 200,
-    "message": "Prometheus installation retrieved successfully",
+    "message": "Instalación de Prometheus recuperada exitosamente",
     "data": {
       "id": 1,
       "internalPort": 9090,
@@ -170,99 +170,108 @@ Fetches the Prometheus installation configuration.
   }
   ```
 
-### User Installation
+### Instalación de Usuarios
 
 #### `POST /api/v1/install/user`
-Saves the user installation configuration.
+Guarda la configuración de la instalación de usuarios.
 
-- **Request Body**:
+- **Cuerpo de la solicitud**:
   ```json
   {
     "nombreUsuario": "user1",
     "password": "userpass"
   }
   ```
-- **Response**:
+- **Respuesta**:
   ```json
   {
     "success": true,
     "code": 200,
-    "message": "User registration saved successfully"
+    "message": "Registro de usuario guardado exitosamente"
   }
   ```
 
-### Installation Status
+### Estado de la Instalación
 
 #### `GET /api/v1/install/status`
-Checks if the installation is complete.
+Verifica si la instalación está completa.
 
-- **Response**:
+- **Respuesta**:
   ```json
   {
     "success": true,
     "code": 200,
-    "message": "Installation status retrieved successfully",
+    "message": "Estado de la instalación recuperado exitosamente",
     "data": true
   }
   ```
 
 #### `PUT /api/v1/install/complete`
-Updates the installation status to complete.
+Actualiza el estado de la instalación a completo.
 
-- **Response**:
+- **Respuesta**:
   ```json
   {
     "success": true,
     "code": 200,
-    "message": "COMPLETE_INSTALL parameter updated successfully"
+    "message": "El parámetro COMPLETE_INSTALL fue actualizado exitosamente"
   }
   ```
 
-## Configuration
+## Configuración
 
-### Prerequisites
+### Requisitos
 
-- Docker and Docker Compose must be installed to run Docker services correctly.
-- PostgreSQL, MariaDB, or MongoDB must be properly configured for connection testing.
+- Docker y Docker Compose deben estar instalados para ejecutar correctamente los servicios Docker.
+- PostgreSQL, MariaDB o MongoDB deben estar configurados correctamente para la prueba de conexión.
 
-### Environment Variables
+### Variables de Entorno
 
-- POSTGRES_USER: PostgreSQL database user.
-- POSTGRES_PASSWORD: PostgreSQL database password.
-- POSTGRES_HOST: PostgreSQL database host.
-- POSTGRES_PORT_HOST: PostgreSQL host port.
+- POSTGRES_USER: Usuario de la base de datos PostgreSQL.
+- POSTGRES_PASSWORD: Contraseña de la base de datos PostgreSQL.
+- POSTGRES_HOST: Host de la base de datos PostgreSQL.
+- POSTGRES_PORT_HOST: Puerto del host de PostgreSQL.
 
-## Installation
+## Instalación
 
-1. Clone the repository:
+1. Clonar el repositorio:
 
 ```bash
 git clone https://github.com/Anyel-ec/SecurityMonitoring/Backend
 ```
 
-2. Configure your `application.properties` file or use an `.env` file for the database credentials.
+2. Configura tu archivo `application.properties` o usa un archivo `.env
 
-3. Run the application:
+` para las credenciales de la base de datos.
+
+3. Ejecuta la aplicación:
 
 ```bash
 ./mvnw spring-boot:run
 ```
 
-4. Access the API at [http://localhost:8080](http://localhost:8080).
+4. Accede a la API en [http://localhost:8080](http://localhost:8080).
 
-## Running Docker Compose
+## Ejecutando Docker Compose
 
-To run Docker Compose with the configured PostgreSQL credentials, ensure you have the `docker-compose.yml` file set up in the path indicated in `DockerService.java`.
+Para ejecutar Docker Compose con las credenciales de PostgreSQL configuradas, asegúrate de tener el archivo `docker-compose.yml` configurado en la ruta indicada en `DockerService.java`.
 
-## Testing
+## Pruebas
 
-- To test the database connection, you can use the provided endpoints. The response will indicate whether the connection was successful or not.
+- Para probar la conexión a la base de datos, puedes utilizar los endpoints proporcionados. La respuesta indicará si la conexión fue exitosa o no.
 
-## Contributions
+## Contribuciones
 
-If you wish to contribute to this project, please open an issue or submit a pull request.
+Si deseas contribuir a este proyecto, por favor abre un issue o envía un pull request.
 
-## License
+## Licencia
 
-This project is licensed under the [Apache License 2.0](LICENSE).
+Este proyecto está licenciado bajo la [Licencia Apache 2.0](LICENSE).
 
+## Información del Equipo y del Proyecto
+
+Herramienta de código abierto para el monitoreo dinámico de tres SGBD: MongoDB, PostgreSQL y MariaDB/MySQL.
+
+**Project Manager(PM): Ing. Luis Chica, Mgtr** - [Perfil en GitHub](https://github.com/LuisChica18)
+
+**Desarrollador: Ing. Ángel Patiño** - [Perfil en GitHub](https://github.com/Anyel-ec)

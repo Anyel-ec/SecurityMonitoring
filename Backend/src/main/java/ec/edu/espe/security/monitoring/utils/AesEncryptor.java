@@ -19,8 +19,11 @@ public class AesEncryptor {
     @Value("${secret.key.aes}")
     private String secretKey;
 
-    private static final String ALGORITHM = "AES/GCM/NoPadding";
+    private static final String ALGORITHM = "AES";
+    private static final String AES_TRANSFORMATION = "AES/GCM/NoPadding";
+
     private static final int GCM_TAG_LENGTH = 16; // Length of authentication tag (in bytes)
+
     public void setSecretKey(String secretKey) {
         this.secretKey = secretKey;
     }
@@ -29,8 +32,8 @@ public class AesEncryptor {
     public String encrypt(String data) throws NoSuchAlgorithmException, InvalidKeyException,
             NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidAlgorithmParameterException {
 
-        SecretKeySpec key = new SecretKeySpec(hexStringToByteArray(secretKey), "AES");
-        Cipher cipher = Cipher.getInstance(ALGORITHM);
+        SecretKeySpec key = new SecretKeySpec(hexStringToByteArray(secretKey), ALGORITHM);
+        Cipher cipher = Cipher.getInstance(AES_TRANSFORMATION);
 
         // Generate a random IV
         byte[] iv = new byte[12]; // GCM standard recommends 12 bytes IV
@@ -60,8 +63,8 @@ public class AesEncryptor {
         System.arraycopy(decodedData, 0, iv, 0, iv.length);
         System.arraycopy(decodedData, iv.length, cipherText, 0, cipherText.length);
 
-        SecretKeySpec key = new SecretKeySpec(hexStringToByteArray(secretKey), "AES");
-        Cipher cipher = Cipher.getInstance(ALGORITHM);
+        SecretKeySpec key = new SecretKeySpec(hexStringToByteArray(secretKey), ALGORITHM);
+        Cipher cipher = Cipher.getInstance(AES_TRANSFORMATION);
         GCMParameterSpec gcmSpec = new GCMParameterSpec(GCM_TAG_LENGTH * 8, iv);
 
         cipher.init(Cipher.DECRYPT_MODE, key, gcmSpec);

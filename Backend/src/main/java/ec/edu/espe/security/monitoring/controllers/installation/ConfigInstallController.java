@@ -24,6 +24,7 @@ public class ConfigInstallController {
 
     private final ConfigInstallService configInstallService;
     private final DockerInstallationService dockerInstallationService;
+
     @GetMapping("/active")
     public ResponseEntity<JsonResponseDto> getActiveInstallations() {
         try {
@@ -91,7 +92,6 @@ public class ConfigInstallController {
         try {
             // Call the service to execute Docker Compose
             dockerInstallationService.runDockerComposeWithActiveInstallations();
-
             // Create a success response
             JsonResponseDto response = new JsonResponseDto(true, 200, "Docker Compose se inició correctamente", null);
             return ResponseEntity.ok(response);
@@ -99,6 +99,11 @@ public class ConfigInstallController {
             log.error("Error al ejecutar Docker Compose", e);
             JsonResponseDto response = new JsonResponseDto(false, 500, "Error al iniciar Docker Compose", null);
             return ResponseEntity.status(500).body(response);
+        } catch (InterruptedException e) {
+            // Log the interruption and rethrow the exception
+            log.error("El hilo se interrumpió mientras se ejecutaba Docker Compose", e);
+            Thread.currentThread().interrupt();  // Restore interrupted status
+            return ResponseEntity.status(500).body(new JsonResponseDto(false, 500, "Proceso interrumpido", null));
         } catch (Exception e) {
             log.error("Error inesperado al iniciar Docker Compose", e);
             return ResponseEntity.status(500).body(new JsonResponseDto(false, 500, "Ocurrió un error inesperado", null));
