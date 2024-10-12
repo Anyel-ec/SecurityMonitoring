@@ -1,5 +1,17 @@
+${AnsiColor.BLUE}
  ,---. ,------. ,-----.,--. ,--.,------. ,--.,--------.,--.   ,--.      ,--.   ,--. ,-----. ,--.  ,--.,--.,--------.,-----. ,------. ,--.,--.  ,--. ,----.
 '   .-'|  .---''  .--./|  | |  ||  .--. '|  |'--.  .--' \  `.'  /,-----.|   `.'   |'  .-.  '|  ,'.|  ||  |'--.  .--'  .-.  '|  .--. '|  ||  ,'.|  |'  .-./
 `.  `-.|  `--, |  |    |  | |  ||  '--'.'|  |   |  |     '.    / '-----'|  |'.'|  ||  | |  ||  |' '  ||  |   |  |  |  | |  ||  '--'.'|  ||  |' '  ||  | .---.
 .-'    |  `---.'  '--'\'  '-'  '|  |\  \ |  |   |  |       |  |         |  |   |  |'  '-'  '|  | `   ||  |   |  |  '  '-'  '|  |\  \ |  ||  | `   |'  '--'  |
 `-----'`------' `-----' `-----' `--' '--'`--'   `--'       `--'         `--'   `--' `-----' `--'  `--'`--'   `--'   `-----' `--' '--'`--'`--'  `--' `------'
+${AnsiColor.BRIGHT_GREEN}
+:: Spring Boot ::  (v${spring-boot.version})
+${AnsiColor.BRIGHT_YELLOW}
+Project: ${spring.application.name}
+Version: ${application.version}
+${AnsiColor.BRIGHT_CYAN}
+Developed by: ${application.author.name}
+PM: ${application.pm.name}
+${AnsiColor.BRIGHT_MAGENTA}
+GitHub Repository: ${application.github.repository}
+Apache License 2.0: ${application.git.license}

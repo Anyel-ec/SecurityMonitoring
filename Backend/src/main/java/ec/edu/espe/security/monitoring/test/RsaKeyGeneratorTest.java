@@ -10,7 +10,7 @@ import javax.crypto.NoSuchPaddingException;
 import java.security.*;
 import java.util.Base64;
 @Slf4j
-public class RSAKeyGeneratorTest {
+public class RsaKeyGeneratorTest {
     @Value("${public.key.rsa}")
     private static String publicKeyStr;
 
