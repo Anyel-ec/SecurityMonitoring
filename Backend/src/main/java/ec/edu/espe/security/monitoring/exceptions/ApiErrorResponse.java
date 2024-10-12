@@ -20,16 +20,16 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 public final class ApiErrorResponse {
 
     private final boolean respuesta;
-    private final int codigoHttp;
-    private final String mensaje;
-    private final Object resultado;
+    private final int httpCode;
+    private final String message;
+    private final Object result;
 
     @Builder
     private ApiErrorResponse(boolean respuesta, HttpStatus httpStatus, String mensaje, Collection<ApiError> errores) {
         this.respuesta = respuesta;
-        this.codigoHttp = httpStatus.value();
-        this.mensaje = mensaje;
-        this.resultado = isNull(errores) ? emptyList() : errores;
+        this.httpCode = httpStatus.value();
+        this.message = mensaje;
+        this.result = isNull(errores) ? emptyList() : errores;
     }
 
     private static ResponseEntity<JsonResponseDto> buildResponse(HttpStatus status, String mensaje, Object resultado) {
