@@ -34,9 +34,9 @@ export default function InstallationWizard() {
     // Step 3 state (Prometheus)
     prometheusLocalPort: '9090', prometheusDockerPort: '9090',
 
-    // Step 4 state (Ports for PostgreSQL, MongoDB, MariaDB)
-    internalPortPostgres: '5432', externalPortPostgres: '5432', internalPortMariadb: '3306', externalPortMariadb: '3306', internalPortMongodb: '27017',
-    externalPortMongodb: '27020',
+    // Step 4 state (Ports for Exporters of PostgreSQL, MongoDB, MariaDB)
+    internalPortPostgres: '9187', externalPortPostgres: '9187', internalPortMariadb: '9104', externalPortMariadb: '9104', internalPortMongodb: '9216',
+    externalPortMongodb: '9216',
   });
 
 

@@ -12,7 +12,7 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class SystemParametersInitializerConfig implements CommandLineRunner {
+public class SystemConfigInitializer implements CommandLineRunner {
 
     private final SystemParametersRepository systemParametersRepository;
 
@@ -30,7 +30,7 @@ public class SystemParametersInitializerConfig implements CommandLineRunner {
                 new SystemParameters("PROMETHEUS_EXPORTER_MONGODB", "Configuration for Prometheus MongoDB exporter", null, true),
                 new SystemParameters("PROMETHEUS_EXPORTER_MARIADB", "Configuration for Prometheus MariaDB exporter", null, true)
         );
-
+        // Check if each parameter exists in the database; if not, insert it
         parameters.forEach(param -> {
             boolean exists = systemParametersRepository.findByNameAndIsActiveTrue(param.getName()).isPresent();
             if (!exists) {

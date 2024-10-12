@@ -6,8 +6,12 @@ import ec.edu.espe.security.monitoring.services.interfaces.docker.DockerInstalla
 import ec.edu.espe.security.monitoring.utils.AesEncryptor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 
@@ -21,12 +25,15 @@ public class DockerInstallationServiceImpl implements DockerInstallationService 
     /**
      * Runs a Docker Compose process to set up the services based on the active installation configurations.
      */
-    public void runDockerComposeWithActiveInstallations() throws IOException {
+    public void runDockerComposeWithActiveInstallations() throws IOException, InterruptedException {
         // Retrieve all active installations
         List<InstallationConfig> activeInstallations = installationConfigRepository.findByIsActiveTrue();
 
+        // Generate the prometheus.yml file dynamically with environment variables
+        generatePrometheusConfig(activeInstallations);
+
         // Create the ProcessBuilder for docker-compose
-        ProcessBuilder processBuilder = new ProcessBuilder(
+        ProcessBuilder dockerComposeProcessBuilder = new ProcessBuilder(
                 "docker-compose",
                 "-f", "../.container/docker-compose.yml",
                 "up", "-d"
@@ -46,26 +53,58 @@ public class DockerInstallationServiceImpl implements DockerInstallationService 
 
             // Only configure environment variables for known installation types
             if ("GRAFANA_INSTALL".equals(config.getSystemParameter().getName())) {
-                addEnvVariable(processBuilder, "GRAFANA_PORT_EXTERNAL", String.valueOf(config.getExternalPort()));
-                addEnvVariable(processBuilder, "GRAFANA_PORT_INTERNAL", String.valueOf(config.getInternalPort()));
-                addEnvVariable(processBuilder, "GRAFANA_USER", config.getUsuario());
-                addEnvVariable(processBuilder, "GRAFANA_PASSWORD", decryptedPassword);
+                addEnvVariable(dockerComposeProcessBuilder, "GRAFANA_PORT_EXTERNAL", String.valueOf(config.getExternalPort()));
+                addEnvVariable(dockerComposeProcessBuilder, "GRAFANA_PORT_INTERNAL", String.valueOf(config.getInternalPort()));
+                addEnvVariable(dockerComposeProcessBuilder, "GRAFANA_USER", config.getUsuario());
+                addEnvVariable(dockerComposeProcessBuilder, "GRAFANA_PASSWORD", decryptedPassword);
             } else if ("PROMETHEUS_INSTALL".equals(config.getSystemParameter().getName())) {
-                addEnvVariable(processBuilder, "PROMETHEUS_PORT_EXTERNAL", String.valueOf(config.getExternalPort()));
-                addEnvVariable(processBuilder, "PROMETHEUS_PORT_INTERNAL", String.valueOf(config.getInternalPort()));
+                addEnvVariable(dockerComposeProcessBuilder, "PROMETHEUS_PORT_EXTERNAL", String.valueOf(config.getExternalPort()));
+                addEnvVariable(dockerComposeProcessBuilder, "PROMETHEUS_PORT_INTERNAL", String.valueOf(config.getInternalPort()));
             } else if ("PROMETHEUS_EXPORTER_POSTGRESQL".equals(config.getSystemParameter().getName())) {
-                addEnvVariable(processBuilder, "EXPORT_POSTGRES_PORT_EXTERNAL", String.valueOf(config.getExternalPort()));
-                addEnvVariable(processBuilder, "EXPORT_POSTGRES_PORT_INTERNAL", String.valueOf(config.getInternalPort()));
-                addEnvVariable(processBuilder, "POSTGRES_USER", config.getUsuario());
-                addEnvVariable(processBuilder, "POSTGRES_PASSWORD", decryptedPassword);
+                addEnvVariable(dockerComposeProcessBuilder, "EXPORT_POSTGRES_PORT_EXTERNAL", String.valueOf(config.getExternalPort()));
+                addEnvVariable(dockerComposeProcessBuilder, "EXPORT_POSTGRES_PORT_INTERNAL", String.valueOf(config.getInternalPort()));
+                addEnvVariable(dockerComposeProcessBuilder, "POSTGRES_USER", config.getUsuario());
+                addEnvVariable(dockerComposeProcessBuilder, "POSTGRES_PASSWORD", decryptedPassword);
             } else {
                 log.warn("No environment variables configured for the parameter: {}", config.getSystemParameter().getName());
             }
         }
 
         // Execute docker-compose
-        processBuilder.inheritIO().start();
+        dockerComposeProcessBuilder.inheritIO().start();
     }
+    /**
+     * Generates prometheus.yml file dynamically based on the active installation configurations.
+     */
+    private void generatePrometheusConfig(List<InstallationConfig> activeInstallations) throws IOException {
+        // Load the template prometheus.yml
+        String templatePath = "../.container/prometheus.template.yml";
+        String outputPath = "../.container/prometheus.yml";
+        StringBuilder prometheusConfig = new StringBuilder();
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(templatePath))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                // Replace placeholders with actual values
+                for (InstallationConfig config : activeInstallations) {
+                    if ("PROMETHEUS_INSTALL".equals(config.getSystemParameter().getName())) {
+                        line = line.replace("${PROMETHEUS_PORT_INTERNAL}", String.valueOf(config.getInternalPort()));
+                    } else if ("PROMETHEUS_EXPORTER_POSTGRESQL".equals(config.getSystemParameter().getName())) {
+                        line = line.replace("${EXPORT_POSTGRES_PORT_INTERNAL}", String.valueOf(config.getInternalPort()));
+                    }
+                }
+                prometheusConfig.append(line).append("\n");
+            }
+        }
+
+        // Write the new prometheus.yml
+        try (FileWriter writer = new FileWriter(outputPath)) {
+            writer.write(prometheusConfig.toString());
+        }
+
+        log.info("Prometheus configuration generated at: {}", outputPath);
+    }
+
 
     /**
      * Adds environment variable to the ProcessBuilder and logs the value.
