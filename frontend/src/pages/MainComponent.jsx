@@ -3,7 +3,7 @@ import SavedConnections from './SavedConnections';
 import ConnectionDetails from './ConnectionDetails';
 import { getConnectionNames, saveOrUpdateConnectionName, saveOrUpdateConnectionCredentials, deleteConnectionById, testPostgresConnection } from '../services/connectionService';
 import Swal from 'sweetalert2';
-
+import {runDockerInstallService} from '../services/dockerComposeService';
 export default function MainComponent() {
   const [connections, setConnections] = useState([]);
   const [selectedConnection, setSelectedConnection] = useState(null);
