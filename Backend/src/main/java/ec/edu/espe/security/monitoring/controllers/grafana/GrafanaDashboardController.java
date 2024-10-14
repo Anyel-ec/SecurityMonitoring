@@ -18,8 +18,8 @@ public class GrafanaDashboardController {
     private final GrafanaDashboardServiceImpl grafanaDashboardService;
 
     /**
-     * Endpoint para crear un dashboard en Grafana.
-     * @return Respuesta HTTP con el resultado de la creación del dashboard.
+     * Endpoint to create a dashboard in Grafana.
+     * @return HTTP response with the result of the dashboard creation.
      */
     @PostMapping("/dashboard/create")
     public ResponseEntity<JsonResponseDto> createDashboard() {

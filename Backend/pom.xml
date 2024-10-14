@@ -15,17 +15,39 @@
     <description>Backend</description>
     <url/>
     <licenses>
-        <license/>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>https://github.com/Anyel-ec/SecurityMonitoring/blob/main/LICENSE</url>
+            <distribution>repo</distribution>
+            <comments>Open source license for the project</comments>
+        </license>
     </licenses>
+
     <developers>
-        <developer/>
+        <developer>
+            <id>anyel-ec</id>
+            <name>Angel Patino</name>
+            <email>cyberdevmatrix@gmail.com</email>
+            <roles>
+                <role>Developer Full Stack</role>
+            </roles>
+        </developer>
+        <developer>
+            <id>LuisChica18</id>
+            <name>Luis Chica Moncayo</name>
+            <email>luischicamoncayo@hotmail.com</email>
+            <roles>
+                <role>Project Manager</role>
+            </roles>
+        </developer>
     </developers>
+
     <scm>
-        <connection/>
-        <developerConnection/>
-        <tag/>
-        <url/>
+        <connection>scm:git:git://github.com/Anyel-ec/SecurityMonitoring.git</connection>
+        <developerConnection>scm:git:ssh://github.com/Anyel-ec/SecurityMonitoring.git</developerConnection>
+        <url>https://github.com/Anyel-ec/SecurityMonitoring</url>
     </scm>
+
     <properties>
         <java.version>17</java.version>
     </properties>

@@ -37,4 +37,5 @@ public class InstallationConfig {
     @Column(columnDefinition = "boolean default true")
     private Boolean isActive;
 
+
 }

@@ -21,7 +21,7 @@ public class GrafanaDashboardServiceImpl {
     private final JsonUtils jsonUtils;
 
     private static final String GRAFANA_API_URL = "http://localhost:3000/api/dashboards/db"; // Grafana API endpoint
-    private static final String DASHBOARD_JSON_FILE_POSTGRES = "dash_pg_v1.json"; // Path to the JSON file in resources
+    private static final String DASHBOARD_JSON_FILE_POSTGRES = "dashboardPostgres.json"; // Path to the JSON file in resources
 
     /**
      * Creates a Grafana dashboard using the predefined JSON file located in resources/dashboards/dash_pg_v1.json.
