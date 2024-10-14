@@ -5,6 +5,7 @@ import ec.edu.espe.security.monitoring.models.InstallationConfig;
 import ec.edu.espe.security.monitoring.models.SystemParameters;
 import ec.edu.espe.security.monitoring.repositories.InstallationConfigRepository;
 import ec.edu.espe.security.monitoring.repositories.SystemParametersRepository;
+import ec.edu.espe.security.monitoring.services.implementations.grafana.GrafanaCredentialServiceImpl;
 import ec.edu.espe.security.monitoring.services.interfaces.installation.GrafanaInstallService;
 import ec.edu.espe.security.monitoring.utils.AesEncryptor;
 import lombok.AllArgsConstructor;
@@ -17,15 +18,15 @@ import java.util.Optional;
 @Slf4j
 @AllArgsConstructor
 public class GrafanaInstallServiceImpl implements GrafanaInstallService {
+
     private final InstallationConfigRepository installationConfigRepository;
-    private final SystemParametersRepository systemParametersRepository;
+    private final GrafanaCredentialServiceImpl grafanaCredentialService;
     private final AesEncryptor aesEncryptor;
+
     @Override
     public InstallationConfig saveGrafanaInstall(GrafanaInstallRequestDto grafanaInstallRequestDto) {
         try {
-            SystemParameters systemParameter = systemParametersRepository
-                    .findByNameAndIsActiveTrue("GRAFANA_INSTALL")
-                    .orElseThrow(() -> new IllegalArgumentException("GRAFANA_INSTALL parameter not found"));
+            SystemParameters systemParameter = grafanaCredentialService.getGrafanaInstallParameter();
 
             // Encrypt the password
             String encryptedPassword = aesEncryptor.encrypt(grafanaInstallRequestDto.getPassword());
@@ -68,27 +69,17 @@ public class GrafanaInstallServiceImpl implements GrafanaInstallService {
     public InstallationConfig getGrafanaInstall() {
         try {
             // Search for the system parameter "GRAFANA_INSTALL"
-            SystemParameters systemParameter = systemParametersRepository
-                    .findByNameAndIsActiveTrue("GRAFANA_INSTALL")
-                    .orElseThrow(() -> new IllegalArgumentException("GRAFANA_INSTALL parameter not found"));
+            SystemParameters systemParameter = grafanaCredentialService.getGrafanaInstallParameter();
 
             // Search for the active installation associated with the found SystemParameter
-            Optional<InstallationConfig> optionalInstall = installationConfigRepository
-                    .findFirstBySystemParameterAndIsActiveTrue(systemParameter);
+            InstallationConfig grafanaInstall = grafanaCredentialService.getActiveInstallationConfig(systemParameter);
 
             // If no installation is found, throw an exception
-            if (optionalInstall.isEmpty()) {
-                throw new IllegalArgumentException("No se encontró una instalación activa para GRAFANA_INSTALL");
-            }
-
-            InstallationConfig grafanaInstall = optionalInstall.get();
-
-            // Decrypt the password
             String decryptedPassword = aesEncryptor.decrypt(grafanaInstall.getPassword());
             grafanaInstall.setPassword(decryptedPassword);
 
-            // Return the InstallationConfig object with the decrypted password
             return grafanaInstall;
+
         } catch (Exception e) {
             throw new IllegalStateException("Error al obtener la instalación de Grafana", e);
         }

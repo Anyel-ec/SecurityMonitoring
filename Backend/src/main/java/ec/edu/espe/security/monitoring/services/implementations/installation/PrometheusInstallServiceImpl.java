@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 public class PrometheusInstallServiceImpl implements PrometheusInstallService {
     private final InstallationConfigRepository installationConfigRepository;
     private final SystemParametersRepository systemParametersRepository;
-    private final AesEncryptor aesEncryptor;
+
     @Override
     public InstallationConfig savePrometheusInstall(PrometheusInstallRequestDto prometheusInstallRequestDto) {
         try {

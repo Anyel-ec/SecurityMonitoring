@@ -1,6 +1,6 @@
 package ec.edu.espe.security.monitoring.controllers.grafana;
 
-import ec.edu.espe.security.monitoring.services.implementations.grafana.GrafanaLoginServiceImpl;
+import ec.edu.espe.security.monitoring.services.interfaces.grafana.GrafanaLoginService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("api/v1/grafana")
 public class GrafanaLoginController {
 
-    private final GrafanaLoginServiceImpl grafanaLoginService;
+    private final GrafanaLoginService grafanaLoginService;
     @PostMapping("/grafana-login")
     public ResponseEntity<String> loginToGrafana() {
         return grafanaLoginService.loginToGrafana();

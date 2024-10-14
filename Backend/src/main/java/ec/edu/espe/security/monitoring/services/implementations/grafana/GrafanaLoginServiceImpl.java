@@ -1,8 +1,7 @@
 package ec.edu.espe.security.monitoring.services.implementations.grafana;
 import ec.edu.espe.security.monitoring.models.InstallationConfig;
 import ec.edu.espe.security.monitoring.models.SystemParameters;
-import ec.edu.espe.security.monitoring.repositories.InstallationConfigRepository;
-import ec.edu.espe.security.monitoring.repositories.SystemParametersRepository;
+import ec.edu.espe.security.monitoring.services.interfaces.grafana.GrafanaLoginService;
 import ec.edu.espe.security.monitoring.utils.AesEncryptor;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -20,10 +19,9 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class GrafanaLoginServiceImpl {
+public class GrafanaLoginServiceImpl implements GrafanaLoginService {
     // Dependency injection
-    private final InstallationConfigRepository installationConfigRepository;
-    private final SystemParametersRepository systemParametersRepository;
+    private final GrafanaCredentialServiceImpl grafanaService;
     private final AesEncryptor aesEncryptor;
 
     // Const
@@ -37,10 +35,11 @@ public class GrafanaLoginServiceImpl {
     // Variable to store cookies dynamically
     private List<String> grafanaCookies;
 
+    @Override
     public ResponseEntity<String> loginToGrafana() {
         try {
-            SystemParameters systemParameter = getGrafanaInstallParameter();
-            InstallationConfig grafanaInstall = getActiveInstallationConfig(systemParameter);
+            SystemParameters systemParameter = grafanaService.getGrafanaInstallParameter();
+            InstallationConfig grafanaInstall = grafanaService.getActiveInstallationConfig(systemParameter);
             String username = grafanaInstall.getUsuario();
             String decryptedPassword = aesEncryptor.decrypt(grafanaInstall.getPassword());
 
@@ -61,6 +60,8 @@ public class GrafanaLoginServiceImpl {
             return ResponseEntity.status(500).body("Error interno: " + e.getMessage());
         }
     }
+
+    @Override
     public void accessDashboardWithSession(HttpServletResponse response) {
         String grafanaUrl = "http://localhost:3000/d/000000039/postgresql-database?orgId=1&refresh=10s";
         if (grafanaCookies != null) {
@@ -70,17 +71,7 @@ public class GrafanaLoginServiceImpl {
         response.setHeader("Location", grafanaUrl);
     }
 
-    private SystemParameters getGrafanaInstallParameter() {
-        return systemParametersRepository
-                .findByNameAndIsActiveTrue("GRAFANA_INSTALL")
-                .orElseThrow(() -> new IllegalArgumentException("GRAFANA_INSTALL parameter not found"));
-    }
 
-    private InstallationConfig getActiveInstallationConfig(SystemParameters systemParameter) {
-        return installationConfigRepository
-                .findFirstBySystemParameterAndIsActiveTrue(systemParameter)
-                .orElseThrow(() -> new IllegalArgumentException("No active installation found for GRAFANA_INSTALL"));
-    }
 
     private ResponseEntity<String> performLoginRequest(String username, String decryptedPassword) {
         String url = "http://localhost:3000/login";
@@ -113,4 +104,3 @@ public class GrafanaLoginServiceImpl {
         return grafanaCookies == null || grafanaCookies.isEmpty();
     }
 }
-

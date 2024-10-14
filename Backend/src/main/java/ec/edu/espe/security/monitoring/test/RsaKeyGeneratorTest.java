@@ -56,6 +56,7 @@ public class RsaKeyGeneratorTest {
         keyGen.initialize(4096); // Generate RSA key pair with a key size of 4096 bits
         return keyGen.generateKeyPair();
     }
+
     /**
      * Encrypts a given message using the provided RSA public key
      */
