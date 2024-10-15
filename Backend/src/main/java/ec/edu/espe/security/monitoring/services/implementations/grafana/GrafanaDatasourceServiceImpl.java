@@ -4,6 +4,7 @@ import ec.edu.espe.security.monitoring.models.InstallationConfig;
 import ec.edu.espe.security.monitoring.models.SystemParameters;
 import ec.edu.espe.security.monitoring.repositories.InstallationConfigRepository;
 import ec.edu.espe.security.monitoring.repositories.SystemParametersRepository;
+import ec.edu.espe.security.monitoring.services.interfaces.grafana.GrafanaDatasourceService;
 import ec.edu.espe.security.monitoring.services.interfaces.installation.PrometheusInstallService;
 import ec.edu.espe.security.monitoring.utils.AesEncryptor;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +16,7 @@ import org.springframework.web.client.RestTemplate;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class GrafanaDatasourceServiceImpl {
+public class GrafanaDatasourceServiceImpl implements GrafanaDatasourceService {
     // Dependency Injected
     private final PrometheusInstallService prometheusInstallService;
     private final GrafanaCredentialServiceImpl grafanaCredentialService;

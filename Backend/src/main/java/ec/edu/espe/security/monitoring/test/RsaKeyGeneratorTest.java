@@ -31,6 +31,8 @@ public class RsaKeyGeneratorTest {
         PrivateKey privateKey = keyPair.getPrivate();
 
         // CONVERT TO BASE64, USING KEYS FROM PROPERTIES (This part would typically load keys from properties if needed)
+        String publicKeyStr = Base64.getEncoder().encodeToString(publicKey.getEncoded());
+        String privateKeyStr = Base64.getEncoder().encodeToString(privateKey.getEncoded());
 
         log.info("Public Key: {}", publicKeyStr);
         log.info("Private Key: {}", privateKeyStr);

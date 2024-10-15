@@ -1,13 +1,12 @@
 package ec.edu.espe.security.monitoring.controllers.grafana;
 
 import ec.edu.espe.security.monitoring.dto.response.JsonResponseDto;
-import ec.edu.espe.security.monitoring.services.implementations.grafana.GrafanaDashboardServiceImpl;
+import ec.edu.espe.security.monitoring.services.interfaces.grafana.GrafanaDashboardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
@@ -15,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("api/v1/grafana")
 public class GrafanaDashboardController {
-    private final GrafanaDashboardServiceImpl grafanaDashboardService;
+    private final GrafanaDashboardService grafanaDashboardService;
 
     /**
      * Endpoint to create a dashboard in Grafana.

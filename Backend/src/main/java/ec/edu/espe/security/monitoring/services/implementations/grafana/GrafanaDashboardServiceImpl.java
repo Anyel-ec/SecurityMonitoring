@@ -1,6 +1,7 @@
 package ec.edu.espe.security.monitoring.services.implementations.grafana;
 import ec.edu.espe.security.monitoring.models.InstallationConfig;
 import ec.edu.espe.security.monitoring.models.SystemParameters;
+import ec.edu.espe.security.monitoring.services.interfaces.grafana.GrafanaDashboardService;
 import ec.edu.espe.security.monitoring.utils.AesEncryptor;
 import ec.edu.espe.security.monitoring.utils.JsonUtils;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +16,7 @@ import org.springframework.web.client.RestTemplate;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class GrafanaDashboardServiceImpl {
+public class GrafanaDashboardServiceImpl implements GrafanaDashboardService {
     private final GrafanaCredentialServiceImpl grafanaService;
     private final AesEncryptor aesEncryptor;
     private final JsonUtils jsonUtils;
@@ -26,6 +27,7 @@ public class GrafanaDashboardServiceImpl {
     /**
      * Creates a Grafana dashboard using the predefined JSON file located in resources/dashboards/dash_pg_v1.json.
      */
+    @Override
     public void createDashboard() {
         try {
             // Retrieve Grafana user and password from the system configuration
