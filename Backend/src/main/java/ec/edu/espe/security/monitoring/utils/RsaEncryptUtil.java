@@ -1,4 +1,7 @@
 package ec.edu.espe.security.monitoring.utils;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -14,9 +17,12 @@ import java.util.Base64;
 
 @Component
 @Slf4j
+@RequiredArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 public class RsaEncryptUtil {
-    private static final String ALGORITHM = "RSA";
-    private static final String RSA_TRANSFORMATION = "RSA/ECB/OAEPWITHSHA-256ANDMGF1PADDING";
+    static final String ALGORITHM = "RSA";
+    static final String RSA_TRANSFORMATION = "RSA/ECB/OAEPWITHSHA-256ANDMGF1PADDING";
 
     public static PublicKey getPublicKey(String base64PublicKey) {
         PublicKey publicKey = null;

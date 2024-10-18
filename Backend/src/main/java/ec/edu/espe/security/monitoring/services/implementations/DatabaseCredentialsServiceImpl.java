@@ -107,7 +107,7 @@ public class DatabaseCredentialsServiceImpl {
 
         if (existingCredentials instanceof PostgresCredentials postgresCredentials) {
             postgresCredentialsRepository.save(postgresCredentials);
-        } else if (existingCredentials instanceof MariadbCredentials) {
+        } else if (existingCredentials instanceof MariadbCredentials mariadbCredentials) {
             mariadbCredentialsRepository.save((MariadbCredentials) existingCredentials);
         } else if (existingCredentials instanceof MongodbCredentials) {
             mongodbCredentialsRepository.save((MongodbCredentials) existingCredentials);

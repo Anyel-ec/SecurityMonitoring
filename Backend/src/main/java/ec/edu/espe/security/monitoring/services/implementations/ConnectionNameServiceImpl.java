@@ -80,6 +80,4 @@ public class ConnectionNameServiceImpl {
             return connectionNameRepository.save(newConnection);
         }
     }
-
-
 }
