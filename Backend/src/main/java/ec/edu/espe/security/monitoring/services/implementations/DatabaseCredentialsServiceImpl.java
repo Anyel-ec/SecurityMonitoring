@@ -108,11 +108,12 @@ public class DatabaseCredentialsServiceImpl {
         if (existingCredentials instanceof PostgresCredentials postgresCredentials) {
             postgresCredentialsRepository.save(postgresCredentials);
         } else if (existingCredentials instanceof MariadbCredentials mariadbCredentials) {
-            mariadbCredentialsRepository.save((MariadbCredentials) existingCredentials);
-        } else if (existingCredentials instanceof MongodbCredentials) {
-            mongodbCredentialsRepository.save((MongodbCredentials) existingCredentials);
+            mariadbCredentialsRepository.save(mariadbCredentials);
+        } else if (existingCredentials instanceof MongodbCredentials mongodbCredentials) {
+            mongodbCredentialsRepository.save(mongodbCredentials);
         }
     }
+
 
     /**
      * Helper method to copy generic properties from DatabaseCredentials to specific credentials

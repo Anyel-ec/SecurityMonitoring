@@ -25,13 +25,13 @@ public class GrafanaDatasourceController {
             String result = grafanaDatasourceService.createPrometheusDatasource();
 
             // Create a successful response using the JsonResponseDto
-            JsonResponseDto response = new JsonResponseDto(true, 200, "Datasource created successfully", result);
+            JsonResponseDto response = new JsonResponseDto(true, 200, "Datasource creada con éxito", result);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
-            log.error("Error creating the Prometheus datasource", e);
+            log.error("Error al crear la datasource de Prometheus", e);
 
             // Create a failure response in case of error
-            JsonResponseDto response = new JsonResponseDto(false, 500, "Failed to create the datasource", null);
+            JsonResponseDto response = new JsonResponseDto(false, 500, "Fallo al crear la datasource", null);
             return ResponseEntity.status(500).body(response);
         }
     }

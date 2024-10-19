@@ -27,7 +27,7 @@ public class GrafanaDashboardController {
             grafanaDashboardService.createDashboard();
 
             // If successful, return a success response
-            JsonResponseDto response = new JsonResponseDto(true, 200, "Dashboard created successfully", null);
+            JsonResponseDto response = new JsonResponseDto(true, 200, "Dashboard creado con éxito", null);
             return ResponseEntity.ok(response);
 
         } catch (IllegalArgumentException e) {
@@ -37,8 +37,8 @@ public class GrafanaDashboardController {
 
         } catch (Exception e) {
             // Catch unexpected errors
-            log.error("Unexpected error while creating the Grafana dashboard", e);
-            JsonResponseDto response = new JsonResponseDto(false, 500, "Internal server error", null);
+            log.error("Error inesperado al crear el dashboard de Grafana", e);
+            JsonResponseDto response = new JsonResponseDto(false, 500, "Error interno del servidor", null);
             return ResponseEntity.status(500).body(response);
         }
     }

@@ -38,7 +38,7 @@ public class GrafanaLoginController {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.setHeader("Content-Type", "application/json");
             try {
-                response.getWriter().write("{\"error\":\"Login failed. Cannot access dashboard.\"}");
+                response.getWriter().write("{\"error\":\"Error en el inicio de sesión. No se puede acceder al dashboard.\"}");
             } catch (Exception e) {
                 log.error("Error: {}", e.getMessage());
             }
