@@ -2,8 +2,6 @@ package ec.edu.espe.security.monitoring.services.implementations.grafana;
 
 import ec.edu.espe.security.monitoring.models.InstallationConfig;
 import ec.edu.espe.security.monitoring.models.SystemParameters;
-import ec.edu.espe.security.monitoring.repositories.InstallationConfigRepository;
-import ec.edu.espe.security.monitoring.repositories.SystemParametersRepository;
 import ec.edu.espe.security.monitoring.services.interfaces.grafana.GrafanaDatasourceService;
 import ec.edu.espe.security.monitoring.services.interfaces.installation.PrometheusInstallService;
 import ec.edu.espe.security.monitoring.utils.AesEncryptor;
@@ -29,7 +27,7 @@ public class GrafanaDatasourceServiceImpl implements GrafanaDatasourceService {
             // Obtain the Prometheus installation configuration
             SystemParameters systemParameter = grafanaCredentialService.getGrafanaInstallParameter();
             InstallationConfig grafanaInstall = grafanaCredentialService.getActiveInstallationConfig(systemParameter);
-            String username = grafanaInstall.getUsuario(); // Grafana username
+            String username = grafanaInstall.getUsername(); // Grafana username
             String decryptedPassword = aesEncryptor.decrypt(grafanaInstall.getPassword()); // Decrypt Grafana password
 
             InstallationConfig prometheusConfig = prometheusInstallService.getPrometheusInstall();

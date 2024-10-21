@@ -4,15 +4,12 @@ import ec.edu.espe.security.monitoring.dto.request.installation.GrafanaInstallRe
 import ec.edu.espe.security.monitoring.models.InstallationConfig;
 import ec.edu.espe.security.monitoring.models.SystemParameters;
 import ec.edu.espe.security.monitoring.repositories.InstallationConfigRepository;
-import ec.edu.espe.security.monitoring.repositories.SystemParametersRepository;
 import ec.edu.espe.security.monitoring.services.implementations.grafana.GrafanaCredentialServiceImpl;
 import ec.edu.espe.security.monitoring.services.interfaces.installation.GrafanaInstallService;
 import ec.edu.espe.security.monitoring.utils.AesEncryptor;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 @Slf4j
@@ -36,7 +33,7 @@ public class GrafanaInstallServiceImpl implements GrafanaInstallService {
                     .orElse(null);
 
             if (grafanaInstall != null) {
-                grafanaInstall.setUsuario(grafanaInstallRequestDto.getUsuario());
+                grafanaInstall.setUsername(grafanaInstallRequestDto.getUsuario());
                 grafanaInstall.setPassword(encryptedPassword);
                 grafanaInstall.setInternalPort(grafanaInstallRequestDto.getInternalPort());
                 grafanaInstall.setExternalPort(grafanaInstallRequestDto.getExternalPort());
@@ -45,7 +42,7 @@ public class GrafanaInstallServiceImpl implements GrafanaInstallService {
                 log.error("Se actualiza las credenciales de Grafana");
             } else {
                 grafanaInstall = InstallationConfig.builder()
-                        .usuario(grafanaInstallRequestDto.getUsuario())
+                        .username(grafanaInstallRequestDto.getUsuario())
                         .password(encryptedPassword)
                         .internalPort(grafanaInstallRequestDto.getInternalPort())
                         .externalPort(grafanaInstallRequestDto.getExternalPort())

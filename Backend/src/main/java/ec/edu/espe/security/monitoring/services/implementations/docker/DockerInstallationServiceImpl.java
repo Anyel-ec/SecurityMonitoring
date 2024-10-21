@@ -6,7 +6,6 @@ import ec.edu.espe.security.monitoring.services.interfaces.docker.DockerInstalla
 import ec.edu.espe.security.monitoring.utils.AesEncryptor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
@@ -55,7 +54,7 @@ public class DockerInstallationServiceImpl implements DockerInstallationService 
             if ("GRAFANA_INSTALL".equals(config.getSystemParameter().getName())) {
                 addEnvVariable(dockerComposeProcessBuilder, "GRAFANA_PORT_EXTERNAL", String.valueOf(config.getExternalPort()));
                 addEnvVariable(dockerComposeProcessBuilder, "GRAFANA_PORT_INTERNAL", String.valueOf(config.getInternalPort()));
-                addEnvVariable(dockerComposeProcessBuilder, "GRAFANA_USER", config.getUsuario());
+                addEnvVariable(dockerComposeProcessBuilder, "GRAFANA_USER", config.getUsername());
                 addEnvVariable(dockerComposeProcessBuilder, "GRAFANA_PASSWORD", decryptedPassword);
             } else if ("PROMETHEUS_INSTALL".equals(config.getSystemParameter().getName())) {
                 addEnvVariable(dockerComposeProcessBuilder, "PROMETHEUS_PORT_EXTERNAL", String.valueOf(config.getExternalPort()));
@@ -63,7 +62,7 @@ public class DockerInstallationServiceImpl implements DockerInstallationService 
             } else if ("PROMETHEUS_EXPORTER_POSTGRESQL".equals(config.getSystemParameter().getName())) {
                 addEnvVariable(dockerComposeProcessBuilder, "EXPORT_POSTGRES_PORT_EXTERNAL", String.valueOf(config.getExternalPort()));
                 addEnvVariable(dockerComposeProcessBuilder, "EXPORT_POSTGRES_PORT_INTERNAL", String.valueOf(config.getInternalPort()));
-                addEnvVariable(dockerComposeProcessBuilder, "POSTGRES_USER", config.getUsuario());
+                addEnvVariable(dockerComposeProcessBuilder, "POSTGRES_USER", config.getUsername());
                 addEnvVariable(dockerComposeProcessBuilder, "POSTGRES_PASSWORD", decryptedPassword);
             } else {
                 log.warn("No environment variables configured for the parameter: {}", config.getSystemParameter().getName());

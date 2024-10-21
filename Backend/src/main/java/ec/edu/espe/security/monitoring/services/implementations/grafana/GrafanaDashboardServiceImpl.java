@@ -33,7 +33,7 @@ public class GrafanaDashboardServiceImpl implements GrafanaDashboardService {
             // Retrieve Grafana user and password from the system configuration
             SystemParameters systemParameter = grafanaService.getGrafanaInstallParameter();
             InstallationConfig grafanaInstall = grafanaService.getActiveInstallationConfig(systemParameter);
-            String username = grafanaInstall.getUsuario(); // Grafana username
+            String username = grafanaInstall.getUsername(); // Grafana username
             String decryptedPassword = aesEncryptor.decrypt(grafanaInstall.getPassword()); // Decrypt Grafana password
 
             // Read the dashboard JSON file

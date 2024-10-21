@@ -40,7 +40,7 @@ public class GrafanaLoginServiceImpl implements GrafanaLoginService {
         try {
             SystemParameters systemParameter = grafanaService.getGrafanaInstallParameter();
             InstallationConfig grafanaInstall = grafanaService.getActiveInstallationConfig(systemParameter);
-            String username = grafanaInstall.getUsuario();
+            String username = grafanaInstall.getUsername();
             String decryptedPassword = aesEncryptor.decrypt(grafanaInstall.getPassword());
 
             ResponseEntity<String> response = performLoginRequest(username, decryptedPassword);

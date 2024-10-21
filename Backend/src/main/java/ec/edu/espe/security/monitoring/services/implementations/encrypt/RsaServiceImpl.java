@@ -20,8 +20,8 @@ public class RsaServiceImpl {
 
     @Value("${private.key.rsa}")
     private String environmentPrivateKey;
-    @Autowired
-    private RsaEncryptUtil rsaEncryptUtil;
+
+    private final RsaEncryptUtil rsaEncryptUtil;
 
     public String loginCliente(String data) throws IllegalBlockSizeException, NoSuchPaddingException, BadPaddingException, NoSuchAlgorithmException, InvalidKeyException {
 

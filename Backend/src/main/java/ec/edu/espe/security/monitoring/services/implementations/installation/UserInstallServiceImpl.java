@@ -34,7 +34,7 @@ public class UserInstallServiceImpl implements UserInstallService {
 
             if (userInstall != null) {
                 // If it exists, update the data
-                userInstall.setUsuario(userInstallRequestDto.getUsuario());
+                userInstall.setUsername(userInstallRequestDto.getUsuario());
                 userInstall.setPassword(encryptedPassword);
                 userInstall.setNumberPhone(userInstallRequestDto.getNumberPhone());
                 userInstall.setEmail(userInstallRequestDto.getEmail());
@@ -43,7 +43,7 @@ public class UserInstallServiceImpl implements UserInstallService {
                 log.info("Se actualiza la instalación de usuario.");
             } else {
                 // If it doesn't exist, create a new installation
-                userInstall = InstallationConfig.builder().usuario(userInstallRequestDto.getUsuario()).password(encryptedPassword).numberPhone(userInstallRequestDto.getNumberPhone()).email(userInstallRequestDto.getEmail()).systemParameter(systemParameter).isActive(true).build();
+                userInstall = InstallationConfig.builder().username(userInstallRequestDto.getUsuario()).password(encryptedPassword).numberPhone(userInstallRequestDto.getNumberPhone()).email(userInstallRequestDto.getEmail()).systemParameter(systemParameter).isActive(true).build();
                 log.info("Se crea una nueva instalación de usuario.");
             }
             log.info("Datos a guardar del usuario: {}", userInstall);
