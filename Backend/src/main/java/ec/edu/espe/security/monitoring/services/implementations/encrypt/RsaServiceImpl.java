@@ -18,7 +18,7 @@ import java.security.NoSuchAlgorithmException;
 @Service
 public class RsaServiceImpl {
 
-    @Value("${rsa.private.key}")
+    @Value("${private.key.rsa}")
     private String environmentPrivateKey;
     @Autowired
     private RsaEncryptUtil rsaEncryptUtil;

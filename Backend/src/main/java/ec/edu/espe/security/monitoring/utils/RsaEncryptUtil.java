@@ -3,6 +3,7 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.BadPaddingException;
@@ -17,10 +18,9 @@ import java.util.Base64;
 
 @Component
 @Slf4j
-@RequiredArgsConstructor
-@NoArgsConstructor
-@AllArgsConstructor
 public class RsaEncryptUtil {
+
+
     static final String ALGORITHM = "RSA";
     static final String RSA_TRANSFORMATION = "RSA/ECB/OAEPWITHSHA-256ANDMGF1PADDING";
 
