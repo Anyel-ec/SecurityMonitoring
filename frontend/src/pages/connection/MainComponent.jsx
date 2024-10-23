@@ -1,9 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import SavedConnections from './SavedConnections';
 import ConnectionDetails from './ConnectionDetails';
+import { showSuccessAlert, showErrorAlert, showConfirmationAlert } from '../../utils/alerts';
 
 import { getConnectionNames, saveOrUpdateConnectionName, saveOrUpdateConnectionCredentials, deleteConnectionById, testPostgresConnection } from '../../services/connectionService';
-import Swal from 'sweetalert2';
+
 export default function MainComponent() {
   const [connections, setConnections] = useState([]);
   const [selectedConnection, setSelectedConnection] = useState(null);
@@ -90,14 +91,7 @@ export default function MainComponent() {
           )
         );
 
-        Swal.fire({
-          toast: true,
-          position: 'top-right',
-          icon: 'success',
-          title: 'Conexión guardada con éxito',
-          showConfirmButton: false,
-          timer: 3000
-        });
+        showSuccessAlert('Conexión guardada con éxito', '');
       } else if (newConnection.connectionName) {
         await saveOrUpdateConnectionName(newConnection);
 
@@ -114,26 +108,11 @@ export default function MainComponent() {
 
         setNewConnection({ connectionName: '' });
 
-        Swal.fire({
-          toast: true,
-          position: 'top-right',
-          icon: 'success',
-          title: 'Nueva conexión guardada con éxito',
-          showConfirmButton: false,
-          timer: 3000
-        });
+        showSuccessAlert('Nueva conexión guardada con éxito', '');
       }
     } catch (error) {
       console.error('Error al guardar la conexión:', error);
-      Swal.fire({
-        toast: true,
-        position: 'top-right',
-        icon: 'error',
-        title: 'No se pudo guardar la conexión',
-        text: error.message || 'Ocurrió un error',
-        showConfirmButton: false,
-        timer: 3000
-      });
+      showErrorAlert('No se pudo guardar la conexión', error.message || 'Ocurrió un error');
     }
   };
 
@@ -154,74 +133,32 @@ export default function MainComponent() {
 
         // Muestra los datos que se van a enviar por consola
         console.log('Datos que se envían al backend:', credentialsData);
-
         await saveOrUpdateConnectionCredentials(credentialsData);
-
-        Swal.fire({
-          toast: true,
-          position: 'top-right',
-          icon: 'success',
-          title: 'Credenciales guardadas con éxito',
-          showConfirmButton: false,
-          timer: 3000
-        });
+        showSuccessAlert('Credenciales guardadas con éxito', '');
         // Abrir el dashboard de Grafana en una nueva pestaña
         window.open('http://localhost:3000/d/000000039/postgresql-database?orgId=1&refresh=10s', '_blank');
-
       }
     } catch (error) {
       console.error('Error al guardar las credenciales:', error);
-      Swal.fire({
-        toast: true,
-        position: 'top-right',
-        icon: 'error',
-        title: 'No se pudo guardar las credenciales',
-        text: error.message || 'Ocurrió un error',
-        showConfirmButton: false,
-        timer: 3000
-      });
+      showErrorAlert('No se pudo guardar las credenciales', error.message || 'Ocurrió un error');
     }
   };
 
+  // Función para eliminar una conexión
   const handleDelete = async () => {
     if (selectedConnection) {
-      Swal.fire({
-        title: '¿Estás seguro?',
-        text: "No podrás deshacer esta acción",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Sí, eliminar',
-        cancelButtonText: 'Cancelar'
-      }).then(async (result) => {
-        if (result.isConfirmed) {
-          try {
-            await deleteConnectionById(selectedConnection.id);
-            setConnections(connections.filter((conn) => conn.connectionName !== selectedConnection.connectionName));
-            setSelectedConnection(null);
-            Swal.fire({
-              toast: true,
-              position: 'top-right',
-              icon: 'success',
-              title: 'Conexión eliminada exitosamente',
-              showConfirmButton: false,
-              timer: 3000
-            });
-          } catch (error) {
-            console.error('Error al eliminar la conexión:', error);
-            Swal.fire({
-              toast: true,
-              position: 'top-right',
-              icon: 'error',
-              title: 'No se pudo eliminar la conexión',
-              text: error.message || 'Ocurrió un error',
-              showConfirmButton: false,
-              timer: 3000
-            });
-          }
+      const result = await showConfirmationAlert('¿Estás seguro?', 'No podrás deshacer esta acción');
+      if (result.isConfirmed) {
+        try {
+          await deleteConnectionById(selectedConnection.id);
+          setConnections(connections.filter((conn) => conn.connectionName !== selectedConnection.connectionName));
+          setSelectedConnection(null);
+          showSuccessAlert('Conexión eliminada exitosamente', '');
+        } catch (error) {
+          console.error('Error al eliminar la conexión:', error);
+          showErrorAlert('No se pudo eliminar la conexión', error.message || 'Ocurrió un error');
         }
-      });
+      }
     }
   };
 
@@ -270,25 +207,9 @@ export default function MainComponent() {
     try {
       const config = selectedConnection.credentials[type];
       const response = await testPostgresConnection(config);
-
-      Swal.fire({
-        toast: true,
-        position: 'top-right',
-        icon: 'success',
-        title: response.message,
-        showConfirmButton: false,
-        timer: 3000
-      });
+      showSuccessAlert(response.message, '');
     } catch (error) {
-      Swal.fire({
-        toast: true,
-        position: 'top-right',
-        icon: 'error',
-        title: 'Conexión fallida',
-        text: error.message || 'No se pudo conectar. Verifica las credenciales.',
-        showConfirmButton: false,
-        timer: 3000
-      });
+      showErrorAlert('Conexión fallida', error.message || 'No se pudo conectar. Verifica las credenciales.');
     } finally {
       setTestingConnection(null);
     }
@@ -312,8 +233,7 @@ export default function MainComponent() {
         onMouseDown={handleMouseDown}
         style={{ cursor: 'col-resize', width: '5px', backgroundColor: '#ddd', border: 'none', padding: '0', outline: 'none' }}
         aria-label="Resizer"
-      >
-      </button>
+      />
 
       <ConnectionDetails
         selectedConnection={selectedConnection}
