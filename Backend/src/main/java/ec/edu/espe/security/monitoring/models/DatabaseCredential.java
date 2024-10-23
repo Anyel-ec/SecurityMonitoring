@@ -2,15 +2,17 @@ package ec.edu.espe.security.monitoring.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
-
+@Builder
 @Entity
 @Data
-@JsonIgnoreProperties(value = {"createdAt"},
-        allowGetters = true)
+@JsonIgnoreProperties(value = {"createdAt"},allowGetters = true)
+@RequiredArgsConstructor
 public class DatabaseCredential {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
