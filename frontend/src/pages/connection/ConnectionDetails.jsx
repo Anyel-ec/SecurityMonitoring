@@ -1,5 +1,5 @@
 import React from 'react';
-import SwitchToggle from './../components/switch/SwitchToggle';
+import SwitchToggle from './../../components/switch/SwitchToggle';
 
 const ConnectionDetails = ({ selectedConnection, handleTypeChange, postgresEnabled, setPostgresEnabled, mariaDbEnabled, setMariaDbEnabled, mongoDbEnabled, setMongoDbEnabled, updateCredential, testConnection, testingConnection, handleSave, handleCancel }) => {
   return (

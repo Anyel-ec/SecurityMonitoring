@@ -1,6 +1,6 @@
 import MainLayout from '../Layouts/MainLayout';
 import { useState, useEffect } from 'react';
-import MainComponent from '../pages/MainComponent';
+import MainComponent from '../pages/connection/MainComponent';
 import PropTypes from 'prop-types';
 import InstallationWizard from '../pages/installation/InstallationWizard';
 import { useNavigate } from 'react-router-dom'; 
