@@ -65,6 +65,7 @@ export default function MainComponent() {
   const handleSelectConnection = (conn) => {
     setSelectedConnection({
       ...conn,
+      comment: conn.comment || '', // Aseguramos que el campo 'comment' esté presente
       types: conn.types || [],
       credentials: {
         PostgreSQL: conn.postgresCredentials || { host: '', port: '', username: '', password: '' },
@@ -72,7 +73,7 @@ export default function MainComponent() {
         MongoDB: conn.mongodbCredentials || { host: '', port: '', username: '', password: '' }
       }
     });
-
+  
     setPostgresEnabled(!!conn.postgresCredentials);
     setMariaDbEnabled(!!conn.mariadbCredentials);
     setMongoDbEnabled(!!conn.mongodbCredentials);
@@ -121,22 +122,35 @@ export default function MainComponent() {
     try {
       if (selectedConnection) {
         const enabledTypes = [];
-        if (postgresEnabled) enabledTypes.push('PostgreSQL');
-        if (mariaDbEnabled) enabledTypes.push('MariaDB');
-        if (mongoDbEnabled) enabledTypes.push('MongoDB');
+        let systemParameter = null;  // Aseguramos que la variable está definida correctamente
+        if (postgresEnabled) {
+          enabledTypes.push('PostgreSQL');
+          systemParameter = { name: 'POSTGRESQL' }; // Corresponding system parameter
+        }
+        if (mariaDbEnabled) {
+          enabledTypes.push('MariaDB');
+          systemParameter = { name: 'MARIADB' }; // Corresponding system parameter
+        }
+        if (mongoDbEnabled) {
+          enabledTypes.push('MongoDB');
+          systemParameter = { name: 'MONGODB' }; // Corresponding system parameter
+        }
 
         const credentialsData = {
           connectionName: selectedConnection.connectionName,
           types: enabledTypes,
           credentials: selectedConnection.credentials,
+          systemParameter,  // Include system parameter
+          comment: selectedConnection.comment
         };
+  
+        // Log the complete data to the console
+        console.log('Saving credentials with system parameter:', credentialsData);
 
-        // Muestra los datos que se van a enviar por consola
-        console.log('Datos que se envían al backend:', credentialsData);
         await saveOrUpdateConnectionCredentials(credentialsData);
         showSuccessAlert('Credenciales guardadas con éxito', '');
         // Abrir el dashboard de Grafana en una nueva pestaña
-        window.open('http://localhost:3000/d/000000039/postgresql-database?orgId=1&refresh=10s', '_blank');
+       // window.open('http://localhost:3000/d/000000039/postgresql-database?orgId=1&refresh=10s', '_blank');
       }
     } catch (error) {
       console.error('Error al guardar las credenciales:', error);
@@ -220,7 +234,7 @@ export default function MainComponent() {
       <SavedConnections
         connections={connections}
         selectedConnection={selectedConnection}
-        setSelectedConnection={handleSelectConnection}
+        setSelectedConnection={handleSelectConnection} // Pasar la función aquí
         handleDelete={handleDelete}
         handleSave={handleSaveConnectionName}
         newConnection={newConnection}
@@ -237,6 +251,7 @@ export default function MainComponent() {
 
       <ConnectionDetails
         selectedConnection={selectedConnection}
+        setSelectedConnection={setSelectedConnection} // Pasar setSelectedConnection al componente ConnectionDetails
         handleTypeChange={handleTypeChange}
         postgresEnabled={postgresEnabled}
         setPostgresEnabled={setPostgresEnabled}

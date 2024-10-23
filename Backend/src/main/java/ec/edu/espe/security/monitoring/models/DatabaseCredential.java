@@ -2,6 +2,7 @@ package ec.edu.espe.security.monitoring.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +13,7 @@ import java.time.LocalDateTime;
 @Entity
 @Data
 @JsonIgnoreProperties(value = {"createdAt"},allowGetters = true)
+@AllArgsConstructor
 @RequiredArgsConstructor
 public class DatabaseCredential {
     @Id

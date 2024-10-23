@@ -1,4 +1,4 @@
-package ec.edu.espe.security.monitoring.dto.request.installation;
+package ec.edu.espe.security.monitoring.dto.request;
 
 import ec.edu.espe.security.monitoring.models.SystemParameters;
 import jakarta.validation.constraints.Max;

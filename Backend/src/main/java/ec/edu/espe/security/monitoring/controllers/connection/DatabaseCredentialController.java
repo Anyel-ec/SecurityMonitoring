@@ -1,6 +1,6 @@
 package ec.edu.espe.security.monitoring.controllers.connection;
 
-import ec.edu.espe.security.monitoring.dto.request.installation.DatabaseCredentialRequestDto;
+import ec.edu.espe.security.monitoring.dto.request.DatabaseCredentialRequestDto;
 import ec.edu.espe.security.monitoring.dto.response.JsonResponseDto;
 import ec.edu.espe.security.monitoring.models.DatabaseCredential;
 import ec.edu.espe.security.monitoring.services.implementations.credential.DatabaseCredentialService;
