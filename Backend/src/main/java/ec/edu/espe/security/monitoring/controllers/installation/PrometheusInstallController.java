@@ -44,7 +44,7 @@ public class PrometheusInstallController {
             return ResponseEntity.badRequest().body(response);  // Return 400 Bad Request
         } catch (Exception e) {
             // Handle any other unexpected exceptions
-            log.error("Error inesperado al guardar la instalación de Prometheus", e);
+            log.error("Error inesperado al guardar la instalación de Prometheus: {}", e.getMessage());
             JsonResponseDto response = new JsonResponseDto(false, 500, "Error interno del servidor al guardar la instalación de Prometheus", null);
             return ResponseEntity.status(500).body(response);  // Return 500 Internal Server Error
         }

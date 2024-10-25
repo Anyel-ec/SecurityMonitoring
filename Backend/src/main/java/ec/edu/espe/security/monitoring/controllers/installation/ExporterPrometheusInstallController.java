@@ -35,7 +35,7 @@ public class ExporterPrometheusInstallController {
             return ResponseEntity.badRequest().body(response);
 
         } catch (Exception e) {
-            log.error("Error inesperado al actualizar exportadores de Prometheus", e);
+            log.error("Error inesperado al actualizar exportadores de Prometheus: {}", e.getMessage());
             JsonResponseDto response = new JsonResponseDto(false, 500, "Error interno del servidor", null);
             return ResponseEntity.status(500).body(response);
         }

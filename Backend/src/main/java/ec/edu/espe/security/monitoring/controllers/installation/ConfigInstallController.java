@@ -32,7 +32,7 @@ public class ConfigInstallController {
             return ResponseEntity.ok(response);
 
         } catch (Exception e) {
-            log.error("Error al obtener las instalaciones activas", e);
+            log.error("Error al obtener las instalaciones activas: {}", e.getMessage());
             JsonResponseDto response = new JsonResponseDto(false, 500, "Error al recuperar las instalaciones activas", null);
             return ResponseEntity.status(500).body(response);
         }
@@ -104,7 +104,7 @@ public class ConfigInstallController {
             Thread.currentThread().interrupt();  // Restore interrupted status
             return ResponseEntity.status(500).body(new JsonResponseDto(false, 500, "Proceso interrumpido", null));
         } catch (Exception e) {
-            log.error("Error inesperado al iniciar Docker Compose", e);
+            log.error("Error inesperado al iniciar Docker Compose: {}", e.getMessage());
             return ResponseEntity.status(500).body(new JsonResponseDto(false, 500, "Ocurrió un error inesperado", null));
         }
     }

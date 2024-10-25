@@ -45,7 +45,7 @@ public class UserInstallController {
             return ResponseEntity.badRequest().body(response);  // Return 400 Bad Request
         } catch (Exception e) {
             // Handle any other unexpected exceptions
-            log.error("Unexpected error while saving user registration", e);
+            log.error("Unexpected error while saving user registration: {}", e.getMessage());
             JsonResponseDto response = new JsonResponseDto(false, 500, "Error interno del servidor al guardar el registro de usuario", null);
             return ResponseEntity.status(500).body(response);  // Return 500 Internal Server Error
         }

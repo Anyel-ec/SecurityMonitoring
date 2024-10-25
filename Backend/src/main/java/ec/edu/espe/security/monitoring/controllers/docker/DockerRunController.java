@@ -30,7 +30,7 @@ public class DockerRunController {
             return ResponseEntity.ok(new JsonResponseDto(true, 200, "Docker está en ejecución", null));
 
         } catch (Exception e) {
-            log.error("Error inesperado al verificar el estado de Docker", e);
+            log.error("Error inesperado al verificar el estado de Docker {}", e.getMessage());
             return ResponseEntity.status(500).body(new JsonResponseDto(false, 500, "Ocurrió un error inesperado", null));
         }
     }

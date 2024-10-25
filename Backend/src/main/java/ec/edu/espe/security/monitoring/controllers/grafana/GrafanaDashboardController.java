@@ -37,7 +37,7 @@ public class GrafanaDashboardController {
 
         } catch (Exception e) {
             // Catch unexpected errors
-            log.error("Error inesperado al crear el dashboard de Grafana", e);
+            log.error("Error inesperado al crear el dashboard de Grafana: {}", e.getMessage());
             JsonResponseDto response = new JsonResponseDto(false, 500, "Error interno del servidor", null);
             return ResponseEntity.status(500).body(response);
         }
