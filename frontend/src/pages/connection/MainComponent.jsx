@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import SavedConnections from './SavedConnections';
 import ConnectionDetails from './ConnectionDetails';
 import { showSuccessAlert, showErrorAlert, showConfirmationAlert } from '../../utils/alerts';
-
+import { createDatabaseCredentialRequestDto } from '../../dto/DatabaseCredentialRequestDto';
 import { getConnectionNames, saveOrUpdateConnectionName, saveOrUpdateConnectionCredentials, deleteConnectionById, testPostgresConnection } from '../../services/connectionService';
 
 export default function MainComponent() {
@@ -73,7 +73,7 @@ export default function MainComponent() {
         MongoDB: conn.mongodbCredentials || { host: '', port: '', username: '', password: '' }
       }
     });
-  
+
     setPostgresEnabled(!!conn.postgresCredentials);
     setMariaDbEnabled(!!conn.mariadbCredentials);
     setMongoDbEnabled(!!conn.mongodbCredentials);
@@ -117,46 +117,41 @@ export default function MainComponent() {
     }
   };
 
-  // Función para guardar las credenciales de la conexión
+  // Función para guardar las credenciales de la conexión en el formato del DTO
   const handleSaveCredentials = async () => {
     try {
       if (selectedConnection) {
-        const enabledTypes = [];
-        let systemParameter = null;  // Aseguramos que la variable está definida correctamente
-        if (postgresEnabled) {
-          enabledTypes.push('PostgreSQL');
-          systemParameter = { name: 'POSTGRESQL' }; // Corresponding system parameter
-        }
-        if (mariaDbEnabled) {
-          enabledTypes.push('MariaDB');
-          systemParameter = { name: 'MARIADB' }; // Corresponding system parameter
-        }
-        if (mongoDbEnabled) {
-          enabledTypes.push('MongoDB');
-          systemParameter = { name: 'MONGODB' }; // Corresponding system parameter
-        }
+        let systemParameter = null;
+        const enabledType = postgresEnabled ? 'PostgreSQL' : mariaDbEnabled ? 'MariaDB' : mongoDbEnabled ? 'MongoDB' : null;
 
-        const credentialsData = {
-          connectionName: selectedConnection.connectionName,
-          types: enabledTypes,
-          credentials: selectedConnection.credentials,
-          systemParameter,  // Include system parameter
-          comment: selectedConnection.comment
-        };
-  
-        // Log the complete data to the console
-        console.log('Saving credentials with system parameter:', credentialsData);
+        if (enabledType) {
+          // Establece el parámetro del sistema según el tipo de base de datos
+          if (enabledType === 'PostgreSQL') systemParameter = { name: 'POSTGRESQL' };
+          if (enabledType === 'MariaDB') systemParameter = { name: 'MARIADB' };
+          if (enabledType === 'MongoDB') systemParameter = { name: 'MONGODB' };
 
-        await saveOrUpdateConnectionCredentials(credentialsData);
-        showSuccessAlert('Credenciales guardadas con éxito', '');
-        // Abrir el dashboard de Grafana en una nueva pestaña
-       // window.open('http://localhost:3000/d/000000039/postgresql-database?orgId=1&refresh=10s', '_blank');
+          // Usa el DTO para crear el objeto de credenciales
+          const credentialsData = createDatabaseCredentialRequestDto(
+            selectedConnection.credentials[enabledType].host,
+            selectedConnection.credentials[enabledType].port,
+            selectedConnection.credentials[enabledType].username,
+            selectedConnection.credentials[enabledType].password,
+            systemParameter,
+            selectedConnection.comment
+          );
+
+          console.log('Saving credentials in DTO format:', credentialsData);
+
+          await saveOrUpdateConnectionCredentials(credentialsData);
+          showSuccessAlert('Credenciales guardadas con éxito', '');
+        }
       }
     } catch (error) {
       console.error('Error al guardar las credenciales:', error);
       showErrorAlert('No se pudo guardar las credenciales', error.message || 'Ocurrió un error');
     }
   };
+
 
   // Función para eliminar una conexión
   const handleDelete = async () => {

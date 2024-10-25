@@ -38,7 +38,7 @@ public class ConnectionCredentialsController {
             JsonResponseDto response = new JsonResponseDto(
                     false,
                     HttpStatus.BAD_REQUEST.value(),
-                    "Error: No se pudo conectar a la base de datos "+type+" con las credenciales proporcionadas.",
+                    "Error: No se pudo conectar a la base de datos: " +type+" :  con las credenciales proporcionadas.",
                     null
             );
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);

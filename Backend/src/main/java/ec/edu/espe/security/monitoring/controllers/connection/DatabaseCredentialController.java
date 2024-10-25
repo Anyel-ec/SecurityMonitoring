@@ -14,7 +14,7 @@ import java.util.List;
 @Slf4j
 @AllArgsConstructor
 @RestController
-@RequestMapping("/api/credentials")
+@RequestMapping("/api/v1/credentials")
 public class DatabaseCredentialController {
 
     private final DatabaseCredentialService credentialService;
