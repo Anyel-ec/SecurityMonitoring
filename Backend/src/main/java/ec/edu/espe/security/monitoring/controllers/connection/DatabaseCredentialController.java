@@ -21,7 +21,7 @@ public class DatabaseCredentialController {
     @PostMapping
     public ResponseEntity<JsonResponseDto> createCredential(@Valid @RequestBody DatabaseCredentialRequestDto dto) {
         try {
-            DatabaseCredential credential = credentialService.createCredential(dto);
+            DatabaseCredential credential = credentialService.createOrUpdateCredential(dto);
             return ResponseEntity.ok(new JsonResponseDto(true, 200, "Credencial creada con éxito", credential));
         } catch (Exception e) {
             log.error("Error al crear credencial: {}", e.getMessage());
@@ -29,16 +29,6 @@ public class DatabaseCredentialController {
         }
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<JsonResponseDto> updateCredential(@PathVariable Long id, @Valid @RequestBody DatabaseCredentialRequestDto dto) {
-        try {
-            DatabaseCredential updatedCredential = credentialService.updateCredential(id, dto);
-            return ResponseEntity.ok(new JsonResponseDto(true, 200, "Credencial actualizada con éxito", updatedCredential));
-        } catch (Exception e) {
-            log.error("Error al actualizar credencial {}", e.getMessage());
-            return ResponseEntity.status(500).body(new JsonResponseDto(false, 500, "Error al actualizar credencial", null));
-        }
-    }
 
     @GetMapping
     public ResponseEntity<JsonResponseDto> getAllCredentials() {

@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -17,46 +18,38 @@ public class DatabaseCredentialService {
     private final AesEncryptor aesEncryptor;
 
     // Create or update database credentials
-    public DatabaseCredential createCredential(DatabaseCredentialRequestDto dto) {
-        String encryptedPassword = null;
+    public DatabaseCredential createOrUpdateCredential(DatabaseCredentialRequestDto credentialRequestDto) {
+        // Search if a credential exists with the same host and system parameter
+        Optional<DatabaseCredential> existingCredentialOpt = databaseCredentialRepository
+                .findByHostAndSystemParameterAndIsActive(
+                        credentialRequestDto.getHost(),
+                        credentialRequestDto.getSystemParameter(),
+                        true
+                );
+
+
+        // Encrypt the password before using it in the credential
+        String encryptedPassword;
         try {
-            encryptedPassword = aesEncryptor.encrypt(dto.getPassword());  // Encrypting the password
+            encryptedPassword = aesEncryptor.encrypt(credentialRequestDto.getPassword());
         } catch (Exception e) {
-            throw new IllegalStateException("Error al encriptar la contraseña", e);
+            throw new IllegalStateException("Error encrypting the password", e);
         }
 
+        // Build the credential object, keeping the ID and createdAt date if updating an existing record
         DatabaseCredential credential = DatabaseCredential.builder()
-                .host(dto.getHost())
-                .port(dto.getPort())
-                .username(dto.getUsername())
-                .password(encryptedPassword)  // Save the encrypted password
-                .systemParameter(dto.getSystemParameter())
-                .comment(dto.getComment())
+                .id(existingCredentialOpt.map(DatabaseCredential::getId).orElse(null))  // Keep ID if it exists
+                .host(credentialRequestDto.getHost())
+                .port(credentialRequestDto.getPort())
+                .username(credentialRequestDto.getUsername())
+                .password(encryptedPassword)
+                .systemParameter(credentialRequestDto.getSystemParameter())
+                .comment(credentialRequestDto.getComment())
                 .isActive(true)
+                .createdAt(existingCredentialOpt.map(DatabaseCredential::getCreatedAt).orElse(null))  // Keep creation date if it exists
                 .build();
 
         // Save the credential in the repository and return the result
-        return databaseCredentialRepository.save(credential);
-    }
-
-    // Update an existing credential by ID
-    public DatabaseCredential updateCredential(Long id, DatabaseCredentialRequestDto dto) {
-        DatabaseCredential credential = databaseCredentialRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Credencial con ID no encontrada : " + id));
-
-        String encryptedPassword = null;
-        try {
-            encryptedPassword = aesEncryptor.encrypt(dto.getPassword());
-        } catch (Exception e) {
-            throw new IllegalStateException("Error al encriptar la contraseña", e);
-        }
-
-        credential.setHost(dto.getHost());
-        credential.setPort(dto.getPort());
-        credential.setUsername(dto.getUsername());
-        credential.setPassword(encryptedPassword);
-        credential.setSystemParameter(dto.getSystemParameter());
-        credential.setComment(dto.getComment());
-
         return databaseCredentialRepository.save(credential);
     }
 

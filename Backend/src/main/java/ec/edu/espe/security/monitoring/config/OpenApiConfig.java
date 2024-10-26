@@ -15,11 +15,11 @@ import org.springframework.context.annotation.Configuration;
                 description = """
                     Open source tool service for dynamic monitoring of three DBMS: MongoDB, PostgreSQL, and MariaDB/MySQL.
                     
-                    **Project Manager (PM): Ing. Luis Chica, Mgtr** - [GitHub Profile](https://github.com/LuisChica18)
+                    **Project Manager: Ing. Luis Chica Moncayo, Mgtr.-** [Linkedin Profile](https://www.linkedin.com/in/luis-chica-moncayo-7970232a/) - [Github Profile](https://github.com/LuisChica18)
                     
-                    **Developer: Ing. Angel Patiño** - [GitHub Profile](https://github.com/Anyel-ec)
+                    **Developer: Ing. Angel Patiño.-**  [Linkedin Profile](https://www.linkedin.com/in/anyel-ec/) - [GitHub Profile](https://github.com/Anyel-ec)
                     """,
-                contact = @Contact(name = "Developed by Angel Paul Patiño Diaz", email = "appatino@espe.edu.ec", url = "www.anyel.top"),
+                contact = @Contact(name = "Developed by Angel Patiño", email = "appatino@espe.edu.ec", url = "www.anyel.top"),
                 license = @License(name = "Apache License 2.0", url = "https://github.com/Anyel-ec/SecurityMonitoring/blob/main/LICENSE")
         ),
         servers = @Server(url = "http://localhost:8080")
