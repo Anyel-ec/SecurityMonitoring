@@ -3,8 +3,8 @@ import SavedConnections from './SavedConnections';
 import ConnectionDetails from './ConnectionDetails';
 import { showSuccessAlert, showErrorAlert, showConfirmationAlert } from '../../utils/alerts';
 import { createDatabaseCredentialRequestDto } from '../../dto/DatabaseCredentialRequestDto';
-import { getConnectionNames, saveOrUpdateConnectionName, saveOrUpdateConnectionCredentials, deleteConnectionById, testPostgresConnection } from '../../services/connectionService';
-import { getAllCredentials} from '../../services/databaseCredentialService';
+import { getConnectionNames, saveOrUpdateConnectionName, saveOrUpdateConnectionCredentials, testPostgresConnection } from '../../services/connectionService';
+import { getAllCredentials, deleteConnectionById} from '../../services/databaseCredentialService';
 
 export default function MainComponent() {
   const [selectedConnection, setSelectedConnection] = useState({ connectionName: '', comment: '', types: [], credentials: {} });
@@ -181,8 +181,8 @@ export default function MainComponent() {
       if (result.isConfirmed) {
         try {
           await deleteConnectionById(selectedConnection.id);
-          setConnections(connections.filter((conn) => conn.connectionName !== selectedConnection.connectionName));
-          setSelectedConnection(null);
+          setConnections(connections.filter((conn) => conn.id !== selectedConnection.id));
+          setSelectedConnection(null); // Limpia la selección después de borrar
           showSuccessAlert('Conexión eliminada exitosamente', '');
         } catch (error) {
           console.error('Error al eliminar la conexión:', error);

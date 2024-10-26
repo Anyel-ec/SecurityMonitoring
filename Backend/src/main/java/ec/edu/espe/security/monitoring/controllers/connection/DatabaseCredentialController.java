@@ -25,7 +25,7 @@ public class DatabaseCredentialController {
             return ResponseEntity.ok(new JsonResponseDto(true, 200, "Credencial creada con éxito", credential));
         } catch (Exception e) {
             log.error("Error al crear credencial: {}", e.getMessage());
-            return ResponseEntity.status(500).body(new JsonResponseDto(false, 500, "Error al crear credencial", null));
+            return ResponseEntity.status(500).body(new JsonResponseDto(false, 500, "Error al crear credencial - " +e.getMessage(), null));
         }
     }
 
@@ -37,7 +37,7 @@ public class DatabaseCredentialController {
             return ResponseEntity.ok(new JsonResponseDto(true, 200, "Lista de credenciales obtenida con éxito", credentials));
         } catch (Exception e) {
             log.error("Error al obtener las credenciales {}", e.getMessage());
-            return ResponseEntity.status(500).body(new JsonResponseDto(false, 500, "Error al obtener las credenciales", null));
+            return ResponseEntity.status(500).body(new JsonResponseDto(false, 500, "Error al obtener las credenciales: " + e.getMessage(), null));
         }
     }
 

@@ -25,7 +25,7 @@ public class DatabaseCredentialService {
         // Find the SystemParameter  its name
         SystemParameters systemParameter = systemParametersRepository
                 .findByNameAndIsActiveTrue(credentialRequestDto.getSystemParameter().getName())
-                .orElseThrow(() -> new IllegalArgumentException("System parameter not found: " + credentialRequestDto.getSystemParameter().getName()));
+                .orElseThrow(() -> new IllegalArgumentException("Parámetro del sistema no encontrado: " + credentialRequestDto.getSystemParameter().getName()));
 
         // Check if a credential with the same host and system parameter already exists
         Optional<DatabaseCredential> existingCredentialOpt = databaseCredentialRepository

@@ -26,7 +26,7 @@ public class DatabaseCredential {
     private String password;
 
     // Only BD
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "type_bd", referencedColumnName = "id")
     private SystemParameters systemParameter;
 
