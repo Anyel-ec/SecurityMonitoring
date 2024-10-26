@@ -32,7 +32,7 @@ public class RsaEncryptUtil {
             publicKey = keyFactory.generatePublic(keySpec);
             return publicKey;
         } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-            log.error("Error al obtener la llave publica", e);
+            log.error("Error al obtener la llave publica {}", e.getMessage());
         }
         return publicKey;
     }
@@ -44,13 +44,13 @@ public class RsaEncryptUtil {
         try {
             keyFactory = KeyFactory.getInstance(ALGORITHM);
         } catch (NoSuchAlgorithmException e) {
-            log.error("Error al obtener la llave privada", e);
+            log.error("Error al obtener la llave privada {}", e.getMessage());
         }
         try {
             assert keyFactory != null;
             privateKey = keyFactory.generatePrivate(keySpec);
         } catch (InvalidKeySpecException e) {
-            log.error("Error al obtener la llave privada", e);
+            log.error("Error al obtener la llave privada {}", e.getMessage());
         }
         return privateKey;
     }
@@ -68,14 +68,9 @@ public class RsaEncryptUtil {
     }
 
     public static String decrypt(String data, String base64PrivateKey) throws IllegalBlockSizeException, InvalidKeyException, BadPaddingException, NoSuchAlgorithmException, NoSuchPaddingException {
-        // Agregar logs para el proceso de desencriptación
-        log.info("Recibiendo cadena para desencriptar: {}", data);
 
-        // Sanitizar la cadena Base64 eliminando espacios o saltos de línea
         String sanitizedData = data.replaceAll("\\s+", "");
-        log.info("Cadena Base64 sanitizada: {}", sanitizedData);
 
-        // Desencriptar la cadena
         String decryptedData = decrypt(Base64.getDecoder().decode(sanitizedData.getBytes()), getPrivateKey(base64PrivateKey));
 
         log.info("Datos desencriptados correctamente");

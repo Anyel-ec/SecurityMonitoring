@@ -4,6 +4,7 @@ import ConnectionDetails from './ConnectionDetails';
 import { showSuccessAlert, showErrorAlert, showConfirmationAlert } from '../../utils/alerts';
 import { createDatabaseCredentialRequestDto } from '../../dto/DatabaseCredentialRequestDto';
 import { getConnectionNames, saveOrUpdateConnectionName, saveOrUpdateConnectionCredentials, deleteConnectionById, testPostgresConnection } from '../../services/connectionService';
+import { getAllCredentials} from '../../services/databaseCredentialService';
 
 export default function MainComponent() {
   const [connections, setConnections] = useState([]);
@@ -16,6 +17,21 @@ export default function MainComponent() {
   const [leftPanelWidth, setLeftPanelWidth] = useState(400);
   const containerRef = useRef(null);
   const isDragging = useRef(false);
+
+  useEffect(() => {
+    // Llamar al servicio para obtener todas las credenciales
+    const fetchAllCredentials = async () => {
+      try {
+        const data = await getAllCredentials();
+        setConnections(data.result);  // Configurar conexiones obtenidas
+      } catch (error) {
+        console.error('Error al obtener todas las credenciales:', error);
+        showErrorAlert('No se pudieron obtener las credenciales');
+      }
+    };
+
+    fetchAllCredentials();
+  }, []);
 
   useEffect(() => {
     const fetchConnectionNames = async () => {
@@ -229,7 +245,7 @@ export default function MainComponent() {
       <SavedConnections
         connections={connections}
         selectedConnection={selectedConnection}
-        setSelectedConnection={handleSelectConnection} // Pasar la función aquí
+        setSelectedConnection={handleSelectConnection}
         handleDelete={handleDelete}
         handleSave={handleSaveConnectionName}
         newConnection={newConnection}
