@@ -14,16 +14,6 @@ export const createCredential = async (dto) => {
   }
 };
 
-// Servicio para actualizar una credencial de base de datos
-export const updateCredential = async (id, dto) => {
-  try {
-    const response = await axios.put(`${BASE_URL}/${id}`, dto);
-    return response.data;
-  } catch (error) {
-    console.error('Error al actualizar la credencial:', error);
-    throw error;
-  }
-};
 
 // Servicio para obtener todas las credenciales de base de datos
 export const getAllCredentials = async () => {

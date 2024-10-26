@@ -7,8 +7,8 @@ import { getConnectionNames, saveOrUpdateConnectionName, saveOrUpdateConnectionC
 import { getAllCredentials} from '../../services/databaseCredentialService';
 
 export default function MainComponent() {
+  const [selectedConnection, setSelectedConnection] = useState({ connectionName: '', comment: '', types: [], credentials: {} });
   const [connections, setConnections] = useState([]);
-  const [selectedConnection, setSelectedConnection] = useState(null);
   const [newConnection, setNewConnection] = useState({ connectionName: '' });
   const [testingConnection, setTestingConnection] = useState(null);
   const [postgresEnabled, setPostgresEnabled] = useState(false);
@@ -19,7 +19,6 @@ export default function MainComponent() {
   const isDragging = useRef(false);
 
   useEffect(() => {
-    // Llamar al servicio para obtener todas las credenciales
     const fetchAllCredentials = async () => {
       try {
         const data = await getAllCredentials();
@@ -29,9 +28,10 @@ export default function MainComponent() {
         showErrorAlert('No se pudieron obtener las credenciales');
       }
     };
-
+  
     fetchAllCredentials();
   }, []);
+  
 
   useEffect(() => {
     const fetchConnectionNames = async () => {
@@ -80,19 +80,24 @@ export default function MainComponent() {
   // Maneja la selección de una conexión y habilita los switches
   const handleSelectConnection = (conn) => {
     setSelectedConnection({
-      ...conn,
-      comment: conn.comment || '', // Aseguramos que el campo 'comment' esté presente
-      types: conn.types || [],
+      id: conn.id,
+      host: conn.host || '',
+      port: conn.port || '',
+      username: conn.username || '',
+      password: conn.password || '',
+      comment: conn.comment || '',
+      systemParameter: conn.systemParameter || { name: '' },
       credentials: {
-        PostgreSQL: conn.postgresCredentials || { host: '', port: '', username: '', password: '' },
-        MariaDB: conn.mariadbCredentials || { host: '', port: '', username: '', password: '' },
-        MongoDB: conn.mongodbCredentials || { host: '', port: '', username: '', password: '' }
+        PostgreSQL: conn.systemParameter.name === 'POSTGRESQL' ? { host: conn.host, port: conn.port, username: conn.username, password: conn.password } : {},
+        MariaDB: conn.systemParameter.name === 'MARIADB' ? { host: conn.host, port: conn.port, username: conn.username, password: conn.password } : {},
+        MongoDB: conn.systemParameter.name === 'MONGODB' ? { host: conn.host, port: conn.port, username: conn.username, password: conn.password } : {}
       }
     });
-
-    setPostgresEnabled(!!conn.postgresCredentials);
-    setMariaDbEnabled(!!conn.mariadbCredentials);
-    setMongoDbEnabled(!!conn.mongodbCredentials);
+  
+    // Configura los switches de acuerdo al tipo de conexión
+    setPostgresEnabled(conn.systemParameter.name === 'POSTGRESQL');
+    setMariaDbEnabled(conn.systemParameter.name === 'MARIADB');
+    setMongoDbEnabled(conn.systemParameter.name === 'MONGODB');
   };
 
   // Función para guardar el nombre de la conexión
