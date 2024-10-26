@@ -18,7 +18,7 @@ import java.util.List;
 public class DatabaseCredentialController {
 
     private final DatabaseCredentialService credentialService;
-    @PostMapping
+    @PostMapping("/createOrUpdate")
     public ResponseEntity<JsonResponseDto> createCredential(@Valid @RequestBody DatabaseCredentialRequestDto dto) {
         try {
             DatabaseCredential credential = credentialService.createOrUpdateCredential(dto);

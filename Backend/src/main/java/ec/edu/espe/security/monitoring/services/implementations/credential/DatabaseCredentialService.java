@@ -2,7 +2,9 @@ package ec.edu.espe.security.monitoring.services.implementations.credential;
 
 import ec.edu.espe.security.monitoring.dto.request.DatabaseCredentialRequestDto;
 import ec.edu.espe.security.monitoring.models.DatabaseCredential;
+import ec.edu.espe.security.monitoring.models.SystemParameters;
 import ec.edu.espe.security.monitoring.repositories.DatabaseCredentialRepository;
+import ec.edu.espe.security.monitoring.repositories.SystemParametersRepository;
 import ec.edu.espe.security.monitoring.utils.AesEncryptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,19 +18,24 @@ public class DatabaseCredentialService {
 
     private final DatabaseCredentialRepository databaseCredentialRepository;
     private final AesEncryptor aesEncryptor;
+    private final SystemParametersRepository systemParametersRepository;
 
     // Create or update database credentials
     public DatabaseCredential createOrUpdateCredential(DatabaseCredentialRequestDto credentialRequestDto) {
-        // Search if a credential exists with the same host and system parameter
+        // Find the SystemParameter by its name
+        SystemParameters systemParameter = systemParametersRepository
+                .findByNameAndIsActiveTrue(credentialRequestDto.getSystemParameter().getName())
+                .orElseThrow(() -> new IllegalArgumentException("System parameter not found: " + credentialRequestDto.getSystemParameter().getName()));
+
+        // Check if a credential with the same host and system parameter already exists
         Optional<DatabaseCredential> existingCredentialOpt = databaseCredentialRepository
                 .findByHostAndSystemParameterAndIsActive(
                         credentialRequestDto.getHost(),
-                        credentialRequestDto.getSystemParameter(),
+                        systemParameter,
                         true
                 );
 
-
-        // Encrypt the password before using it in the credential
+        // Encrypt the password
         String encryptedPassword;
         try {
             encryptedPassword = aesEncryptor.encrypt(credentialRequestDto.getPassword());
@@ -36,17 +43,17 @@ public class DatabaseCredentialService {
             throw new IllegalStateException("Error encrypting the password", e);
         }
 
-        // Build the credential object, keeping the ID and createdAt date if updating an existing record
+        // Create or update the credential using the builder
         DatabaseCredential credential = DatabaseCredential.builder()
-                .id(existingCredentialOpt.map(DatabaseCredential::getId).orElse(null))  // Keep ID if it exists
+                .id(existingCredentialOpt.map(DatabaseCredential::getId).orElse(null))  // Retain ID if it exists
                 .host(credentialRequestDto.getHost())
                 .port(credentialRequestDto.getPort())
                 .username(credentialRequestDto.getUsername())
                 .password(encryptedPassword)
-                .systemParameter(credentialRequestDto.getSystemParameter())
+                .systemParameter(systemParameter)  // Assign the found system parameter
                 .comment(credentialRequestDto.getComment())
                 .isActive(true)
-                .createdAt(existingCredentialOpt.map(DatabaseCredential::getCreatedAt).orElse(null))  // Keep creation date if it exists
+                .createdAt(existingCredentialOpt.map(DatabaseCredential::getCreatedAt).orElse(null))  // Retain creation date if it exists
                 .build();
 
         // Save the credential in the repository and return the result
