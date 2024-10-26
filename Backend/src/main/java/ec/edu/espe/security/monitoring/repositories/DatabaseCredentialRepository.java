@@ -10,4 +10,7 @@ import java.util.Optional;
 @Repository
 public interface DatabaseCredentialRepository extends JpaRepository<DatabaseCredential, Long> {
     Optional<DatabaseCredential> findByHostAndSystemParameterAndIsActive(String host, SystemParameters systemParameter, Boolean isActive);
+    Optional<DatabaseCredential> findBySystemParameterAndIsActive(SystemParameters systemParameter, Boolean isActive);
+
+
 }

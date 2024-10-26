@@ -22,15 +22,14 @@ public class DatabaseCredentialService {
 
     // Create or update database credentials
     public DatabaseCredential createOrUpdateCredential(DatabaseCredentialRequestDto credentialRequestDto) {
-        // Find the SystemParameter by its name
+        // Find the SystemParameter  its name
         SystemParameters systemParameter = systemParametersRepository
                 .findByNameAndIsActiveTrue(credentialRequestDto.getSystemParameter().getName())
                 .orElseThrow(() -> new IllegalArgumentException("System parameter not found: " + credentialRequestDto.getSystemParameter().getName()));
 
         // Check if a credential with the same host and system parameter already exists
         Optional<DatabaseCredential> existingCredentialOpt = databaseCredentialRepository
-                .findByHostAndSystemParameterAndIsActive(
-                        credentialRequestDto.getHost(),
+                .findBySystemParameterAndIsActive(
                         systemParameter,
                         true
                 );
