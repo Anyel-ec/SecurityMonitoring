@@ -1,4 +1,4 @@
-package ec.edu.espe.security.monitoring.services.implementations.docker;
+package ec.edu.espe.security.monitoring.services.impl.docker;
 
 import ec.edu.espe.security.monitoring.models.credentials.DatabaseCredentials;
 import ec.edu.espe.security.monitoring.services.interfaces.docker.DockerComposeService;

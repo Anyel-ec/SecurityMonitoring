@@ -1,4 +1,4 @@
-package ec.edu.espe.security.monitoring.services.implementations.grafana;
+package ec.edu.espe.security.monitoring.services.impl.grafana;
 import ec.edu.espe.security.monitoring.models.InstallationConfig;
 import ec.edu.espe.security.monitoring.models.SystemParameters;
 import ec.edu.espe.security.monitoring.services.interfaces.grafana.GrafanaDashboardService;

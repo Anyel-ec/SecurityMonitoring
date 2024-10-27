@@ -1,10 +1,10 @@
-package ec.edu.espe.security.monitoring.services.implementations.installation;
+package ec.edu.espe.security.monitoring.services.impl.installation;
 
 import ec.edu.espe.security.monitoring.dto.request.installation.GrafanaInstallRequestDto;
 import ec.edu.espe.security.monitoring.models.InstallationConfig;
 import ec.edu.espe.security.monitoring.models.SystemParameters;
 import ec.edu.espe.security.monitoring.repositories.InstallationConfigRepository;
-import ec.edu.espe.security.monitoring.services.implementations.grafana.GrafanaCredentialServiceImpl;
+import ec.edu.espe.security.monitoring.services.impl.grafana.GrafanaCredentialServiceImpl;
 import ec.edu.espe.security.monitoring.services.interfaces.installation.GrafanaInstallService;
 import ec.edu.espe.security.monitoring.utils.AesEncryptor;
 import lombok.AllArgsConstructor;

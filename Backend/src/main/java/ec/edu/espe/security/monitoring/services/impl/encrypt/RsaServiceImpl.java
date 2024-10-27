@@ -1,4 +1,4 @@
-package ec.edu.espe.security.monitoring.services.implementations.encrypt;
+package ec.edu.espe.security.monitoring.services.impl.encrypt;
 
 import ec.edu.espe.security.monitoring.utils.RsaEncryptUtil;
 import lombok.RequiredArgsConstructor;

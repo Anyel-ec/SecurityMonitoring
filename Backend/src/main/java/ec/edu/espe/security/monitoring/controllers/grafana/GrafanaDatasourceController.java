@@ -1,7 +1,7 @@
 package ec.edu.espe.security.monitoring.controllers.grafana;
 
 import ec.edu.espe.security.monitoring.dto.response.JsonResponseDto;
-import ec.edu.espe.security.monitoring.services.implementations.grafana.GrafanaDatasourceServiceImpl;
+import ec.edu.espe.security.monitoring.services.impl.grafana.GrafanaDatasourceServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;

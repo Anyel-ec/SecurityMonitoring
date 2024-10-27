@@ -1,4 +1,4 @@
-package ec.edu.espe.security.monitoring.services.implementations.docker;
+package ec.edu.espe.security.monitoring.services.impl.docker;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

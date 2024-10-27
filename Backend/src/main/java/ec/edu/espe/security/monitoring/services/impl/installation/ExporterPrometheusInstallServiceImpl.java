@@ -1,4 +1,4 @@
-package ec.edu.espe.security.monitoring.services.implementations.installation;
+package ec.edu.espe.security.monitoring.services.impl.installation;
 import ec.edu.espe.security.monitoring.dto.request.installation.ExporterPrometheusInstallRequestDto;
 import ec.edu.espe.security.monitoring.models.InstallationConfig;
 import ec.edu.espe.security.monitoring.models.SystemParameters;

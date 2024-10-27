@@ -1,4 +1,4 @@
-package ec.edu.espe.security.monitoring.services.implementations.credential;
+package ec.edu.espe.security.monitoring.services.impl.credential;
 
 import ec.edu.espe.security.monitoring.dto.request.DatabaseCredentialRequestDto;
 import ec.edu.espe.security.monitoring.models.DatabaseCredential;

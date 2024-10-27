@@ -1,4 +1,4 @@
-package ec.edu.espe.security.monitoring.services.implementations;
+package ec.edu.espe.security.monitoring.services.impl;
 
 import ec.edu.espe.security.monitoring.models.ConnectionName;
 import ec.edu.espe.security.monitoring.models.credentials.PostgresCredentials;

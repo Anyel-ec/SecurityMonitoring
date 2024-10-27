@@ -1,4 +1,4 @@
-package ec.edu.espe.security.monitoring.services.implementations;
+package ec.edu.espe.security.monitoring.services.impl;
 
 import ec.edu.espe.security.monitoring.models.*;
 import ec.edu.espe.security.monitoring.models.credentials.DatabaseCredentials;
@@ -9,7 +9,7 @@ import ec.edu.espe.security.monitoring.repositories.ConnectionNameRepository;
 import ec.edu.espe.security.monitoring.repositories.PostgresCredentialsRepository;
 import ec.edu.espe.security.monitoring.repositories.MariadbCredentialsRepository;
 import ec.edu.espe.security.monitoring.repositories.MongodbCredentialsRepository;
-import ec.edu.espe.security.monitoring.services.implementations.docker.DockerComposeServiceImpl;
+import ec.edu.espe.security.monitoring.services.impl.docker.DockerComposeServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
