@@ -21,6 +21,7 @@ public class DatabaseCredentialController {
     @PostMapping("/createOrUpdate")
     public ResponseEntity<JsonResponseDto> createCredential(@Valid @RequestBody DatabaseCredentialRequestDto dto) {
         try {
+            log.info("Entro a guardar credenciales de BD");
             DatabaseCredential credential = credentialService.createOrUpdateCredential(dto);
             return ResponseEntity.ok(new JsonResponseDto(true, 200, "Credencial creada con éxito", credential));
         } catch (Exception e) {

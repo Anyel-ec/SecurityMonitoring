@@ -3,8 +3,8 @@ import SavedConnections from './SavedConnections';
 import ConnectionDetails from './ConnectionDetails';
 import { showSuccessAlert, showErrorAlert, showConfirmationAlert } from '../../utils/alerts';
 import { createDatabaseCredentialRequestDto } from '../../dto/DatabaseCredentialRequestDto';
-import { getConnectionNames, saveOrUpdateConnectionName, saveOrUpdateConnectionCredentials, testPostgresConnection } from '../../services/connectionService';
-import { getAllCredentials, deleteConnectionById} from '../../services/databaseCredentialService';
+import { getConnectionNames, saveOrUpdateConnectionName, testPostgresConnection } from '../../services/connectionService';
+import { getAllCredentials, deleteConnectionById, createOrUpdateCredential} from '../../services/databaseCredentialService';
 
 export default function MainComponent() {
   const [selectedConnection, setSelectedConnection] = useState({ connectionName: '', comment: '', types: [], credentials: {} });
@@ -18,20 +18,20 @@ export default function MainComponent() {
   const containerRef = useRef(null);
   const isDragging = useRef(false);
 
-  useEffect(() => {
-    const fetchAllCredentials = async () => {
-      try {
-        const data = await getAllCredentials();
-        setConnections(data.result);  // Configurar conexiones obtenidas
-      } catch (error) {
-        console.error('Error al obtener todas las credenciales:', error);
-        showErrorAlert('No se pudieron obtener las credenciales');
-      }
-    };
+  const fetchAllCredentials = async () => {
+    try {
+      const data = await getAllCredentials();
+      setConnections(data.result);  // Configurar conexiones obtenidas
+    } catch (error) {
+      console.error('Error al obtener todas las credenciales:', error);
+      showErrorAlert('No se pudieron obtener las credenciales');
+    }
+  };
   
+
+  useEffect(() => {
     fetchAllCredentials();
   }, []);
-  
 
   useEffect(() => {
     const fetchConnectionNames = async () => {
@@ -112,10 +112,12 @@ export default function MainComponent() {
               : conn
           )
         );
+        await fetchAllCredentials();
 
         showSuccessAlert('Conexión guardada con éxito', '');
       } else if (newConnection.connectionName) {
         await saveOrUpdateConnectionName(newConnection);
+        await fetchAllCredentials();
 
         setConnections([
           ...connections,
@@ -144,26 +146,29 @@ export default function MainComponent() {
       if (selectedConnection) {
         let systemParameter = null;
         const enabledType = postgresEnabled ? 'PostgreSQL' : mariaDbEnabled ? 'MariaDB' : mongoDbEnabled ? 'MongoDB' : null;
-
+  
         if (enabledType) {
           // Establece el parámetro del sistema según el tipo de base de datos
           if (enabledType === 'PostgreSQL') systemParameter = { name: 'POSTGRESQL' };
           if (enabledType === 'MariaDB') systemParameter = { name: 'MARIADB' };
           if (enabledType === 'MongoDB') systemParameter = { name: 'MONGODB' };
-
-          // Usa el DTO para crear el objeto de credenciales
-          const credentialsData = createDatabaseCredentialRequestDto(
-            selectedConnection.credentials[enabledType].host,
-            selectedConnection.credentials[enabledType].port,
-            selectedConnection.credentials[enabledType].username,
-            selectedConnection.credentials[enabledType].password,
-            systemParameter,
-            selectedConnection.comment
-          );
-
+  
+          // Crear el DTO en el formato correcto
+          const credentialsData = {
+            host: selectedConnection.credentials[enabledType].host,
+            port: selectedConnection.credentials[enabledType].port,
+            username: selectedConnection.credentials[enabledType].username,
+            password: selectedConnection.credentials[enabledType].password,
+            systemParameter: systemParameter,
+            comment: selectedConnection.comment
+          };
+  
           console.log('Saving credentials in DTO format:', credentialsData);
-
-          await saveOrUpdateConnectionCredentials(credentialsData);
+  
+          // Llamada al servicio para crear o actualizar credenciales
+          await createOrUpdateCredential(credentialsData);
+          // Obtener todas las credenciales de bd 
+          await fetchAllCredentials();
           showSuccessAlert('Credenciales guardadas con éxito', '');
         }
       }
@@ -173,7 +178,6 @@ export default function MainComponent() {
     }
   };
 
-
   // Función para eliminar una conexión
   const handleDelete = async () => {
     if (selectedConnection) {
@@ -182,7 +186,10 @@ export default function MainComponent() {
         try {
           await deleteConnectionById(selectedConnection.id);
           setConnections(connections.filter((conn) => conn.id !== selectedConnection.id));
-          setSelectedConnection(null); // Limpia la selección después de borrar
+          
+          // Mantener un objeto vacío en lugar de null
+          setSelectedConnection({ connectionName: '', comment: '', types: [], credentials: {} });
+          
           showSuccessAlert('Conexión eliminada exitosamente', '');
         } catch (error) {
           console.error('Error al eliminar la conexión:', error);
@@ -191,6 +198,7 @@ export default function MainComponent() {
       }
     }
   };
+  
 
   const handleCancel = () => {
     setSelectedConnection(null);

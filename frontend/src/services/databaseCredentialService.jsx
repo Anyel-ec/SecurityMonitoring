@@ -3,13 +3,12 @@ import AppEnvironments from '../config/AppEnvironments';
 
 const BASE_URL = `${AppEnvironments.baseUrl}/api/v1/credentials`;
 
-// Servicio para crear una credencial de base de datos
-export const createCredential = async (dto) => {
+export const createOrUpdateCredential = async (dto) => {
   try {
-    const response = await axios.post(`${BASE_URL}`, dto);
+    const response = await axios.post(`${BASE_URL}/createOrUpdate`, dto);
     return response.data;
   } catch (error) {
-    console.error('Error al crear la credencial:', error);
+    console.error('Error al crear o actualizar la credencial:', error);
     throw error;
   }
 };
