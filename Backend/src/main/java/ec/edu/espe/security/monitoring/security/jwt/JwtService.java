@@ -63,9 +63,6 @@ public class JwtService {
         return createToken(claims, userDetails.getUsername(), userDetails.getAuthorities());
     }
 
-
-
-
     public String createToken(Map<String, Object> claims, String username, Collection<? extends GrantedAuthority> authorities) {
         claims.put("roles", authorities.stream()
                 .map(GrantedAuthority::getAuthority)
