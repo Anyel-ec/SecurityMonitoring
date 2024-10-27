@@ -10,12 +10,18 @@ import java.io.IOException;
 @Service
 @Slf4j
 public class DockerComposeServiceImpl implements DockerComposeService {
+    private boolean isExecuted = false;
+
     /**
      * Runs Docker Compose to bring up the services defined in the docker-compose.yml file.
      * This method simply executes the docker-compose up -d command.
      */
     @Override
     public void runDockerCompose() {
+        if (isExecuted) {
+            log.info("Docker Compose ya ha sido ejecutado. No se volverá a ejecutar.");
+            return;
+        }
         ProcessBuilder processBuilder = new ProcessBuilder(
                 "docker-compose",
                 "-f", "../.container/docker-compose.yml",
@@ -28,12 +34,20 @@ public class DockerComposeServiceImpl implements DockerComposeService {
 
             // Inherit IO to display output in the current terminal and start the process
             processBuilder.inheritIO().start().waitFor();
-
+            isExecuted = true;  // Mark as executed after successful execution
             log.info("Docker Compose executed successfully.");
         } catch (IOException | InterruptedException e) {
             log.error("Error while executing docker-compose up: ", e);
             Thread.currentThread().interrupt();  // Restore the interrupted status if interrupted
         }
+    }
+
+    /**
+     * Indicates whether the Docker Compose process has been executed.
+     * @return
+     */
+    public boolean hasBeenExecuted() {
+        return isExecuted;
     }
 
     /**

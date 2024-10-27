@@ -33,6 +33,7 @@ public class ConfigInstallServiceImpl implements ConfigInstallService {
                     String decryptedPassword = aesEncryptor.decrypt(config.getPassword());
                     config.setPassword(decryptedPassword);
                 }
+                log.info("Obteniendo todas las configuraciones de Instalacion ");
             } catch (IllegalArgumentException e) {
                 log.error("Error: {}", e.getMessage());
                 throw e;
@@ -58,7 +59,7 @@ public class ConfigInstallServiceImpl implements ConfigInstallService {
             return completeInstallParam.getParamValue() != null && completeInstallParam.getParamValue().equalsIgnoreCase("1");
 
         } catch (Exception e) {
-            log.error("Error al verificar el estado de la instalación", e);
+            log.error("Error al verificar el estado de la instalación: {}", e.getMessage());
             throw new IllegalStateException("Error interno del servidor al verificar el estado de la instalación", e);
         }
     }

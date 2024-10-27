@@ -26,7 +26,6 @@ public class JwtService {
     @Value("${jwt.expiration.time.min}")
     private long jwtExpirationTime; // in minutes
 
-
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }

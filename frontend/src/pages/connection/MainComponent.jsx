@@ -49,15 +49,6 @@ export default function MainComponent() {
       checkDockerAndFetchData(); // Llama a la verificación de Docker solo si aún no se ha verificado
     }
   }, [dockerChecked]);
-  const fetchConnectionNames = async () => {
-    try {
-      const data = await getConnectionNames();
-      console.log('Datos obtenidos del backend:', data);
-      setConnections(data.result);
-    } catch (error) {
-      console.error('Error al obtener los nombres de las conexiones:', error);
-    }
-  };
 
 
   const fetchAllCredentials = async () => {

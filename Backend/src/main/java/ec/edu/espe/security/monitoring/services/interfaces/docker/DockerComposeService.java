@@ -6,5 +6,6 @@ import java.io.IOException;
 
 public interface DockerComposeService {
     void runDockerCompose();
+
     void runDockerComposeWithDatabase(DatabaseCredentials config, String dbType) throws IOException;
 }
