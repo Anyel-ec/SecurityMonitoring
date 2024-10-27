@@ -38,3 +38,17 @@ export const showConfirmationAlert = async (title, text) => {
   });
   return result;
 };
+
+// Nueva alerta para el estado de Docker
+export const showDockerErrorAlert = (retryCallback) => {
+  Swal.fire({
+    title: 'Error',
+    text: 'Docker no está en ejecución. No se puede continuar.',
+    icon: 'error',
+    confirmButtonText: 'Aceptar',
+  }).then((result) => {
+    if (result.isConfirmed) {
+      retryCallback(); // Ejecuta el callback para reintentar la verificación de Docker
+    }
+  });
+};

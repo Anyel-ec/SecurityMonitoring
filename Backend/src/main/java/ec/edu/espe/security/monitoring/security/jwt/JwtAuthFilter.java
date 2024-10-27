@@ -1,4 +1,4 @@
-package ec.edu.espe.security.monitoring.security;
+package ec.edu.espe.security.monitoring.security.jwt;
 
 import ec.edu.espe.security.monitoring.services.impl.UserDetailsServiceImpl;
 import jakarta.servlet.FilterChain;
@@ -7,7 +7,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,7 +18,6 @@ import java.io.IOException;
 @RequiredArgsConstructor
 @Component
 public class JwtAuthFilter extends OncePerRequestFilter {
-
 
     private final JwtService jwtService;
     private final UserDetailsServiceImpl userDetailsServiceImpl;

@@ -1,4 +1,4 @@
-package ec.edu.espe.security.monitoring.security;
+package ec.edu.espe.security.monitoring.security.jwt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -21,7 +21,7 @@ import java.util.function.Function;
 public class JwtService {
 
     @Value("${secret.key.jwt}")
-    private static String secretKeyJwt;
+    private String secretKeyJwt;
 
     @Value("${jwt.expiration.time.min}")
     private long jwtExpirationTime; // in minutes

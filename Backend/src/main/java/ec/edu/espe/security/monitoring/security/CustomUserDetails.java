@@ -9,12 +9,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 public class CustomUserDetails extends UserInfo implements UserDetails {
 
-    private String username;
-    private String password;
-    Collection<? extends GrantedAuthority> authorities;
+    private final String username;
+    private final String password;
+    private final Collection<? extends GrantedAuthority> authorities;
 
     public CustomUserDetails(UserInfo byUsername) {
         this.username = byUsername.getUsername();
@@ -62,4 +63,21 @@ public class CustomUserDetails extends UserInfo implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        CustomUserDetails that = (CustomUserDetails) o;
+        return Objects.equals(username, that.username) &&
+                Objects.equals(password, that.password) &&
+                Objects.equals(authorities, that.authorities);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), username, password, authorities);
+    }
+
 }

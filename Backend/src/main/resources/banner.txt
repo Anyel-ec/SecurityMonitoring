@@ -10,7 +10,6 @@ ${AnsiColor.BRIGHT_YELLOW}
 Project: ${spring.application.name}
 Version: ${application.version}
 ${AnsiColor.BRIGHT_CYAN}
-
 Project Manager: ${application.pm.name}
 Developed by: ${application.author.name}
 ${AnsiColor.BRIGHT_MAGENTA}

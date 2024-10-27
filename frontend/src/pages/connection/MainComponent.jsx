@@ -1,11 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import SavedConnections from './SavedConnections';
 import ConnectionDetails from './ConnectionDetails';
-import { showSuccessAlert, showErrorAlert, showConfirmationAlert } from '../../utils/alerts';
-import { createDatabaseCredentialRequestDto } from '../../dto/DatabaseCredentialRequestDto';
+import { showSuccessAlert, showErrorAlert, showConfirmationAlert, showDockerErrorAlert } from '../../utils/alerts';
 import { getConnectionNames, saveOrUpdateConnectionName, testPostgresConnection } from '../../services/connectionService';
-import { getAllCredentials, deleteConnectionById, createOrUpdateCredential} from '../../services/databaseCredentialService';
-
+import { getAllCredentials, deleteConnectionById, createOrUpdateCredential } from '../../services/databaseCredentialService';
+import { checkDockerStatus } from '../../services/dockerService';
 export default function MainComponent() {
   const [selectedConnection, setSelectedConnection] = useState({ connectionName: '', comment: '', types: [], credentials: {} });
   const [connections, setConnections] = useState([]);
@@ -15,8 +14,51 @@ export default function MainComponent() {
   const [mariaDbEnabled, setMariaDbEnabled] = useState(false);
   const [mongoDbEnabled, setMongoDbEnabled] = useState(false);
   const [leftPanelWidth, setLeftPanelWidth] = useState(400);
+  const [dockerChecked, setDockerChecked] = useState(false); // Estado para rastrear el estado de Docker
+  const [isCheckingDocker, setIsCheckingDocker] = useState(false); // Nuevo estado para evitar múltiples llamadas
   const containerRef = useRef(null);
   const isDragging = useRef(false);
+
+
+
+  const checkDockerAndFetchData = async () => {
+    if (isCheckingDocker) return; // Si ya estamos verificando, salir
+    setIsCheckingDocker(true); // Marcar como en proceso de verificación
+
+    try {
+      const response = await checkDockerStatus();
+      if (response.success) {
+        console.log('Docker está en ejecución');
+        setDockerChecked(true); // Marca Docker como verificado y evita llamadas repetidas
+      } else {
+        setDockerChecked(false); // Marca que Docker no está verificado
+        showDockerErrorAlert(checkDockerAndFetchData); // Muestra la alerta y reintenta si Docker no está en ejecución
+      }
+    } catch (error) {
+      console.error('Error al verificar el estado de Docker:', error);
+      setDockerChecked(false);
+      showDockerErrorAlert(checkDockerAndFetchData);
+    } finally {
+      setIsCheckingDocker(false); // Liberar el estado de verificación al finalizar
+    }
+  };
+
+
+  useEffect(() => {
+    if (!dockerChecked) {
+      checkDockerAndFetchData(); // Llama a la verificación de Docker solo si aún no se ha verificado
+    }
+  }, [dockerChecked]);
+  const fetchConnectionNames = async () => {
+    try {
+      const data = await getConnectionNames();
+      console.log('Datos obtenidos del backend:', data);
+      setConnections(data.result);
+    } catch (error) {
+      console.error('Error al obtener los nombres de las conexiones:', error);
+    }
+  };
+
 
   const fetchAllCredentials = async () => {
     try {
@@ -27,11 +69,7 @@ export default function MainComponent() {
       showErrorAlert('No se pudieron obtener las credenciales');
     }
   };
-  
 
-  useEffect(() => {
-    fetchAllCredentials();
-  }, []);
 
   useEffect(() => {
     const fetchConnectionNames = async () => {
@@ -45,6 +83,7 @@ export default function MainComponent() {
     };
 
     fetchConnectionNames();
+    fetchAllCredentials();
   }, []);
 
   useEffect(() => {
@@ -93,7 +132,7 @@ export default function MainComponent() {
         MongoDB: conn.systemParameter.name === 'MONGODB' ? { host: conn.host, port: conn.port, username: conn.username, password: conn.password } : {}
       }
     });
-  
+
     // Configura los switches de acuerdo al tipo de conexión
     setPostgresEnabled(conn.systemParameter.name === 'POSTGRESQL');
     setMariaDbEnabled(conn.systemParameter.name === 'MARIADB');
@@ -146,13 +185,13 @@ export default function MainComponent() {
       if (selectedConnection) {
         let systemParameter = null;
         const enabledType = postgresEnabled ? 'PostgreSQL' : mariaDbEnabled ? 'MariaDB' : mongoDbEnabled ? 'MongoDB' : null;
-  
+
         if (enabledType) {
           // Establece el parámetro del sistema según el tipo de base de datos
           if (enabledType === 'PostgreSQL') systemParameter = { name: 'POSTGRESQL' };
           if (enabledType === 'MariaDB') systemParameter = { name: 'MARIADB' };
           if (enabledType === 'MongoDB') systemParameter = { name: 'MONGODB' };
-  
+
           // Crear el DTO en el formato correcto
           const credentialsData = {
             host: selectedConnection.credentials[enabledType].host,
@@ -162,9 +201,9 @@ export default function MainComponent() {
             systemParameter: systemParameter,
             comment: selectedConnection.comment
           };
-  
+
           console.log('Saving credentials in DTO format:', credentialsData);
-  
+
           // Llamada al servicio para crear o actualizar credenciales
           await createOrUpdateCredential(credentialsData);
           // Obtener todas las credenciales de bd 
@@ -186,10 +225,10 @@ export default function MainComponent() {
         try {
           await deleteConnectionById(selectedConnection.id);
           setConnections(connections.filter((conn) => conn.id !== selectedConnection.id));
-          
+
           // Mantener un objeto vacío en lugar de null
           setSelectedConnection({ connectionName: '', comment: '', types: [], credentials: {} });
-          
+
           showSuccessAlert('Conexión eliminada exitosamente', '');
         } catch (error) {
           console.error('Error al eliminar la conexión:', error);
@@ -198,7 +237,7 @@ export default function MainComponent() {
       }
     }
   };
-  
+
 
   const handleCancel = () => {
     setSelectedConnection(null);
