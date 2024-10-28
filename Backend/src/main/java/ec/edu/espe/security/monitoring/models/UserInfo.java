@@ -28,7 +28,6 @@ public class UserInfo {
     private long id;
     private String username;
 
-
     @JsonIgnore
     private String password;
 

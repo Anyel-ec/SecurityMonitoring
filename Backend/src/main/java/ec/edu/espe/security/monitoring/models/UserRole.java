@@ -6,6 +6,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.time.LocalDateTime;
 
 @JsonIgnoreProperties(value = {"createdAt", "updatedAt"},
         allowGetters = true)
@@ -23,4 +26,11 @@ public class UserRole {
     private long id;
     private String name;
 
+    private String description;
+
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+
+    @Column(columnDefinition = "boolean default true")
+    private Boolean isActive;
 }
