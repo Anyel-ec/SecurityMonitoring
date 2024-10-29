@@ -44,7 +44,7 @@ public class DockerComposeServiceImpl implements DockerComposeService {
 
     /**
      * Indicates whether the Docker Compose process has been executed.
-     * @return
+     * @return true if the process has already been executed, false otherwise
      */
     public boolean hasBeenExecuted() {
         return isExecuted;
