@@ -1,6 +1,6 @@
 package ec.edu.espe.security.monitoring.utils;
 
-import ec.edu.espe.security.monitoring.models.credentials.DatabaseCredentials;
+import ec.edu.espe.security.monitoring.models.DatabaseCredential;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -15,7 +15,7 @@ public class DatabaseUtils {
     /**
      * Tests the connection to a database using the provided credentials and database type.
      */
-    public boolean testDatabaseConnection(DatabaseCredentials config, String dbType) {
+    public boolean testDatabaseConnection(DatabaseCredential config, String dbType) {
         String jdbcUrl = buildJdbcUrl(config, dbType);
 
         if (jdbcUrl == null) {
@@ -35,7 +35,7 @@ public class DatabaseUtils {
      * Builds the JDBC URL based on the provided database type and credentials.
      */
 
-    private String buildJdbcUrl(DatabaseCredentials config, String dbType) {
+    private String buildJdbcUrl(DatabaseCredential config, String dbType) {
         return switch (dbType.toLowerCase()) {
             case "postgresql" -> String.format("jdbc:postgresql://%s:%d/", config.getHost(), config.getPort());
             case "mariadb" -> String.format("jdbc:mariadb://%s:%d/", config.getHost(), config.getPort());

@@ -35,16 +35,6 @@ public class DockerRunController {
             return ResponseEntity.status(500).body(new JsonResponseDto(false, 500, "Ocurrió un error inesperado", null));
         }
     }
-    @GetMapping("/runCompose")
-    public ResponseEntity<JsonResponseDto> runDockerCompose() {
-        try {
-            dockerComposeService.runDockerCompose();
-            return ResponseEntity.ok(new JsonResponseDto(true, 200, "Docker Compose ejecutado con éxito", null));
-        } catch (Exception e) {
-            log.error("Error al ejecutar Docker Compose: {}", e.getMessage());
-            return ResponseEntity.status(500).body(new JsonResponseDto(false, 500, "Error al ejecutar Docker Compose", null));
-        }
-    }
 
     @GetMapping("/hasBeenExecuted")
     public ResponseEntity<JsonResponseDto> checkIfComposeExecuted() {

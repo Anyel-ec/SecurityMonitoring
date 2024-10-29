@@ -1,6 +1,6 @@
 package ec.edu.espe.security.monitoring.services.impl.docker;
 
-import ec.edu.espe.security.monitoring.models.credentials.DatabaseCredentials;
+import ec.edu.espe.security.monitoring.models.DatabaseCredential;
 import ec.edu.espe.security.monitoring.services.interfaces.docker.DockerComposeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -54,7 +54,7 @@ public class DockerComposeServiceImpl implements DockerComposeService {
      * Runs a Docker Compose process to set up a database container based on the provided DBMS type and credentials.
      */
     @Override
-    public void runDockerComposeWithDatabase(DatabaseCredentials config, String dbType) throws IOException {
+    public void runDockerComposeWithDatabase(DatabaseCredential config, String dbType) throws IOException {
         ProcessBuilder processBuilder = new ProcessBuilder(
                 "docker-compose",
                 "-f", "../.container/docker-compose.yml",
