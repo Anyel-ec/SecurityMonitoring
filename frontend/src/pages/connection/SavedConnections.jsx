@@ -46,13 +46,6 @@ const SavedConnections = ({ connections, selectedConnection, setSelectedConnecti
       </div>
 
       <div className="p-3 border-top mt-auto">
-        <input
-          type="text"
-          className="form-control mb-3"
-          placeholder="Nombre de nueva conexión"
-          value={newConnection.connectionName}
-          onChange={(e) => setNewConnection({ ...newConnection, connectionName: e.target.value })}
-        />
         <div className="d-flex justify-content-between">
           <button className="btn btn-primary" onClick={handleSave}>
             Monitorear

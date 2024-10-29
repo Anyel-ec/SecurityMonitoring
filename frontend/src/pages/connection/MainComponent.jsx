@@ -31,13 +31,20 @@ export default function MainComponent() {
         console.log('Docker está en ejecución');
         setDockerChecked(true); // Marca Docker como verificado
 
-        // Verificar si Docker Compose ya ha sido ejecutado
-        const composeResponse = await checkIfComposeExecuted();
-        if (composeResponse.success) {
-          setComposeExecuted(composeResponse.data); // Guardar el estado de si Compose fue ejecutado
-          console.log('Docker Compose ya ha sido ejecutado.');
+        // Verificar si Docker Compose ya ha sido ejecutado solo una vez
+        const composeStatus = localStorage.getItem("composeExecuted");
+        if (!composeStatus) {
+          const composeResponse = await checkIfComposeExecuted();
+          if (composeResponse.success) {
+            setComposeExecuted(true);
+            localStorage.setItem("composeExecuted", "true"); // Guardar el estado en localStorage
+            console.log('Docker Compose ya ha sido ejecutado.');
+          } else {
+            console.log('Docker Compose no ha sido ejecutado.');
+          }
         } else {
-          console.log('Docker Compose no ha sido ejecutado.');
+          setComposeExecuted(true); // Recuperar el estado de localStorage
+          console.log('Docker Compose ya estaba marcado como ejecutado.');
         }
       } else {
         setDockerChecked(false);
@@ -52,14 +59,12 @@ export default function MainComponent() {
     }
   };
 
-
   // Ejecutar verificación al montar el componente
   useEffect(() => {
     if (!dockerChecked) {
       checkDockerAndFetchData(); // Llama a la verificación de Docker solo si aún no se ha verificado
     }
   }, [dockerChecked]);
-
 
   const fetchAllCredentials = async () => {
     try {
