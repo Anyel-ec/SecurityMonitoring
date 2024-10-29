@@ -4,7 +4,7 @@ import ConnectionDetails from './ConnectionDetails';
 import { showSuccessAlert, showErrorAlert, showConfirmationAlert, showDockerErrorAlert } from '../../utils/alerts';
 import { getConnectionNames, saveOrUpdateConnectionName, testPostgresConnection } from '../../services/connectionService';
 import { getAllCredentials, deleteConnectionById, createOrUpdateCredential } from '../../services/databaseCredentialService';
-import { checkDockerStatus } from '../../services/dockerService';
+import { checkDockerStatus, checkIfComposeExecuted } from '../../services/dockerService';
 export default function MainComponent() {
   const [selectedConnection, setSelectedConnection] = useState({ connectionName: '', comment: '', types: [], credentials: {} });
   const [connections, setConnections] = useState([]);
@@ -15,23 +15,32 @@ export default function MainComponent() {
   const [mongoDbEnabled, setMongoDbEnabled] = useState(false);
   const [leftPanelWidth, setLeftPanelWidth] = useState(400);
   const [dockerChecked, setDockerChecked] = useState(false); // Estado para rastrear el estado de Docker
+  const [composeExecuted, setComposeExecuted] = useState(false); // Estado para rastrear si Docker Compose ya fue ejecutado
   const [isCheckingDocker, setIsCheckingDocker] = useState(false); // Nuevo estado para evitar múltiples llamadas
   const containerRef = useRef(null);
   const isDragging = useRef(false);
 
-
-
+  // Función para verificar el estado de Docker y luego el estado de Docker Compose
   const checkDockerAndFetchData = async () => {
     if (isCheckingDocker) return; // Si ya estamos verificando, salir
     setIsCheckingDocker(true); // Marcar como en proceso de verificación
 
     try {
-      const response = await checkDockerStatus();
-      if (response.success) {
+      const dockerResponse = await checkDockerStatus();
+      if (dockerResponse.success) {
         console.log('Docker está en ejecución');
-        setDockerChecked(true); // Marca Docker como verificado y evita llamadas repetidas
+        setDockerChecked(true); // Marca Docker como verificado
+
+        // Verificar si Docker Compose ya ha sido ejecutado
+        const composeResponse = await checkIfComposeExecuted();
+        if (composeResponse.success) {
+          setComposeExecuted(composeResponse.data); // Guardar el estado de si Compose fue ejecutado
+          console.log('Docker Compose ya ha sido ejecutado.');
+        } else {
+          console.log('Docker Compose no ha sido ejecutado.');
+        }
       } else {
-        setDockerChecked(false); // Marca que Docker no está verificado
+        setDockerChecked(false);
         showDockerErrorAlert(checkDockerAndFetchData); // Muestra la alerta y reintenta si Docker no está en ejecución
       }
     } catch (error) {
@@ -44,6 +53,7 @@ export default function MainComponent() {
   };
 
 
+  // Ejecutar verificación al montar el componente
   useEffect(() => {
     if (!dockerChecked) {
       checkDockerAndFetchData(); // Llama a la verificación de Docker solo si aún no se ha verificado
