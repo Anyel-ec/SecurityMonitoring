@@ -10,7 +10,7 @@ export default function ExporterStep({ values, errors, touched, handleBlur, hand
         <Col sm="6">
           <Form.Label>Internal Port</Form.Label>
           <Form.Control
-            type="text"
+            type="number"
             name="internalPortPostgres"
             placeholder="5432"
             value={values.internalPortPostgres}
@@ -25,7 +25,7 @@ export default function ExporterStep({ values, errors, touched, handleBlur, hand
         <Col sm="6">
           <Form.Label>External Port</Form.Label>
           <Form.Control
-            type="text"
+            type="number"
             name="externalPortPostgres"
             placeholder="5432"
             value={values.externalPortPostgres}
@@ -45,7 +45,7 @@ export default function ExporterStep({ values, errors, touched, handleBlur, hand
         <Col sm="6">
           <Form.Label>Internal Port</Form.Label>
           <Form.Control
-            type="text"
+            type="number"
             name="internalPortMariadb"
             placeholder="3306"
             value={values.internalPortMariadb}
@@ -60,7 +60,7 @@ export default function ExporterStep({ values, errors, touched, handleBlur, hand
         <Col sm="6">
           <Form.Label>External Port</Form.Label>
           <Form.Control
-            type="text"
+            type="number"
             name="externalPortMariadb"
             placeholder="3306"
             value={values.externalPortMariadb}
@@ -80,7 +80,7 @@ export default function ExporterStep({ values, errors, touched, handleBlur, hand
         <Col sm="6">
           <Form.Label>Internal Port</Form.Label>
           <Form.Control
-            type="text"
+            type="number"
             name="internalPortMongodb"
             placeholder="27017"
             value={values.internalPortMongodb}
@@ -95,7 +95,7 @@ export default function ExporterStep({ values, errors, touched, handleBlur, hand
         <Col sm="6">
           <Form.Label>External Port</Form.Label>
           <Form.Control
-            type="text"
+            type="number"
             name="externalPortMongodb"
             placeholder="27020"
             value={values.externalPortMongodb}

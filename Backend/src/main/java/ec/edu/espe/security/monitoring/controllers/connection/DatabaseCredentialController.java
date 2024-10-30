@@ -30,7 +30,6 @@ public class DatabaseCredentialController {
         }
     }
 
-
     @GetMapping
     public ResponseEntity<JsonResponseDto> getAllCredentials() {
         try {

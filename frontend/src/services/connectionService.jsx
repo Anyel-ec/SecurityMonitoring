@@ -1,17 +1,6 @@
 import axios from 'axios';
 import AppEnvironments from '../config/AppEnvironments';
 
-// Servicio para obtener los nombres de las conexiones
-export const getConnectionNames = async () => {
-  const BASE_URL = AppEnvironments.baseUrl; 
-  try {
-    const response = await axios.get(`${BASE_URL}/api/v1/connection/names`); 
-    return response.data;
-  } catch (error) {
-    console.error('Error al obtener los nombres de las conexiones:', error);
-    throw error;
-  }
-};
 // Servicio para guardar o actualizar la conexión
 export const saveOrUpdateConnectionName = async (connectionData) => {
   const BASE_URL = AppEnvironments.baseUrl;
@@ -61,7 +50,7 @@ export const deleteConnectionById = async (id) => {
 export const testPostgresConnection = async (credentials) => {
   const BASE_URL = AppEnvironments.baseUrl;
   try {
-    const response = await axios.post(`${BASE_URL}/api/v1/config/testConnection/postgresql`, credentials);
+    const response = await axios.post(`${BASE_URL}/api/v1/test/connectionDB/postgresql`, credentials);
 
     if (response.data.success) {
       return response.data;

@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import SavedConnections from './SavedConnections';
 import ConnectionDetails from './ConnectionDetails';
 import { showSuccessAlert, showErrorAlert, showConfirmationAlert, showDockerErrorAlert } from '../../utils/alerts';
-import { getConnectionNames, saveOrUpdateConnectionName, testPostgresConnection } from '../../services/connectionService';
+import { saveOrUpdateConnectionName, testPostgresConnection } from '../../services/connectionService';
 import { getAllCredentials, deleteConnectionById, createOrUpdateCredential } from '../../services/databaseCredentialService';
 import { checkDockerStatus, checkIfComposeExecuted } from '../../services/dockerService';
 export default function MainComponent() {
@@ -78,17 +78,6 @@ export default function MainComponent() {
 
 
   useEffect(() => {
-    const fetchConnectionNames = async () => {
-      try {
-        const data = await getConnectionNames();
-        console.log('Datos obtenidos del backend:', data);
-        setConnections(data.result);
-      } catch (error) {
-        console.error('Error al obtener los nombres de las conexiones:', error);
-      }
-    };
-
-    fetchConnectionNames();
     fetchAllCredentials();
   }, []);
 
