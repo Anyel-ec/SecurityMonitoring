@@ -4,8 +4,8 @@ import ec.edu.espe.security.monitoring.models.DatabaseCredential;
 
 import java.io.IOException;
 
-public interface DockerComposeService {
+public interface DockerDbCredentialService {
     void runDockerCompose();
 
-    void runDockerComposeWithDatabase(DatabaseCredential config, String dbType) throws IOException;
+    void runDockerComposeWithDatabase() throws IOException;
 }

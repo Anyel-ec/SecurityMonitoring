@@ -1,7 +1,7 @@
 package ec.edu.espe.security.monitoring.controllers.docker;
 
 import ec.edu.espe.security.monitoring.dto.response.JsonResponseDto;
-import ec.edu.espe.security.monitoring.services.impl.docker.DockerComposeServiceImpl;
+import ec.edu.espe.security.monitoring.services.impl.docker.DockerDbCredentialServiceImpl;
 import ec.edu.espe.security.monitoring.services.impl.docker.DockerInstallationServiceImpl;
 import ec.edu.espe.security.monitoring.services.impl.docker.DockerRunServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class DockerRunController {
     private final DockerRunServiceImpl dockerRunService;
-    private final DockerComposeServiceImpl dockerComposeService;
+    private final DockerDbCredentialServiceImpl dockerComposeService;
     private final DockerInstallationServiceImpl dockerInstallationService;
 
     @GetMapping("/isActive")
@@ -56,6 +56,18 @@ public class DockerRunController {
         } catch (Exception e) {
             log.error("Error al verificar y ejecutar Docker Compose si no ha sido ejecutado: {}", e.getMessage());
             return ResponseEntity.status(500).body(new JsonResponseDto(false, 500, "Error al verificar o ejecutar Docker Compose", null));
+        }
+    }
+
+    @GetMapping("/runComposeWithDatabase")
+    public ResponseEntity<JsonResponseDto> runDockerComposeWithDatabase() {
+        try {
+            dockerComposeService.runDockerComposeWithDatabase();
+            log.info("Docker Compose ejecutado con las credenciales de base de datos activas.");
+            return ResponseEntity.ok(new JsonResponseDto(true, 200, "Docker Compose ejecutado con éxito para las credenciales de base de datos activas.", null));
+        } catch (Exception e) {
+            log.error("Error al ejecutar Docker Compose con credenciales de base de datos activas: {}", e.getMessage());
+            return ResponseEntity.status(500).body(new JsonResponseDto(false, 500, "Error al ejecutar Docker Compose con credenciales de base de datos", null));
         }
     }
 }
