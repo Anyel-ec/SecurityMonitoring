@@ -18,15 +18,19 @@ public class DockerDbCredentialServiceImpl implements DockerDbCredentialService 
 
     // Injected dependencies
     private final DatabaseCredentialRepository databaseCredentialRepository;
+<<<<<<< HEAD
     private final AesEncryptorUtil aesEncryptor;
+=======
+    private final DockerInstallationServiceImpl dockerInstallationService;
+>>>>>>> ae50512728bb4cd03e0b6adc0b5de73e0d40ee32
 
     /**
      * Runs a Docker Compose process to set up a database container based on the provided DBMS type and credentials.
      */
     @Override
     public void runDockerComposeWithDatabase() {
-        List<DatabaseCredential> activeCredentials = databaseCredentialRepository.findByIsActiveTrue();
 
+<<<<<<< HEAD
         if (activeCredentials.isEmpty()) {
             log.warn("No se encontraron credenciales de base de datos activas. No se ejecutará Docker Compose.");
             return;
@@ -92,6 +96,16 @@ public class DockerDbCredentialServiceImpl implements DockerDbCredentialService 
             } catch (IOException e) {
                 log.error("Error al ejecutar Docker Compose para {}: {}", dbType, e.getMessage());
             }
+=======
+
+        try {
+            dockerInstallationService.runDockerComposeWithActiveInstallations();
+            log.info("Docker Compose ejecutado con las credenciales de base de datos activas.");
+        } catch (IOException e) {
+            log.error("Error al ejecutar Docker Compose con credenciales de base de datos: {}", e.getMessage());
+            Thread.currentThread().interrupt();
+            throw new IllegalStateException("Error al ejecutar Docker Compose con credenciales de base de datos", e);
+>>>>>>> ae50512728bb4cd03e0b6adc0b5de73e0d40ee32
         }
     }
 }
