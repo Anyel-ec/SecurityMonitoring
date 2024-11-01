@@ -1,8 +1,6 @@
 package ec.edu.espe.security.monitoring.services.impl.docker;
 
-import ec.edu.espe.security.monitoring.models.DatabaseCredential;
 import ec.edu.espe.security.monitoring.models.InstallationConfig;
-import ec.edu.espe.security.monitoring.repositories.DatabaseCredentialRepository;
 import ec.edu.espe.security.monitoring.repositories.InstallationConfigRepository;
 import ec.edu.espe.security.monitoring.services.interfaces.docker.DockerInstallationService;
 import ec.edu.espe.security.monitoring.utils.AesEncryptorUtil;
@@ -13,40 +11,19 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.List;
 
-<<<<<<< HEAD
 import static ec.edu.espe.security.monitoring.utils.PrometheusConfigUtil.generatePrometheusConfig;
-=======
-import static ec.edu.espe.security.monitoring.utils.DockerUtils.*;
-import static ec.edu.espe.security.monitoring.utils.PrometheusUtils.generatePrometheusConfig;
->>>>>>> ae50512728bb4cd03e0b6adc0b5de73e0d40ee32
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class DockerInstallationServiceImpl implements DockerInstallationService {
     private final InstallationConfigRepository installationConfigRepository;
-<<<<<<< HEAD
     private final AesEncryptorUtil aesEncryptor;
-=======
-    private final DatabaseCredentialRepository databaseCredentialRepository;
-    private final AesEncryptor aesEncryptor;
->>>>>>> ae50512728bb4cd03e0b6adc0b5de73e0d40ee32
-
-
 
     /**
      * Runs a Docker Compose process to set up the services based on the active installation configurations.
      */
-
-
-    public void runDockerComposeWithActiveInstallations() throws IOException {
-        List<DatabaseCredential> activeCredentials = databaseCredentialRepository.findByIsActiveTrue();
-
-        if (activeCredentials.isEmpty()) {
-            log.warn("No se encontraron credenciales de base de datos activas. No se ejecutará Docker Compose.");
-            return;
-        }
-
+    public void runDockerComposeWithActiveInstallations() throws IOException, InterruptedException {
         // Retrieve all active installations
         List<InstallationConfig> activeInstallations = installationConfigRepository.findByIsActiveTrue();
 
@@ -66,7 +43,16 @@ public class DockerInstallationServiceImpl implements DockerInstallationService 
 
         // Configure the environment variables based on the active installations
         for (InstallationConfig config : activeInstallations) {
-            String decryptedPassword = decryptPassword(config.getPassword(), config.getId());
+            String decryptedPassword = null;
+            try {
+                if (config.getPassword() != null) {
+                    decryptedPassword = aesEncryptor.decrypt(config.getPassword());
+                }
+            } catch (Exception e) {
+                log.error("Error decrypting the password for the installation with ID: {}", config.getId(), e);
+                throw new IllegalStateException("Error decrypting the password", e);
+            }
+
             // Only configure environment variables for known installation types
             if ("GRAFANA_INSTALL".equals(config.getSystemParameter().getName())) {
                 addEnvVariable(dockerComposeProcessBuilder, "GRAFANA_PORT_EXTERNAL", String.valueOf(config.getExternalPort()));
@@ -86,29 +72,9 @@ public class DockerInstallationServiceImpl implements DockerInstallationService 
             }
         }
 
-        for (DatabaseCredential config : activeCredentials) {
-            String decryptedPassword = decryptPassword(config.getPassword(), config.getId());
-            String host = "localhost".equals(config.getHost()) || "127.0.0.1".equals(config.getHost()) ? "host.docker.internal" : config.getHost();
-
-            String dbType = config.getSystemParameter().getName().toUpperCase();
-            switch (dbType) {
-                case "POSTGRESQL":
-                    addDatabaseEnv(dockerComposeProcessBuilder, "POSTGRES_USER", config.getUsername(), host, config.getPort(), decryptedPassword);
-                    break;
-                case "MARIADB":
-                    addDatabaseEnv(dockerComposeProcessBuilder, "MARIADB_USER", config.getUsername(), host, config.getPort(), decryptedPassword);
-                    break;
-                case "MONGODB":
-                    addDatabaseEnv(dockerComposeProcessBuilder, "MONGODB_USER", config.getUsername(), host, config.getPort(), decryptedPassword);
-                    break;
-                default:
-                    log.warn("Tipo de base de datos no soportado para SystemParameter: {}", dbType);
-            }
-        }
         // Execute docker-compose
         dockerComposeProcessBuilder.inheritIO().start();
     }
-<<<<<<< HEAD
 
     /**
      * Adds environment variable to the ProcessBuilder and logs the value.
@@ -122,6 +88,4 @@ public class DockerInstallationServiceImpl implements DockerInstallationService 
         }
     }
 
-=======
->>>>>>> ae50512728bb4cd03e0b6adc0b5de73e0d40ee32
 }
