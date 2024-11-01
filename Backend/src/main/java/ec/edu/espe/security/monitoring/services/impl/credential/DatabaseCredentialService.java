@@ -5,7 +5,7 @@ import ec.edu.espe.security.monitoring.models.DatabaseCredential;
 import ec.edu.espe.security.monitoring.models.SystemParameters;
 import ec.edu.espe.security.monitoring.repositories.DatabaseCredentialRepository;
 import ec.edu.espe.security.monitoring.repositories.SystemParametersRepository;
-import ec.edu.espe.security.monitoring.utils.AesEncryptor;
+import ec.edu.espe.security.monitoring.utils.AesEncryptorUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +17,7 @@ import java.util.Optional;
 public class DatabaseCredentialService {
 
     private final DatabaseCredentialRepository databaseCredentialRepository;
-    private final AesEncryptor aesEncryptor;
+    private final AesEncryptorUtil aesEncryptor;
     private final SystemParametersRepository systemParametersRepository;
 
     // Create or update database credentials

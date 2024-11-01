@@ -4,7 +4,7 @@ import ec.edu.espe.security.monitoring.models.InstallationConfig;
 import ec.edu.espe.security.monitoring.models.SystemParameters;
 import ec.edu.espe.security.monitoring.services.interfaces.grafana.GrafanaDatasourceService;
 import ec.edu.espe.security.monitoring.services.interfaces.installation.PrometheusInstallService;
-import ec.edu.espe.security.monitoring.utils.AesEncryptor;
+import ec.edu.espe.security.monitoring.utils.AesEncryptorUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;
@@ -18,7 +18,7 @@ public class GrafanaDatasourceServiceImpl implements GrafanaDatasourceService {
     // Dependency Injected
     private final PrometheusInstallService prometheusInstallService;
     private final GrafanaCredentialServiceImpl grafanaCredentialService;
-    private final AesEncryptor aesEncryptor;
+    private final AesEncryptorUtil aesEncryptor;
 
     private static final String GRAFANA_API_URL = "http://localhost:3000/api/datasources";
 

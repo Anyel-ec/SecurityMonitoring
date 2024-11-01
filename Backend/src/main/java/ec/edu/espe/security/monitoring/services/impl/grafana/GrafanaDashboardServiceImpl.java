@@ -2,7 +2,7 @@ package ec.edu.espe.security.monitoring.services.impl.grafana;
 import ec.edu.espe.security.monitoring.models.InstallationConfig;
 import ec.edu.espe.security.monitoring.models.SystemParameters;
 import ec.edu.espe.security.monitoring.services.interfaces.grafana.GrafanaDashboardService;
-import ec.edu.espe.security.monitoring.utils.AesEncryptor;
+import ec.edu.espe.security.monitoring.utils.AesEncryptorUtil;
 import ec.edu.espe.security.monitoring.utils.JsonUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +18,7 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class GrafanaDashboardServiceImpl implements GrafanaDashboardService {
     private final GrafanaCredentialServiceImpl grafanaService;
-    private final AesEncryptor aesEncryptor;
+    private final AesEncryptorUtil aesEncryptor;
     private final JsonUtils jsonUtils;
 
     private static final String GRAFANA_API_URL = "http://localhost:3000/api/dashboards/db"; // Grafana API endpoint

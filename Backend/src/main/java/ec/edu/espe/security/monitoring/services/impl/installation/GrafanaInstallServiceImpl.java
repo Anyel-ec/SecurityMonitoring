@@ -6,7 +6,7 @@ import ec.edu.espe.security.monitoring.models.SystemParameters;
 import ec.edu.espe.security.monitoring.repositories.InstallationConfigRepository;
 import ec.edu.espe.security.monitoring.services.impl.grafana.GrafanaCredentialServiceImpl;
 import ec.edu.espe.security.monitoring.services.interfaces.installation.GrafanaInstallService;
-import ec.edu.espe.security.monitoring.utils.AesEncryptor;
+import ec.edu.espe.security.monitoring.utils.AesEncryptorUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -18,7 +18,7 @@ public class GrafanaInstallServiceImpl implements GrafanaInstallService {
 
     private final InstallationConfigRepository installationConfigRepository;
     private final GrafanaCredentialServiceImpl grafanaCredentialService;
-    private final AesEncryptor aesEncryptor;
+    private final AesEncryptorUtil aesEncryptor;
 
     @Override
     public InstallationConfig saveGrafanaInstall(GrafanaInstallRequestDto grafanaInstallRequestDto) {

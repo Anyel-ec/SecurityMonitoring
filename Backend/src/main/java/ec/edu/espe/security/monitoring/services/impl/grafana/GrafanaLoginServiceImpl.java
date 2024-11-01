@@ -2,7 +2,7 @@ package ec.edu.espe.security.monitoring.services.impl.grafana;
 import ec.edu.espe.security.monitoring.models.InstallationConfig;
 import ec.edu.espe.security.monitoring.models.SystemParameters;
 import ec.edu.espe.security.monitoring.services.interfaces.grafana.GrafanaLoginService;
-import ec.edu.espe.security.monitoring.utils.AesEncryptor;
+import ec.edu.espe.security.monitoring.utils.AesEncryptorUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +22,7 @@ import java.util.List;
 public class GrafanaLoginServiceImpl implements GrafanaLoginService {
     // Dependency injection
     private final GrafanaCredentialServiceImpl grafanaService;
-    private final AesEncryptor aesEncryptor;
+    private final AesEncryptorUtil aesEncryptor;
 
     // Const
     private static final String SET_COOKIE = "Set-Cookie";

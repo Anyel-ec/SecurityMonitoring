@@ -3,7 +3,7 @@ package ec.edu.espe.security.monitoring.services.impl.docker;
 import ec.edu.espe.security.monitoring.models.DatabaseCredential;
 import ec.edu.espe.security.monitoring.repositories.DatabaseCredentialRepository;
 import ec.edu.espe.security.monitoring.services.interfaces.docker.DockerDbCredentialService;
-import ec.edu.espe.security.monitoring.utils.AesEncryptor;
+import ec.edu.espe.security.monitoring.utils.AesEncryptorUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -15,9 +15,10 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 public class DockerDbCredentialServiceImpl implements DockerDbCredentialService {
+
     // Injected dependencies
     private final DatabaseCredentialRepository databaseCredentialRepository;
-    private final AesEncryptor aesEncryptor;
+    private final AesEncryptorUtil aesEncryptor;
 
     /**
      * Runs a Docker Compose process to set up a database container based on the provided DBMS type and credentials.
@@ -30,12 +31,13 @@ public class DockerDbCredentialServiceImpl implements DockerDbCredentialService 
             log.warn("No se encontraron credenciales de base de datos activas. No se ejecutará Docker Compose.");
             return;
         }
+        log.info("Entra a run docker compose with db");
 
         for (DatabaseCredential config : activeCredentials) {
             ProcessBuilder processBuilder = new ProcessBuilder(
                     "docker-compose",
                     "-f", "../.container/docker-compose.yml",
-                    "up", "-d"
+                    "up", "-d", "postgres-exporter"
             );
 
             String host = config.getHost();
@@ -43,7 +45,6 @@ public class DockerDbCredentialServiceImpl implements DockerDbCredentialService 
                 host = "host.docker.internal";
             }
 
-            // Desencriptar la contraseña
             String decryptedPassword = null;
             try {
                 if (config.getPassword() != null) {

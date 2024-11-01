@@ -13,7 +13,7 @@ import java.security.SecureRandom;
 import java.util.Base64;
 
 @Component
-public class AesEncryptor {
+public class AesEncryptorUtil {
 
     // AES key (32 bytes = 256 bits)
     @Value("${secret.key.aes}")

@@ -1,6 +1,6 @@
 package ec.edu.espe.security.monitoring.test;
 
-import ec.edu.espe.security.monitoring.utils.AesEncryptor;
+import ec.edu.espe.security.monitoring.utils.AesEncryptorUtil;
 import io.github.cdimascio.dotenv.Dotenv;
 import lombok.extern.slf4j.Slf4j;
 
@@ -10,7 +10,7 @@ public class AesEncryptorTest {
     public static void main(String[] args) {
         try {
             // Create an instance of the encryptor
-            AesEncryptor aesEncryptor = new AesEncryptor();
+            AesEncryptorUtil aesEncryptor = new AesEncryptorUtil();
 
             Dotenv dotenv = Dotenv.configure().load();
 

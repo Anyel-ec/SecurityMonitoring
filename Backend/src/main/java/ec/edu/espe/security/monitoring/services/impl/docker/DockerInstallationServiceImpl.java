@@ -3,23 +3,22 @@ package ec.edu.espe.security.monitoring.services.impl.docker;
 import ec.edu.espe.security.monitoring.models.InstallationConfig;
 import ec.edu.espe.security.monitoring.repositories.InstallationConfigRepository;
 import ec.edu.espe.security.monitoring.services.interfaces.docker.DockerInstallationService;
-import ec.edu.espe.security.monitoring.utils.AesEncryptor;
+import ec.edu.espe.security.monitoring.utils.AesEncryptorUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
+
+import static ec.edu.espe.security.monitoring.utils.PrometheusConfigUtil.generatePrometheusConfig;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class DockerInstallationServiceImpl implements DockerInstallationService {
     private final InstallationConfigRepository installationConfigRepository;
-    private final AesEncryptor aesEncryptor;
+    private final AesEncryptorUtil aesEncryptor;
 
     /**
      * Runs a Docker Compose process to set up the services based on the active installation configurations.
@@ -28,8 +27,12 @@ public class DockerInstallationServiceImpl implements DockerInstallationService 
         // Retrieve all active installations
         List<InstallationConfig> activeInstallations = installationConfigRepository.findByIsActiveTrue();
 
+        // Paths to the Prometheus configuration files
+        String templatePath = "../.container/prometheus.template.yml";
+        String outputPath = "../.container/prometheus.yml";
+
         // Generate the prometheus.yml file dynamically with environment variables
-        generatePrometheusConfig(activeInstallations);
+        generatePrometheusConfig(activeInstallations, templatePath, outputPath);
 
         // Create the ProcessBuilder for docker-compose
         ProcessBuilder dockerComposeProcessBuilder = new ProcessBuilder(
@@ -72,38 +75,6 @@ public class DockerInstallationServiceImpl implements DockerInstallationService 
         // Execute docker-compose
         dockerComposeProcessBuilder.inheritIO().start();
     }
-    /**
-     * Generates prometheus.yml file dynamically based on the active installation configurations.
-     */
-    private void generatePrometheusConfig(List<InstallationConfig> activeInstallations) throws IOException {
-        // Load the template prometheus.yml
-        String templatePath = "../.container/prometheus.template.yml";
-        String outputPath = "../.container/prometheus.yml";
-        StringBuilder prometheusConfig = new StringBuilder();
-
-        try (BufferedReader reader = new BufferedReader(new FileReader(templatePath))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                // Replace placeholders with actual values
-                for (InstallationConfig config : activeInstallations) {
-                    if ("PROMETHEUS_INSTALL".equals(config.getSystemParameter().getName())) {
-                        line = line.replace("${PROMETHEUS_PORT_INTERNAL}", String.valueOf(config.getInternalPort()));
-                    } else if ("PROMETHEUS_EXPORTER_POSTGRESQL".equals(config.getSystemParameter().getName())) {
-                        line = line.replace("${EXPORT_POSTGRES_PORT_INTERNAL}", String.valueOf(config.getInternalPort()));
-                    }
-                }
-                prometheusConfig.append(line).append("\n");
-            }
-        }
-
-        // Write the new prometheus.yml
-        try (FileWriter writer = new FileWriter(outputPath)) {
-            writer.write(prometheusConfig.toString());
-        }
-
-        log.info("Prometheus configuration generated at: {}", outputPath);
-    }
-
 
     /**
      * Adds environment variable to the ProcessBuilder and logs the value.
