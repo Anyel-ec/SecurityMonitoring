@@ -1,5 +1,6 @@
 package ec.edu.espe.security.monitoring.utils;
 
+import lombok.experimental.UtilityClass;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
@@ -7,7 +8,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-@Component
+@UtilityClass
 public class JsonUtils {
     public String readJsonFromFileDashboard(String fileName) throws IOException {
         ClassPathResource resource = new ClassPathResource("dashboards/" + fileName);

@@ -1,5 +1,6 @@
 package ec.edu.espe.security.monitoring.utils;
 
+import lombok.experimental.UtilityClass;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -12,7 +13,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Base64;
 
-@Component
+@UtilityClass
 public class AesEncryptor {
 
     // AES key (32 bytes = 256 bits)
@@ -25,7 +26,7 @@ public class AesEncryptor {
     private static final int GCM_TAG_LENGTH = 16; // Length of authentication tag (in bytes)
 
     public void setSecretKey(String secretKey) {
-        this.secretKey = secretKey;
+        AesEncryptor.secretKey = secretKey;
     }
 
     // Encrypt a string using AES GCM
@@ -74,7 +75,7 @@ public class AesEncryptor {
     }
 
     // Convert hex string to byte array
-    private static byte[] hexStringToByteArray(String s) {
+    private byte[] hexStringToByteArray(String s) {
         int len = s.length();
         byte[] data = new byte[len / 2];
         for (int i = 0; i < len; i += 2) {

@@ -17,80 +17,22 @@ import java.util.List;
 public class DockerDbCredentialServiceImpl implements DockerDbCredentialService {
     // Injected dependencies
     private final DatabaseCredentialRepository databaseCredentialRepository;
-    private final AesEncryptor aesEncryptor;
+    private final DockerInstallationServiceImpl dockerInstallationService;
 
     /**
      * Runs a Docker Compose process to set up a database container based on the provided DBMS type and credentials.
      */
     @Override
     public void runDockerComposeWithDatabase() {
-        List<DatabaseCredential> activeCredentials = databaseCredentialRepository.findByIsActiveTrue();
 
-        if (activeCredentials.isEmpty()) {
-            log.warn("No se encontraron credenciales de base de datos activas. No se ejecutará Docker Compose.");
-            return;
-        }
 
-        for (DatabaseCredential config : activeCredentials) {
-            ProcessBuilder processBuilder = new ProcessBuilder(
-                    "docker-compose",
-                    "-f", "../.container/docker-compose.yml",
-                    "up", "-d"
-            );
-
-            String host = config.getHost();
-            if ("localhost".equals(host) || "127.0.0.1".equals(host)) {
-                host = "host.docker.internal";
-            }
-
-            // Desencriptar la contraseña
-            String decryptedPassword = null;
-            try {
-                if (config.getPassword() != null) {
-                    decryptedPassword = aesEncryptor.decrypt(config.getPassword());
-                }
-            } catch (Exception e) {
-                log.error("Error al desencriptar la contraseña para la configuración con ID: {}", config.getId(), e);
-                throw new IllegalStateException("Error al desencriptar la contraseña", e);
-            }
-
-            String dbType = config.getSystemParameter().getName().toUpperCase();
-            switch (dbType) {
-                case "POSTGRESQL":
-                    log.info("Configurando PostgreSQL con host {}, usuario {}, puerto {}", host, config.getUsername(), config.getPort());
-                    processBuilder.environment().put("POSTGRES_USER", config.getUsername());
-                    processBuilder.environment().put("POSTGRES_PASSWORD", decryptedPassword);
-                    processBuilder.environment().put("POSTGRES_HOST", host);
-                    processBuilder.environment().put("POSTGRES_PORT", String.valueOf(config.getPort()));
-                    break;
-
-                case "MARIADB":
-                    log.info("Configurando MariaDB con host {}, usuario {}, puerto {}.", host, config.getUsername(), config.getPort());
-                    processBuilder.environment().put("MARIADB_USER", config.getUsername());
-                    processBuilder.environment().put("MARIADB_PASSWORD", decryptedPassword);
-                    processBuilder.environment().put("MARIADB_HOST", host);
-                    processBuilder.environment().put("MARIADB_PORT", String.valueOf(config.getPort()));
-                    break;
-
-                case "MONGODB":
-                    log.info("Configurando MongoDB con host {}, usuario {}, puerto {}.", host, config.getUsername(), config.getPort());
-                    processBuilder.environment().put("MONGODB_USER", config.getUsername());
-                    processBuilder.environment().put("MONGODB_PASSWORD", decryptedPassword);
-                    processBuilder.environment().put("MONGODB_HOST", host);
-                    processBuilder.environment().put("MONGODB_PORT", String.valueOf(config.getPort()));
-                    break;
-
-                default:
-                    log.warn("Tipo de base de datos no soportado para SystemParameter: {}", dbType);
-                    continue;
-            }
-
-            try {
-                processBuilder.inheritIO().start();
-                log.info("Docker Compose ejecutado exitosamente para {}", dbType);
-            } catch (IOException e) {
-                log.error("Error al ejecutar Docker Compose para {}: {}", dbType, e.getMessage());
-            }
+        try {
+            dockerInstallationService.runDockerComposeWithActiveInstallations();
+            log.info("Docker Compose ejecutado con las credenciales de base de datos activas.");
+        } catch (IOException e) {
+            log.error("Error al ejecutar Docker Compose con credenciales de base de datos: {}", e.getMessage());
+            Thread.currentThread().interrupt();
+            throw new IllegalStateException("Error al ejecutar Docker Compose con credenciales de base de datos", e);
         }
     }
 }

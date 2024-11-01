@@ -1,6 +1,7 @@
 package ec.edu.espe.security.monitoring.utils;
 
 import ec.edu.espe.security.monitoring.models.DatabaseCredential;
+import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -8,7 +9,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-@Component
+@UtilityClass
 @Slf4j
 public class DatabaseUtils {
 
