@@ -39,7 +39,7 @@ public class DockerRunController {
     @GetMapping("/hasBeenExecuted")
     public ResponseEntity<JsonResponseDto> checkIfComposeExecuted() {
         try {
-            boolean hasExecuted = dockerComposeService.hasBeenExecuted();
+            boolean hasExecuted = dockerRunService.hasBeenExecuted();
 
             if (!hasExecuted) {
                 log.info("Docker Compose no ha sido ejecutado. Ejecutando Docker Compose...");

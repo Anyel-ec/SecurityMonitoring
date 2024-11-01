@@ -1,5 +1,6 @@
 package ec.edu.espe.security.monitoring.services.impl.docker;
 
+import ec.edu.espe.security.monitoring.services.interfaces.docker.DockerRunService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -9,7 +10,9 @@ import java.io.InputStreamReader;
 
 @Service
 @Slf4j
-public class DockerRunServiceImpl {
+public class DockerRunServiceImpl implements DockerRunService {
+
+    private boolean isExecuted = false;
 
     /**
      * This service checks whether Docker is currently running on the system.
@@ -59,5 +62,43 @@ public class DockerRunServiceImpl {
             log.error("Thread was interrupted while checking Docker status: " + e.getMessage());
         }
         return false;  // Docker daemon is not running
+    }
+
+    /**
+     * Runs Docker Compose to bring up the services defined in the docker-compose.yml file.
+     * This method simply executes the docker-compose up -d command.
+     */
+    @Override
+    public void runDockerCompose() {
+        if (isExecuted) {
+            log.info("Docker Compose ya ha sido ejecutado. No se volverá a ejecutar.");
+            return;
+        }
+        ProcessBuilder processBuilder = new ProcessBuilder(
+                "docker-compose",
+                "-f", "../.container/docker-compose.yml",
+                "up", "-d"
+        );
+
+        try {
+            // Log before execution
+            log.info("Executing docker-compose up -d to bring up services...");
+
+            // Inherit IO to display output in the current terminal and start the process
+            processBuilder.inheritIO().start().waitFor();
+            isExecuted = true;  // Mark as executed after successful execution
+            log.info("Docker Compose executed successfully.");
+        } catch (IOException | InterruptedException e) {
+            log.error("Error while executing docker-compose up: ", e);
+            Thread.currentThread().interrupt();  // Restore the interrupted status if interrupted
+        }
+    }
+
+    /**
+     * Indicates whether the Docker Compose process has been executed.
+     * @return true if the process has already been executed, false otherwise
+     */
+    public boolean hasBeenExecuted() {
+        return isExecuted;
     }
 }
