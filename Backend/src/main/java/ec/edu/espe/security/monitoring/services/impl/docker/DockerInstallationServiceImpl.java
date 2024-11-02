@@ -53,20 +53,20 @@ public class DockerInstallationServiceImpl implements DockerInstallationService 
                 throw new IllegalStateException("Error decrypting the password", e);
             }
 
-            // Only configure environment variables for known installation types
+            // Set environment variables directly with processBuilder.environment().put()
             if ("GRAFANA_INSTALL".equals(config.getSystemParameter().getName())) {
-                addEnvVariable(dockerComposeProcessBuilder, "GRAFANA_PORT_EXTERNAL", String.valueOf(config.getExternalPort()));
-                addEnvVariable(dockerComposeProcessBuilder, "GRAFANA_PORT_INTERNAL", String.valueOf(config.getInternalPort()));
-                addEnvVariable(dockerComposeProcessBuilder, "GRAFANA_USER", config.getUsername());
-                addEnvVariable(dockerComposeProcessBuilder, "GRAFANA_PASSWORD", decryptedPassword);
+                dockerComposeProcessBuilder.environment().put("GRAFANA_PORT_EXTERNAL", String.valueOf(config.getExternalPort()));
+                dockerComposeProcessBuilder.environment().put("GRAFANA_PORT_INTERNAL", String.valueOf(config.getInternalPort()));
+                dockerComposeProcessBuilder.environment().put("GRAFANA_USER", config.getUsername());
+                dockerComposeProcessBuilder.environment().put("GRAFANA_PASSWORD", decryptedPassword);
             } else if ("PROMETHEUS_INSTALL".equals(config.getSystemParameter().getName())) {
-                addEnvVariable(dockerComposeProcessBuilder, "PROMETHEUS_PORT_EXTERNAL", String.valueOf(config.getExternalPort()));
-                addEnvVariable(dockerComposeProcessBuilder, "PROMETHEUS_PORT_INTERNAL", String.valueOf(config.getInternalPort()));
+                dockerComposeProcessBuilder.environment().put("PROMETHEUS_PORT_EXTERNAL", String.valueOf(config.getExternalPort()));
+                dockerComposeProcessBuilder.environment().put("PROMETHEUS_PORT_INTERNAL", String.valueOf(config.getInternalPort()));
             } else if ("PROMETHEUS_EXPORTER_POSTGRESQL".equals(config.getSystemParameter().getName())) {
-                addEnvVariable(dockerComposeProcessBuilder, "EXPORT_POSTGRES_PORT_EXTERNAL", String.valueOf(config.getExternalPort()));
-                addEnvVariable(dockerComposeProcessBuilder, "EXPORT_POSTGRES_PORT_INTERNAL", String.valueOf(config.getInternalPort()));
-                addEnvVariable(dockerComposeProcessBuilder, "POSTGRES_USER", config.getUsername());
-                addEnvVariable(dockerComposeProcessBuilder, "POSTGRES_PASSWORD", decryptedPassword);
+                dockerComposeProcessBuilder.environment().put("EXPORT_POSTGRES_PORT_EXTERNAL", String.valueOf(config.getExternalPort()));
+                dockerComposeProcessBuilder.environment().put("EXPORT_POSTGRES_PORT_INTERNAL", String.valueOf(config.getInternalPort()));
+                dockerComposeProcessBuilder.environment().put("POSTGRES_USER", config.getUsername());
+                dockerComposeProcessBuilder.environment().put("POSTGRES_PASSWORD", decryptedPassword);
             } else {
                 log.warn("No environment variables configured for the parameter: {}", config.getSystemParameter().getName());
             }
@@ -74,18 +74,6 @@ public class DockerInstallationServiceImpl implements DockerInstallationService 
 
         // Execute docker-compose
         dockerComposeProcessBuilder.inheritIO().start();
-    }
-
-    /**
-     * Adds environment variable to the ProcessBuilder and logs the value.
-     */
-    private void addEnvVariable(ProcessBuilder processBuilder, String key, String value) {
-        if (value != null && !value.isEmpty()) {
-            processBuilder.environment().put(key, value);
-            log.info("Setting environment variable: {} = {}", key, value);  // Log the environment variable
-        } else {
-            log.warn("Environment variable {} not set because value is null or empty", key);
-        }
     }
 
 }

@@ -6,5 +6,5 @@ import java.io.IOException;
 
 public interface DockerDbCredentialService {
 
-    void runDockerComposeWithDatabase() throws IOException;
+    void runDockerComposeWithDatabase() throws IOException, InterruptedException;
 }

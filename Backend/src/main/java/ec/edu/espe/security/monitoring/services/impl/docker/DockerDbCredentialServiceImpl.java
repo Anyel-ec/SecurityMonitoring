@@ -1,7 +1,9 @@
 package ec.edu.espe.security.monitoring.services.impl.docker;
 
 import ec.edu.espe.security.monitoring.models.DatabaseCredential;
+import ec.edu.espe.security.monitoring.models.InstallationConfig;
 import ec.edu.espe.security.monitoring.repositories.DatabaseCredentialRepository;
+import ec.edu.espe.security.monitoring.repositories.InstallationConfigRepository;
 import ec.edu.espe.security.monitoring.services.interfaces.docker.DockerDbCredentialService;
 import ec.edu.espe.security.monitoring.utils.AesEncryptorUtil;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +19,7 @@ import java.util.List;
 public class DockerDbCredentialServiceImpl implements DockerDbCredentialService {
 
     // Injected dependencies
+    private final InstallationConfigRepository installationConfigRepository;
     private final DatabaseCredentialRepository databaseCredentialRepository;
     private final AesEncryptorUtil aesEncryptor;
 
@@ -24,21 +27,54 @@ public class DockerDbCredentialServiceImpl implements DockerDbCredentialService 
      * Runs a Docker Compose process to set up a database container based on the provided DBMS type and credentials.
      */
     @Override
-    public void runDockerComposeWithDatabase() {
+    public void runDockerComposeWithDatabase() throws IOException, InterruptedException {
         List<DatabaseCredential> activeCredentials = databaseCredentialRepository.findByIsActiveTrue();
+        List<InstallationConfig> activeInstallations = installationConfigRepository.findByIsActiveTrue();
 
         if (activeCredentials.isEmpty()) {
             log.warn("No se encontraron credenciales de base de datos activas. No se ejecutará Docker Compose.");
             return;
         }
-        log.info("Entra a run docker compose with db");
+
+        ProcessBuilder processBuilder = new ProcessBuilder(
+                "docker-compose",
+                "-f", "../.container/docker-compose.yml",
+                "up", "-d"
+        );
+
+        // Configure the environment variables based on the active installations
+        for (InstallationConfig config : activeInstallations) {
+            String decryptedPassword = null;
+            try {
+                if (config.getPassword() != null) {
+                    decryptedPassword = aesEncryptor.decrypt(config.getPassword());
+                }
+            } catch (Exception e) {
+                log.error("Error decrypting the password for the installation with ID: {}", config.getId(), e);
+                throw new IllegalStateException("Error decrypting the password", e);
+            }
+
+            // Only configure environment variables for known installation types
+            if ("GRAFANA_INSTALL".equals(config.getSystemParameter().getName())) {
+                processBuilder.environment().put("GRAFANA_PORT_EXTERNAL", String.valueOf(config.getExternalPort()));
+                processBuilder.environment().put("GRAFANA_PORT_INTERNAL", String.valueOf(config.getInternalPort()));
+                processBuilder.environment().put("GRAFANA_USER", config.getUsername());
+                processBuilder.environment().put("GRAFANA_PASSWORD", decryptedPassword);
+            } else if ("PROMETHEUS_INSTALL".equals(config.getSystemParameter().getName())) {
+                processBuilder.environment().put("PROMETHEUS_PORT_EXTERNAL", String.valueOf(config.getExternalPort()));
+                processBuilder.environment().put("PROMETHEUS_PORT_INTERNAL", String.valueOf(config.getInternalPort()));
+            } else if ("PROMETHEUS_EXPORTER_POSTGRESQL".equals(config.getSystemParameter().getName())) {
+                processBuilder.environment().put("EXPORT_POSTGRES_PORT_EXTERNAL", String.valueOf(config.getExternalPort()));
+                processBuilder.environment().put("EXPORT_POSTGRES_PORT_INTERNAL", String.valueOf(config.getInternalPort()));
+                processBuilder.environment().put("POSTGRES_USER", config.getUsername());
+                processBuilder.environment().put("POSTGRES_PASSWORD", decryptedPassword);
+            } else {
+                log.warn("No environment variables configured for the parameter: {}", config.getSystemParameter().getName());
+            }
+        }
 
         for (DatabaseCredential config : activeCredentials) {
-            ProcessBuilder processBuilder = new ProcessBuilder(
-                    "docker-compose",
-                    "-f", "../.container/docker-compose.yml",
-                    "up", "-d", "postgres-exporter"
-            );
+
 
             String host = config.getHost();
             if ("localhost".equals(host) || "127.0.0.1".equals(host)) {
@@ -58,7 +94,7 @@ public class DockerDbCredentialServiceImpl implements DockerDbCredentialService 
             String dbType = config.getSystemParameter().getName().toUpperCase();
             switch (dbType) {
                 case "POSTGRESQL":
-                    log.info("Configurando PostgreSQL con host {}, usuario {}, puerto {}", host, config.getUsername(), config.getPort());
+                    log.info("Configurando PostgreSQL con host {}, usuario {}, puerto {}, password {}", host, config.getUsername(), config.getPort(), decryptedPassword);
                     processBuilder.environment().put("POSTGRES_USER", config.getUsername());
                     processBuilder.environment().put("POSTGRES_PASSWORD", decryptedPassword);
                     processBuilder.environment().put("POSTGRES_HOST", host);
