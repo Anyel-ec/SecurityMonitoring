@@ -26,7 +26,13 @@ public class UserInfo {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID")
     private long id;
+
+
     private String username;
+
+    private String email;
+
+    private String phone;
 
     @JsonIgnore
     private String password;

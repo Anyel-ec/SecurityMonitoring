@@ -49,10 +49,6 @@ public class DockerRunController {
                 return ResponseEntity.ok(new JsonResponseDto(true, 200, "Docker Compose ya ha sido ejecutado.", true));
             }
 
-        } catch (InterruptedException e) {
-            log.error("Error de interrupción al ejecutar Docker Compose: {}", e.getMessage());
-            Thread.currentThread().interrupt();
-            return ResponseEntity.status(500).body(new JsonResponseDto(false, 500, "El proceso fue interrumpido", null));
         } catch (Exception e) {
             log.error("Error al verificar y ejecutar Docker Compose si no ha sido ejecutado: {}", e.getMessage());
             return ResponseEntity.status(500).body(new JsonResponseDto(false, 500, "Error al verificar o ejecutar Docker Compose", null));
