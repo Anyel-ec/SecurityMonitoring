@@ -1,8 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
 import SavedConnections from './SavedConnections';
 import ConnectionDetails from './ConnectionDetails';
+import { loginAndAccessDashboard } from '../../services/grafanaService';
 import { showSuccessAlert, showErrorAlert, showConfirmationAlert, showDockerErrorAlert } from '../../utils/alerts';
-import { saveOrUpdateConnectionName, testPostgresConnection } from '../../services/connectionService';
+import { testPostgresConnection } from '../../services/connectionService';
 import { getAllCredentials, deleteConnectionById, createOrUpdateCredential } from '../../services/databaseCredentialService';
 import { checkDockerStatus, checkIfComposeExecuted } from '../../services/dockerService';
 export default function MainComponent() {
@@ -19,6 +20,23 @@ export default function MainComponent() {
   const [isCheckingDocker, setIsCheckingDocker] = useState(false); // Nuevo estado para evitar múltiples llamadas
   const containerRef = useRef(null);
   const isDragging = useRef(false);
+
+
+  // En tu componente MainComponent
+  const handleMonitor = async () => {
+    try {
+      const response = await loginAndAccessDashboard();
+      if (response && response.redirectUrl) {
+        window.location.href = response.redirectUrl; // Redirige en el frontend
+      } else {
+        showErrorAlert('No se pudo acceder al dashboard de Grafana.');
+      }
+    } catch (error) {
+      console.error('Error al iniciar sesión y acceder al dashboard de Grafana:', error);
+      showErrorAlert('Error al acceder al dashboard de Grafana');
+    }
+  };
+
 
   // Función para verificar el estado de Docker y luego el estado de Docker Compose
   const checkDockerAndFetchData = async () => {
@@ -134,45 +152,7 @@ export default function MainComponent() {
     setMongoDbEnabled(conn.systemParameter.name === 'MONGODB');
   };
 
-  // Función para guardar el nombre de la conexión
-  const handleSaveConnectionName = async () => {
-    try {
-      if (selectedConnection) {
-        await saveOrUpdateConnectionName(selectedConnection);
-        setConnections(
-          connections.map((conn) =>
-            conn.name === selectedConnection.name
-              ? { ...selectedConnection, lastConnected: new Date().toLocaleString() }
-              : conn
-          )
-        );
-        await fetchAllCredentials();
 
-        showSuccessAlert('Conexión guardada con éxito', '');
-      } else if (newConnection.connectionName) {
-        await saveOrUpdateConnectionName(newConnection);
-        await fetchAllCredentials();
-
-        setConnections([
-          ...connections,
-          {
-            connectionName: newConnection.connectionName,
-            types: [],
-            credentials: {},
-            comment: '',
-            lastConnected: new Date().toLocaleString(),
-          },
-        ]);
-
-        setNewConnection({ connectionName: '' });
-
-        showSuccessAlert('Nueva conexión guardada con éxito', '');
-      }
-    } catch (error) {
-      console.error('Error al guardar la conexión:', error);
-      showErrorAlert('No se pudo guardar la conexión', error.message || 'Ocurrió un error');
-    }
-  };
 
   // Función para guardar las credenciales de la conexión en el formato del DTO
   const handleSaveCredentials = async () => {
@@ -294,8 +274,7 @@ export default function MainComponent() {
         selectedConnection={selectedConnection}
         setSelectedConnection={handleSelectConnection}
         handleDelete={handleDelete}
-        handleSave={handleSaveConnectionName}
-        newConnection={newConnection}
+        handleMonitor={handleMonitor}
         setNewConnection={setNewConnection}
         leftPanelWidth={leftPanelWidth}
       />

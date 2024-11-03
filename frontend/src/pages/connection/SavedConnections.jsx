@@ -1,9 +1,9 @@
+// SavedConnections.js
 import React from 'react';
-import 'bootstrap-icons/font/bootstrap-icons.css'; // Para los iconos de Bootstrap
+import 'bootstrap-icons/font/bootstrap-icons.css';
 
-const SavedConnections = ({ connections, selectedConnection, setSelectedConnection, handleDelete, handleSave, newConnection, setNewConnection, leftPanelWidth }) => {
+const SavedConnections = ({ connections, selectedConnection, setSelectedConnection, handleDelete, handleMonitor, leftPanelWidth }) => {
 
-  // Function to convert systemParameter name to a more friendly name
   const getFriendlyName = (name) => {
     switch (name) {
       case 'POSTGRESQL':
@@ -22,9 +22,9 @@ const SavedConnections = ({ connections, selectedConnection, setSelectedConnecti
       <div className="p-3 flex-grow-1 overflow-auto" style={{ maxHeight: 'calc(100vh - 150px)' }}>
         <h2 className="h5 mb-3">Conexiones guardadas</h2>
         <div className="list-group">
-          {connections.map((conn, index) => (
+          {connections.map((conn) => (
             <button
-              key={conn.id} // Usa el ID como clave única
+              key={conn.id}
               type="button"
               className={`list-group-item list-group-item-action ${selectedConnection?.id === conn.id ? 'list-group-item-secondary' : ''}`}
               onClick={() => setSelectedConnection(conn)}
@@ -32,13 +32,13 @@ const SavedConnections = ({ connections, selectedConnection, setSelectedConnecti
               <div className="d-flex justify-content-between">
                 <div>
                   <i className="bi bi-database me-2"></i>
-                  {`${conn.host}:${conn.port}`} {/* Host y puerto concatenados */}
+                  {`${conn.host}:${conn.port}`}
                 </div>
                 <small className="text-muted">
-                  {getFriendlyName(conn.systemParameter?.name) || 'No disponible'} {/* Nombre amigable del parámetro del sistema */}
+                  {getFriendlyName(conn.systemParameter?.name) || 'No disponible'}
                 </small>
               </div>
-              <small className="text-muted">{new Date(conn.createdAt).toLocaleString()}</small> {/* Fecha de creación */}
+              <small className="text-muted">{new Date(conn.createdAt).toLocaleString()}</small>
               <small className="text-truncate d-block">{conn.comment || 'Sin comentarios'}</small>
             </button>
           ))}
@@ -47,7 +47,7 @@ const SavedConnections = ({ connections, selectedConnection, setSelectedConnecti
 
       <div className="p-3 border-top mt-auto">
         <div className="d-flex justify-content-between">
-          <button className="btn btn-primary" onClick={handleSave}>
+          <button className="btn btn-primary" onClick={handleMonitor}>
             Monitorear
           </button>
           <button className="btn btn-danger" onClick={handleDelete}>

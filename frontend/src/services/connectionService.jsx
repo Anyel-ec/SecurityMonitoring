@@ -1,52 +1,6 @@
 import axios from 'axios';
 import AppEnvironments from '../config/AppEnvironments';
 
-// Servicio para guardar o actualizar la conexión
-export const saveOrUpdateConnectionName = async (connectionData) => {
-  const BASE_URL = AppEnvironments.baseUrl;
-  try {
-    const response = await axios.post(`${BASE_URL}/api/v1/connection/save`, connectionData);
-    return response.data;
-  } catch (error) {
-    if (error.response?.data) {
-      throw new Error(error.response.data.message || 'Ocurrió un error desconocido');
-    } else {
-      throw new Error('No se pudo conectar al servidor. Verifica tu conexión.');
-    }
-  }
-
-};
-
-// Servicio para guardar o actualizar la conexión
-export const saveOrUpdateConnectionCredentials = async (connectionData) => {
-  const BASE_URL = AppEnvironments.baseUrl;
-  try {
-    const response = await axios.post(`${BASE_URL}/api/v1/config/database`, connectionData);
-    return response.data;
-  } catch (error) {
-    if (error.response?.data) {
-      throw new Error(error.response.data.message || 'Ocurrió un error desconocido');
-    } else {
-      throw new Error('No se pudo conectar al servidor. Verifica tu conexión.');
-    }
-  }
-};
-
-
-
-// Servicio para eliminar una conexión por ID
-export const deleteConnectionById = async (id) => {
-  const BASE_URL = AppEnvironments.baseUrl; 
-  try {
-    const response = await axios.delete(`${BASE_URL}/api/v1/connection/delete/${id}`);
-    return response.data;
-  } catch (error) {
-    console.error('Error al eliminar la conexión:', error);
-    throw error;
-  }
-};
-
-
 export const testPostgresConnection = async (credentials) => {
   const BASE_URL = AppEnvironments.baseUrl;
   try {

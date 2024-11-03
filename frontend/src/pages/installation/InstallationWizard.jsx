@@ -4,7 +4,7 @@ import { Button, Card, ProgressBar } from 'react-bootstrap';
 import Swal from 'sweetalert2';
 import { Check, Database, FileEarmarkCheck, PersonFill } from 'react-bootstrap-icons'; // Bootstrap icons
 import './installation.css';
-import { completeInstallService, saveGrafanaInstallService, savePrometheusInstallService, saveOrUpdatePrometheusExportersService, saveUserInstallService } from '../../services/installationService';
+import {  saveGrafanaInstallService, savePrometheusInstallService, saveOrUpdatePrometheusExportersService, saveUserInstallService } from '../../services/installationService';
 import * as Yup from 'yup'; // Yup para validaciones
 import GrafanaStep from './step/GrafanaStep'; // Importe el componente de Grafana 
 import PrometheusStep from './step/PrometheusStep'; // Importe el componente de Prometheus
@@ -12,7 +12,6 @@ import ExporterStep from './step/ExporterStep'; // Importa el componente de conf
 import UserInstallStep from './step/UserInstallStep'; // Importa el componente de instalación de usuario
 import { grafanaValidationSchema, prometheusValidationSchema, exportersValidationSchema, userInstallValidationSchema } from './validationSchemas';
 import { useNavigate } from 'react-router-dom'; // Importa useNavigate
-import { runDockerInstallService } from '../../services/dockerComposeService'; // Importa el servicio que ejecuta Docker Compose
 import { completeInstallation } from '../../pages/installation/helper/installationHelper'; // Importa la función completa desde el archivo helper
 
 export default function InstallationWizard() {

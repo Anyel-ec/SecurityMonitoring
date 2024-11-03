@@ -100,6 +100,16 @@ public class GrafanaLoginServiceImpl implements GrafanaLoginService {
         return responseHeaders.get(SET_COOKIE);
     }
 
+    @Override
+    public String getGrafanaDashboardUrlWithSession() {
+        return "http://localhost:3000/d/000000039/postgresql-database?orgId=1&refresh=10s";
+    }
+
+    @Override
+    public List<String> getGrafanaCookies() {
+        return grafanaCookies;
+    }
+
     private boolean cookiesAreInvalid() {
         return grafanaCookies == null || grafanaCookies.isEmpty();
     }
