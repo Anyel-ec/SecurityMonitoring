@@ -320,8 +320,8 @@ export default function InstallationWizard() {
               Previous
             </Button>
           )}
-          <Button onClick={nextStep} className="ml-auto">
-            {currentStep === 4 ? 'Instalar' : currentStep < 6 ? 'Next' : 'Finish'}
+          <Button onClick={nextStep} className="ml-auto" disabled={currentStep === 5 && isInstalling}>
+          {currentStep === 4 ? 'Instalar' : currentStep < 6 ? 'Next' : 'Finish'}
           </Button>
         </div>
       </Card>
