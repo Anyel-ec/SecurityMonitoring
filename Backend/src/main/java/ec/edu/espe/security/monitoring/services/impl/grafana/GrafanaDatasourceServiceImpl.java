@@ -1,5 +1,6 @@
 package ec.edu.espe.security.monitoring.services.impl.grafana;
 
+import ec.edu.espe.security.monitoring.dto.request.grafana.PrometheusDatasourceDto;
 import ec.edu.espe.security.monitoring.models.InstallationConfig;
 import ec.edu.espe.security.monitoring.models.SystemParameters;
 import ec.edu.espe.security.monitoring.services.interfaces.grafana.GrafanaDatasourceService;
@@ -7,6 +8,7 @@ import ec.edu.espe.security.monitoring.services.interfaces.installation.Promethe
 import ec.edu.espe.security.monitoring.utils.AesEncryptorUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -30,13 +32,7 @@ public class GrafanaDatasourceServiceImpl implements GrafanaDatasourceService {
             String username = grafanaInstall.getUsername(); // Grafana username
             String decryptedPassword = aesEncryptor.decrypt(grafanaInstall.getPassword()); // Decrypt Grafana password
 
-            InstallationConfig prometheusConfig = prometheusInstallService.getPrometheusInstall();
-
-            // Create the request body with the Prometheus URL obtained
-            String requestBody = String.format(
-                    "{\"name\": \"prometheus\", \"type\": \"prometheus\", \"url\": \"http://prometheus:%s\", \"access\": \"proxy\", \"basicAuth\": false, \"isDefault\": true}",
-                    prometheusConfig.getInternalPort() // Here the URL is obtained from the config
-            );
+            PrometheusDatasourceDto datasourceDto = getPrometheusDatasourceDto();
 
             // Create the RestTemplate client to send the POST request
             RestTemplate restTemplate = new RestTemplate();
@@ -47,7 +43,7 @@ public class GrafanaDatasourceServiceImpl implements GrafanaDatasourceService {
             headers.setBasicAuth(username, decryptedPassword); // Set Basic Authentication
 
             // Set up the request body and headers
-            HttpEntity<String> entity = new HttpEntity<>(requestBody, headers);
+            HttpEntity<PrometheusDatasourceDto> entity = new HttpEntity<>(datasourceDto, headers);
 
             // Send the POST request to the Grafana endpoint
             ResponseEntity<String> response = restTemplate.exchange(
@@ -56,7 +52,7 @@ public class GrafanaDatasourceServiceImpl implements GrafanaDatasourceService {
                     entity,
                     String.class
             );
-
+            log.info("se creo el datasource");
             // Return the obtained response
             return response.getBody();
 
@@ -65,5 +61,19 @@ public class GrafanaDatasourceServiceImpl implements GrafanaDatasourceService {
         }
     }
 
+    @NotNull
+    private PrometheusDatasourceDto getPrometheusDatasourceDto() {
+        InstallationConfig prometheusConfig = prometheusInstallService.getPrometheusInstall();
+
+        // Set up the DTO with the required properties
+        return new PrometheusDatasourceDto(
+                "prometheus",  // Name
+                "prometheus",  // Type
+                String.format("http://prometheus:%s", prometheusConfig.getInternalPort()),  // URL
+                "proxy",       // Access
+                false,         // Basic Auth
+                true           // Is Default
+        );
+    }
 
 }

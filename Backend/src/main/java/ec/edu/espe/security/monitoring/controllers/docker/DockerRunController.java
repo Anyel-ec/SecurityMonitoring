@@ -66,4 +66,20 @@ public class DockerRunController {
             return ResponseEntity.status(500).body(new JsonResponseDto(false, 500, "Error al ejecutar Docker Compose con credenciales de base de datos", null));
         }
     }
+
+    @GetMapping("/checkInstallationStatus")
+    public ResponseEntity<JsonResponseDto> checkInstallationStatus() {
+        try {
+            log.info("Entra a verificar estados");
+            // Check if all containers are up
+            dockerInstallationService.waitForDockerContainersUp();
+
+            // If waitForDockerContainersUp completes, all containers are up
+            return ResponseEntity.ok(new JsonResponseDto(true, 200, "Installation complete. Post-installation tasks have been executed.", null));
+        } catch (IllegalStateException e) {
+            // In case of an error, return an error message
+            log.error("Error durante la verificación de instalación: {}", e.getMessage());
+            return ResponseEntity.status(500).body(new JsonResponseDto(false, 500, "Error during installation check: " + e.getMessage(), null));
+        }
+    }
 }

@@ -1,4 +1,8 @@
 package ec.edu.espe.security.monitoring.services.impl.grafana;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import ec.edu.espe.security.monitoring.dto.request.grafana.GrafanaDashboardRequestDto;
 import ec.edu.espe.security.monitoring.models.InstallationConfig;
 import ec.edu.espe.security.monitoring.models.SystemParameters;
 import ec.edu.espe.security.monitoring.services.interfaces.grafana.GrafanaDashboardService;
@@ -12,6 +16,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.Map;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -61,18 +67,26 @@ public class GrafanaDashboardServiceImpl implements GrafanaDashboardService {
      * Sends a POST request to Grafana to create the dashboard.
      */
     private ResponseEntity<String> performDashboardCreationRequest(String username, String password, String dashboardJson) {
-        RestTemplate restTemplate = new RestTemplate(); // REST client for sending HTTP requests
-        HttpHeaders headers = new HttpHeaders(); // Create HTTP headers
-        headers.setContentType(MediaType.APPLICATION_JSON); // Set content type to JSON
-        headers.setBasicAuth(username, password); // Set Basic Authentication using username and password
+        RestTemplate restTemplate = new RestTemplate();
 
-        // Create the final JSON body for the request
-        String requestBody = String.format("{ \"dashboard\": %s, \"folderId\": 0, \"overwrite\": true }", dashboardJson);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setBasicAuth(username, password);
 
-        HttpEntity<String> request = new HttpEntity<>(requestBody, headers); // Create the request entity with headers and body
+        // Create DTO
+        GrafanaDashboardRequestDto dashboardRequestDto = new GrafanaDashboardRequestDto(parseDashboardJson(dashboardJson),0,true);
 
-        // Send the POST request to the Grafana API and return the response
+        HttpEntity<GrafanaDashboardRequestDto> request = new HttpEntity<>(dashboardRequestDto, headers);
+
         return restTemplate.postForEntity(GRAFANA_API_URL, request, String.class);
+    }
+
+    private Map<String, Object> parseDashboardJson(String dashboardJson) {
+        try {
+            return new ObjectMapper().readValue(dashboardJson, new TypeReference<>() {});
+        } catch (JsonProcessingException e) {
+            throw new IllegalStateException("Invalid JSON format for dashboard", e);
+        }
     }
 
 }

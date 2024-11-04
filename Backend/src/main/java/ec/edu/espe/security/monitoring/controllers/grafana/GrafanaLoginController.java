@@ -1,5 +1,6 @@
 package ec.edu.espe.security.monitoring.controllers.grafana;
 
+import ec.edu.espe.security.monitoring.dto.response.JsonResponseDto;
 import ec.edu.espe.security.monitoring.services.interfaces.grafana.GrafanaLoginService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +33,7 @@ public class GrafanaLoginController {
     }
 
     @GetMapping("/grafana-login-and-access-dashboard")
-    public ResponseEntity<?> loginAndAccessDashboard(HttpServletResponse response) {
+    public ResponseEntity<JsonResponseDto> loginAndAccessDashboard(HttpServletResponse response) {
         log.info("Entró al login de Grafana");
         ResponseEntity<String> loginResponse = grafanaLoginService.loginToGrafana();
 
@@ -45,12 +46,13 @@ public class GrafanaLoginController {
 
             headers.add("Access-Control-Expose-Headers", "Set-Cookie");
 
+            // Devuelve la URL de redirección en un JsonResponseDto
             return ResponseEntity.ok()
                     .headers(headers)
-                    .body(Map.of("redirectUrl", grafanaUrl));
+                    .body(new JsonResponseDto(true, 200, "Login successful, redirecting to dashboard", Map.of("redirectUrl", grafanaUrl)));
         } else {
             return ResponseEntity.status(HttpServletResponse.SC_UNAUTHORIZED)
-                    .body(Map.of("error", "Error en el inicio de sesión. No se puede acceder al dashboard."));
+                    .body(new JsonResponseDto(false, 401, "Error en el inicio de sesión. No se puede acceder al dashboard.", null));
         }
     }
 
