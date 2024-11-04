@@ -67,19 +67,22 @@ public class DockerRunController {
         }
     }
 
-    @GetMapping("/checkInstallationStatus")
-    public ResponseEntity<JsonResponseDto> checkInstallationStatus() {
+    @GetMapping("/checkContainerStatus")
+    public ResponseEntity<JsonResponseDto> checkContainerStatus() {
         try {
-            log.info("Entra a verificar estados");
-            // Check if all containers are up
-            dockerInstallationService.waitForDockerContainersUp();
+            log.info("Verificando si los contenedores de Grafana y Prometheus están en funcionamiento.");
 
-            // If waitForDockerContainersUp completes, all containers are up
-            return ResponseEntity.ok(new JsonResponseDto(true, 200, "Installation complete. Post-installation tasks have been executed.", null));
+            boolean containersUp = dockerInstallationService.areDockerContainersUp();
+
+            if (containersUp) {
+                return ResponseEntity.ok(new JsonResponseDto(true, 200, "Ambos contenedores de Grafana y Prometheus están en funcionamiento.", null));
+            } else {
+                return ResponseEntity.ok(new JsonResponseDto(false, 200, "Uno o ambos contenedores no están en funcionamiento.", null));
+            }
+
         } catch (IllegalStateException e) {
-            // In case of an error, return an error message
-            log.error("Error durante la verificación de instalación: {}", e.getMessage());
-            return ResponseEntity.status(500).body(new JsonResponseDto(false, 500, "Error during installation check: " + e.getMessage(), null));
+            log.error("Error al verificar el estado de los contenedores: {}", e.getMessage());
+            return ResponseEntity.status(500).body(new JsonResponseDto(false, 500, "Error al verificar el estado de los contenedores: " + e.getMessage(), null));
         }
     }
 }

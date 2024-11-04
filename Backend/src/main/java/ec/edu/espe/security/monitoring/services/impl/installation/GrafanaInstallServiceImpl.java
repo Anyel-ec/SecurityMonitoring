@@ -39,7 +39,7 @@ public class GrafanaInstallServiceImpl implements GrafanaInstallService {
                 grafanaInstall.setExternalPort(grafanaInstallRequestDto.getExternalPort());
                 grafanaInstall.setSystemParameter(systemParameter);
                 grafanaInstall.setIsActive(true);
-                log.error("Se actualiza las credenciales de Grafana");
+                log.info("Se actualiza las credenciales de Grafana");
             } else {
                 grafanaInstall = InstallationConfig.builder()
                         .username(grafanaInstallRequestDto.getUsuario())

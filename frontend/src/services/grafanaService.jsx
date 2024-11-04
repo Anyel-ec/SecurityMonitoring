@@ -43,7 +43,12 @@ export const loginAndAccessDashboard = async () => {
     const response = await axios.get(`${BASE_URL}/grafana-login-and-access-dashboard`, {
       withCredentials: true,
     });
-    return response.data; // Devuelve la respuesta completa
+
+    if (response.data.success && response.data.data?.redirectUrl) {
+      window.location.href = response.data.data.redirectUrl; // Redirige a la URL del dashboard
+    } else {
+      throw new Error(response.data.message || 'No se pudo acceder al dashboard.');
+    }
   } catch (error) {
     console.error('Error al iniciar sesión y acceder al dashboard de Grafana:', error);
     throw error;

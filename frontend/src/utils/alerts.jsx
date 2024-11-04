@@ -25,6 +25,19 @@ export const showErrorAlert = (title, message) => {
   });
 };
 
+export const showLoadingAlert = (title, message) => {
+  Swal.fire({
+    icon: 'info',
+    title: title,
+    text: message,
+    showConfirmButton: false,
+    allowOutsideClick: false,
+    didOpen: () => {
+      Swal.showLoading();
+    },
+  });
+};
+
 export const showConfirmationAlert = async (title, text) => {
   const result = await Swal.fire({
     title: title,
@@ -51,4 +64,22 @@ export const showDockerErrorAlert = (retryCallback) => {
       retryCallback(); // Ejecuta el callback para reintentar la verificación de Docker
     }
   });
+};
+
+export const showWarningAlert = (title, message) => {
+  Swal.fire({
+    icon: 'warning',
+    title: title,
+    text: message,
+    toast: true,
+    position: 'bottom-start',
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+  });
+};
+
+
+export const closeAlert = () => {
+  Swal.close();
 };

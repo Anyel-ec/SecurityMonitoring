@@ -24,3 +24,35 @@ export const checkIfComposeExecuted = async () => {
         throw error;
     }
 };
+
+
+export const runDockerInstallService = async () => {
+    const BASE_URL = AppEnvironments.baseUrl;
+    try {
+        const response = await axios.get(`${BASE_URL}/api/v1/install/docker/install`);
+        return response.data;
+    } catch (error) {
+        console.error('Error al ejecutar Docker Compose:', error);
+        if (error.response?.data) {
+            throw new Error(error.response.data.message || 'Error al ejecutar Docker Compose');
+        } else {
+            throw new Error('No se pudo conectar al servidor. Verifica tu conexión.');
+        }
+    }
+};
+
+
+// New service to check the container status of Grafana and Prometheus
+export const checkContainerStatusService = async () => {
+    try {
+        const response = await axios.get(`${BASE_URL}/checkContainerStatus`);
+        return response.data; // Returns the JSON response object
+    } catch (error) {
+        console.error('Error checking container status:', error);
+        if (error.response?.data) {
+            throw new Error(error.response.data.message || 'Error checking container status');
+        } else {
+            throw new Error('Unable to connect to the server. Please check your connection.');
+        }
+    }
+};

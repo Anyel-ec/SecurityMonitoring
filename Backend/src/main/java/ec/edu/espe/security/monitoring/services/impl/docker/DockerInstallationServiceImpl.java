@@ -15,6 +15,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import static ec.edu.espe.security.monitoring.utils.PrometheusConfigUtil.generatePrometheusConfig;
 
@@ -28,52 +31,27 @@ public class DockerInstallationServiceImpl implements DockerInstallationService 
     private final GrafanaDatasourceService grafanaDatasourceService;
     private final AesEncryptorUtil aesEncryptor;
 
-    public void waitForDockerContainersUp() {
-        boolean grafanaUp = false;
-        boolean prometheusUp = false;
+    public boolean areDockerContainersUp() {
+        try {
+            // Run the "docker ps" command to list active containers
+            Process process = new ProcessBuilder("docker", "ps").start();
+            List<String> lines = new BufferedReader(new InputStreamReader(process.getInputStream())).lines().toList();
 
-        // Loop until both Grafana and Prometheus containers are confirmed to be "up"
-        while (!grafanaUp || !prometheusUp) {
-            try {
-                // Run the "docker ps" command to list active containers
-                ProcessBuilder processBuilder = new ProcessBuilder("docker", "ps");
-                Process process = processBuilder.start();
+            boolean grafanaUp = lines.stream().anyMatch(line -> line.contains("grafana") && line.contains("Up"));
+            boolean prometheusUp = lines.stream().anyMatch(line -> line.contains("prometheus") && line.contains("Up"));
 
-                // Read the output of the "docker ps" command
-                BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-                String line;
-
-                // Reset container statuses for each iteration
-                grafanaUp = false;
-                prometheusUp = false;
-
-                // Check each line in the output to see if the required containers are "up"
-                while ((line = reader.readLine()) != null) {
-                    if (line.contains("grafana") && line.contains("Up")) {
-                        grafanaUp = true;
-                    }
-                    if (line.contains("prometheus") && line.contains("Up")) {
-                        prometheusUp = true;
-                    }
-                }
-
-                // If either container is not "up", wait 3 seconds before checking again
-                if (!grafanaUp || !prometheusUp) {
-                    Thread.sleep(3000); // sleep 3s
-                    log.info("Waiting for Grafana and Prometheus to be up. Sleeping for 3 seconds.");
-                }
-
-            } catch (IOException e) {
-                throw new IllegalStateException("Error checking Docker container status", e);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-                throw new IllegalStateException("Process was interrupted while checking Docker status", e);
+            // Return true if both Grafana and Prometheus containers are up, otherwise false
+            if (grafanaUp && prometheusUp) {
+                log.info("Both Grafana and Prometheus containers are up.");
+                return true;
+            } else {
+                log.info("One or both containers are not up.");
+                return false;
             }
-        }
 
-        // When both Grafana and Prometheus are confirmed "up," proceed with post-installation tasks
-        log.info("Both Grafana and Prometheus containers are up. Executing post-installation tasks...");
-        runPostInstallationTasks();
+        } catch (IOException e) {
+            throw new IllegalStateException("Error checking Docker container status", e);
+        }
     }
 
     private void runPostInstallationTasks() {
