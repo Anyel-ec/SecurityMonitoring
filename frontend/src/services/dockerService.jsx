@@ -3,6 +3,20 @@ import AppEnvironments from '../config/AppEnvironments';
 
 const BASE_URL = `${AppEnvironments.baseUrl}/api/v1/docker`;
 
+
+// Servicio para ejecutar Docker Compose con la base de datos
+export const runDockerComposeWithDatabase = async () => {
+    try {
+        const response = await axios.get(`${BASE_URL}/runComposeWithDatabase`);
+        return response.data; // Devuelve el objeto de respuesta JSON
+    } catch (error) {
+        console.error('Error al ejecutar Docker Compose con credenciales de base de datos:', error);
+        throw error;
+    }
+};
+
+
+
 // Servicio para verificar el estado de Docker
 export const checkDockerStatus = async () => {
     try {

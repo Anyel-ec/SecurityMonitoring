@@ -6,6 +6,8 @@ import { showSuccessAlert, showErrorAlert, showConfirmationAlert, showDockerErro
 import { testPostgresConnection } from '../../services/connectionService';
 import { getAllCredentials, deleteConnectionById, createOrUpdateCredential } from '../../services/databaseCredentialService';
 import { checkDockerStatus, checkIfComposeExecuted } from '../../services/dockerService';
+import { runDockerComposeWithDatabase } from '../../services/dockerService';
+
 export default function MainComponent() {
   const [selectedConnection, setSelectedConnection] = useState({ connectionName: '', comment: '', types: [], credentials: {} });
   const [connections, setConnections] = useState([]);
@@ -183,6 +185,8 @@ export default function MainComponent() {
           await createOrUpdateCredential(credentialsData);
           // Obtener todas las credenciales de bd 
           await fetchAllCredentials();
+          // Ejecutar Docker Compose con la base de datos después de guardar las credenciales
+          await runDockerComposeWithDatabase();
           showSuccessAlert('Credenciales guardadas con éxito', '');
         }
       }

@@ -14,6 +14,7 @@ import { useNavigate } from 'react-router-dom'; // Importa useNavigate
 import { completeInstallation } from '../../pages/installation/helper/installationHelper';
 import { runDockerInstallService } from '../../services/dockerService';
 import { checkContainerStatusService } from '../../services/dockerService';
+import { createDashboard, createPrometheusDatasource } from '../../services/grafanaService';
 
 import { showLoadingAlert, closeAlert, showSuccessAlert, showErrorAlert, showWarningAlert } from '../../utils/alerts';
 export default function InstallationWizard() {
@@ -172,6 +173,28 @@ export default function InstallationWizard() {
   const handleCompleteInstallation = async () => {
     await completeInstallation(navigate);
   };
+  useEffect(() => {
+    if (currentStep === 6) {
+      const initializeGrafana = async () => {
+        try {
+          showLoadingAlert('Configurando Grafana...', 'Creando dashboard y datasource en Grafana...');
+          
+          await createDashboard();
+          await createPrometheusDatasource();
+          
+          closeAlert();
+          showSuccessAlert('Configuración Completa', 'Dashboard y datasource creados en Grafana.');
+        } catch (error) {
+          closeAlert();
+          showErrorAlert('Error', 'Hubo un problema al configurar Grafana.');
+        }
+      };
+
+      const timerId = setTimeout(initializeGrafana, 5000); // Ejecutar después de 5 segundos
+
+      return () => clearTimeout(timerId); // Limpiar el temporizador si el componente se desmonta
+    }
+  }, [currentStep]);
 
   const nextStep = () => {
     switch (currentStep) {

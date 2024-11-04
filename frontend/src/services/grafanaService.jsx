@@ -44,13 +44,43 @@ export const loginAndAccessDashboard = async () => {
       withCredentials: true,
     });
 
-    if (response.data.success && response.data.data?.redirectUrl) {
-      window.location.href = response.data.data.redirectUrl; // Redirige a la URL del dashboard
+    if (response.data.success && response.data.result?.redirectUrl) {
+      window.location.href = response.data.result.redirectUrl; // Redirige a la URL del dashboard
     } else {
-      throw new Error(response.data.message || 'No se pudo acceder al dashboard.');
+      throw new Error(response.data.message);
     }
   } catch (error) {
     console.error('Error al iniciar sesión y acceder al dashboard de Grafana:', error);
     throw error;
   }
 };
+
+
+/**
+ * Crea un nuevo dashboard en Grafana.
+ * @returns {Promise} Promesa que devuelve la respuesta de la creación del dashboard.
+ */
+export const createDashboard = async () => {
+  try {
+    const response = await axios.post(`${BASE_URL}/dashboard/create`);
+    return response.data;
+  } catch (error) {
+    console.error('Error al crear el dashboard en Grafana:', error);
+    throw error;
+  }
+};
+
+/**
+ * Crea una datasource de Prometheus en Grafana.
+ * @returns {Promise} Promesa que devuelve la respuesta de la creación de la datasource.
+ */
+export const createPrometheusDatasource = async () => {
+  try {
+    const response = await axios.post(`${BASE_URL}/datasource`);
+    return response.data;
+  } catch (error) {
+    console.error('Error al crear la datasource de Prometheus en Grafana:', error);
+    throw error;
+  }
+};
+
