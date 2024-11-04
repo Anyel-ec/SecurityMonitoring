@@ -1,7 +1,9 @@
 package ec.edu.espe.security.monitoring.config;
 
 import ec.edu.espe.security.monitoring.models.SystemParameters;
+import ec.edu.espe.security.monitoring.models.UserRole;
 import ec.edu.espe.security.monitoring.repositories.SystemParametersRepository;
+import ec.edu.espe.security.monitoring.repositories.UserRoleRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
@@ -15,7 +17,9 @@ import java.util.List;
 @Slf4j
 public class SystemInitializerConfig implements CommandLineRunner {
 
+    // Injected dependencies
     private final SystemParametersRepository systemParametersRepository;
+    private final UserRoleRepository userRoleRepository;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -26,7 +30,6 @@ public class SystemInitializerConfig implements CommandLineRunner {
         List<SystemParameters> parameters = List.of(
                 new SystemParameters("GRAFANA_INSTALL", "Configuration for installing Grafana", null, true),
                 new SystemParameters("PROMETHEUS_INSTALL", "Configuration for installing Prometheus", null, true),
-                new SystemParameters("USERS_INSTALL", "Configuration for installing user accounts", null, true),
                 new SystemParameters("COMPLETE_INSTALL", "Configuration for installing complete", "0", true),
                 new SystemParameters("PROMETHEUS_EXPORTER_POSTGRESQL", "Configuration for Prometheus PostgreSQL exporter", null, true),
                 new SystemParameters("PROMETHEUS_EXPORTER_MONGODB", "Configuration for Prometheus MongoDB exporter", null, true),
@@ -43,6 +46,21 @@ public class SystemInitializerConfig implements CommandLineRunner {
         if (!newParameters.isEmpty()) {
             log.info("Insertando nuevos parámetros: {}", newParameters);
             systemParametersRepository.saveAll(newParameters);  // Batch insert
+        }
+
+        List<UserRole> roles = List.of(
+                new UserRole( "superadmin", "Highest privilege role", 1, true),
+                new UserRole ("admin", "Administrator role", 2, true),
+                new UserRole( "user", "Standard user role", 3, true)
+        );
+
+        List<UserRole> newRoles = roles.stream()
+                .filter(role -> userRoleRepository.findByNameAndIsActiveTrue(role.getName()).isEmpty())
+                .toList();
+
+        if (!newRoles.isEmpty()) {
+            log.info("Insertando nuevos roles: {}", newRoles);
+            userRoleRepository.saveAll(newRoles);  // Batch insert
         }
 
 

@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class PrometheusDatasourceDto {
+public class PrometheusDatasourceRequestDto {
 
     private String name;
     private String type;

@@ -21,16 +21,25 @@ import java.time.LocalDateTime;
 public class UserRole {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
     private long id;
     private String name;
 
     private String description;
 
+    private int hierarchy;
+
     @CreationTimestamp
     private LocalDateTime createdAt;
 
     @Column(columnDefinition = "boolean default true")
     private Boolean isActive;
+
+    public UserRole(String name, String description, int hierarchy, Boolean isActive) {
+        this.name = name;
+        this.description = description;
+        this.hierarchy = hierarchy;
+        this.isActive = isActive;
+    }
 }

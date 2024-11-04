@@ -1,7 +1,7 @@
 package ec.edu.espe.security.monitoring.services.impl;
 
 import ec.edu.espe.security.monitoring.models.UserInfo;
-import ec.edu.espe.security.monitoring.repositories.UserRepository;
+import ec.edu.espe.security.monitoring.repositories.UserInfoRepository;
 import ec.edu.espe.security.monitoring.security.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,12 +14,12 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
     
-    private final UserRepository userRepository;
+    private final UserInfoRepository userInfoRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         log.info("Entering in loadUserByUsername Method...");
-        UserInfo user = userRepository.findByUsernameAndIsActiveTrue(username);
+        UserInfo user = userInfoRepository.findByUsernameAndIsActiveTrue(username);
         if(user == null){
             log.info("Username not found: " + username);
             throw new UsernameNotFoundException("could not found user..!!");

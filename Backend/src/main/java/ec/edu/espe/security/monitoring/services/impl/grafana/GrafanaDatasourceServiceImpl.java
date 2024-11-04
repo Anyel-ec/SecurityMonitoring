@@ -1,6 +1,6 @@
 package ec.edu.espe.security.monitoring.services.impl.grafana;
 
-import ec.edu.espe.security.monitoring.dto.request.grafana.PrometheusDatasourceDto;
+import ec.edu.espe.security.monitoring.dto.request.grafana.PrometheusDatasourceRequestDto;
 import ec.edu.espe.security.monitoring.models.InstallationConfig;
 import ec.edu.espe.security.monitoring.models.SystemParameters;
 import ec.edu.espe.security.monitoring.services.interfaces.grafana.GrafanaDatasourceService;
@@ -32,7 +32,7 @@ public class GrafanaDatasourceServiceImpl implements GrafanaDatasourceService {
             String username = grafanaInstall.getUsername(); // Grafana username
             String decryptedPassword = aesEncryptor.decrypt(grafanaInstall.getPassword()); // Decrypt Grafana password
 
-            PrometheusDatasourceDto datasourceDto = getPrometheusDatasourceDto();
+            PrometheusDatasourceRequestDto datasourceDto = getPrometheusDatasourceDto();
 
             // Create the RestTemplate client to send the POST request
             RestTemplate restTemplate = new RestTemplate();
@@ -43,7 +43,7 @@ public class GrafanaDatasourceServiceImpl implements GrafanaDatasourceService {
             headers.setBasicAuth(username, decryptedPassword); // Set Basic Authentication
 
             // Set up the request body and headers
-            HttpEntity<PrometheusDatasourceDto> entity = new HttpEntity<>(datasourceDto, headers);
+            HttpEntity<PrometheusDatasourceRequestDto> entity = new HttpEntity<>(datasourceDto, headers);
 
             // Send the POST request to the Grafana endpoint
             ResponseEntity<String> response = restTemplate.exchange(
@@ -62,11 +62,11 @@ public class GrafanaDatasourceServiceImpl implements GrafanaDatasourceService {
     }
 
     @NotNull
-    private PrometheusDatasourceDto getPrometheusDatasourceDto() {
+    private PrometheusDatasourceRequestDto getPrometheusDatasourceDto() {
         InstallationConfig prometheusConfig = prometheusInstallService.getPrometheusInstall();
 
         // Set up the DTO with the required properties
-        return new PrometheusDatasourceDto(
+        return new PrometheusDatasourceRequestDto(
                 "prometheus",  // Name
                 "prometheus",  // Type
                 String.format("http://prometheus:%s", prometheusConfig.getInternalPort()),  // URL

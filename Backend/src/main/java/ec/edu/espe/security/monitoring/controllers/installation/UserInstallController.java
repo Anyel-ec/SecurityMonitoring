@@ -3,6 +3,7 @@ package ec.edu.espe.security.monitoring.controllers.installation;
 import ec.edu.espe.security.monitoring.dto.request.installation.UserInstallRequestDto;
 import ec.edu.espe.security.monitoring.dto.response.JsonResponseDto;
 import ec.edu.espe.security.monitoring.models.InstallationConfig;
+import ec.edu.espe.security.monitoring.models.UserInfo;
 import ec.edu.espe.security.monitoring.services.interfaces.installation.UserInstallService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -29,7 +30,7 @@ public class UserInstallController {
     public ResponseEntity<JsonResponseDto> saveUserInstall(@Valid @RequestBody UserInstallRequestDto userInstallRequestDto) {
         try {
             // Try to save the user registration
-            InstallationConfig savedUserInstall = userInstallService.saveUserInstall(userInstallRequestDto);
+            UserInfo savedUserInstall = userInstallService.saveUserInstall(userInstallRequestDto);
 
             // Check if the registration was successfully saved
             if (savedUserInstall != null) {

@@ -23,8 +23,6 @@ public class InstallationConfig {
     private int externalPort;
     private String username;
     private String password;
-    private String numberPhone;
-    private String email;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "type", referencedColumnName = "id")
