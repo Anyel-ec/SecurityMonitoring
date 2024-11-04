@@ -83,3 +83,20 @@ export const showWarningAlert = (title, message) => {
 export const closeAlert = () => {
   Swal.close();
 };
+
+
+// Alerta de error con opción de reintento
+export const showRetryAlert = (title, message, retryCallback) => {
+  Swal.fire({
+    icon: 'error',
+    title: title,
+    text: message,
+    showCancelButton: true,
+    confirmButtonText: 'Reintentar',
+    cancelButtonText: 'Cancelar',
+  }).then((result) => {
+    if (result.isConfirmed) {
+      retryCallback(); // Ejecuta el callback para reintentar la acción
+    }
+  });
+};

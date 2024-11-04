@@ -33,31 +33,37 @@ public class UserInstallServiceImpl implements UserInstallService {
             // Encrypt the password
             String encryptedPassword = aesEncryptor.encrypt(userInstallRequestDto.getPassword());
 
-            // Check if a user with the same username already exists
-            UserInfo existingUser = userInfoRepository.findByUsernameAndIsActiveTrue(userInstallRequestDto.getUsuario());
-            if (existingUser != null) {
-                throw new IllegalArgumentException("El nombre de usuario ya existe.");
-            }
-
             // Retrieve the "superadmin" role
             UserRole superAdminRole = userRoleRepository.findByNameAndIsActiveTrue("superadmin")
                     .orElseThrow(() -> new IllegalArgumentException("El rol superadmin no fue encontrado"));
 
-            // Create a new user with the superadmin role
-            UserInfo user = new UserInfo();
-            user.setUsername(userInstallRequestDto.getUsuario());
-            user.setPassword(encryptedPassword);
-            user.setPhone(userInstallRequestDto.getNumberPhone());
-            user.setEmail(userInstallRequestDto.getEmail());
-            user.setIsActive(true);
+            // Check if a user with the same username already exists
+            UserInfo user = userInfoRepository.findByUsernameAndIsActiveTrue(userInstallRequestDto.getUsuario());
 
-            // Set roles
-            Set<UserRole> roles = new HashSet<>();
+            if (user != null) {
+                // If user exists, update fields
+                log.info("Actualizando usuario existente con rol superadmin: {}", user.getUsername());
+                user.setPassword(encryptedPassword);
+                user.setPhone(userInstallRequestDto.getNumberPhone());
+                user.setEmail(userInstallRequestDto.getEmail());
+                user.setIsActive(true);
+            } else {
+                // If user does not exist, create a new user
+                user = new UserInfo();
+                user.setUsername(userInstallRequestDto.getUsuario());
+                user.setPassword(encryptedPassword);
+                user.setPhone(userInstallRequestDto.getNumberPhone());
+                user.setEmail(userInstallRequestDto.getEmail());
+                user.setIsActive(true);
+                log.info("Creando nuevo usuario con rol superadmin: {}", user.getUsername());
+            }
+
+            // Set roles (ensuring superadmin role is added)
+            Set<UserRole> roles = user.getRoles() != null ? user.getRoles() : new HashSet<>();
             roles.add(superAdminRole);
             user.setRoles(roles);
 
             // Save the user in the database
-            log.info("Guardando nuevo usuario con rol superadmin: {}", user);
             return userInfoRepository.save(user);
         } catch (IllegalArgumentException e) {
             log.error(e.getMessage());

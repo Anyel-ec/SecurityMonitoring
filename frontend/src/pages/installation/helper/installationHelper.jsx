@@ -14,12 +14,6 @@ export const completeInstallation = async (navigate) => {
   try {
     await completeInstallService();
 
-    showLoadingAlert('Ejecutando Docker...', 'Por favor, espera mientras se ejecuta Docker Compose.');
-
-    await runDockerInstallService();
-
-    closeAlert();
-
     showSuccessAlert('Instalación Completa', 'Docker Compose se ejecutó y la instalación se ha completado exitosamente.');
 
     navigate('/');

@@ -45,7 +45,7 @@ public class DockerInstallationServiceImpl implements DockerInstallationService 
                 log.info("Both Grafana and Prometheus containers are up.");
                 return true;
             } else {
-                log.info("One or both containers are not up.");
+                log.warn("One or both containers are not up.");
                 return false;
             }
 
@@ -54,14 +54,7 @@ public class DockerInstallationServiceImpl implements DockerInstallationService 
         }
     }
 
-    private void runPostInstallationTasks() {
-        log.info("Ya se acabaron de instalar");
-        grafanaDatasourceService.createPrometheusDatasource();
-        log.info("Se creo el datasource de prometheus");
-        grafanaDashboardService.createDashboard();
-        log.info("Se creo dashboard de grafana");
-    }
-
+    
     /**
      * Runs a Docker Compose process to set up the services based on the active installation configurations.
      */

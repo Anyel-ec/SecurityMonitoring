@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Button, Card, ProgressBar, Spinner  } from 'react-bootstrap';
+import { Button, Card, ProgressBar, Spinner } from 'react-bootstrap';
 import { Check, Database, FileEarmarkCheck, PersonFill } from 'react-bootstrap-icons'; // Bootstrap icons
 import './installation.css';
 import { saveGrafanaInstallService, savePrometheusInstallService, saveOrUpdatePrometheusExportersService, saveUserInstallService } from '../../services/installationService';
@@ -12,11 +12,10 @@ import UserInstallStep from './step/UserInstallStep'; // Importa el componente d
 import { grafanaValidationSchema, prometheusValidationSchema, exportersValidationSchema, userInstallValidationSchema } from './validationSchemas';
 import { useNavigate } from 'react-router-dom'; // Importa useNavigate
 import { completeInstallation } from '../../pages/installation/helper/installationHelper';
-import { runDockerInstallService } from '../../services/dockerService';
-import { checkContainerStatusService } from '../../services/dockerService';
+import { checkContainerStatusService, runDockerInstallService } from '../../services/dockerService';
 import { createDashboard, createPrometheusDatasource } from '../../services/grafanaService';
 
-import { showLoadingAlert, closeAlert, showSuccessAlert, showErrorAlert, showWarningAlert } from '../../utils/alerts';
+import { showLoadingAlert, closeAlert, showSuccessAlert, showErrorAlert } from '../../utils/alerts';
 export default function InstallationWizard() {
   const [currentStep, setCurrentStep] = useState(1);
   const [darkMode, setDarkMode] = useState(false);
@@ -86,7 +85,7 @@ export default function InstallationWizard() {
         setCurrentStep((prev) => prev + 1);
         showSuccessAlert('Instalación Completa', 'Tanto Grafana como Prometheus están ejecutándose.');
       }
-    }, 5000);
+    }, 15000);
   };
 
   const saveStep = async (data, serviceFunction, successMessage) => {
@@ -171,30 +170,41 @@ export default function InstallationWizard() {
   };
 
   const handleCompleteInstallation = async () => {
-    await completeInstallation(navigate);
-  };
-  useEffect(() => {
-    if (currentStep === 6) {
-      const initializeGrafana = async () => {
+    try {
+      // Mostrar el spinner de carga con SweetAlert
+      showLoadingAlert('Finalizando Configuración...', 'Configurando Grafana...');
+
+      const attemptGrafanaSetup = async () => {
         try {
-          showLoadingAlert('Configurando Grafana...', 'Creando dashboard y datasource en Grafana...');
-          
+          // Ejecuta después de un retraso de 5 segundos
+          await new Promise(resolve => setTimeout(resolve, 10000));
           await createDashboard();
           await createPrometheusDatasource();
-          
+
+          // Cerrar el spinner de carga y mostrar éxito
           closeAlert();
           showSuccessAlert('Configuración Completa', 'Dashboard y datasource creados en Grafana.');
+          // Redirige al inicio ("/") después de la configuración exitosa
+          navigate('/');
         } catch (error) {
+          // Manejo de error y opción para reintentar
           closeAlert();
-          showErrorAlert('Error', 'Hubo un problema al configurar Grafana.');
+          showRetryAlert(
+            'Error en la configuración',
+            'Hubo un problema al configurar el dashboard y datasource en Grafana.',
+            attemptGrafanaSetup // Reintentar la configuración
+          );
         }
       };
 
-      const timerId = setTimeout(initializeGrafana, 5000); // Ejecutar después de 5 segundos
-
-      return () => clearTimeout(timerId); // Limpiar el temporizador si el componente se desmonta
+      attemptGrafanaSetup(); // Inicia el intento de configuración
+    } catch (error) {
+      console.error('Error en la instalación final:', error);
+      closeAlert();
+      showErrorAlert('Error', 'Ocurrió un problema al completar la instalación.');
     }
-  }, [currentStep]);
+  };
+
 
   const nextStep = () => {
     switch (currentStep) {
@@ -259,7 +269,7 @@ export default function InstallationWizard() {
         return (
           <div className="text-center">
             {isInstalling ? (
-              <Spinner animation="border" variant="primary" /> 
+              <Spinner animation="border" variant="primary" />
             ) : (
               <Check size={50} color="green" />
             )}
@@ -271,7 +281,7 @@ export default function InstallationWizard() {
         return (
           <div className="text-center">
             <h2>Installation Complete!</h2>
-            <p>Your setup is ready.</p>
+            <p>Your setup is ready. Verifying Grafana dashboard and datasource setup...</p>
           </div>
         );
       default:
@@ -344,7 +354,7 @@ export default function InstallationWizard() {
             </Button>
           )}
           <Button onClick={nextStep} className="ml-auto" disabled={currentStep === 5 && isInstalling}>
-          {currentStep === 4 ? 'Instalar' : currentStep < 6 ? 'Next' : 'Finish'}
+            {currentStep === 4 ? 'Instalar' : currentStep < 6 ? 'Next' : 'Finish'}
           </Button>
         </div>
       </Card>
