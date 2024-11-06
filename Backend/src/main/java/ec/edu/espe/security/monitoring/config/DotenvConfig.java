@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class DotenvConfig {
-
+    // Get ENV
     @Bean
     public Dotenv dotenv() {
         // Dynamically gets the project's directory
