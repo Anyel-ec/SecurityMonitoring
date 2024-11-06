@@ -21,17 +21,29 @@ import java.util.Map;
 public class GrafanaLoginController {
 
     private final GrafanaLoginService grafanaLoginService;
-
+    /**
+     * Endpoint to log in to Grafana.
+     * @return ResponseEntity with a string response from the login service.
+     */
     @PostMapping("/grafana-login")
     public ResponseEntity<String> loginToGrafana() {
         return grafanaLoginService.loginToGrafana();
     }
 
+    /**
+     * Endpoint to access the Grafana dashboard with an existing session.
+     * @param response HttpServletResponse to manage the response handling for dashboard access.
+     */
     @GetMapping("/access-dashboard-with-session")
     public void accessDashboardWithSession(HttpServletResponse response) {
         grafanaLoginService.accessDashboardWithSession(response);
     }
 
+    /**
+     * Endpoint to log in to Grafana and redirect to the dashboard with session details.
+     * @param response HttpServletResponse for managing cookies and redirection headers.
+     * @return ResponseEntity containing a JSON response with the redirection URL or an error message.
+     */
     @GetMapping("/grafana-login-and-access-dashboard")
     public ResponseEntity<JsonResponseDto> loginAndAccessDashboard(HttpServletResponse response) {
         log.info("Entró al login de Grafana");

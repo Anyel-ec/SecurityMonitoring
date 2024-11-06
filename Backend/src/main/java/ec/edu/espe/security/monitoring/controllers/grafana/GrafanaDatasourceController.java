@@ -18,6 +18,10 @@ public class GrafanaDatasourceController {
     // Inject the GrafanaDatasourceServiceImpl
     private final GrafanaDatasourceServiceImpl grafanaDatasourceService;
 
+    /**
+     * Endpoint to create a Prometheus datasource in Grafana.
+     * @return ResponseEntity containing a JSON response with the operation result.
+     */
     @PostMapping("/datasource")
     public ResponseEntity<JsonResponseDto> createPrometheusDatasource() {
         try {

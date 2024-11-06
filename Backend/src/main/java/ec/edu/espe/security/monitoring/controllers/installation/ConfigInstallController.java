@@ -24,6 +24,10 @@ public class ConfigInstallController {
     private final ConfigInstallService configInstallService;
     private final DockerInstallationService dockerInstallationService;
 
+    /**
+     * Endpoint to retrieve all active installations.
+     * @return ResponseEntity with JSON response containing active installations.
+     */
     @GetMapping("/active")
     public ResponseEntity<JsonResponseDto> getActiveInstallations() {
         try {
@@ -38,9 +42,9 @@ public class ConfigInstallController {
         }
     }
 
-    /*
-     * GET endpoint to check if the installation is complete
-     * @return ResponseEntity<JsonResponseDto>
+    /**
+     * Endpoint to check if the installation is complete.
+     * @return ResponseEntity containing a JSON response with the installation completion status.
      */
     @GetMapping("/status")
     public ResponseEntity<JsonResponseDto> getInstallationCompleteStatus() {
@@ -62,9 +66,9 @@ public class ConfigInstallController {
         }
     }
 
-    /*
-     * PUT endpoint to update the COMPLETE_INSTALL parameter
-     * @return ResponseEntity<JsonResponseDto>
+    /**
+     * Endpoint to update the COMPLETE_INSTALL parameter.
+     * @return ResponseEntity containing a JSON response with the updated parameter.
      */
     @PutMapping("/complete")
     public ResponseEntity<JsonResponseDto> updateCompleteInstall() {
@@ -85,7 +89,10 @@ public class ConfigInstallController {
         }
     }
 
-    // Endpoint run the Docker Compose installation process
+    /**
+     * Endpoint to run the Docker Compose installation process.
+     * @return ResponseEntity with JSON response indicating success or error.
+     */
     @GetMapping("/docker/install")
     public ResponseEntity<JsonResponseDto> runDockerInstall() {
         try {

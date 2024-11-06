@@ -18,6 +18,12 @@ import java.util.List;
 public class DatabaseCredentialController {
 
     private final DatabaseCredentialService credentialService;
+
+    /**
+     * Endpoint to create or update database credentials.
+     * @param dto Data Transfer Object containing credential information.
+     * @return ResponseEntity with JSON response indicating success or error message.
+     */
     @PostMapping("/createOrUpdate")
     public ResponseEntity<JsonResponseDto> createCredential(@Valid @RequestBody DatabaseCredentialRequestDto dto) {
         try {
@@ -30,6 +36,10 @@ public class DatabaseCredentialController {
         }
     }
 
+    /**
+     * Endpoint to retrieve all database credentials.
+     * @return ResponseEntity containing a JSON response with the list of credentials or an error message.
+     */
     @GetMapping
     public ResponseEntity<JsonResponseDto> getAllCredentials() {
         try {
@@ -41,6 +51,11 @@ public class DatabaseCredentialController {
         }
     }
 
+    /**
+     * Endpoint to retrieve a specific credential by ID.
+     * @param id The ID of the credential to be retrieved.
+     * @return ResponseEntity with the credential data if found, or an error message if not.
+     */
     @GetMapping("/{id}")
     public ResponseEntity<JsonResponseDto> getCredentialById(@PathVariable Long id) {
         try {
@@ -55,6 +70,11 @@ public class DatabaseCredentialController {
         }
     }
 
+    /**
+     * Endpoint to delete a database credential by ID.
+     * @param id The ID of the credential to be deleted.
+     * @return ResponseEntity with a success or error message based on the outcome.
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity<JsonResponseDto> deleteCredential(@PathVariable Long id) {
         try {

@@ -8,5 +8,6 @@ import java.util.Optional;
 
 @Repository
 public interface SystemParametersRepository extends JpaRepository<SystemParameters, Long> {
+    // Finds an active system parameter by its name
     Optional<SystemParameters> findByNameAndIsActiveTrue(String name);
 }

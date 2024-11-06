@@ -20,6 +20,10 @@ public class DockerRunController {
     private final DockerDbCredentialServiceImpl dockerComposeService;
     private final DockerInstallationServiceImpl dockerInstallationService;
 
+    /**
+     * Endpoint to check if Docker is currently running.
+     * @return ResponseEntity with JSON response indicating Docker's running status.
+     */
     @GetMapping("/isActive")
     public ResponseEntity<JsonResponseDto> checkDockerStatus() {
         try {
@@ -36,6 +40,11 @@ public class DockerRunController {
         }
     }
 
+    /**
+     * Endpoint to check if Docker Compose has been executed.
+     * If not, it triggers Docker Compose execution.
+     * @return ResponseEntity with JSON response indicating execution status.
+     */
     @GetMapping("/hasBeenExecuted")
     public ResponseEntity<JsonResponseDto> checkIfComposeExecuted() {
         try {
@@ -55,6 +64,10 @@ public class DockerRunController {
         }
     }
 
+    /**
+     * Endpoint to run Docker Compose with database credentials.
+     * @return ResponseEntity with JSON response indicating success or error.
+     */
     @GetMapping("/runComposeWithDatabase")
     public ResponseEntity<JsonResponseDto> runDockerComposeWithDatabase() {
         try {
@@ -67,6 +80,10 @@ public class DockerRunController {
         }
     }
 
+    /**
+     * Endpoint to check the running status of Grafana and Prometheus containers.
+     * @return ResponseEntity with JSON response indicating container statuses.
+     */
     @GetMapping("/checkContainerStatus")
     public ResponseEntity<JsonResponseDto> checkContainerStatus() {
         try {

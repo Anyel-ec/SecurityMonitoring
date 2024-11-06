@@ -31,6 +31,10 @@ public class DockerInstallationServiceImpl implements DockerInstallationService 
     private final GrafanaDatasourceService grafanaDatasourceService;
     private final AesEncryptorUtil aesEncryptor;
 
+    /**
+     * Checks if the Docker containers for Grafana and Prometheus are currently running.
+     * @return true if both containers are up, otherwise false.
+     */
     public boolean areDockerContainersUp() {
         try {
             // Run the "docker ps" command to list active containers
