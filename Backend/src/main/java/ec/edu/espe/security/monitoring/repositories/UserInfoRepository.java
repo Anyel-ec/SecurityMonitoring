@@ -8,7 +8,11 @@ import java.util.List;
 
 @Repository
 public interface UserInfoRepository extends JpaRepository<UserInfo, Long> {
-    UserInfo findByUsernameAndIsActiveTrue(String username);
-    List<UserInfo> findByIsActiveTrue();
 
+    // Finds an active user by their username
+    UserInfo findByUsernameAndIsActiveTrue(String username);
+
+    // Retrieves all active users
+    List<UserInfo> findByIsActiveTrue();
 }
+

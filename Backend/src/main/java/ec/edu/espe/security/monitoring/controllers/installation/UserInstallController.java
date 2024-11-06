@@ -21,10 +21,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserInstallController {
     private final UserInstallService userInstallService;
 
-    /*
-     * POST endpoint to save user registration
-     * @param UserInstallRequestDto userInstallRequestDto
-     * @return ResponseEntity<JsonResponseDto>
+    /**
+     * POST endpoint to save user registration.
+     * @param userInstallRequestDto Data Transfer Object containing user registration details.
+     * @return ResponseEntity with a JSON response indicating success or failure.
      */
     @PostMapping()
     public ResponseEntity<JsonResponseDto> saveUserInstall(@Valid @RequestBody UserInstallRequestDto userInstallRequestDto) {

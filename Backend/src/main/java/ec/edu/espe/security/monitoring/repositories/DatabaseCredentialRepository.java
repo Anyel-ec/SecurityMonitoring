@@ -10,10 +10,14 @@ import java.util.Optional;
 
 @Repository
 public interface DatabaseCredentialRepository extends JpaRepository<DatabaseCredential, Long> {
+
+    // Finds an active database credential by host and system parameter
     Optional<DatabaseCredential> findByHostAndSystemParameterAndIsActive(String host, SystemParameters systemParameter, Boolean isActive);
+
+    // Finds an active database credential by system parameter only
     Optional<DatabaseCredential> findBySystemParameterAndIsActive(SystemParameters systemParameter, Boolean isActive);
 
-    // gell alll credential databases
+    // Retrieves all active database credentials
     List<DatabaseCredential> findByIsActiveTrue();
-
 }
+

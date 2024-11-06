@@ -20,6 +20,10 @@ import java.util.List;
 @RequestMapping("api/v1/auth")
 public class AuthController {
     private final AuthServiceImpl authService;
+    /**
+     * Endpoint to retrieve all active users.
+     * @return ResponseEntity containing a JSON response with active user data.
+     */
     @GetMapping("/active-users")
     public ResponseEntity<JsonResponseDto> getAllActiveUsers() {
         log.info("Solicitud para obtener todos los usuarios activos");

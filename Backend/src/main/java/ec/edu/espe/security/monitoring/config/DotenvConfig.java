@@ -6,7 +6,12 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class DotenvConfig {
-    // Get ENV
+
+    /**
+     * Bean definition for Dotenv.
+     * This loads environment variables from a .env file located in the project's directory.
+     * @return Dotenv instance with loaded environment variables.
+     */
     @Bean
     public Dotenv dotenv() {
         // Dynamically gets the project's directory

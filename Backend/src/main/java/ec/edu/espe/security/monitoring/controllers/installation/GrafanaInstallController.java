@@ -19,10 +19,10 @@ public class GrafanaInstallController
 
     private final GrafanaInstallService grafanaInstallService;
 
-    /*
-     * POST endpoint to save Grafana installation parameters
-     * @param GrafanaInstallRequestDto grafanaInstallRequestDTO
-     * @return ResponseEntity<InstallationConfig>
+    /**
+     * POST endpoint to save Grafana installation parameters.
+     * @param grafanaInstallRequestDTO Data Transfer Object containing installation details.
+     * @return ResponseEntity with a JSON response indicating success or failure.
      */
     @PostMapping()
     public ResponseEntity<JsonResponseDto> saveGrafanaInstall(@Valid @RequestBody GrafanaInstallRequestDto grafanaInstallRequestDTO) {
@@ -50,9 +50,9 @@ public class GrafanaInstallController
         }
     }
 
-    /*
-     * GET endpoint to retrieve Grafana installation parameters
-     * @return ResponseEntity<InstallationConfig>
+    /**
+     * GET endpoint to retrieve Grafana installation parameters.
+     * @return ResponseEntity with a JSON response containing the installation configuration or error details.
      */
     @GetMapping()
     public ResponseEntity<JsonResponseDto> getGrafanaInstall() {

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 @Repository
 public interface UserRoleRepository extends JpaRepository<UserRole, Long> {
-    Optional<UserRole> findByNameAndIsActiveTrue(String name);
 
+    // Finds an active user role by its name
+    Optional<UserRole> findByNameAndIsActiveTrue(String name);
 }

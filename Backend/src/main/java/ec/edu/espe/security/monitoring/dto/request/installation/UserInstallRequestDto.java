@@ -12,6 +12,7 @@ public class UserInstallRequestDto {
     @Size(min = 3, max = 50, message = "El nombre de usuario debe tener entre 3 y 50 caracteres")
     private String usuario;
 
+    @NotNull(message = "La contraseña no puede ser nula")
     @Size(min = 6, message = "La contraseña debe tener al menos 6 caracteres")
     private String password;
 

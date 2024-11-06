@@ -19,12 +19,12 @@ public class PrometheusInstallController {
     private final PrometheusInstallService prometheusInstallService;
 
 
-    /*
-     * POST endpoint to save Prometheus installation parameters
-     * @param PrometheusInstallRequestDto prometheusInstallRequestDto
-     * @return ResponseEntity<JsonResponseDto>
+    /**
+     * POST endpoint to save Prometheus installation parameters.
+     * @param prometheusInstallRequestDto Data Transfer Object containing installation details.
+     * @return ResponseEntity with a JSON response indicating success or failure.
      */
-    @PostMapping()
+    @PostMapping
     public ResponseEntity<JsonResponseDto> savePrometheusInstall(@Valid @RequestBody PrometheusInstallRequestDto prometheusInstallRequestDto) {
         try {
             // Try to save the Prometheus installation
@@ -50,7 +50,11 @@ public class PrometheusInstallController {
         }
     }
 
-    @GetMapping()
+    /**
+     * GET endpoint to retrieve Prometheus installation parameters.
+     * @return ResponseEntity with a JSON response containing the installation configuration or error details.
+     */
+    @GetMapping
     public ResponseEntity<JsonResponseDto> getPrometheusInstall() {
         try {
             // Retrieve Prometheus installation configuration
