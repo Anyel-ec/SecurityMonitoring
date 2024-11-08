@@ -185,7 +185,8 @@ export default function InstallationWizard() {
           closeAlert();
           showSuccessAlert('Configuración Completa', 'Dashboard y datasource creados en Grafana.');
           // Redirige al inicio ("/") después de la configuración exitosa
-          navigate('/');
+          completeInstallation(navigate); // Asegúrate de pasar navigate aquí
+
         } catch (error) {
           // Manejo de error y opción para reintentar
           closeAlert();

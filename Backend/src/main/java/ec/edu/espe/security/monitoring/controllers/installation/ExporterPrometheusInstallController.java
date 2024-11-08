@@ -21,7 +21,7 @@ public class ExporterPrometheusInstallController {
      * @param requestDto DTO containing the port configurations for PostgreSQL, MariaDB, and MongoDB.
      * @return JsonResponseDto with success or error message.
      */
-    @PutMapping()
+    @PutMapping
     public ResponseEntity<JsonResponseDto> saveOrUpdatePrometheusExporters(
             @RequestBody ExporterPrometheusInstallRequestDto requestDto) {
         try {

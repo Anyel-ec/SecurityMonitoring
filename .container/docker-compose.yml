@@ -32,14 +32,7 @@ services:
     networks:
       - monitoring
 
-  mongo-exporter:
-    image: ssheehy/mongodb-exporter:latest
-    ports:
-      - "${EXPORT_MONGO_PORT_EXTERNAL}:${EXPORT_MONGO_PORT_INTERNAL}"
-    environment:
-      MONGODB_URI: "${MONGODB_URI}"
-    networks:
-      - monitoring
+  
 
 networks:
   monitoring:

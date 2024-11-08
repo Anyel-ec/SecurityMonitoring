@@ -27,8 +27,6 @@ import static ec.edu.espe.security.monitoring.utils.PrometheusConfigUtil.generat
 public class DockerInstallationServiceImpl implements DockerInstallationService {
     // Injected dependencies
     private final InstallationConfigRepository installationConfigRepository;
-    private final GrafanaDashboardService grafanaDashboardService;
-    private final GrafanaDatasourceService grafanaDatasourceService;
     private final AesEncryptorUtil aesEncryptor;
 
     /**
