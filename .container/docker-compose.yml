@@ -32,6 +32,27 @@ services:
     networks:
       - monitoring
 
+  mongo-exporter:
+    image: ssheehy/mongodb-exporter:latest
+    ports:
+      - "${EXPORT_MONGO_PORT_EXTERNAL}:${EXPORT_MONGO_PORT_INTERNAL}"
+    environment:
+      MONGODB_URI: "mongodb://${MONGO_USER:+${MONGO_USER}:${MONGO_PASSWORD}@}${MONGO_HOST}:${MONGO_PORT}"
+    networks:
+      - monitoring
+
+  mariadb-exporter:
+    image: prom/mysqld-exporter
+    command:
+      - --config.my-cnf=/cfg/.my.cnf
+      - --mysqld.address=${MARIADB_HOST}:${MARIADB_PORT}
+    volumes:
+      - "./.my.cnf:/cfg/.my.cnf"
+    ports:
+      - "${EXPORT_MARIADB_PORT_EXTERNAL}:${EXPORT_MARIADB_PORT_INTERNAL}"
+    networks:
+      - monitoring
+
   
 
 networks:

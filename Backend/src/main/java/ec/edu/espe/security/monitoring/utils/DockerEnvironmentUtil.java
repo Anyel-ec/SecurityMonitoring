@@ -11,6 +11,7 @@ import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
+
 @UtilityClass
 @Slf4j
 public class DockerEnvironmentUtil {
@@ -29,6 +30,16 @@ public class DockerEnvironmentUtil {
             putEnvIfNotNull(processBuilder, "EXPORT_POSTGRES_PORT_INTERNAL", String.valueOf(config.getInternalPort()));
             putEnvIfNotNull(processBuilder, "POSTGRES_USER", config.getUsername());
             putEnvIfNotNull(processBuilder, "POSTGRES_PASSWORD", decryptedPassword);
+        } else if ("PROMETHEUS_EXPORTER_MONGODB".equals(config.getSystemParameter().getName())) {
+            putEnvIfNotNull(processBuilder, "EXPORT_MONGO_PORT_EXTERNAL", String.valueOf(config.getExternalPort()));
+            putEnvIfNotNull(processBuilder, "EXPORT_MONGO_PORT_INTERNAL", String.valueOf(config.getInternalPort()));
+            putEnvIfNotNull(processBuilder, "MONGODB_USER", config.getUsername());
+            putEnvIfNotNull(processBuilder, "MONGODB_PASSWORD", decryptedPassword);
+        } else if ("PROMETHEUS_EXPORTER_MARIADB".equals(config.getSystemParameter().getName())) {
+            putEnvIfNotNull(processBuilder, "EXPORT_MARIADB_PORT_EXTERNAL", String.valueOf(config.getExternalPort()));
+            putEnvIfNotNull(processBuilder, "EXPORT_MARIADB_PORT_INTERNAL", String.valueOf(config.getInternalPort()));
+            putEnvIfNotNull(processBuilder, "MARIADB_USER", config.getUsername());
+            putEnvIfNotNull(processBuilder, "MARIADB_PASSWORD", decryptedPassword);
         }
     }
 
@@ -37,7 +48,7 @@ public class DockerEnvironmentUtil {
         if (value != null) {
             processBuilder.environment().put(key, value);
         } else {
-            log.warn("Environment variable {} has null value and will not be set", key);
+            log.warn("La variable de entorno {} tiene un valor nulo y no se establecerá", key);
         }
     }
 
