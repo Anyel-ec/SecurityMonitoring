@@ -72,4 +72,8 @@ public final class ApiErrorResponse {
     public static ResponseEntity<JsonResponseDto> internalServerError(String mensaje, Collection<ApiError> errores) {
         return buildResponse(INTERNAL_SERVER_ERROR, mensaje, errores);
     }
+
+
+
+
 }

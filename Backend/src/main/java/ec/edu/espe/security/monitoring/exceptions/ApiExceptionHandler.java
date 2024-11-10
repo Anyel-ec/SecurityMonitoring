@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -23,8 +24,12 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.util.List;
+
+import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
 
 @RestControllerAdvice
 @Slf4j
@@ -33,10 +38,23 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     // Handle 404 errors when no handler is found
     @Override
     protected ResponseEntity<Object> handleNoHandlerFoundException(NoHandlerFoundException ex,
-                                                                   @NotNull HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+                                                                   @NotNull HttpHeaders headers, @NotNull HttpStatusCode status, @NotNull WebRequest request) {
         log.warn("No handler found for URL: " + ex.getRequestURL());
         JsonResponseDto response = new JsonResponseDto(false, 404, "No se encontró el recurso solicitado: " + ex.getRequestURL(), null);
         return ResponseEntity.status(404).body(response);
+    }
+
+    // Handle NoResourceFoundException
+    protected ResponseEntity<Object> handleNoHandlerFoundException(NoHandlerFoundException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+        String resourcePath = request.getDescription(false).replace("uri=", "");
+        String httpMethod = ex.getHttpMethod();
+        String requestURL = ex.getRequestURL();
+
+        log.warn("No handler found for resource: {}, Method: {}, URL: {}", resourcePath, httpMethod, requestURL);
+
+        JsonResponseDto response = new JsonResponseDto(false, status.value(), String.format("Recurso no encontrado: %s. Método: %s. URL solicitada: %s", resourcePath, httpMethod, requestURL), null);
+
+        return ResponseEntity.status(status).headers(headers).contentType(APPLICATION_JSON).body(response);
     }
 
     // Handle internal server errors in request handling
