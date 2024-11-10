@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -96,4 +97,12 @@ public class ApiExceptionHandler {
         log.error("Request handling failed", throwable);
         return ApiErrorResponse.internalServerError("Ocurrió un error inesperado");
     }
+
+    // Handles JSON parsing errors (e.g., incorrect data types or malformed JSON)
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<JsonResponseDto> handleHttpMessageNotReadable(HttpMessageNotReadableException ex) {
+        log.warn("JSON parse error: {}", ex.getMessage());
+        return ApiErrorResponse.badRequest("Error de formato JSON ");
+    }
+
 }
