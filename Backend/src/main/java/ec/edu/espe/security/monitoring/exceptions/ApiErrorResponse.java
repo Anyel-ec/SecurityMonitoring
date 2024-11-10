@@ -73,7 +73,4 @@ public final class ApiErrorResponse {
         return buildResponse(INTERNAL_SERVER_ERROR, mensaje, errores);
     }
 
-
-
-
 }
