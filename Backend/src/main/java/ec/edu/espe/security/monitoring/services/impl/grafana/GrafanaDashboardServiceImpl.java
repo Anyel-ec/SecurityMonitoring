@@ -47,7 +47,6 @@ public class GrafanaDashboardServiceImpl implements GrafanaDashboardService {
 
             // Send the request to create the dashboard
             ResponseEntity<String> response = performDashboardCreationRequest(username, decryptedPassword, dashboardJson);
-            log.info("Dashboard JSON: {}", dashboardJson); // Log the dashboard JSON
             log.info("Grafana response: {}", response.getBody()); // Log the response from Grafana
 
             // Check if the response status is not successful

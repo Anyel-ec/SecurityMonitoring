@@ -261,7 +261,23 @@ export default function MainComponent() {
   const testConnection = async (type) => {
     setTestingConnection(type);
     try {
-      const config = selectedConnection.credentials[type];
+      // Crear el objeto completo DatabaseCredential
+      const config = {
+        ...selectedConnection,
+        // Extrae las credenciales correctas según el tipo (PostgreSQL, MariaDB, MongoDB)
+        host: selectedConnection.credentials[type]?.host,
+        port: selectedConnection.credentials[type]?.port,
+        username: selectedConnection.credentials[type]?.username,
+        password: selectedConnection.credentials[type]?.password,
+        systemParameter: {
+          name: type.toUpperCase() // Asegúrate de que coincida con el tipo de BD en mayúsculas
+        },
+        comment: selectedConnection.comment || ''
+      };
+  
+      console.log('Enviando objeto DatabaseCredential:', config);
+  
+      // Llama a la función de prueba de conexión con el objeto completo
       const response = await testPostgresConnection(config);
       showSuccessAlert(response.message, '');
     } catch (error) {
@@ -270,6 +286,7 @@ export default function MainComponent() {
       setTestingConnection(null);
     }
   };
+  
 
   return (
     <div ref={containerRef} className="d-flex h-100">

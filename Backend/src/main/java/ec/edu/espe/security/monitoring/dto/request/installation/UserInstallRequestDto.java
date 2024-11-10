@@ -13,7 +13,7 @@ public class UserInstallRequestDto {
     private String usuario;
 
     @NotNull(message = "La contraseña no puede ser nula")
-    @Size(min = 6, message = "La contraseña debe tener al menos 6 caracteres")
+    @Size(min = 5, message = "La contraseña debe tener al menos 6 caracteres")
     private String password;
 
     @NotNull(message = "El número de teléfono no puede ser nulo")

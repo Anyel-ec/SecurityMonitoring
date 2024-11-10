@@ -15,7 +15,13 @@ public class DatabaseUtils {
     /**
      * Tests the connection to a database using the provided credentials and database type.
      */
-    public boolean testDatabaseConnection(DatabaseCredential config, String dbType) {
+    public boolean testDatabaseConnection(DatabaseCredential config) {
+        if (config.getSystemParameter() == null || config.getSystemParameter().getName() == null) {
+            log.error("Error: El tipo de base de datos no está especificado en los parámetros del sistema.");
+            return false;
+        }
+
+        String dbType = config.getSystemParameter().getName();
         String jdbcUrl = buildJdbcUrl(config, dbType);
 
         if (jdbcUrl == null) {
@@ -35,13 +41,14 @@ public class DatabaseUtils {
      * Builds the JDBC URL based on the provided database type and credentials.
      */
 
+    /**
+     * Builds the JDBC URL based on the provided database type and credentials.
+     */
     private String buildJdbcUrl(DatabaseCredential config, String dbType) {
-        return switch (dbType.toLowerCase()) {
-            case "postgresql" -> String.format("jdbc:postgresql://%s:%d/", config.getHost(), config.getPort());
-            case "mariadb" -> String.format("jdbc:mariadb://%s:%d/", config.getHost(), config.getPort());
-            case "mongodb" ->
-                // to MongoDB, not using direct JDBC directamente
-                    String.format("mongodb://%s:%d/", config.getHost(), config.getPort());
+        return switch (dbType.toUpperCase()) {
+            case "POSTGRESQL" -> String.format("jdbc:postgresql://%s:%d/", config.getHost(), config.getPort());
+            case "MARIADB" -> String.format("jdbc:mariadb://%s:%d/", config.getHost(), config.getPort());
+            case "MONGODB" -> String.format("mongodb://%s:%d/", config.getHost(), config.getPort());
             default -> null;
         };
     }

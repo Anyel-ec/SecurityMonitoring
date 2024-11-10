@@ -28,11 +28,7 @@ public class DatabaseCredentialService {
                 .orElseThrow(() -> new IllegalArgumentException("Parámetro del sistema no encontrado: " + credentialRequestDto.getSystemParameter().getName()));
 
         // Check if a credential with the same host and system parameter already exists
-        Optional<DatabaseCredential> existingCredentialOpt = databaseCredentialRepository
-                .findBySystemParameterAndIsActive(
-                        systemParameter,
-                        true
-                );
+        Optional<DatabaseCredential> existingCredentialOpt = databaseCredentialRepository.findBySystemParameterAndIsActive(systemParameter, true);
 
         // Encrypt the password
         String encryptedPassword;
@@ -80,7 +76,8 @@ public class DatabaseCredentialService {
 
     // Retrieve a specific credential by its ID
     public DatabaseCredential getCredentialById(Long id) {
-        DatabaseCredential credential = databaseCredentialRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Credencial con ID no encontrada: " + id));
+        DatabaseCredential credential = databaseCredentialRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Credencial con ID no encontrada: " + id));
 
         try {
             if (credential.getPassword() != null) {
@@ -90,13 +87,13 @@ public class DatabaseCredentialService {
         } catch (Exception e) {
             throw new IllegalStateException("Error al desencriptar la contraseña", e);
         }
-
         return credential;
     }
 
     // Delete a credential by its ID
     public void deleteCredential(Long id) {
-        DatabaseCredential credential = databaseCredentialRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Credencial con ID no encontrada: " + id));
+        DatabaseCredential credential = databaseCredentialRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Credencial con ID no encontrada: " + id));
 
         databaseCredentialRepository.delete(credential);
     }

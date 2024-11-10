@@ -3,6 +3,7 @@ package ec.edu.espe.security.monitoring.controllers.installation;
 import ec.edu.espe.security.monitoring.dto.request.installation.ExporterPrometheusInstallRequestDto;
 import ec.edu.espe.security.monitoring.dto.response.JsonResponseDto;
 import ec.edu.espe.security.monitoring.services.interfaces.installation.PrometheusExporterInstallService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -23,8 +24,7 @@ public class ExporterPrometheusInstallController {
      * @return JsonResponseDto with success or error message.
      */
     @PutMapping
-    public ResponseEntity<JsonResponseDto> saveOrUpdatePrometheusExporters(
-            @RequestBody ExporterPrometheusInstallRequestDto requestDto) {
+    public ResponseEntity<JsonResponseDto> saveOrUpdatePrometheusExporters(@Valid @RequestBody ExporterPrometheusInstallRequestDto requestDto) {
         try {
             prometheusExporterInstallService.saveOrUpdatePrometheusExporters(requestDto);
 
