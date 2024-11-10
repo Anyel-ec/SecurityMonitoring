@@ -18,6 +18,7 @@ public class ExporterPrometheusInstallController {
 
     /**
      * Endpoint to save or update Prometheus exporter configurations.
+     *
      * @param requestDto DTO containing the port configurations for PostgreSQL, MariaDB, and MongoDB.
      * @return JsonResponseDto with success or error message.
      */
@@ -27,17 +28,14 @@ public class ExporterPrometheusInstallController {
         try {
             prometheusExporterInstallService.saveOrUpdatePrometheusExporters(requestDto);
 
-            JsonResponseDto response = new JsonResponseDto(true, 200, "Exportadores de Prometheus actualizados correctamente", null);
-            return ResponseEntity.ok(response);
+            return ResponseEntity.ok(new JsonResponseDto(true, 200, "Exportadores de Prometheus actualizados correctamente", null));
 
         } catch (IllegalArgumentException e) {
-            JsonResponseDto response = new JsonResponseDto(false, 400, e.getMessage(), null);
-            return ResponseEntity.badRequest().body(response);
+            return ResponseEntity.badRequest().body(new JsonResponseDto(false, 400, e.getMessage(), null));
 
         } catch (Exception e) {
             log.error("Error inesperado al actualizar exportadores de Prometheus: {}", e.getMessage());
-            JsonResponseDto response = new JsonResponseDto(false, 500, "Error interno del servidor", null);
-            return ResponseEntity.status(500).body(response);
+            return ResponseEntity.status(500).body(new JsonResponseDto(false, 500, "Error interno del servidor", null));
         }
     }
 }

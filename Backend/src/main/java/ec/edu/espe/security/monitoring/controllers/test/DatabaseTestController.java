@@ -19,31 +19,18 @@ public class DatabaseTestController {
 
     /**
      * Method to test the database connection.
+     *
      * @param config Database credentials
-     * @param type Type of the database (postgresql, mariadb, mongodb, etc.)
+     * @param type   Type of the database (postgresql, mariadb, mongodb, etc.)
      * @return Response with success or error status
      */
     @PostMapping("/connectionDB/{type}")
-    public ResponseEntity<JsonResponseDto> testConnection(
-            @RequestBody DatabaseCredential config,
-            @PathVariable String type) {
+    public ResponseEntity<JsonResponseDto> testConnection(@RequestBody DatabaseCredential config, @PathVariable String type) {
 
         if (databaseUtils.testDatabaseConnection(config, type)) {
-            JsonResponseDto response = new JsonResponseDto(
-                    true,
-                    HttpStatus.OK.value(),
-                    "Conexión exitosa a la base de datos " + type + ".",
-                    null
-            );
-            return new ResponseEntity<>(response, HttpStatus.OK);
+            return new ResponseEntity<>(new JsonResponseDto(true, HttpStatus.OK.value(), "Conexión exitosa a la base de datos " + type + ".", null), HttpStatus.OK);
         } else {
-            JsonResponseDto response = new JsonResponseDto(
-                    false,
-                    HttpStatus.BAD_REQUEST.value(),
-                    "Error: No se pudo conectar a la base de datos " + type + " con las credenciales proporcionadas.",
-                    null
-            );
-            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new JsonResponseDto(false, HttpStatus.BAD_REQUEST.value(), "Error: No se pudo conectar a la base de datos " + type + " con las credenciales proporcionadas.", null), HttpStatus.BAD_REQUEST);
         }
     }
 

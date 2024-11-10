@@ -21,6 +21,7 @@ public class PrometheusInstallController {
 
     /**
      * POST endpoint to save Prometheus installation parameters.
+     *
      * @param prometheusInstallRequestDto Data Transfer Object containing installation details.
      * @return ResponseEntity with a JSON response indicating success or failure.
      */
@@ -32,26 +33,23 @@ public class PrometheusInstallController {
 
             // Check if the installation was successfully saved
             if (savedPrometheusInstall != null) {
-                JsonResponseDto response = new JsonResponseDto(true, 200, "Instalación de Prometheus guardada exitosamente", savedPrometheusInstall);
-                return ResponseEntity.ok(response);  // Return 200 OK with the saved configuration
+                return ResponseEntity.ok(new JsonResponseDto(true, 200, "Instalación de Prometheus guardada exitosamente", savedPrometheusInstall));  // Return 200 OK with the saved configuration
             } else {
-                JsonResponseDto response = new JsonResponseDto(false, 500, "Error al guardar la instalación de Prometheus", null);
-                return ResponseEntity.status(500).body(response);  // Return 500 Internal Server Error
+                return ResponseEntity.status(500).body(new JsonResponseDto(false, 500, "Error al guardar la instalación de Prometheus", null));  // Return 500 Internal Server Error
             }
         } catch (IllegalArgumentException e) {
             // Handle specific exceptions such as invalid data
-            JsonResponseDto response = new JsonResponseDto(false, 400, e.getMessage(), null);
-            return ResponseEntity.badRequest().body(response);  // Return 400 Bad Request
+            return ResponseEntity.badRequest().body(new JsonResponseDto(false, 400, e.getMessage(), null));  // Return 400 Bad Request
         } catch (Exception e) {
             // Handle any other unexpected exceptions
             log.error("Error inesperado al guardar la instalación de Prometheus: {}", e.getMessage());
-            JsonResponseDto response = new JsonResponseDto(false, 500, "Error interno del servidor al guardar la instalación de Prometheus", null);
-            return ResponseEntity.status(500).body(response);  // Return 500 Internal Server Error
+            return ResponseEntity.status(500).body(new JsonResponseDto(false, 500, "Error interno del servidor al guardar la instalación de Prometheus", null));  // Return 500 Internal Server Error
         }
     }
 
     /**
      * GET endpoint to retrieve Prometheus installation parameters.
+     *
      * @return ResponseEntity with a JSON response containing the installation configuration or error details.
      */
     @GetMapping
@@ -62,21 +60,17 @@ public class PrometheusInstallController {
 
             // If the configuration is found, return 200 OK with the configuration
             if (prometheusInstall != null) {
-                JsonResponseDto response = new JsonResponseDto(true, 200, "Instalación de Prometheus recuperada exitosamente", prometheusInstall);
-                return ResponseEntity.ok(response);
+                return ResponseEntity.ok(new JsonResponseDto(true, 200, "Instalación de Prometheus recuperada exitosamente", prometheusInstall));
             } else {
                 // If the configuration is not found, return 404 Not Found
-                JsonResponseDto response = new JsonResponseDto(false, 404, "Instalación de Prometheus no encontrada", null);
-                return ResponseEntity.status(404).body(response);
+                return ResponseEntity.status(404).body(new JsonResponseDto(false, 404, "Instalación de Prometheus no encontrada", null));
             }
         } catch (IllegalArgumentException e) {
             // Handle error if parameters are not found, return 400 Bad Request
-            JsonResponseDto response = new JsonResponseDto(false, 400, e.getMessage(), null);
-            return ResponseEntity.badRequest().body(response);
+            return ResponseEntity.badRequest().body(new JsonResponseDto(false, 400, e.getMessage(), null));
         } catch (Exception e) {
             // Handle any unexpected exception, return 500 Internal Server Error
-            JsonResponseDto response = new JsonResponseDto(false, 500, "Error interno del servidor al recuperar la instalación de Prometheus", null);
-            return ResponseEntity.status(500).body(response);
+            return ResponseEntity.status(500).body(new JsonResponseDto(false, 500, "Error interno del servidor al recuperar la instalación de Prometheus", null));
         }
     }
 }

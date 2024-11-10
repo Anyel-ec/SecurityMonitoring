@@ -23,6 +23,7 @@ public class UserInstallController {
 
     /**
      * POST endpoint to save user registration.
+     *
      * @param userInstallRequestDto Data Transfer Object containing user registration details.
      * @return ResponseEntity with a JSON response indicating success or failure.
      */
@@ -34,21 +35,17 @@ public class UserInstallController {
 
             // Check if the registration was successfully saved
             if (savedUserInstall != null) {
-                JsonResponseDto response = new JsonResponseDto(true, 200, "Registro de usuario guardado exitosamente", savedUserInstall);
-                return ResponseEntity.ok(response);  // Return 200 OK with the saved registration
+                return ResponseEntity.ok(new JsonResponseDto(true, 200, "Registro de usuario guardado exitosamente", savedUserInstall));  // Return 200 OK with the saved registration
             } else {
-                JsonResponseDto response = new JsonResponseDto(false, 500, "Error al guardar el registro de usuario", null);
-                return ResponseEntity.status(500).body(response);  // Return 500 Internal Server Error
+                return ResponseEntity.status(500).body(new JsonResponseDto(false, 500, "Error al guardar el registro de usuario", null));  // Return 500 Internal Server Error
             }
         } catch (IllegalArgumentException e) {
             // Handle specific exceptions such as invalid data
-            JsonResponseDto response = new JsonResponseDto(false, 400, e.getMessage(), null);
-            return ResponseEntity.badRequest().body(response);  // Return 400 Bad Request
+            return ResponseEntity.badRequest().body(new JsonResponseDto(false, 400, e.getMessage(), null));  // Return 400 Bad Request
         } catch (Exception e) {
             // Handle any other unexpected exceptions
             log.error("Unexpected error while saving user registration: {}", e.getMessage());
-            JsonResponseDto response = new JsonResponseDto(false, 500, "Error interno del servidor al guardar el registro de usuario", null);
-            return ResponseEntity.status(500).body(response);  // Return 500 Internal Server Error
+            return ResponseEntity.status(500).body(new JsonResponseDto(false, 500, "Error interno del servidor al guardar el registro de usuario", null));  // Return 500 Internal Server Error
         }
     }
 }
