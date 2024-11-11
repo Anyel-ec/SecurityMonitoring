@@ -1,6 +1,9 @@
 package ec.edu.espe.security.monitoring.utils;
 
-import ec.edu.espe.security.monitoring.models.DatabaseCredential;
+
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import ec.edu.espe.security.monitoring.dto.request.DatabaseCredentialRequestDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -15,13 +18,41 @@ public class DatabaseUtils {
     /**
      * Tests the connection to a database using the provided credentials and database type.
      */
-    public boolean testDatabaseConnection(DatabaseCredential config) {
+    public boolean testDatabaseConnection(DatabaseCredentialRequestDto config) {
         if (config.getSystemParameter() == null || config.getSystemParameter().getName() == null) {
             log.error("Error: El tipo de base de datos no está especificado en los parámetros del sistema.");
             return false;
         }
 
         String dbType = config.getSystemParameter().getName();
+
+        if (dbType.equalsIgnoreCase("MONGODB")) {
+            return testMongoDBConnection(config);
+        } else {
+            return testSQLConnection(config, dbType);
+        }
+    }
+
+    /**
+     * Tests the connection to a MongoDB database.
+     */
+    private boolean testMongoDBConnection(DatabaseCredentialRequestDto config) {
+        String uri = String.format("mongodb://%s:%d/", config.getHost(), config.getPort());
+
+        try (MongoClient mongoClient = MongoClients.create(uri)) {
+            mongoClient.getDatabase("admin").listCollectionNames();
+            log.info("Conexión exitosa a MongoDB en {}:{}", config.getHost(), config.getPort());
+            return true;
+        } catch (Exception e) {
+            log.error("Error al intentar conectarse a MongoDB: {}", e.getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Tests the connection to a MongoDB database.
+     */
+    private boolean testSQLConnection(DatabaseCredentialRequestDto config, String dbType) {
         String jdbcUrl = buildJdbcUrl(config, dbType);
 
         if (jdbcUrl == null) {
@@ -32,7 +63,7 @@ public class DatabaseUtils {
         try (Connection connection = DriverManager.getConnection(jdbcUrl, config.getUsername(), config.getPassword())) {
             return connection != null && !connection.isClosed();
         } catch (SQLException e) {
-            log.error("Error al intentar conectarse al servidor: {}", e.getMessage());
+            log.error("Error al intentar conectarse al servidor SQL: {}", e.getMessage());
             return false;
         }
     }
@@ -40,16 +71,12 @@ public class DatabaseUtils {
     /**
      * Builds the JDBC URL based on the provided database type and credentials.
      */
-
-    /**
-     * Builds the JDBC URL based on the provided database type and credentials.
-     */
-    private String buildJdbcUrl(DatabaseCredential config, String dbType) {
+    private String buildJdbcUrl(DatabaseCredentialRequestDto config, String dbType) {
         return switch (dbType.toUpperCase()) {
             case "POSTGRESQL" -> String.format("jdbc:postgresql://%s:%d/", config.getHost(), config.getPort());
             case "MARIADB" -> String.format("jdbc:mariadb://%s:%d/", config.getHost(), config.getPort());
-            case "MONGODB" -> String.format("mongodb://%s:%d/", config.getHost(), config.getPort());
             default -> null;
         };
     }
+
 }

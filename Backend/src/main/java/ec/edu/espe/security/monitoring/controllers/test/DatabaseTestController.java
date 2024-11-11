@@ -1,5 +1,6 @@
 package ec.edu.espe.security.monitoring.controllers.test;
 
+import ec.edu.espe.security.monitoring.dto.request.DatabaseCredentialRequestDto;
 import ec.edu.espe.security.monitoring.dto.response.JsonResponseDto;
 import ec.edu.espe.security.monitoring.models.DatabaseCredential;
 import ec.edu.espe.security.monitoring.utils.DatabaseUtils;
@@ -25,7 +26,7 @@ public class DatabaseTestController {
      * @return Response with success or error status
      */
     @PostMapping("/connectionDB")
-    public ResponseEntity<JsonResponseDto> testConnection(@RequestBody DatabaseCredential config) {
+    public ResponseEntity<JsonResponseDto> testConnection(@RequestBody DatabaseCredentialRequestDto config) {
         String dbType = (config.getSystemParameter() != null) ? config.getSystemParameter().getName() : null;
 
         if (dbType == null) {
@@ -34,6 +35,7 @@ public class DatabaseTestController {
         }
 
         if (databaseUtils.testDatabaseConnection(config)) {
+            log.info(dbType + " database connection successful.");
             return new ResponseEntity<>(new JsonResponseDto(true, HttpStatus.OK.value(),
                     "Conexión exitosa a la base de datos de tipo " + dbType + ".", null), HttpStatus.OK);
         } else {
