@@ -42,10 +42,10 @@ public class DockerInstallationServiceImpl implements DockerInstallationService 
     
                 // Return true if both Grafana and Prometheus containers are up, otherwise false
                 if (grafanaUp && prometheusUp) {
-                    log.info("Both Grafana and Prometheus containers are up.");
+                    log.info("Tanto los contenedores Grafana como Prometheus están activos.");
                     return true;
                 } else {
-                    log.warn("One or both containers are not up.");
+                    log.warn("Uno o ambos contenedores no están arriba.");
                     return false;
                 }
             }

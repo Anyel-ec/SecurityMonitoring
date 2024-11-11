@@ -57,7 +57,7 @@ public class DatabaseCredentialService {
 
     // Retrieve all credentials from the repository
     public List<DatabaseCredential> getAllCredentials() {
-        List<DatabaseCredential> credentials = databaseCredentialRepository.findAll();
+        List<DatabaseCredential> credentials = databaseCredentialRepository.findByIsActiveTrue();
 
         // Iterate over each credential to decrypt the password before returning it
         for (DatabaseCredential credential : credentials) {
@@ -95,6 +95,8 @@ public class DatabaseCredentialService {
         DatabaseCredential credential = databaseCredentialRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Credencial con ID no encontrada: " + id));
 
-        databaseCredentialRepository.delete(credential);
+        // delete logic
+        credential.setIsActive(false);
+        databaseCredentialRepository.save(credential);
     }
 }

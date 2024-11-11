@@ -20,7 +20,6 @@ public class DatabaseCredentialRequestDto {
     private String username;
     private String password;
 
-    @NotBlank
     private SystemParameters systemParameter;
 
     @Size(max = 255, message = "El comentario no puede tener más de 255 caracteres")
