@@ -74,8 +74,13 @@ public class DockerEnvironmentUtil {
                 env.put("MONGODB_PASSWORD", decryptedPassword);
                 env.put("MONGODB_HOST", host);
                 env.put("MONGODB_PORT", String.valueOf(config.getPort()));
+                String uri = String.format("mongodb://%s%s:%s",
+                        config.getUsername() != null ? config.getUsername() + ":" + decryptedPassword + "@" : "",
+                        host,
+                        config.getPort());
+                log.info("MongoDB URI configurada: {}", uri);
                 break;
-            default:
+                default:
                 log.warn("Unsupported database type for SystemParameter: {}", config.getSystemParameter().getName());
         }
     }

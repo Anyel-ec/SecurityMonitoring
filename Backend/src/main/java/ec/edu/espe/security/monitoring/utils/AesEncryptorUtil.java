@@ -15,6 +15,9 @@ import java.util.Base64;
 @Component
 public class AesEncryptorUtil {
 
+    @Value("${default.empty.password}")
+    private String defaultEmptyPassword;
+
     // AES key (32 bytes = 256 bits)
     @Value("${secret.key.aes}")
     private String secretKey;
@@ -31,6 +34,12 @@ public class AesEncryptorUtil {
     // Encrypt a string using AES GCM
     public String encrypt(String data) throws NoSuchAlgorithmException, InvalidKeyException,
             NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidAlgorithmParameterException {
+
+
+        // Handle null or empty input
+        if (data == null || data.isEmpty()) {
+            data = defaultEmptyPassword;
+        }
 
         SecretKeySpec key = new SecretKeySpec(hexStringToByteArray(secretKey), ALGORITHM);
         Cipher cipher = Cipher.getInstance(AES_TRANSFORMATION);
@@ -52,6 +61,7 @@ public class AesEncryptorUtil {
     }
 
     // Decrypt a string using AES GCM
+    // Decrypt a string using AES GCM
     public String decrypt(String encryptedData) throws NoSuchAlgorithmException, InvalidKeyException,
             NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidAlgorithmParameterException {
 
@@ -70,7 +80,10 @@ public class AesEncryptorUtil {
         cipher.init(Cipher.DECRYPT_MODE, key, gcmSpec);
         byte[] decryptedData = cipher.doFinal(cipherText);
 
-        return new String(decryptedData);
+        String result = new String(decryptedData);
+
+        // Return empty string if the decrypted value matches the special value for an empty password
+        return result.equals(defaultEmptyPassword) ? "" : result;
     }
 
     // Convert hex string to byte array

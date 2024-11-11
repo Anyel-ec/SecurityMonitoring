@@ -95,8 +95,6 @@ public class DatabaseCredentialService {
         DatabaseCredential credential = databaseCredentialRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Credencial con ID no encontrada: " + id));
 
-        // delete logic
-        credential.setIsActive(false);
-        databaseCredentialRepository.save(credential);
+        databaseCredentialRepository.delete(credential);
     }
 }

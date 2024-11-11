@@ -20,6 +20,7 @@ public class BackendApplication {
         System.setProperty("PUBLIC_KEY_RSA", dotenv.get("PUBLIC_KEY_RSA", ""));
         System.setProperty("PRIVATE_KEY_RSA", dotenv.get("PRIVATE_KEY_RSA", ""));
         System.setProperty("SECRET_KEY_JWT", dotenv.get("SECRET_KEY_JWT", ""));
+        System.setProperty("DEFAULT_EMPTY_PASSWORD", dotenv.get("DEFAULT_EMPTY_PASSWORD", ""));
         // Run the Spring Boot application
         SpringApplication.run(BackendApplication.class, args);
     }
