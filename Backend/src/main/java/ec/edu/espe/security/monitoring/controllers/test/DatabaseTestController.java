@@ -2,9 +2,7 @@ package ec.edu.espe.security.monitoring.controllers.test;
 
 import ec.edu.espe.security.monitoring.dto.request.DatabaseCredentialRequestDto;
 import ec.edu.espe.security.monitoring.dto.response.JsonResponseDto;
-import ec.edu.espe.security.monitoring.models.DatabaseCredential;
 import ec.edu.espe.security.monitoring.utils.DatabaseUtils;
-import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

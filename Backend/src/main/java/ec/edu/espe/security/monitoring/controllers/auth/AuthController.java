@@ -2,9 +2,7 @@ package ec.edu.espe.security.monitoring.controllers.auth;
 
 import ec.edu.espe.security.monitoring.dto.response.JsonResponseDto;
 import ec.edu.espe.security.monitoring.models.UserInfo;
-import ec.edu.espe.security.monitoring.repositories.UserInfoRepository;
 import ec.edu.espe.security.monitoring.services.impl.auth.AuthServiceImpl;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;

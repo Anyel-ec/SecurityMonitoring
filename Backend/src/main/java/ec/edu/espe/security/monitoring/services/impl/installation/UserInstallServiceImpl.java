@@ -1,12 +1,8 @@
 package ec.edu.espe.security.monitoring.services.impl.installation;
 
 import ec.edu.espe.security.monitoring.dto.request.installation.UserInstallRequestDto;
-import ec.edu.espe.security.monitoring.models.InstallationConfig;
-import ec.edu.espe.security.monitoring.models.SystemParameters;
 import ec.edu.espe.security.monitoring.models.UserInfo;
 import ec.edu.espe.security.monitoring.models.UserRole;
-import ec.edu.espe.security.monitoring.repositories.InstallationConfigRepository;
-import ec.edu.espe.security.monitoring.repositories.SystemParametersRepository;
 import ec.edu.espe.security.monitoring.repositories.UserInfoRepository;
 import ec.edu.espe.security.monitoring.repositories.UserRoleRepository;
 import ec.edu.espe.security.monitoring.services.interfaces.installation.UserInstallService;

@@ -3,8 +3,6 @@ package ec.edu.espe.security.monitoring.services.impl.docker;
 import ec.edu.espe.security.monitoring.models.InstallationConfig;
 import ec.edu.espe.security.monitoring.repositories.InstallationConfigRepository;
 import ec.edu.espe.security.monitoring.services.interfaces.docker.DockerInstallationService;
-import ec.edu.espe.security.monitoring.services.interfaces.grafana.GrafanaDashboardService;
-import ec.edu.espe.security.monitoring.services.interfaces.grafana.GrafanaDatasourceService;
 import ec.edu.espe.security.monitoring.utils.AesEncryptorUtil;
 import ec.edu.espe.security.monitoring.utils.DockerEnvironmentUtil;
 import lombok.RequiredArgsConstructor;
@@ -15,9 +13,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 import static ec.edu.espe.security.monitoring.utils.PrometheusConfigUtil.generatePrometheusConfig;
 
@@ -37,24 +32,29 @@ public class DockerInstallationServiceImpl implements DockerInstallationService 
         try {
             // Run the "docker ps" command to list active containers
             Process process = new ProcessBuilder("docker", "ps").start();
-            List<String> lines = new BufferedReader(new InputStreamReader(process.getInputStream())).lines().toList();
-
-            boolean grafanaUp = lines.stream().anyMatch(line -> line.contains("grafana") && line.contains("Up"));
-            boolean prometheusUp = lines.stream().anyMatch(line -> line.contains("prometheus") && line.contains("Up"));
-
-            // Return true if both Grafana and Prometheus containers are up, otherwise false
-            if (grafanaUp && prometheusUp) {
-                log.info("Both Grafana and Prometheus containers are up.");
-                return true;
-            } else {
-                log.warn("One or both containers are not up.");
-                return false;
+    
+            // Use try-with-resources to ensure BufferedReader is closed properly
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
+                List<String> lines = reader.lines().toList();
+    
+                boolean grafanaUp = lines.stream().anyMatch(line -> line.contains("grafana") && line.contains("Up"));
+                boolean prometheusUp = lines.stream().anyMatch(line -> line.contains("prometheus") && line.contains("Up"));
+    
+                // Return true if both Grafana and Prometheus containers are up, otherwise false
+                if (grafanaUp && prometheusUp) {
+                    log.info("Both Grafana and Prometheus containers are up.");
+                    return true;
+                } else {
+                    log.warn("One or both containers are not up.");
+                    return false;
+                }
             }
-
+    
         } catch (IOException e) {
             throw new IllegalStateException("Error checking Docker container status", e);
         }
     }
+    
 
     
     /**

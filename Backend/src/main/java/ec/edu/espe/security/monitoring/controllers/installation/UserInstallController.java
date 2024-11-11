@@ -2,7 +2,6 @@ package ec.edu.espe.security.monitoring.controllers.installation;
 
 import ec.edu.espe.security.monitoring.dto.request.installation.UserInstallRequestDto;
 import ec.edu.espe.security.monitoring.dto.response.JsonResponseDto;
-import ec.edu.espe.security.monitoring.models.InstallationConfig;
 import ec.edu.espe.security.monitoring.models.UserInfo;
 import ec.edu.espe.security.monitoring.services.interfaces.installation.UserInstallService;
 import jakarta.validation.Valid;
