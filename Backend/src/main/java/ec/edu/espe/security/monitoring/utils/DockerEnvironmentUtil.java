@@ -17,31 +17,47 @@ import java.util.Map;
 public class DockerEnvironmentUtil {
 
     public static void configureInstallationEnv(ProcessBuilder processBuilder, InstallationConfig config, String decryptedPassword) {
-        if ("GRAFANA_INSTALL".equals(config.getSystemParameter().getName())) {
-            putEnvIfNotNull(processBuilder, "GRAFANA_PORT_EXTERNAL", String.valueOf(config.getExternalPort()));
-            putEnvIfNotNull(processBuilder, "GRAFANA_PORT_INTERNAL", String.valueOf(config.getInternalPort()));
-            putEnvIfNotNull(processBuilder, "GRAFANA_USER", config.getUsername());
-            putEnvIfNotNull(processBuilder, "GRAFANA_PASSWORD", decryptedPassword);
-        } else if ("PROMETHEUS_INSTALL".equals(config.getSystemParameter().getName())) {
-            putEnvIfNotNull(processBuilder, "PROMETHEUS_PORT_EXTERNAL", String.valueOf(config.getExternalPort()));
-            putEnvIfNotNull(processBuilder, "PROMETHEUS_PORT_INTERNAL", String.valueOf(config.getInternalPort()));
-        } else if ("PROMETHEUS_EXPORTER_POSTGRESQL".equals(config.getSystemParameter().getName())) {
-            putEnvIfNotNull(processBuilder, "EXPORT_POSTGRES_PORT_EXTERNAL", String.valueOf(config.getExternalPort()));
-            putEnvIfNotNull(processBuilder, "EXPORT_POSTGRES_PORT_INTERNAL", String.valueOf(config.getInternalPort()));
-            putEnvIfNotNull(processBuilder, "POSTGRES_USER", config.getUsername());
-            putEnvIfNotNull(processBuilder, "POSTGRES_PASSWORD", decryptedPassword);
-        } else if ("PROMETHEUS_EXPORTER_MONGODB".equals(config.getSystemParameter().getName())) {
-            putEnvIfNotNull(processBuilder, "EXPORT_MONGO_PORT_EXTERNAL", String.valueOf(config.getExternalPort()));
-            putEnvIfNotNull(processBuilder, "EXPORT_MONGO_PORT_INTERNAL", String.valueOf(config.getInternalPort()));
-            putEnvIfNotNull(processBuilder, "MONGODB_USER", config.getUsername());
-            putEnvIfNotNull(processBuilder, "MONGODB_PASSWORD", decryptedPassword);
-        } else if ("PROMETHEUS_EXPORTER_MARIADB".equals(config.getSystemParameter().getName())) {
-            putEnvIfNotNull(processBuilder, "EXPORT_MARIADB_PORT_EXTERNAL", String.valueOf(config.getExternalPort()));
-            putEnvIfNotNull(processBuilder, "EXPORT_MARIADB_PORT_INTERNAL", String.valueOf(config.getInternalPort()));
-            putEnvIfNotNull(processBuilder, "MARIADB_USER", config.getUsername());
-            putEnvIfNotNull(processBuilder, "MARIADB_PASSWORD", decryptedPassword);
+        String systemParam = config.getSystemParameter().getName();
+        switch (systemParam) {
+            case "GRAFANA_INSTALL":
+                putEnvIfNotNull(processBuilder, "GRAFANA_PORT_EXTERNAL", String.valueOf(config.getExternalPort()));
+                putEnvIfNotNull(processBuilder, "GRAFANA_PORT_INTERNAL", String.valueOf(config.getInternalPort()));
+                putEnvIfNotNull(processBuilder, "GRAFANA_USER", config.getUsername());
+                putEnvIfNotNull(processBuilder, "GRAFANA_PASSWORD", decryptedPassword);
+                break;
+
+            case "PROMETHEUS_INSTALL":
+                putEnvIfNotNull(processBuilder, "PROMETHEUS_PORT_EXTERNAL", String.valueOf(config.getExternalPort()));
+                putEnvIfNotNull(processBuilder, "PROMETHEUS_PORT_INTERNAL", String.valueOf(config.getInternalPort()));
+                break;
+
+            case "PROMETHEUS_EXPORTER_POSTGRESQL":
+                putEnvIfNotNull(processBuilder, "EXPORT_POSTGRES_PORT_EXTERNAL", String.valueOf(config.getExternalPort()));
+                putEnvIfNotNull(processBuilder, "EXPORT_POSTGRES_PORT_INTERNAL", String.valueOf(config.getInternalPort()));
+                putEnvIfNotNull(processBuilder, "POSTGRES_USER", null);
+                putEnvIfNotNull(processBuilder, "POSTGRES_PASSWORD", null);
+                break;
+
+            case "PROMETHEUS_EXPORTER_MONGODB":
+                putEnvIfNotNull(processBuilder, "EXPORT_MONGO_PORT_EXTERNAL", String.valueOf(config.getExternalPort()));
+                putEnvIfNotNull(processBuilder, "EXPORT_MONGO_PORT_INTERNAL", String.valueOf(config.getInternalPort()));
+                putEnvIfNotNull(processBuilder, "MONGODB_HOST", null);
+                putEnvIfNotNull(processBuilder, "MONGODB_PORT", null);
+                break;
+
+            case "PROMETHEUS_EXPORTER_MARIADB":
+                putEnvIfNotNull(processBuilder, "EXPORT_MARIADB_PORT_EXTERNAL", String.valueOf(config.getExternalPort()));
+                putEnvIfNotNull(processBuilder, "EXPORT_MARIADB_PORT_INTERNAL", String.valueOf(config.getInternalPort()));
+                putEnvIfNotNull(processBuilder, "MARIADB_USER", null);
+                putEnvIfNotNull(processBuilder, "MARIADB_PASSWORD", null);
+                break;
+
+            default:
+                log.warn("No se encontró una configuración válida para: {}", systemParam);
+                break;
         }
     }
+
 
     // Helper method to add non-null values to environment
     private static void putEnvIfNotNull(ProcessBuilder processBuilder, String key, String value) {
@@ -56,33 +72,51 @@ public class DockerEnvironmentUtil {
         Map<String, String> env = processBuilder.environment();
         String host = "localhost".equals(config.getHost()) || "127.0.0.1".equals(config.getHost()) ? "host.docker.internal" : config.getHost();
 
+        log.info("Configurando entorno para base de datos: {}", config.getSystemParameter().getName());
+        log.info("Host: {}", host);
+        log.info("Puerto: {}", config.getPort());
+        log.info("Usuario: {}", config.getUsername());
+
         switch (config.getSystemParameter().getName().toUpperCase()) {
             case "POSTGRESQL":
                 env.put("POSTGRES_USER", config.getUsername());
                 env.put("POSTGRES_PASSWORD", decryptedPassword);
                 env.put("POSTGRES_HOST", host);
                 env.put("POSTGRES_PORT", String.valueOf(config.getPort()));
+                log.info("Variables de entorno para PostgreSQL establecidas: USER={}, HOST={}, PORT={}", config.getUsername(), host, config.getPort());
                 break;
+
             case "MARIADB":
                 env.put("MARIADB_USER", config.getUsername());
                 env.put("MARIADB_PASSWORD", decryptedPassword);
                 env.put("MARIADB_HOST", host);
                 env.put("MARIADB_PORT", String.valueOf(config.getPort()));
+                log.info("Variables de entorno para MariaDB establecidas: USER={}, HOST={}, PORT={}", config.getUsername(), host, config.getPort());
                 break;
+
             case "MONGODB":
-                env.put("MONGODB_USER", config.getUsername());
-                env.put("MONGODB_PASSWORD", decryptedPassword);
-                env.put("MONGODB_HOST", host);
-                env.put("MONGODB_PORT", String.valueOf(config.getPort()));
-                String uri = String.format("mongodb://%s%s:%s",
-                        config.getUsername() != null ? config.getUsername() + ":" + decryptedPassword + "@" : "",
-                        host,
-                        config.getPort());
-                log.info("MongoDB URI configurada: {}", uri);
+                String mongoUri = getMongoUri(config, decryptedPassword, host);
+                env.put("MONGODB_URI", mongoUri);
+                log.info("URI para MongoDB configurada: {}", mongoUri);
                 break;
-                default:
-                log.warn("Unsupported database type for SystemParameter: {}", config.getSystemParameter().getName());
+
+            default:
+                log.warn("Tipo de base de datos no soportado para SystemParameter: {}", config.getSystemParameter().getName());
         }
+    }
+
+    private static String getMongoUri(DatabaseCredential config, String decryptedPassword, String host) {
+        String mongoUri;
+        if (config.getUsername() != null && !config.getUsername().isEmpty() && decryptedPassword != null && !decryptedPassword.isEmpty()) {
+            mongoUri = String.format("mongodb://%s:%s@%s:%s",
+                    config.getUsername(),
+                    decryptedPassword,
+                    host,
+                    config.getPort());
+        } else {
+            mongoUri = String.format("mongodb://%s:%s", host, config.getPort());
+        }
+        return mongoUri;
     }
 
     public static String decryptPassword(String encryptedPassword, AesEncryptorUtil aesEncryptor) {

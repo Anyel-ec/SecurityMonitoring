@@ -28,16 +28,17 @@ public class SystemInitializerConfig implements CommandLineRunner {
 
         // List the parameters to insert in BD
         List<SystemParameters> parameters = List.of(
-                new SystemParameters("GRAFANA_INSTALL", "Configuration for installing Grafana", null, true),
-                new SystemParameters("PROMETHEUS_INSTALL", "Configuration for installing Prometheus", null, true),
-                new SystemParameters("COMPLETE_INSTALL", "Configuration for installing complete", "0", true),
-                new SystemParameters("PROMETHEUS_EXPORTER_POSTGRESQL", "Configuration for Prometheus PostgreSQL exporter", null, true),
-                new SystemParameters("PROMETHEUS_EXPORTER_MONGODB", "Configuration for Prometheus MongoDB exporter", null, true),
-                new SystemParameters("PROMETHEUS_EXPORTER_MARIADB", "Configuration for Prometheus MariaDB exporter", null, true),
-                new SystemParameters("POSTGRESQL", "Configuration for PostgreSQL database", null, true),
-                new SystemParameters("MARIADB", "Configuration for MariaDB database", null, true),
-                new SystemParameters("MONGODB", "Configuration for MongoDB database", null, true)
+                new SystemParameters("GRAFANA_INSTALL", "Configuración para instalar Grafana", null, true),
+                new SystemParameters("PROMETHEUS_INSTALL", "Configuración para instalar Prometheus", null, true),
+                new SystemParameters("COMPLETE_INSTALL", "Configuración para la instalación completa", "0", true),
+                new SystemParameters("PROMETHEUS_EXPORTER_POSTGRESQL", "Configuración para el exportador de PostgreSQL en Prometheus", null, true),
+                new SystemParameters("PROMETHEUS_EXPORTER_MONGODB", "Configuración para el exportador de MongoDB en Prometheus", null, true),
+                new SystemParameters("PROMETHEUS_EXPORTER_MARIADB", "Configuración para el exportador de MariaDB en Prometheus", null, true),
+                new SystemParameters("POSTGRESQL", "Configuración para la base de datos PostgreSQL", null, true),
+                new SystemParameters("MARIADB", "Configuración para la base de datos MariaDB", null, true),
+                new SystemParameters("MONGODB", "Configuración para la base de datos MongoDB", null, true)
         );
+
         // Filter out existing parameters
         List<SystemParameters> newParameters = parameters.stream()
                 .filter(param -> systemParametersRepository.findByNameAndIsActiveTrue(param.getName()).isEmpty())
@@ -49,9 +50,9 @@ public class SystemInitializerConfig implements CommandLineRunner {
         }
 
         List<UserRole> roles = List.of(
-                new UserRole( "superadmin", "Highest privilege role", 1, true),
-                new UserRole ("admin", "Administrator role", 2, true),
-                new UserRole( "user", "Standard user role", 3, true)
+                new UserRole("superadmin", "Rol con los privilegios más altos", 1, true),
+                new UserRole("admin", "Rol de administrador", 2, true),
+                new UserRole("user", "Rol de usuario estándar", 3, true)
         );
 
         List<UserRole> newRoles = roles.stream()

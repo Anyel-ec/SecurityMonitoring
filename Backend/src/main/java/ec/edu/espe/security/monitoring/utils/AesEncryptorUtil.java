@@ -61,7 +61,6 @@ public class AesEncryptorUtil {
     }
 
     // Decrypt a string using AES GCM
-    // Decrypt a string using AES GCM
     public String decrypt(String encryptedData) throws NoSuchAlgorithmException, InvalidKeyException,
             NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidAlgorithmParameterException {
 
