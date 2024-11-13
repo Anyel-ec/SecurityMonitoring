@@ -73,4 +73,8 @@ public final class ApiErrorResponse {
         return buildResponse(INTERNAL_SERVER_ERROR, mensaje, errores);
     }
 
+    public static ResponseEntity<JsonResponseDto> forbidden(String mensaje) {
+        return buildResponse(FORBIDDEN, mensaje, null);
+    }
+
 }

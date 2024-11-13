@@ -7,10 +7,16 @@ import org.springframework.beans.TypeMismatchException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.http.converter.HttpMessageNotWritableException;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
+import org.springframework.web.bind.ServletRequestBindingException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.NoHandlerFoundException;
@@ -57,6 +63,35 @@ public class ApiExceptionHandler {
         return ApiErrorResponse.unsupportedMediaType(new HttpHeaders(), "Tipo de contenido no soportado");
     }
 
+
+    // Handles cases where a required request parameter is missing
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    public ResponseEntity<JsonResponseDto> handleMissingServletRequestParameter(MissingServletRequestParameterException ex) {
+        log.warn("Missing request parameter: {}", ex.getParameterName());
+        return ApiErrorResponse.badRequest("Falta el parámetro de solicitud: " + ex.getParameterName());
+    }
+
+    // Handles cases where there is a binding error in the request
+    @ExceptionHandler(ServletRequestBindingException.class)
+    public ResponseEntity<JsonResponseDto> handleServletRequestBindingException(ServletRequestBindingException ex) {
+        log.warn("Request binding error: {}", ex.getMessage());
+        return ApiErrorResponse.badRequest("Error de enlace de solicitud");
+    }
+
+    // Handles cases where the response message cannot be written
+    @ExceptionHandler(HttpMessageNotWritableException.class)
+    public ResponseEntity<JsonResponseDto> handleHttpMessageNotWritable(HttpMessageNotWritableException ex) {
+        log.error("Message not writable: ", ex);
+        return ApiErrorResponse.internalServerError("Error al escribir el mensaje de respuesta");
+    }
+
+    // Handles cases where access is denied to a resource
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<JsonResponseDto> handleAccessDeniedException(AccessDeniedException ex) {
+        log.warn("Access denied: {}", ex.getMessage());
+        return ApiErrorResponse.forbidden("Acceso denegado");
+    }
+
     // Handles validation errors when method arguments are not valid
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<JsonResponseDto> handleMethodArgumentNotValid(MethodArgumentNotValidException ex) {
@@ -82,6 +117,20 @@ public class ApiExceptionHandler {
     public ResponseEntity<JsonResponseDto> handleTypeMismatch(TypeMismatchException ex) {
         log.warn("Tipo de dato no coincide: {}", ex.getPropertyName());
         return ApiErrorResponse.badRequest("Solicitud de no coincidencia de tipos");
+    }
+
+    // Hanlde not find username
+    @ExceptionHandler(UsernameNotFoundException.class)
+    public ResponseEntity<JsonResponseDto> handleUsernameNotFoundException(UsernameNotFoundException ex) {
+        log.error("Username not found: ", ex);
+        return ApiErrorResponse.notFound("No se encontró el usuario");
+    }
+
+    // Handle bad credentials
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<JsonResponseDto> handleBadCredentialsException(BadCredentialsException ex) {
+        log.error("Bad credentials: ", ex);
+        return ApiErrorResponse.badRequest("Credenciales incorrectas");
     }
 
     // Handles general exceptions that are not specifically defined
