@@ -106,18 +106,17 @@ public class DockerEnvironmentUtil {
     }
 
     private static String getMongoUri(DatabaseCredential config, String decryptedPassword, String host) {
-        String mongoUri;
         if (config.getUsername() != null && !config.getUsername().isEmpty() && decryptedPassword != null && !decryptedPassword.isEmpty()) {
-            mongoUri = String.format("mongodb://%s:%s@%s:%s",
+            return String.format("mongodb://%s:%s@%s:%d",
                     config.getUsername(),
                     decryptedPassword,
                     host,
                     config.getPort());
         } else {
-            mongoUri = String.format("mongodb://%s:%s", host, config.getPort());
+            return String.format("mongodb://%s:%d", host, config.getPort());
         }
-        return mongoUri;
     }
+
 
     public static String decryptPassword(String encryptedPassword, AesEncryptorUtil aesEncryptor) {
         try {
