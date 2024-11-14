@@ -33,7 +33,7 @@ services:
       - monitoring
 
   mongo-exporter:
-    image: percona/mongodb_exporter:0.40.0
+    image: ssheehy/mongodb-exporter:latest
     environment:
       MONGODB_URI: "${MONGODB_URI}"
     ports:
