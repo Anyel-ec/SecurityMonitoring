@@ -30,6 +30,8 @@ public class PrometheusConfigUtil {
                         line = line.replace("${PROMETHEUS_PORT_INTERNAL}", String.valueOf(config.getInternalPort()));
                     } else if ("PROMETHEUS_EXPORTER_POSTGRESQL".equals(config.getSystemParameter().getName())) {
                         line = line.replace("${EXPORT_POSTGRES_PORT_INTERNAL}", String.valueOf(config.getInternalPort()));
+                    } else if ("PROMETHEUS_EXPORTER_MONGODB".equals(config.getSystemParameter().getName())) {
+                        line = line.replace("${EXPORT_MONGO_PORT_INTERNAL}", String.valueOf(config.getInternalPort()));
                     }
                 }
                 prometheusConfig.append(line).append("\n");
