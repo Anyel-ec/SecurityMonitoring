@@ -19,5 +19,9 @@ public interface DatabaseCredentialRepository extends JpaRepository<DatabaseCred
 
     // Retrieves all active database credentials
     List<DatabaseCredential> findByIsActiveTrue();
+
+    // Find active MariaDB credentials
+    List<DatabaseCredential> findBySystemParameterNameAndIsActive(String systemParameterName, Boolean isActive);
+
 }
 

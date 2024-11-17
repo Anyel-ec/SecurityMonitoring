@@ -45,7 +45,7 @@ public class SystemInitializerConfig implements CommandLineRunner {
                 .toList();
 
         if (!newParameters.isEmpty()) {
-            log.info("Insertando parámetros de instalacion : {}", newParameters);
+            log.debug("Insertando parámetros de instalacion : {}", newParameters);
             systemParametersRepository.saveAll(newParameters);  // Batch insert
         }
 
