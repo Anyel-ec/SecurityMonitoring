@@ -41,15 +41,14 @@ public class DockerEnvironmentUtil {
             case "PROMETHEUS_EXPORTER_MONGODB":
                 putEnvIfNotNull(processBuilder, "EXPORT_MONGO_PORT_EXTERNAL", String.valueOf(config.getExternalPort()));
                 putEnvIfNotNull(processBuilder, "EXPORT_MONGO_PORT_INTERNAL", String.valueOf(config.getInternalPort()));
-                putEnvIfNotNull(processBuilder, "MONGODB_HOST", null);
-                putEnvIfNotNull(processBuilder, "MONGODB_PORT", null);
+                putEnvIfNotNull(processBuilder, "MONGODB_URI", null);
                 break;
 
             case "PROMETHEUS_EXPORTER_MARIADB":
                 putEnvIfNotNull(processBuilder, "EXPORT_MARIADB_PORT_EXTERNAL", String.valueOf(config.getExternalPort()));
                 putEnvIfNotNull(processBuilder, "EXPORT_MARIADB_PORT_INTERNAL", String.valueOf(config.getInternalPort()));
-                putEnvIfNotNull(processBuilder, "MARIADB_USER", null);
-                putEnvIfNotNull(processBuilder, "MARIADB_PASSWORD", null);
+                putEnvIfNotNull(processBuilder, "MARIADB_HOST", null);
+                putEnvIfNotNull(processBuilder, "MARIADB_PORT", null);
                 break;
 
             default:

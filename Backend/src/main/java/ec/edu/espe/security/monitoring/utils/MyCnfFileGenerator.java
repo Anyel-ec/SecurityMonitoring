@@ -21,11 +21,10 @@ public class MyCnfFileGenerator {
 
     private final DatabaseCredentialRepository databaseCredentialRepository;
     private final SystemParametersRepository systemParametersRepository;
-    private final AesEncryptorUtil aesEncryptorUtil;
 
     /**
-    * Generates the .my.cnf file based on the active MariaDB credentials.
-    */
+     * Generates the .my.cnf file based on the active MariaDB credentials with an encrypted password.
+     */
     public void generateMyCnfFile() {
         String absolutePath = getAbsolutePath();
 
@@ -35,10 +34,10 @@ public class MyCnfFileGenerator {
         if (credentialOpt.isEmpty()) return;
 
         DatabaseCredential credential = credentialOpt.get();
-        String decryptedPassword = decryptPassword(credential.getPassword());
-        if (decryptedPassword == null) return;
+        String encryptedPassword = credential.getPassword(); // Use encrypted password directly
+        if (encryptedPassword == null) return;
 
-        writeMyCnfFile(absolutePath, credential.getUsername(), decryptedPassword);
+        writeMyCnfFile(absolutePath, credential.getUsername(), encryptedPassword);
     }
 
     private String getAbsolutePath() {
@@ -71,20 +70,11 @@ public class MyCnfFileGenerator {
         return databaseCredentialRepository.findBySystemParameterAndIsActive(existingParam.get(), true);
     }
 
-    private String decryptPassword(String encryptedPassword) {
-        try {
-            return aesEncryptorUtil.decrypt(encryptedPassword);
-        } catch (Exception e) {
-            log.error("Error al desencriptar la contraseña", e);
-            return null;
-        }
-    }
-
     private void writeMyCnfFile(String absolutePath, String user, String password) {
         try (FileWriter writer = new FileWriter(absolutePath)) {
             writer.write("[client]\n");
             writer.write("user=" + user + "\n");
-            writer.write("password=" + password + "\n");
+            writer.write("password=" + password + "\n"); // Save encrypted password directly
             log.info("Archivo .my.cnf creado exitosamente en la ruta: {}", absolutePath);
         } catch (IOException e) {
             log.error("Error al escribir el archivo .my.cnf: {}", e.getMessage());
