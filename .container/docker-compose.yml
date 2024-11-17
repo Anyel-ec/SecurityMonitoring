@@ -47,7 +47,7 @@ services:
       - --config.my-cnf=/cfg/.my.cnf
       - --mysqld.address=${MARIADB_HOST}:${MARIADB_PORT}
     volumes:
-      - "./.my.cnf:/cfg/.my.cnf"
+      - ".my.cnf:/cfg/.my.cnf"
     ports:
       - "${EXPORT_MARIADB_PORT_EXTERNAL}:${EXPORT_MARIADB_PORT_INTERNAL}"
     networks:

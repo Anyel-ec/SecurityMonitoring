@@ -86,8 +86,6 @@ public class DockerEnvironmentUtil {
                 break;
 
             case "MARIADB":
-                env.put("MARIADB_USER", config.getUsername());
-                env.put("MARIADB_PASSWORD", decryptedPassword);
                 env.put("MARIADB_HOST", host);
                 env.put("MARIADB_PORT", String.valueOf(config.getPort()));
                 log.info("Variables de entorno para MariaDB establecidas: USER={}, HOST={}, PORT={}", config.getUsername(), host, config.getPort());
