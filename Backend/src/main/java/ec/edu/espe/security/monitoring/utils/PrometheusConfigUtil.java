@@ -26,12 +26,23 @@ public class PrometheusConfigUtil {
             while ((line = reader.readLine()) != null) {
                 // Replace placeholders with actual values
                 for (InstallationConfig config : activeInstallations) {
-                    if ("PROMETHEUS_INSTALL".equals(config.getSystemParameter().getName())) {
-                        line = line.replace("${PROMETHEUS_PORT_INTERNAL}", String.valueOf(config.getInternalPort()));
-                    } else if ("PROMETHEUS_EXPORTER_POSTGRESQL".equals(config.getSystemParameter().getName())) {
-                        line = line.replace("${EXPORT_POSTGRES_PORT_INTERNAL}", String.valueOf(config.getInternalPort()));
-                    } else if ("PROMETHEUS_EXPORTER_MONGODB".equals(config.getSystemParameter().getName())) {
-                        line = line.replace("${EXPORT_MONGO_PORT_INTERNAL}", String.valueOf(config.getInternalPort()));
+                    String systemParameter = config.getSystemParameter().getName();
+                    switch (systemParameter) {
+                        case "PROMETHEUS_INSTALL":
+                            line = line.replace("${PROMETHEUS_PORT_INTERNAL}", String.valueOf(config.getInternalPort()));
+                            break;
+                        case "PROMETHEUS_EXPORTER_POSTGRESQL":
+                            line = line.replace("${EXPORT_POSTGRES_PORT_INTERNAL}", String.valueOf(config.getInternalPort()));
+                            break;
+                        case "PROMETHEUS_EXPORTER_MONGODB":
+                            line = line.replace("${EXPORT_MONGO_PORT_INTERNAL}", String.valueOf(config.getInternalPort()));
+                            break;
+                        case "PROMETHEUS_EXPORTER_MARIADB":
+                            line = line.replace("${EXPORT_MARIADB_PORT_INTERNAL}", String.valueOf(config.getInternalPort()));
+                            break;
+                        default:
+                            log.warn("No matching placeholder found for system parameter: {}", systemParameter);
+                            break;
                     }
                 }
                 prometheusConfig.append(line).append("\n");

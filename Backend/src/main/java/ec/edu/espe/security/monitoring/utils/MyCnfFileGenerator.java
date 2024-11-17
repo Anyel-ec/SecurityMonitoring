@@ -21,9 +21,10 @@ public class MyCnfFileGenerator {
 
     private final DatabaseCredentialRepository databaseCredentialRepository;
     private final SystemParametersRepository systemParametersRepository;
+    private final AesEncryptorUtil aesEncryptorUtil;
 
     /**
-     * Generates the .my.cnf file based on the active MariaDB credentials with an encrypted password.
+     * Generates the .my.cnf file based on the active MariaDB credentials.
      */
     public void generateMyCnfFile() {
         String absolutePath = getAbsolutePath();
@@ -31,13 +32,27 @@ public class MyCnfFileGenerator {
         if (!ensureDirectoryExists(absolutePath)) return;
 
         Optional<DatabaseCredential> credentialOpt = getActiveDatabaseCredential();
-        if (credentialOpt.isEmpty()) return;
+        if (credentialOpt.isEmpty()) {
+            log.warn("No se encontraron credenciales activas para MariaDB.");
+            return;
+        }
 
         DatabaseCredential credential = credentialOpt.get();
-        String encryptedPassword = credential.getPassword(); // Use encrypted password directly
-        if (encryptedPassword == null) return;
+        String decryptedPassword;
 
-        writeMyCnfFile(absolutePath, credential.getUsername(), encryptedPassword);
+        try {
+            decryptedPassword = aesEncryptorUtil.decrypt(credential.getPassword());
+        } catch (Exception e) {
+            log.error("Error al desencriptar la contraseña: {}", e.getMessage());
+            return;
+        }
+
+        if (decryptedPassword == null || decryptedPassword.isBlank()) {
+            log.error("La contraseña desencriptada de MariaDB está vacía.");
+            return;
+        }
+
+        writeMyCnfFile(absolutePath, credential.getUsername(), decryptedPassword);
     }
 
     private String getAbsolutePath() {
@@ -74,7 +89,9 @@ public class MyCnfFileGenerator {
         try (FileWriter writer = new FileWriter(absolutePath)) {
             writer.write("[client]\n");
             writer.write("user=" + user + "\n");
-            writer.write("password=" + password + "\n"); // Save encrypted password directly
+            writer.write("password=" + password + "\n");
+            writer.write("host=host.docker.internal\n");
+            writer.write("port=3306\n");
             log.info("Archivo .my.cnf creado exitosamente en la ruta: {}", absolutePath);
         } catch (IOException e) {
             log.error("Error al escribir el archivo .my.cnf: {}", e.getMessage());

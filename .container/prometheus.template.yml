@@ -13,3 +13,7 @@ scrape_configs:
   - job_name: 'mongo'
     static_configs:
       - targets: ['mongo-exporter:${EXPORT_MONGO_PORT_INTERNAL}']
+
+  - job_name: 'mariadb'
+    static_configs:
+      - targets: ['mariadb-exporter:${EXPORT_MARIADB_PORT_INTERNAL}']
