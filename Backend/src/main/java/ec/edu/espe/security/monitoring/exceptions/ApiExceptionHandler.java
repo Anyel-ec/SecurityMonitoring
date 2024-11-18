@@ -1,10 +1,12 @@
 package ec.edu.espe.security.monitoring.exceptions;
 
 import ec.edu.espe.security.monitoring.dto.response.JsonResponseDto;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.converter.HttpMessageNotWritableException;
@@ -21,7 +23,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
+import java.sql.SQLException;
 import java.util.List;
+import java.util.concurrent.TimeoutException;
 
 @RestControllerAdvice
 @Slf4j
@@ -54,6 +58,22 @@ public class ApiExceptionHandler {
         log.warn("Método no soportado: {}", ex.getMethod());
         String message = String.format("Método de solicitud '%s' no soportado", ex.getMethod());
         return ApiErrorResponse.methodNotAllowed(new HttpHeaders(), message);
+    }
+
+    @ExceptionHandler(TimeoutException.class)
+    public ResponseEntity<JsonResponseDto> timeoutException(TimeoutException ex, HttpServletRequest request) {
+        log.info("ERROR, LA SOLICITUD HA TARDADO DEMASIADO => {}", ex.getMessage());
+        HttpStatus estado = HttpStatus.INTERNAL_SERVER_ERROR;
+        JsonResponseDto jsonResponse = new JsonResponseDto(false, estado.value(), "Ha tardado demasiado al consumir el servicio, por favor comunicate con desarrollo", null);
+        return new ResponseEntity<>(jsonResponse, estado);
+    }
+
+    @ExceptionHandler(SQLException.class)
+    public ResponseEntity<JsonResponseDto> sQLException(SQLException ex, HttpServletRequest request) {
+        log.info("ERROR AL CONECTAR CON LA BASE DE DATOS => {}", ex.getMessage());
+        HttpStatus estado = HttpStatus.INTERNAL_SERVER_ERROR;
+        JsonResponseDto jsonResponse = new JsonResponseDto(false, estado.value(), "Error al conectar con la base de datos", null);
+        return new ResponseEntity<>(jsonResponse, estado);
     }
 
     // Handles cases where the media type in the request is not supported
