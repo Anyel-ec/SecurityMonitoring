@@ -16,6 +16,7 @@ import java.util.Base64;
 @Slf4j
 public class RsaEncryptUtil {
 
+    private RsaEncryptUtil(){}
 
     static final String ALGORITHM = "RSA";
     static final String RSA_TRANSFORMATION = "RSA/ECB/OAEPWITHSHA-256ANDMGF1PADDING";

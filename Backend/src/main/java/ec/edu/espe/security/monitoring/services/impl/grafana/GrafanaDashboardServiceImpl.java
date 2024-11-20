@@ -1,4 +1,5 @@
 package ec.edu.espe.security.monitoring.services.impl.grafana;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -27,8 +28,8 @@ public class GrafanaDashboardServiceImpl implements GrafanaDashboardService {
     private final AesEncryptorUtil aesEncryptor;
     private final JsonUtils jsonUtils;
 
+    // TODO: URL dynamic
     private static final String GRAFANA_API_URL = "http://localhost:3000/api/dashboards/db"; // Grafana API endpoint
-    private static final String DASHBOARD_JSON_FILE_POSTGRES = "dashboardPostgres.json"; // Path to the JSON file in resources
 
     /**
      * Creates a Grafana dashboard using the predefined JSON file located in resources/dashboards/dash_pg_v1.json.
@@ -36,31 +37,44 @@ public class GrafanaDashboardServiceImpl implements GrafanaDashboardService {
     @Override
     public void createDashboard() {
         try {
-            // Retrieve Grafana user and password from the system configuration
+            // Retrieve Grafana credentials
             SystemParameters systemParameter = grafanaService.getGrafanaInstallParameter();
             InstallationConfig grafanaInstall = grafanaService.getActiveInstallationConfig(systemParameter);
-            String username = grafanaInstall.getUsername(); // Grafana username
-            String decryptedPassword = aesEncryptor.decrypt(grafanaInstall.getPassword()); // Decrypt Grafana password
+            String username = grafanaInstall.getUsername();
+            String decryptedPassword = aesEncryptor.decrypt(grafanaInstall.getPassword());
 
-            // Read the dashboard JSON file
-            String dashboardJson = jsonUtils.readJsonFromFileDashboard(DASHBOARD_JSON_FILE_POSTGRES);
-
-            // Send the request to create the dashboard
-            ResponseEntity<String> response = performDashboardCreationRequest(username, decryptedPassword, dashboardJson);
-            log.info("Grafana response: {}", response.getBody()); // Log the response from Grafana
-
-            // Check if the response status is not successful
-            if (!response.getStatusCode().is2xxSuccessful()) {
-                log.error("Dashboard creation failed with status: {}", response.getStatusCode());
-                throw new IllegalStateException("Dashboard creation failed with status: " + response.getStatusCode());
-            }
-
-            log.info("Dashboard created successfully"); // Log success message
+            // Create dashboards
+            createDashboardFromJsonFile(username, decryptedPassword, "dashboardPostgres.json");
+            createDashboardFromJsonFile(username, decryptedPassword, "dashboardMariaDB.json");
+            createDashboardFromJsonFile(username, decryptedPassword, "dashboardMongoDB.json");
         } catch (Exception e) {
-            log.error("Error creating the dashboard: {}", e.getMessage());
+            log.error("Error creando los dashboards: {}", e.getMessage());
             throw new IllegalStateException("Internal server error: " + e.getMessage(), e);
         }
     }
+
+    private void createDashboardFromJsonFile(String username, String password, String dashboardJsonFile) {
+        try {
+            // Read the JSON file for the dashboard
+            String dashboardJson = jsonUtils.readJsonFromFileDashboard(dashboardJsonFile);
+
+            // Send the request to create the dashboard
+            ResponseEntity<String> response = performDashboardCreationRequest(username, password, dashboardJson);
+            log.info("Grafana response for {}: {}", dashboardJsonFile, response.getBody());
+
+            // Check if the response is not successful
+            if (!response.getStatusCode().is2xxSuccessful()) {
+                log.error("Dashboard creation failed for {} with status: {}", dashboardJsonFile, response.getStatusCode());
+                throw new IllegalStateException("Dashboard creation failed for " + dashboardJsonFile + " with status: " + response.getStatusCode());
+            }
+
+            log.info("Dashboard {} created successfully", dashboardJsonFile);
+        } catch (Exception e) {
+            log.error("Error creating the dashboard {}: {}", dashboardJsonFile, e.getMessage());
+            throw new IllegalStateException("Error creating the dashboard " + dashboardJsonFile + ": " + e.getMessage(), e);
+        }
+    }
+
 
     /**
      * Sends a POST request to Grafana to create the dashboard.
@@ -73,7 +87,7 @@ public class GrafanaDashboardServiceImpl implements GrafanaDashboardService {
         headers.setBasicAuth(username, password);
 
         // Create DTO
-        GrafanaDashboardRequestDto dashboardRequestDto = new GrafanaDashboardRequestDto(parseDashboardJson(dashboardJson),0,true);
+        GrafanaDashboardRequestDto dashboardRequestDto = new GrafanaDashboardRequestDto(parseDashboardJson(dashboardJson), 0, true);
 
         HttpEntity<GrafanaDashboardRequestDto> request = new HttpEntity<>(dashboardRequestDto, headers);
 
@@ -82,7 +96,8 @@ public class GrafanaDashboardServiceImpl implements GrafanaDashboardService {
 
     private Map<String, Object> parseDashboardJson(String dashboardJson) {
         try {
-            return new ObjectMapper().readValue(dashboardJson, new TypeReference<>() {});
+            return new ObjectMapper().readValue(dashboardJson, new TypeReference<>() {
+            });
         } catch (JsonProcessingException e) {
             throw new IllegalStateException("Invalid JSON format for dashboard", e);
         }
