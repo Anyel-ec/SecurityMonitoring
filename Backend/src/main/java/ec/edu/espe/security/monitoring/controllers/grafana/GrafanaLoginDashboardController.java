@@ -7,10 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -45,20 +42,30 @@ public class GrafanaLoginController {
      * @return ResponseEntity containing a JSON response with the redirection URL or an error message.
      */
     @GetMapping("/grafana-login-and-access-dashboard")
-    public ResponseEntity<JsonResponseDto> loginAndAccessDashboard(HttpServletResponse response) {
-        log.info("Entró al login de Grafana");
+    public ResponseEntity<JsonResponseDto> loginAndAccessDashboard(
+            @RequestParam("dbType") String dbType,
+            HttpServletResponse response) {
+        log.info("Entró al login de Grafana con base de datos: {}", dbType);
+
         ResponseEntity<String> loginResponse = grafanaLoginService.loginToGrafana();
 
         if (loginResponse.getStatusCode().is2xxSuccessful()) {
-            String grafanaUrl = grafanaLoginService.getGrafanaDashboardUrlWithSession();
+            // Get the appropriate Grafana dashboard URL based on dbType
+            String grafanaUrl = grafanaLoginService.getGrafanaDashboardUrlByDbType(dbType);
+
+            if (grafanaUrl == null) {
+                return ResponseEntity.status(HttpServletResponse.SC_BAD_REQUEST)
+                        .body(new JsonResponseDto(false, 400, "Base de datos no soportada.", null));
+            }
+
             HttpHeaders headers = new HttpHeaders();
 
-            // Agrega las cookies a la respuesta
+            // Add cookies to the response
             grafanaLoginService.getGrafanaCookies().forEach(cookie -> headers.add(HttpHeaders.SET_COOKIE, cookie));
 
             headers.add("Access-Control-Expose-Headers", "Set-Cookie");
 
-            // Devuelve la URL de redirección en un JsonResponseDto
+            // Return the redirection URL in a JsonResponseDto
             return ResponseEntity.ok()
                     .headers(headers)
                     .body(new JsonResponseDto(true, 200, "Login successful, redirecting to dashboard", Map.of("redirectUrl", grafanaUrl)));
@@ -67,7 +74,5 @@ public class GrafanaLoginController {
                     .body(new JsonResponseDto(false, 401, "Error en el inicio de sesión. No se puede acceder al dashboard.", null));
         }
     }
-
-
 
 }
