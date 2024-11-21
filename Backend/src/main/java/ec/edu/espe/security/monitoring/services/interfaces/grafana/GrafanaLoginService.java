@@ -13,4 +13,6 @@ public interface GrafanaLoginService {
     String getGrafanaDashboardUrlWithSession();
     List<String> getGrafanaCookies();
 
+    String getGrafanaDashboardUrlByDbType(String dbType);
+
 }

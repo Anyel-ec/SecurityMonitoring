@@ -1,4 +1,5 @@
 package ec.edu.espe.security.monitoring.services.impl.grafana;
+import ec.edu.espe.security.monitoring.dto.request.grafana.GrafanaLoginRequestDto;
 import ec.edu.espe.security.monitoring.models.InstallationConfig;
 import ec.edu.espe.security.monitoring.models.SystemParameters;
 import ec.edu.espe.security.monitoring.services.interfaces.grafana.GrafanaLoginService;
@@ -71,16 +72,14 @@ public class GrafanaLoginServiceImpl implements GrafanaLoginService {
         response.setHeader("Location", grafanaUrl);
     }
 
-
-
     private ResponseEntity<String> performLoginRequest(String username, String decryptedPassword) {
         String url = "http://localhost:3000/login";
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        String body = String.format("{\"user\":\"%s\", \"password\":\"%s\"}", username, decryptedPassword);
-        HttpEntity<String> request = new HttpEntity<>(body, headers);
+        GrafanaLoginRequestDto loginRequest = new GrafanaLoginRequestDto(username, decryptedPassword);
+        HttpEntity<GrafanaLoginRequestDto> request = new HttpEntity<>(loginRequest, headers);
 
         return restTemplate.postForEntity(url, request, String.class);
     }
@@ -99,6 +98,17 @@ public class GrafanaLoginServiceImpl implements GrafanaLoginService {
         HttpHeaders responseHeaders = response.getHeaders();
         return responseHeaders.get(SET_COOKIE);
     }
+
+    @Override
+    public String getGrafanaDashboardUrlByDbType(String dbType) {
+        return switch (dbType.toLowerCase()) {
+            case "postgresql" -> "http://localhost:3000/d/000000039/postgresql-database?orgId=1&refresh=10s";
+            case "mariadb" -> "http://localhost:3000/d/r4uc0hUGk/mysql-dashboard?orgId=1&refresh=10s";
+            case "mongodb" -> "http://localhost:3000/d/be4iite03rabke/mongodb?orgId=1&refresh=10s";
+            default -> null;
+        };
+    }
+
 
     @Override
     public String getGrafanaDashboardUrlWithSession() {

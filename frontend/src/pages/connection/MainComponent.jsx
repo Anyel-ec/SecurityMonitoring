@@ -25,9 +25,14 @@ export default function MainComponent() {
 
 
   // En tu componente MainComponent
-  const handleMonitor = async () => {
+  const handleMonitor = async (dbType) => {
+    if (!dbType) {
+      showErrorAlert('No se ha seleccionado una base de datos válida.');
+      return;
+    }
+
     try {
-      const response = await loginAndAccessDashboard();
+      const response = await loginAndAccessDashboard(dbType);
       if (response && response.redirectUrl) {
         window.location.href = response.redirectUrl; // Redirige en el frontend
       } else {
@@ -274,9 +279,9 @@ export default function MainComponent() {
         },
         comment: selectedConnection.comment || ''
       };
-  
+
       console.log('Enviando objeto DatabaseCredential:', config);
-  
+
       // Llama a la función de prueba de conexión con el objeto completo
       const response = await testPostgresConnection(config);
       showSuccessAlert(response.message, '');
@@ -286,7 +291,7 @@ export default function MainComponent() {
       setTestingConnection(null);
     }
   };
-  
+
 
   return (
     <div ref={containerRef} className="d-flex h-100">
@@ -295,7 +300,13 @@ export default function MainComponent() {
         selectedConnection={selectedConnection}
         setSelectedConnection={handleSelectConnection}
         handleDelete={handleDelete}
-        handleMonitor={handleMonitor}
+        handleMonitor={() => {
+          if (selectedConnection && selectedConnection.systemParameter) {
+            handleMonitor(selectedConnection.systemParameter.name);
+          } else {
+            showErrorAlert('No se ha seleccionado una conexión válida.');
+          }
+        }}
         setNewConnection={setNewConnection}
         leftPanelWidth={leftPanelWidth}
       />

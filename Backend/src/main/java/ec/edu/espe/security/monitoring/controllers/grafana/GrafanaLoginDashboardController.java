@@ -15,29 +15,13 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequestMapping("api/v1/grafana")
-public class GrafanaLoginController {
+public class GrafanaLoginDashboardController {
 
     private final GrafanaLoginService grafanaLoginService;
-    /**
-     * Endpoint to log in to Grafana.
-     * @return ResponseEntity with a string response from the login service.
-     */
-    @PostMapping("/grafana-login")
-    public ResponseEntity<String> loginToGrafana() {
-        return grafanaLoginService.loginToGrafana();
-    }
-
-    /**
-     * Endpoint to access the Grafana dashboard with an existing session.
-     * @param response HttpServletResponse to manage the response handling for dashboard access.
-     */
-    @GetMapping("/access-dashboard-with-session")
-    public void accessDashboardWithSession(HttpServletResponse response) {
-        grafanaLoginService.accessDashboardWithSession(response);
-    }
 
     /**
      * Endpoint to log in to Grafana and redirect to the dashboard with session details.
+     *
      * @param response HttpServletResponse for managing cookies and redirection headers.
      * @return ResponseEntity containing a JSON response with the redirection URL or an error message.
      */
@@ -58,11 +42,12 @@ public class GrafanaLoginController {
                         .body(new JsonResponseDto(false, 400, "Base de datos no soportada.", null));
             }
 
-            HttpHeaders headers = new HttpHeaders();
 
+            HttpHeaders headers = new HttpHeaders();
+            log.info("Antes del cookies");
             // Add cookies to the response
             grafanaLoginService.getGrafanaCookies().forEach(cookie -> headers.add(HttpHeaders.SET_COOKIE, cookie));
-
+            log.info("Despues del cookies");
             headers.add("Access-Control-Expose-Headers", "Set-Cookie");
 
             // Return the redirection URL in a JsonResponseDto
@@ -75,4 +60,23 @@ public class GrafanaLoginController {
         }
     }
 
+    /**
+     * Endpoint to log in to Grafana.
+     *
+     * @return ResponseEntity with a string response from the login service.
+     */
+    @PostMapping("/grafana-login")
+    public ResponseEntity<String> loginToGrafana() {
+        return grafanaLoginService.loginToGrafana();
+    }
+
+    /**
+     * Endpoint to access the Grafana dashboard with an existing session.
+     *
+     * @param response HttpServletResponse to manage the response handling for dashboard access.
+     */
+    @GetMapping("/access-dashboard-with-session")
+    public void accessDashboardWithSession(HttpServletResponse response) {
+        grafanaLoginService.accessDashboardWithSession(response);
+    }
 }
