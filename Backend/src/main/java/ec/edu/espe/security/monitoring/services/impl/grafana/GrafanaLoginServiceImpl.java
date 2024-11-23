@@ -109,7 +109,6 @@ public class GrafanaLoginServiceImpl implements GrafanaLoginService {
         };
     }
 
-
     @Override
     public String getGrafanaDashboardUrlWithSession() {
         return "http://localhost:3000/d/000000039/postgresql-database?orgId=1&refresh=10s";
