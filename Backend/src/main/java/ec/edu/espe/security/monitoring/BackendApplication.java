@@ -21,6 +21,13 @@ public class BackendApplication {
         System.setProperty("PRIVATE_KEY_RSA", dotenv.get("PRIVATE_KEY_RSA", ""));
         System.setProperty("SECRET_KEY_JWT", dotenv.get("SECRET_KEY_JWT", ""));
         System.setProperty("DEFAULT_EMPTY_PASSWORD", dotenv.get("DEFAULT_EMPTY_PASSWORD", ""));
+
+        // Add alertmanager-related environment variables
+        System.setProperty("ALERT_SMTP_HOST", dotenv.get("ALERT_SMTP_HOST", ""));
+        System.setProperty("ALERT_SMTP_FROM", dotenv.get("ALERT_SMTP_FROM", ""));
+        System.setProperty("ALERT_SMTP_USER", dotenv.get("ALERT_SMTP_USER", ""));
+        System.setProperty("ALERT_SMTP_PASSWORD", dotenv.get("ALERT_SMTP_PASSWORD", ""));
+        System.setProperty("ALERT_SMTP_TO", dotenv.get("ALERT_SMTP_TO", ""));
         // Run the Spring Boot application
         SpringApplication.run(BackendApplication.class, args);
     }
