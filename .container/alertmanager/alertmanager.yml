@@ -1,0 +1,14 @@
+global:
+  smtp_smarthost: '${ALERT_SMTP_HOST}'
+  smtp_from: '${ALERT_SMTP_FROM}'
+  smtp_auth_username: '${ALERT_SMTP_USER}'
+  smtp_auth_password: '${ALERT_SMTP_PASSWORD}'
+  smtp_require_tls: true
+
+route:
+  receiver: 'email-alert'
+
+receivers:
+  - name: 'email-alert'
+    email_configs:
+      - to: '${ALERT_SMTP_TO}'

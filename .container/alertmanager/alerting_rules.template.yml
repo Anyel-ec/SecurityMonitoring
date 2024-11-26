@@ -1,0 +1,29 @@
+groups:
+  - name: Exporter Alerts
+    rules:
+      - alert: PostgresExporterDown
+        expr: up{job="postgres-exporter"} == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Postgres Exporter is down"
+          description: "Postgres Exporter has been down for more than 1 minute."
+
+      - alert: MongoExporterDown
+        expr: up{job="mongo-exporter"} == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Mongo Exporter is down"
+          description: "Mongo Exporter has been down for more than 1 minute."
+
+      - alert: MariadbExporterDown
+        expr: up{job="mariadb-exporter"} == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "MariaDB Exporter is down"
+          description: "MariaDB Exporter has been down for more than 1 minute."

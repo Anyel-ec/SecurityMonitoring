@@ -18,8 +18,19 @@ services:
     image: prom/prometheus
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro 
+      - ./alertmanager/alerting_rules.yml:/etc/prometheus/alerting_rules.yml:ro
+
     ports:
       - "${PROMETHEUS_PORT_EXTERNAL}:${PROMETHEUS_PORT_INTERNAL}"
+    networks:
+      - monitoring
+
+  alertmanager:
+    image: prom/alertmanager
+    volumes:
+      - ./alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml
+    ports:
+      - "9093:9093"
     networks:
       - monitoring
 
