@@ -4,6 +4,7 @@ import ec.edu.espe.security.monitoring.models.InstallationConfig;
 import ec.edu.espe.security.monitoring.repositories.InstallationConfigRepository;
 import ec.edu.espe.security.monitoring.services.interfaces.docker.DockerInstallationService;
 import ec.edu.espe.security.monitoring.utils.AesEncryptorUtil;
+import ec.edu.espe.security.monitoring.utils.AlertManagerConfigUtil;
 import ec.edu.espe.security.monitoring.utils.DockerEnvironmentUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +24,7 @@ public class DockerInstallationServiceImpl implements DockerInstallationService 
     // Injected dependencies
     private final InstallationConfigRepository installationConfigRepository;
     private final AesEncryptorUtil aesEncryptor;
+    private final AlertManagerConfigUtil alertManagerConfigUtil;
 
     /**
      * Checks if the Docker containers for Grafana and Prometheus are currently running.
@@ -54,9 +56,7 @@ public class DockerInstallationServiceImpl implements DockerInstallationService 
             throw new IllegalStateException("Error checking Docker container status", e);
         }
     }
-    
 
-    
     /**
      * Runs a Docker Compose process to set up the services based on the active installation configurations.
      */
@@ -68,9 +68,14 @@ public class DockerInstallationServiceImpl implements DockerInstallationService 
             // Paths to the Prometheus configuration files
             String templatePath = "../.container/prometheus.template.yml";
             String outputPath = "../.container/prometheus.yml";
+            String alertManagerTemplatePath = "../.container/alertmanager/alertmanager.template.yml";
+            String alertManagerOutputPath = "../.container/alertmanager/alertmanager.yml";
 
             // Generate the prometheus.yml file dynamically with environment variables
             generatePrometheusConfig(activeInstallations, templatePath, outputPath);
+
+            // Generate the alertmanager.yml file dynamically
+            alertManagerConfigUtil.generateAlertManagerConfig(alertManagerTemplatePath, alertManagerOutputPath);
 
             // Create the ProcessBuilder for docker-compose
             ProcessBuilder dockerComposeProcessBuilder = new ProcessBuilder(
@@ -89,10 +94,10 @@ public class DockerInstallationServiceImpl implements DockerInstallationService 
             dockerComposeProcessBuilder.inheritIO().start();
             log.info("Docker Compose ejecutado exitosamente con las configuraciones activas de instalación.");
         } catch (IOException e) {
-            log.error("Error al ejecutar Docker Compose: {}", e.getMessage(), e);
+            log.error("Error al ejecutar Docker Compose: {}", e.getMessage());
             throw new IllegalStateException("Error al ejecutar Docker Compose con configuraciones de instalación activas", e);
         } catch (Exception e) {
-            log.error("Error inesperado en la configuración del entorno Docker Compose: {}", e.getMessage(), e);
+            log.error("Error inesperado en la configuración del entorno Docker Compose: {}", e.getMessage());
             throw new IllegalStateException("Error inesperado en la configuración del entorno Docker Compose", e);
         }
     }
