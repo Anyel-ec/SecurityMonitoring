@@ -6,7 +6,7 @@ import ec.edu.espe.security.monitoring.models.SystemParameters;
 import ec.edu.espe.security.monitoring.repositories.InstallationConfigRepository;
 import ec.edu.espe.security.monitoring.services.impl.grafana.GrafanaCredentialServiceImpl;
 import ec.edu.espe.security.monitoring.services.interfaces.installation.GrafanaInstallService;
-import ec.edu.espe.security.monitoring.utils.AesEncryptorUtil;
+import ec.edu.espe.security.monitoring.shared.utils.encrypt.AesEncryptorUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

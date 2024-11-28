@@ -1,4 +1,4 @@
-package ec.edu.espe.security.monitoring.exceptions;
+package ec.edu.espe.security.monitoring.shared.exceptions;
 
 public interface ApiError {
 

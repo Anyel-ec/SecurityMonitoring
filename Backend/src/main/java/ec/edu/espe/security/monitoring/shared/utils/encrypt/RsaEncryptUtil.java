@@ -1,4 +1,4 @@
-package ec.edu.espe.security.monitoring.shared.utils;
+package ec.edu.espe.security.monitoring.shared.utils.encrypt;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 

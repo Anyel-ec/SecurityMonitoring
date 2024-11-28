@@ -1,4 +1,4 @@
-package ec.edu.espe.security.monitoring.utils;
+package ec.edu.espe.security.monitoring.shared.utils;
 /*
  * Author: Anyel EC
  * Github: https://github.com/Anyel-ec
@@ -7,6 +7,7 @@ package ec.edu.espe.security.monitoring.utils;
 
 import ec.edu.espe.security.monitoring.models.DatabaseCredential;
 import ec.edu.espe.security.monitoring.models.InstallationConfig;
+import ec.edu.espe.security.monitoring.shared.utils.encrypt.AesEncryptorUtil;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 

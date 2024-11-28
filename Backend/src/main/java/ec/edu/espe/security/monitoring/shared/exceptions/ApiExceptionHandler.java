@@ -1,4 +1,4 @@
-package ec.edu.espe.security.monitoring.exceptions;
+package ec.edu.espe.security.monitoring.shared.exceptions;
 
 import ec.edu.espe.security.monitoring.dto.response.JsonResponseDto;
 import jakarta.servlet.http.HttpServletRequest;

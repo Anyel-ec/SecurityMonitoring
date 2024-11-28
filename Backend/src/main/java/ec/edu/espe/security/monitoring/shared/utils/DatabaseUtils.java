@@ -1,4 +1,4 @@
-package ec.edu.espe.security.monitoring.utils;
+package ec.edu.espe.security.monitoring.shared.utils;
 
 
 import com.mongodb.client.MongoClient;

@@ -5,7 +5,7 @@ import ec.edu.espe.security.monitoring.models.InstallationConfig;
 import ec.edu.espe.security.monitoring.models.SystemParameters;
 import ec.edu.espe.security.monitoring.services.interfaces.grafana.GrafanaDatasourceService;
 import ec.edu.espe.security.monitoring.services.interfaces.installation.PrometheusInstallService;
-import ec.edu.espe.security.monitoring.utils.AesEncryptorUtil;
+import ec.edu.espe.security.monitoring.shared.utils.encrypt.AesEncryptorUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;

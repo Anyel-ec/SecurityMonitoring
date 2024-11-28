@@ -1,9 +1,10 @@
-package ec.edu.espe.security.monitoring.utils;
+package ec.edu.espe.security.monitoring.shared.utils;
 
 import ec.edu.espe.security.monitoring.models.DatabaseCredential;
 import ec.edu.espe.security.monitoring.models.SystemParameters;
 import ec.edu.espe.security.monitoring.repositories.DatabaseCredentialRepository;
 import ec.edu.espe.security.monitoring.repositories.SystemParametersRepository;
+import ec.edu.espe.security.monitoring.shared.utils.encrypt.AesEncryptorUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

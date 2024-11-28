@@ -1,4 +1,4 @@
-package ec.edu.espe.security.monitoring.utils;
+package ec.edu.espe.security.monitoring.shared.utils;
 
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;

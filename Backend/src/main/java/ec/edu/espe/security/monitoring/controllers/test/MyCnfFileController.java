@@ -6,7 +6,7 @@ package ec.edu.espe.security.monitoring.controllers.test;
  */
 
 import ec.edu.espe.security.monitoring.dto.response.JsonResponseDto;
-import ec.edu.espe.security.monitoring.utils.MyCnfFileGenerator;
+import ec.edu.espe.security.monitoring.shared.utils.MyCnfFileGenerator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

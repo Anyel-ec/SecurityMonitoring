@@ -1,4 +1,4 @@
-package ec.edu.espe.security.monitoring.shared.utils;
+package ec.edu.espe.security.monitoring.shared.utils.encrypt;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;

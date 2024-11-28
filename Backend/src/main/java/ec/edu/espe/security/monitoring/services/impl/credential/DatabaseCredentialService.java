@@ -5,7 +5,7 @@ import ec.edu.espe.security.monitoring.models.DatabaseCredential;
 import ec.edu.espe.security.monitoring.models.SystemParameters;
 import ec.edu.espe.security.monitoring.repositories.DatabaseCredentialRepository;
 import ec.edu.espe.security.monitoring.repositories.SystemParametersRepository;
-import ec.edu.espe.security.monitoring.utils.AesEncryptorUtil;
+import ec.edu.espe.security.monitoring.shared.utils.encrypt.AesEncryptorUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
