@@ -1,7 +1,7 @@
 package ec.edu.espe.security.monitoring.security;
 
 import ec.edu.espe.security.monitoring.security.jwt.JwtAuthFilter;
-import ec.edu.espe.security.monitoring.services.impl.UserDetailsServiceImpl;
+import ec.edu.espe.security.monitoring.services.impl.auth.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

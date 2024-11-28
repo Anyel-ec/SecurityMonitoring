@@ -2,7 +2,7 @@ groups:
   - name: Exporter Alerts
     rules:
       - alert: PostgresExporterDown
-        expr: up{job="postgres-exporter"} == 0
+        expr: up{job="postgres-exporter"} != 1
         for: 1m
         labels:
           severity: critical

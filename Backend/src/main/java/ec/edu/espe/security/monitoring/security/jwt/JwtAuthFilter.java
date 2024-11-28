@@ -1,6 +1,6 @@
 package ec.edu.espe.security.monitoring.security.jwt;
 
-import ec.edu.espe.security.monitoring.services.impl.UserDetailsServiceImpl;
+import ec.edu.espe.security.monitoring.services.impl.auth.UserDetailsServiceImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

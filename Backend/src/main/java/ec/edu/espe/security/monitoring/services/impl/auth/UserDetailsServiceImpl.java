@@ -1,4 +1,4 @@
-package ec.edu.espe.security.monitoring.services.impl;
+package ec.edu.espe.security.monitoring.services.impl.auth;
 
 import ec.edu.espe.security.monitoring.models.UserInfo;
 import ec.edu.espe.security.monitoring.repositories.UserInfoRepository;
