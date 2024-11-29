@@ -9,6 +9,7 @@ import ec.edu.espe.security.monitoring.services.interfaces.installation.UserInst
 import ec.edu.espe.security.monitoring.shared.utils.encrypt.AesEncryptorUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -21,13 +22,14 @@ public class UserInstallServiceImpl implements UserInstallService {
 
     private final UserInfoRepository userInfoRepository;
     private final UserRoleRepository userRoleRepository;
-    private final AesEncryptorUtil aesEncryptor;
+    private final PasswordEncoder passwordEncoder;
+
 
     @Override
     public UserInfo saveUserInstall(UserInstallRequestDto userInstallRequestDto) {
         try {
-            // Encrypt the password
-            String encryptedPassword = aesEncryptor.encrypt(userInstallRequestDto.getPassword());
+            // Encrypt the password using BCrypt
+            String encryptedPassword = passwordEncoder.encode(userInstallRequestDto.getPassword());
 
             // Retrieve the "superadmin" role
             UserRole superAdminRole = userRoleRepository.findByNameAndIsActiveTrue("superadmin")
@@ -37,21 +39,26 @@ public class UserInstallServiceImpl implements UserInstallService {
             UserInfo user = userInfoRepository.findByUsernameAndIsActiveTrue(userInstallRequestDto.getUsuario());
 
             if (user != null) {
-                // If user exists, update fields
                 log.info("Actualizando usuario existente con rol superadmin: {}", user.getUsername());
-                user.setPassword(encryptedPassword);
-                user.setPhone(userInstallRequestDto.getNumberPhone());
-                user.setEmail(userInstallRequestDto.getEmail());
-                user.setIsActive(true);
+                user = UserInfo.builder()
+                        .id(user.getId())
+                        .username(user.getUsername())
+                        .password(encryptedPassword)
+                        .email(userInstallRequestDto.getEmail())
+                        .phone(userInstallRequestDto.getNumberPhone())
+                        .isActive(true)
+                        .roles(user.getRoles()) // Mantener roles existentes
+                        .build();
             } else {
-                // If user does not exist, create a new user
-                user = new UserInfo();
-                user.setUsername(userInstallRequestDto.getUsuario());
-                user.setPassword(encryptedPassword);
-                user.setPhone(userInstallRequestDto.getNumberPhone());
-                user.setEmail(userInstallRequestDto.getEmail());
-                user.setIsActive(true);
-                log.info("Creando nuevo usuario con rol superadmin: {}", user.getUsername());
+                // Crear nuevo usuario
+                log.info("Creando nuevo usuario con rol superadmin: {}", userInstallRequestDto.getUsuario());
+                user = UserInfo.builder()
+                        .username(userInstallRequestDto.getUsuario())
+                        .password(encryptedPassword)
+                        .email(userInstallRequestDto.getEmail())
+                        .phone(userInstallRequestDto.getNumberPhone())
+                        .isActive(true)
+                        .build();
             }
 
             // Set roles (ensuring superadmin role is added)

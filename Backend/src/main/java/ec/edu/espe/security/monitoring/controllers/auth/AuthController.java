@@ -25,20 +25,27 @@ public class AuthController {
      */
     @GetMapping("/active-users")
     public ResponseEntity<JsonResponseDto> getAllActiveUsers() {
-        log.info("Solicitud para obtener todos los usuarios activos");
-
-        List<UserInfo> activeUsers = authService.getAllActiveUsers();
-        JsonResponseDto response = new JsonResponseDto(true, 200, "Usuarios activos obtenidos correctamente", activeUsers);
-
-        return ResponseEntity.ok(response);
+        try {
+            List<UserInfo> activeUsers = authService.getAllActiveUsers();
+            JsonResponseDto response = new JsonResponseDto(true, 200, "Usuarios activos obtenidos correctamente", activeUsers);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            log.error("Error al obtener usuarios activos {}", e.getMessage());
+            JsonResponseDto response = new JsonResponseDto(false, 500, "Error al obtener usuarios activos", null);
+            return ResponseEntity.status(500).body(response);
+        }
     }
 
     @PostMapping("/login")
     public ResponseEntity<JsonResponseDto> login(@RequestBody LoginRequestDto loginRequest) {
-        log.info("Solicitud para autenticar y generar token JWT");
-        String token = authService.authenticate(loginRequest);
-        JsonResponseDto response = new JsonResponseDto(true, 200, "Autenticación exitosa", token);
-
-        return ResponseEntity.ok(response);
+        try {
+            String token = authService.authenticate(loginRequest);
+            JsonResponseDto response = new JsonResponseDto(true, 200, "Autenticación exitosa", token);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            log.error("Error en la autenticación {}", e.getMessage());
+            JsonResponseDto response = new JsonResponseDto(false, 401, "Error en la autenticación: Credenciales inválidas", null);
+            return ResponseEntity.status(401).body(response);
+        }
     }
 }

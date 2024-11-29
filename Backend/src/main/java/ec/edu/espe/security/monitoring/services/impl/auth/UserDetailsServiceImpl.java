@@ -25,8 +25,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             throw new UsernameNotFoundException("could not found user..!!");
         }
         log.info("User Authenticated Successfully..!!!");
-
-        // Crear y devolver un objeto UserDetails con los roles del usuario
         return new CustomUserDetails(user);
     }
 }
