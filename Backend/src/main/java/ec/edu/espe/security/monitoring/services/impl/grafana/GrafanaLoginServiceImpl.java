@@ -102,9 +102,9 @@ public class GrafanaLoginServiceImpl implements GrafanaLoginService {
     @Override
     public String getGrafanaDashboardUrlByDbType(String dbType) {
         return switch (dbType.toLowerCase()) {
-            case "postgresql" -> "http://localhost:3000/d/000000039/postgresql-database?orgId=1&refresh=10s";
-            case "mariadb" -> "http://localhost:3000/d/r4uc0hUGk/mysql-dashboard?orgId=1&refresh=10s";
-            case "mongodb" -> "http://localhost:3000/d/be4iite03rabke/mongodb?orgId=1&refresh=10s";
+            case "postgresql" -> "http://localhost:3000/d/000000039/postgresql-database";
+            case "mariadb" -> "http://localhost:3000/d/r4uc0hUGk/mysql-dashboard";
+            case "mongodb" -> "http://localhost:3000/d/fe5usr0w1cglcb/mongodb";
             default -> null;
         };
     }
