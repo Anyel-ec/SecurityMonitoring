@@ -3,7 +3,7 @@ groups:
     rules:
       - alert: PostgresExporterDown
         expr: up{job="postgres"}== 0
-        for: 1m
+        for: 10s
         labels:
           severity: critical
         annotations:
@@ -21,7 +21,7 @@ groups:
 
       - alert: MariadbExporterDown
         expr: up{job="mariadb"} == 0
-        for: 1m
+        for: 10s
         labels:
           severity: critical
         annotations:

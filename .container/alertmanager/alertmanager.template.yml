@@ -12,3 +12,17 @@ receivers:
   - name: 'email-alert'
     email_configs:
       - to: '${ALERT_SMTP_TO}'
+        from: 'appatino@espe.edu.ec'
+        send_resolved: true
+        headers:
+            Subject: 'Prometheus Alert: {{ .CommonLabels.alertname }}'
+            To: monitoring-to@example.com
+        html: |
+          <br><hr><br>TEST ALERTMANAGER
+          {{ range .Alerts }}
+            <p>
+              <strong>{{ .Annotations.summary }}</strong><br>
+              {{ .Annotations.description }}
+            </p>
+            <hr>
+          {{ end }}
