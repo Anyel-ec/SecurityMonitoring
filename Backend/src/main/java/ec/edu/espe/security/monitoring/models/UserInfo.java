@@ -34,7 +34,6 @@ public class UserInfo {
     @JsonIgnore
     private String password;
 
-
     @CreationTimestamp
     private LocalDateTime createdAt;
 
