@@ -6,7 +6,6 @@ import ec.edu.espe.security.monitoring.models.UserRole;
 import ec.edu.espe.security.monitoring.repositories.UserInfoRepository;
 import ec.edu.espe.security.monitoring.repositories.UserRoleRepository;
 import ec.edu.espe.security.monitoring.services.interfaces.installation.UserInstallService;
-import ec.edu.espe.security.monitoring.shared.utils.encrypt.AesEncryptorUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
