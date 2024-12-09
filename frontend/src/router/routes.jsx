@@ -6,7 +6,7 @@ import InstallationWizard from '../pages/installation/InstallationWizard';
 import { useNavigate } from 'react-router-dom'; 
 import { checkInstallationStatusService } from '../services/installationService'; // Importar el servicio
 import Swal from 'sweetalert2';  // Importar SweetAlert2
-
+import Login from '../pages/auth/login';
 const RoutesWrapper = ({ children }) => {
   const [darkMode, setDarkMode] = useState(() => {
     const savedTheme = localStorage.getItem('darkMode');
@@ -100,7 +100,13 @@ const routes = [
         <InstallationWizard />
       </RoutesWrapper>
     ),
-  }
+  }, 
+  {
+    path: "/inicio-sesion",
+    element: (
+        <Login />
+    ),
+  },
 ];
 
 export { routes };
