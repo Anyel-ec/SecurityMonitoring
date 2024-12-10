@@ -30,9 +30,9 @@ public class DatabaseCredential {
     @JoinColumn(name = "type_bd", referencedColumnName = "id")
     private SystemParameters systemParameter;
 
-    @ManyToOne
+    /*@ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
-    private UserInfo user;
+    private UserInfo user;*/
 
     @Column(columnDefinition = "TEXT")
     private String comment;
