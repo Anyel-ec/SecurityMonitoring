@@ -66,92 +66,17 @@
   "links": [],
   "panels": [
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 4,
-        "w": 3,
-        "x": 0,
-        "y": 0
-      },
-      "id": 26,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "percentChangeColorMode": "standard",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "showPercentChange": false,
-        "textMode": "auto",
-        "wideLayout": true
-      },
-      "pluginVersion": "11.3.1",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
-          "disableTextWrap": false,
-          "editorMode": "builder",
-          "exemplar": false,
-          "expr": "mongodb_exporter_build_info",
-          "fullMetaSearch": false,
-          "includeNullMetadata": true,
-          "instant": true,
-          "interval": "",
-          "legendFormat": "{{short_version}}",
-          "range": false,
-          "refId": "A",
-          "useBackend": false
-        }
-      ],
-      "title": "Version",
-      "type": "stat"
-    },
-    {
       "collapsed": false,
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 4
+        "y": 0
       },
       "id": 20,
       "panels": [],
       "repeat": "env",
-      "title": "General Counters, CPU, Memory and File Descriptor Stats",
+      "title": "Query Metrics for $env",
       "type": "row"
     },
     {
@@ -159,141 +84,6 @@
         "type": "prometheus",
         "uid": "${DS_PROMETHEUS}"
       },
-      "description": "Average user and system CPU time spent in seconds.",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic-by-name"
-          },
-          "custom": {
-            "axisBorderShow": false,
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "barWidthFactor": 0.6,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "insertNulls": false,
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "never",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "s"
-        },
-        "overrides": [
-          {
-            "__systemRef": "hideSeriesFrom",
-            "matcher": {
-              "id": "byNames",
-              "options": {
-                "mode": "exclude",
-                "names": [
-                  "avg(rate(process_cpu_seconds_total{}[5m]) * 1000)"
-                ],
-                "prefix": "All except:",
-                "readOnly": true
-              }
-            },
-            "properties": [
-              {
-                "id": "custom.hideFrom",
-                "value": {
-                  "legend": false,
-                  "tooltip": false,
-                  "viz": false
-                }
-              }
-            ]
-          }
-        ]
-      },
-      "gridPos": {
-        "h": 6,
-        "w": 10,
-        "x": 0,
-        "y": 5
-      },
-      "id": 7,
-      "options": {
-        "legend": {
-          "calcs": [
-            "max",
-            "lastNotNull",
-            "mean",
-            "min"
-          ],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "pluginVersion": "11.3.1",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
-          "editorMode": "code",
-          "exemplar": false,
-          "expr": "avg(rate(process_cpu_seconds_total{}[5m]) * 1000)",
-          "format": "time_series",
-          "instant": false,
-          "interval": "",
-          "intervalFactor": 2,
-          "legendFormat": "CPU",
-          "range": true,
-          "refId": "A",
-          "step": 240
-        }
-      ],
-      "title": "Average CPU Usage",
-      "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
-      },
-      "description": "Virtual and Resident memory size in bytes, averages over 5 min interval",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -346,26 +136,21 @@
               }
             ]
           },
-          "unit": "decbytes"
+          "unit": "ops"
         },
         "overrides": []
       },
       "gridPos": {
         "h": 6,
-        "w": 8,
-        "x": 10,
-        "y": 5
+        "w": 10,
+        "x": 0,
+        "y": 1
       },
-      "id": 9,
+      "id": 7,
       "options": {
         "legend": {
-          "calcs": [
-            "mean",
-            "lastNotNull",
-            "max",
-            "min"
-          ],
-          "displayMode": "table",
+          "calcs": [],
+          "displayMode": "list",
           "placement": "bottom",
           "showLegend": true
         },
@@ -381,34 +166,115 @@
             "type": "prometheus",
             "uid": "${DS_PROMETHEUS}"
           },
-          "editorMode": "code",
-          "expr": "avg(rate(mongodb_memory{type=\"resident\"}[5m]))",
+          "expr": "rate(mongodb_op_counters_total{instance=~\"$env\"}[$interval])",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 2,
-          "legendFormat": "Residencial",
-          "range": true,
+          "legendFormat": "",
           "refId": "A",
           "step": 240
+        }
+      ],
+      "title": "Query Operations",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "short"
         },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 8,
+        "x": 10,
+        "y": 1
+      },
+      "id": 9,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.3.1",
+      "targets": [
         {
           "datasource": {
             "type": "prometheus",
             "uid": "${DS_PROMETHEUS}"
           },
-          "editorMode": "code",
-          "expr": "avg(rate(mongodb_memory{type=\"virtual\"}[5m]))",
+          "expr": "rate(mongodb_metrics_document_total{instance=~\"$env\"}[$interval])",
           "format": "time_series",
-          "hide": false,
           "interval": "",
           "intervalFactor": 2,
-          "legendFormat": "Virtual",
-          "range": true,
-          "refId": "B",
+          "legendFormat": "",
+          "refId": "A",
           "step": 240
         }
       ],
-      "title": "Average Memory Usage",
+      "title": "Document Operations",
       "type": "timeseries"
     },
     {
@@ -476,7 +342,7 @@
         "h": 6,
         "w": 6,
         "x": 18,
-        "y": 5
+        "y": 1
       },
       "id": 8,
       "options": {
@@ -516,7 +382,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 11
+        "y": 7
       },
       "id": 21,
       "panels": [],
@@ -589,7 +455,7 @@
         "h": 6,
         "w": 6,
         "x": 0,
-        "y": 12
+        "y": 8
       },
       "id": 15,
       "options": {
@@ -711,7 +577,7 @@
         "h": 6,
         "w": 12,
         "x": 6,
-        "y": 12
+        "y": 8
       },
       "id": 14,
       "options": {
@@ -819,7 +685,7 @@
         "h": 6,
         "w": 6,
         "x": 18,
-        "y": 12
+        "y": 8
       },
       "id": 11,
       "options": {
@@ -859,7 +725,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 18
+        "y": 14
       },
       "id": 22,
       "panels": [],
@@ -910,7 +776,7 @@
         "h": 4,
         "w": 4,
         "x": 0,
-        "y": 19
+        "y": 15
       },
       "id": 10,
       "maxDataPoints": 100,
@@ -992,7 +858,7 @@
         "h": 4,
         "w": 4,
         "x": 4,
-        "y": 19
+        "y": 15
       },
       "id": 2,
       "maxDataPoints": 100,
@@ -1075,7 +941,7 @@
         "h": 4,
         "w": 16,
         "x": 8,
-        "y": 19
+        "y": 15
       },
       "id": 1,
       "maxDataPoints": 100,
@@ -1121,7 +987,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 23
+        "y": 19
       },
       "id": 23,
       "panels": [],
@@ -1193,7 +1059,7 @@
         "h": 6,
         "w": 8,
         "x": 0,
-        "y": 24
+        "y": 20
       },
       "id": 6,
       "options": {
@@ -1293,7 +1159,7 @@
         "h": 6,
         "w": 8,
         "x": 8,
-        "y": 24
+        "y": 20
       },
       "id": 4,
       "options": {
@@ -1394,7 +1260,7 @@
         "h": 6,
         "w": 8,
         "x": 16,
-        "y": 24
+        "y": 20
       },
       "id": 5,
       "options": {
@@ -1435,7 +1301,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 30
+        "y": 26
       },
       "id": 24,
       "panels": [],
@@ -1507,7 +1373,7 @@
         "h": 7,
         "w": 12,
         "x": 0,
-        "y": 31
+        "y": 27
       },
       "id": 16,
       "options": {
@@ -1608,7 +1474,7 @@
         "h": 7,
         "w": 12,
         "x": 12,
-        "y": 31
+        "y": 27
       },
       "id": 17,
       "options": {
@@ -1648,7 +1514,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 38
+        "y": 34
       },
       "id": 25,
       "panels": [],
@@ -1703,7 +1569,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -1719,7 +1586,7 @@
         "h": 7,
         "w": 12,
         "x": 0,
-        "y": 39
+        "y": 35
       },
       "id": 18,
       "options": {
@@ -1800,7 +1667,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -1816,7 +1684,7 @@
         "h": 7,
         "w": 12,
         "x": 12,
-        "y": 39
+        "y": 35
       },
       "id": 19,
       "options": {
@@ -1948,86 +1816,6 @@
         "refresh": 1,
         "regex": "",
         "type": "datasource"
-      },
-      {
-        "current": {},
-        "datasource": {
-          "type": "prometheus",
-          "uid": "${DS_PROMETHEUS}"
-        },
-        "definition": "query_result(mongodb_exporter_last_scrape_duration_seconds)",
-        "label": "Namespace",
-        "name": "namespace",
-        "options": [],
-        "query": {
-          "qryType": 3,
-          "query": "query_result(mongodb_exporter_last_scrape_duration_seconds)",
-          "refId": "PrometheusVariableQueryEditor-VariableQuery"
-        },
-        "refresh": 1,
-        "regex": "/.*kubernetes_namespace=\"([^\"]+).*/",
-        "sort": 1,
-        "type": "query"
-      },
-      {
-        "current": {},
-        "datasource": {
-          "type": "prometheus",
-          "uid": "${DS_PROMETHEUS}"
-        },
-        "definition": "query_result(mongodb_exporter_last_scrape_duration_seconds{kubernetes_namespace=\"$namespace\"})",
-        "label": "Release",
-        "name": "release",
-        "options": [],
-        "query": {
-          "qryType": 3,
-          "query": "query_result(mongodb_exporter_last_scrape_duration_seconds{kubernetes_namespace=\"$namespace\"})",
-          "refId": "PrometheusVariableQueryEditor-VariableQuery"
-        },
-        "refresh": 2,
-        "regex": "/.*release=\"([^\"]+)/",
-        "sort": 1,
-        "type": "query"
-      },
-      {
-        "current": {},
-        "datasource": {
-          "type": "prometheus",
-          "uid": "${DS_PROMETHEUS}"
-        },
-        "definition": "query_result(mongodb_up{release=\"$release\"})",
-        "label": "Instance",
-        "name": "instance",
-        "options": [],
-        "query": {
-          "qryType": 3,
-          "query": "query_result(mongodb_up{release=\"$release\"})",
-          "refId": "PrometheusVariableQueryEditor-VariableQuery"
-        },
-        "refresh": 1,
-        "regex": "/.*instance=\"([^\"]+).*/",
-        "sort": 1,
-        "type": "query"
-      },
-      {
-        "current": {},
-        "datasource": {
-          "type": "prometheus",
-          "uid": "${DS_PROMETHEUS}"
-        },
-        "definition": "label_values(datname)",
-        "label": "Database",
-        "name": "datname",
-        "options": [],
-        "query": {
-          "qryType": 1,
-          "query": "label_values(datname)",
-          "refId": "PrometheusVariableQueryEditor-VariableQuery"
-        },
-        "refresh": 1,
-        "regex": "",
-        "sort": 1,
-        "type": "query"
       }
     ]
   },
@@ -2039,6 +1827,6 @@
   "timezone": "browser",
   "title": "MongoDB",
   "uid": "fe5usr0w1cglcb",
-  "version": 12,
+  "version": 2,
   "weekStart": ""
 }
