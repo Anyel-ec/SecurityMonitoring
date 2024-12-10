@@ -1,4 +1,47 @@
 {
+  "__inputs": [
+    {
+      "name": "DS_PROMETHEUS",
+      "label": "prometheus",
+      "description": "",
+      "type": "datasource",
+      "pluginId": "prometheus",
+      "pluginName": "Prometheus"
+    }
+  ],
+  "__elements": {},
+  "__requires": [
+    {
+      "type": "panel",
+      "id": "gauge",
+      "name": "Gauge",
+      "version": ""
+    },
+    {
+      "type": "grafana",
+      "id": "grafana",
+      "name": "Grafana",
+      "version": "11.4.0"
+    },
+    {
+      "type": "datasource",
+      "id": "prometheus",
+      "name": "Prometheus",
+      "version": "1.0.0"
+    },
+    {
+      "type": "panel",
+      "id": "stat",
+      "name": "Stat",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "timeseries",
+      "name": "Time series",
+      "version": ""
+    }
+  ],
   "annotations": {
     "list": [
       {
@@ -25,7 +68,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 5,
+  "id": null,
   "links": [],
   "panels": [
     {
@@ -252,7 +295,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "de6g0wmaqyo00c"
+        "uid": "${DS_PROMETHEUS}"
       },
       "fieldConfig": {
         "defaults": {
@@ -344,7 +387,11 @@
           "expr": "avg(rate(process_cpu_seconds_total{} [5m]) * 1000)",
           "legendFormat": "CPU time",
           "range": true,
-          "refId": "A"
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          }
         }
       ],
       "title": "Uso promedio de CPU",
@@ -353,7 +400,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "de6g0wmaqyo00c"
+        "uid": "${DS_PROMETHEUS}"
       },
       "fieldConfig": {
         "defaults": {
@@ -445,7 +492,11 @@
           "expr": "avg(rate(process_resident_memory_bytes{instance=\"$host\"}[5m]))",
           "legendFormat": "RAM Time",
           "range": true,
-          "refId": "A"
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          }
         }
       ],
       "title": "Uso promedio de RAM",
@@ -454,7 +505,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "de6g0wmaqyo00c"
+        "uid": "${DS_PROMETHEUS}"
       },
       "description": "Number of open file descriptors",
       "fieldConfig": {
@@ -547,7 +598,11 @@
           "expr": "mysql_global_status_open_files{instance=\"$host\"}",
           "legendFormat": "Open Files",
           "range": true,
-          "refId": "A"
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          }
         }
       ],
       "title": "Open File Descriptors",
@@ -1911,7 +1966,6 @@
       "type": "timeseries"
     }
   ],
-  "preload": false,
   "refresh": "",
   "schemaVersion": 40,
   "tags": [],
@@ -1975,10 +2029,7 @@
         "type": "interval"
       },
       {
-        "current": {
-          "text": "mariadb-exporter:9104",
-          "value": "mariadb-exporter:9104"
-        },
+        "current": {},
         "datasource": {
           "type": "prometheus",
           "uid": "${DS_PROMETHEUS}"
@@ -1998,10 +2049,7 @@
         "type": "query"
       },
       {
-        "current": {
-          "text": "prometheus",
-          "value": "de6g0wmaqyo00c"
-        },
+        "current": {},
         "label": "datasource",
         "name": "DS_PROMETHEUS",
         "options": [],
@@ -2011,10 +2059,7 @@
         "type": "datasource"
       },
       {
-        "current": {
-          "text": "",
-          "value": ""
-        },
+        "current": {},
         "datasource": {
           "type": "prometheus",
           "uid": "${DS_PROMETHEUS}"
@@ -2033,10 +2078,7 @@
         "type": "query"
       },
       {
-        "current": {
-          "text": "",
-          "value": ""
-        },
+        "current": {},
         "datasource": {
           "type": "prometheus",
           "uid": "${DS_PROMETHEUS}"
@@ -2055,10 +2097,7 @@
         "type": "query"
       },
       {
-        "current": {
-          "text": "app_examen",
-          "value": "app_examen"
-        },
+        "current": {},
         "datasource": {
           "type": "prometheus",
           "uid": "${DS_PROMETHEUS}"
