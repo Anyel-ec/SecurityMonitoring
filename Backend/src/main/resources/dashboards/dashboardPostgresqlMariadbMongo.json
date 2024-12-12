@@ -1009,7 +1009,7 @@
           "refId": "A"
         }
       ],
-      "title": "MariaDB",
+      "title": "MongoDB",
       "type": "timeseries"
     }
   ],
@@ -1020,7 +1020,18 @@
     "mongodb"
   ],
   "templating": {
-    "list": []
+    "list": [
+      {
+        "current": {},
+        "label": "datasource",
+        "name": "DS_PROMETHEUS",
+        "options": [],
+        "query": "prometheus",
+        "refresh": 1,
+        "regex": "",
+        "type": "datasource"
+      }
+    ]
   },
   "time": {
     "from": "now-6h",
@@ -1030,6 +1041,6 @@
   "timezone": "browser",
   "title": "Postgres + Maria + Mongo",
   "uid": "fe6hmwui4a134b",
-  "version": 33,
+  "version": 44,
   "weekStart": ""
 }

@@ -41,7 +41,7 @@ const Login = () => {
       <div className="container-login100">
         <div className="wrap-login100">
           <form className="login100-form validate-form" onSubmit={handleSubmit}>
-            <span className="login100-form-title p-b-26">Bienvenido</span>
+            <span className="login100-form-title p-b-26">Bienvenido a Security Monitoring</span>
             <span className="login100-form-title p-b-48">
               <i className="zmdi zmdi-font"></i>
             </span>
@@ -58,7 +58,7 @@ const Login = () => {
                 onChange={handleChange}
                 onBlur={handleBlur}
               />
-              <span className="focus-input100" data-placeholder="Email"></span>
+              <span className="focus-input100" data-placeholder="Correo o usuario"></span>
               {errors.email && <span className="error-message">{errors.email}</span>}
             </div>
 
@@ -77,7 +77,7 @@ const Login = () => {
                 onChange={handleChange}
                 onBlur={handleBlur}
               />
-              <span className="focus-input100" data-placeholder="Password"></span>
+              <span className="focus-input100" data-placeholder="Contraseña"></span>
               {errors.pass && <span className="error-message">{errors.pass}</span>}
             </div>
 
@@ -91,9 +91,9 @@ const Login = () => {
             </div>
 
             <div className="text-center p-t-115">
-              <span className="txt1">Don’t have an account?</span>
+              <span className="txt1">Olvidastes la contraseña?</span>
               <a className="txt2" href="#">
-                Sign Up
+                Recuperala
               </a>
             </div>
           </form>
