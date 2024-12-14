@@ -1,8 +1,5 @@
 # Base image with JDK 17
-FROM eclipse-temurin:17-jdk-alpine
-
-# Add necessary utilities (curl in this case)
-RUN apk --no-cache add curl
+FROM openjdk:17-jdk-alpine
 
 # Set the working directory
 WORKDIR /app/security-monitoring/backend

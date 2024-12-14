@@ -1,41 +1,4 @@
 {
-  "__inputs": [
-    {
-      "name": "DS_PROMETHEUS",
-      "label": "prometheus",
-      "description": "",
-      "type": "datasource",
-      "pluginId": "prometheus",
-      "pluginName": "Prometheus"
-    }
-  ],
-  "__elements": {},
-  "__requires": [
-    {
-      "type": "grafana",
-      "id": "grafana",
-      "name": "Grafana",
-      "version": "11.4.0"
-    },
-    {
-      "type": "datasource",
-      "id": "prometheus",
-      "name": "Prometheus",
-      "version": "1.0.0"
-    },
-    {
-      "type": "panel",
-      "id": "stat",
-      "name": "Stat",
-      "version": ""
-    },
-    {
-      "type": "panel",
-      "id": "timeseries",
-      "name": "Time series",
-      "version": ""
-    }
-  ],
   "annotations": {
     "list": [
       {
@@ -56,7 +19,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 1,
-  "id": null,
+  "id": 6,
   "links": [],
   "panels": [
     {
@@ -151,7 +114,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "de6g0wmaqyo00c"
       },
       "fieldConfig": {
         "defaults": {
@@ -217,11 +180,7 @@
           "expr": "process_start_time_seconds{release=\"$release\", instance=\"$instance\"} * 1000",
           "legendFormat": "__auto",
           "range": true,
-          "refId": "A",
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          }
+          "refId": "A"
         }
       ],
       "title": "Tiempo de inicio",
@@ -230,7 +189,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "de6g0wmaqyo00c"
       },
       "fieldConfig": {
         "defaults": {
@@ -286,11 +245,7 @@
           "expr": "SUM(mongodb_op_counters_total{type=\"query\", instance=\"$instance\"})",
           "legendFormat": "__auto",
           "range": true,
-          "refId": "A",
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          }
+          "refId": "A"
         }
       ],
       "title": "Datos de búsqueda actuales",
@@ -299,7 +254,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "de6g0wmaqyo00c"
       },
       "fieldConfig": {
         "defaults": {
@@ -355,11 +310,7 @@
           "expr": "SUM(mongodb_op_counters_total{type=\"insert\", instance=\"$instance\"})",
           "legendFormat": "__auto",
           "range": true,
-          "refId": "A",
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          }
+          "refId": "A"
         }
       ],
       "title": "Datos de inserción actuales",
@@ -368,7 +319,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "de6g0wmaqyo00c"
       },
       "fieldConfig": {
         "defaults": {
@@ -424,11 +375,7 @@
           "expr": "SUM(mongodb_op_counters_total{type=\"update\", instance=\"$instance\"})",
           "legendFormat": "__auto",
           "range": true,
-          "refId": "A",
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          }
+          "refId": "A"
         }
       ],
       "title": "Datos de actualización actuales",
@@ -913,7 +860,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "de6g0wmaqyo00c"
       },
       "fieldConfig": {
         "defaults": {
@@ -940,7 +887,7 @@
       },
       "gridPos": {
         "h": 4,
-        "w": 4,
+        "w": 8,
         "x": 0,
         "y": 13
       },
@@ -969,11 +916,7 @@
           "expr": "mongodb_mongod_wiredtiger_cache_max_bytes{instance=\"$instance\"}",
           "legendFormat": "__auto",
           "range": true,
-          "refId": "A",
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          }
+          "refId": "A"
         }
       ],
       "title": "Tamaño máximo del caché de WiredTiger",
@@ -982,7 +925,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "de6g0wmaqyo00c"
       },
       "fieldConfig": {
         "defaults": {
@@ -1009,8 +952,8 @@
       },
       "gridPos": {
         "h": 4,
-        "w": 4,
-        "x": 4,
+        "w": 8,
+        "x": 8,
         "y": 13
       },
       "id": 34,
@@ -1038,11 +981,7 @@
           "expr": "mongodb_mongod_wiredtiger_cache_bytes{type=\"dirty\"}",
           "legendFormat": "__auto",
           "range": true,
-          "refId": "A",
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          }
+          "refId": "A"
         }
       ],
       "title": "Caché datos sucios",
@@ -1089,8 +1028,8 @@
       },
       "gridPos": {
         "h": 4,
-        "w": 3,
-        "x": 8,
+        "w": 8,
+        "x": 16,
         "y": 13
       },
       "id": 1,
@@ -1148,7 +1087,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "de6g0wmaqyo00c"
       },
       "fieldConfig": {
         "defaults": {
@@ -1193,8 +1132,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1236,11 +1174,7 @@
           "expr": "mongodb_connections{state=\"current\"} !=0",
           "legendFormat": "Mongo, s: {{state}}",
           "range": true,
-          "refId": "A",
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          }
+          "refId": "A"
         }
       ],
       "title": "Sesiones Activas",
@@ -1249,7 +1183,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "de6g0wmaqyo00c"
       },
       "fieldConfig": {
         "defaults": {
@@ -1294,8 +1228,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1336,11 +1269,7 @@
           "expr": "irate(mongodb_mongod_wiredtiger_transactions_total{type=\"committed\", instance=\"$instance\"}[5m])",
           "legendFormat": "Mongo",
           "range": true,
-          "refId": "A",
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          }
+          "refId": "A"
         }
       ],
       "title": "Total transacciones ",
@@ -1349,7 +1278,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "de6g0wmaqyo00c"
       },
       "fieldConfig": {
         "defaults": {
@@ -1394,8 +1323,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1436,11 +1364,7 @@
           "expr": "mongodb_mongod_op_latencies_ops_total{type=\"write\", instance=\"$instance\"}",
           "legendFormat": "Mongo",
           "range": true,
-          "refId": "A",
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          }
+          "refId": "A"
         }
       ],
       "title": "Total de operaciones de escritura",
@@ -1449,7 +1373,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "de6g0wmaqyo00c"
       },
       "fieldConfig": {
         "defaults": {
@@ -1536,11 +1460,7 @@
           "expr": "mongodb_mongod_wiredtiger_blockmanager_bytes_total{type=\"written\"} !=0",
           "legendFormat": "Mongo, s: {{state}}",
           "range": true,
-          "refId": "A",
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          }
+          "refId": "A"
         }
       ],
       "title": "Número total de bytes escritos",
@@ -1549,7 +1469,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "de6g0wmaqyo00c"
       },
       "fieldConfig": {
         "defaults": {
@@ -1636,11 +1556,7 @@
           "expr": "mongodb_mongod_wiredtiger_blockmanager_bytes_total{type=\"read\"} !=0",
           "legendFormat": "Mongo, s: {{state}}",
           "range": true,
-          "refId": "A",
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          }
+          "refId": "A"
         }
       ],
       "title": "Número total de bytes leidos",
@@ -1846,6 +1762,7 @@
       "type": "timeseries"
     }
   ],
+  "preload": false,
   "refresh": "5s",
   "schemaVersion": 40,
   "tags": [
@@ -1854,7 +1771,14 @@
   "templating": {
     "list": [
       {
-        "current": {},
+        "current": {
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        },
         "datasource": {
           "type": "prometheus",
           "uid": "${DS_PROMETHEUS}"
@@ -1936,7 +1860,10 @@
         "type": "interval"
       },
       {
-        "current": {},
+        "current": {
+          "text": "prometheus",
+          "value": "de6g0wmaqyo00c"
+        },
         "label": "datasource",
         "name": "DS_PROMETHEUS",
         "options": [],
@@ -1946,7 +1873,10 @@
         "type": "datasource"
       },
       {
-        "current": {},
+        "current": {
+          "text": "",
+          "value": ""
+        },
         "datasource": {
           "type": "prometheus",
           "uid": "${DS_PROMETHEUS}"
@@ -1966,7 +1896,10 @@
         "type": "query"
       },
       {
-        "current": {},
+        "current": {
+          "text": "",
+          "value": ""
+        },
         "datasource": {
           "type": "prometheus",
           "uid": "${DS_PROMETHEUS}"
@@ -1986,7 +1919,10 @@
         "type": "query"
       },
       {
-        "current": {},
+        "current": {
+          "text": "mongo-exporter:9216",
+          "value": "mongo-exporter:9216"
+        },
         "datasource": {
           "type": "prometheus",
           "uid": "${DS_PROMETHEUS}"
@@ -2006,7 +1942,10 @@
         "type": "query"
       },
       {
-        "current": {},
+        "current": {
+          "text": "app_examen",
+          "value": "app_examen"
+        },
         "datasource": {
           "type": "prometheus",
           "uid": "${DS_PROMETHEUS}"
@@ -2035,6 +1974,6 @@
   "timezone": "browser",
   "title": "MongoDB",
   "uid": "fe5usr0w1cglcb",
-  "version": 23,
+  "version": 24,
   "weekStart": ""
 }
