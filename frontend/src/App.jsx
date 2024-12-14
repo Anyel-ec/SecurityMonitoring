@@ -1,33 +1,32 @@
-import React, { useState, useEffect } from 'react';
-import Header from './components/Layouts/Header';
-import MainComponent from './components/MainComponent'; 
-import './App.css'; 
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { toggleRTL, toggleTheme, toggleLocale, toggleMenu, toggleLayout, toggleAnimation, toggleNavbar, toggleSemidark } from './store/themeConfigSlice';
+import store from './store';
 
-export default function App() {
-  const [darkMode, setDarkMode] = useState(() => {
-    const savedTheme = localStorage.getItem('darkMode');
-    return savedTheme ? JSON.parse(savedTheme) : false;
-  });
+function App({ children }) {
+    const themeConfig = useSelector((state) => state.themeConfig);
+    const dispatch = useDispatch();
 
-  useEffect(() => {
-    if (darkMode) {
-      document.body.classList.add('dark-theme'); // Asegúrate de agregar la clase dark-theme al body
-    } else {
-      document.body.classList.remove('dark-theme');
-    }
-    localStorage.setItem('darkMode', JSON.stringify(darkMode));
-  }, [darkMode]);
+    useEffect(() => {
+        dispatch(toggleTheme(localStorage.getItem('theme') || themeConfig.theme));
+        dispatch(toggleMenu(localStorage.getItem('menu') || themeConfig.menu));
+        dispatch(toggleLayout(localStorage.getItem('layout') || themeConfig.layout));
+        dispatch(toggleRTL(localStorage.getItem('rtlClass') || themeConfig.rtlClass));
+        dispatch(toggleAnimation(localStorage.getItem('animation') || themeConfig.animation));
+        dispatch(toggleNavbar(localStorage.getItem('navbar') || themeConfig.navbar));
+        dispatch(toggleLocale(localStorage.getItem('i18nextLng') || themeConfig.locale));
+        dispatch(toggleSemidark(localStorage.getItem('semidark') || themeConfig.semidark));
+    }, [dispatch, themeConfig.theme, themeConfig.menu, themeConfig.layout, themeConfig.rtlClass, themeConfig.animation, themeConfig.navbar, themeConfig.locale, themeConfig.semidark]);
 
-  const toggleTheme = () => {
-    setDarkMode(!darkMode);
-  };
-
-  return (
-    <div className={`app-container ${darkMode ? 'dark-theme' : 'light-theme'}`}>
-      <Header darkMode={darkMode} toggleTheme={toggleTheme} />
-      <div className="content">
-        <MainComponent darkMode={darkMode} /> {/* Pasar darkMode como prop */}
-      </div>
-    </div>
-  );
+    return (
+        <div
+            className={`${(store.getState().themeConfig.sidebar && 'toggle-sidebar') || ''} ${themeConfig.menu} ${themeConfig.layout} ${
+                themeConfig.rtlClass
+            } main-section antialiased relative font-nunito text-sm font-normal`}
+        >
+            {children}
+        </div>
+    );
 }
+
+export default App;
