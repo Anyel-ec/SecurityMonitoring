@@ -1,11 +1,11 @@
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { setPageTitle } from '../store/themeConfigSlice';
+import { setPageTitle } from '../../store/themeConfigSlice';
 
-const Index = () => {
+const Instalation = () => {
     const dispatch = useDispatch();
     useEffect(() => {
-        dispatch(setPageTitle('Inicio'));
+        dispatch(setPageTitle('Instalación'));
     });
 
     return (
@@ -18,4 +18,4 @@ const Index = () => {
     );
 };
 
-export default Index;
+export default Instalation;
