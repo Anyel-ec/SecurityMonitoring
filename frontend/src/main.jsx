@@ -1,5 +1,6 @@
 import React, { Suspense } from 'react';
 import ReactDOM from 'react-dom/client'
+import { InstallationProvider } from './hooks/contexts/useRoutesWarpper.context';
 
 // Perfect Scrollbar
 import 'react-perfect-scrollbar/dist/css/styles.css';
@@ -21,11 +22,13 @@ import store from './store/index';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
     <React.StrictMode>
-        <Suspense>
-            <Provider store={store}>
-                <RouterProvider router={router} />
-            </Provider>
-        </Suspense>
+        <InstallationProvider>
+            <Suspense>
+                <Provider store={store}>
+                    <RouterProvider router={router} />
+                </Provider>
+            </Suspense>
+        </InstallationProvider>
     </React.StrictMode>
 );
 

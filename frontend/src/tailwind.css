@@ -711,3 +711,52 @@ hover:text-primary hover:before:!bg-primary ltr:before:mr-2 rtl:before:ml-2 dark
 pre.hljs {
     @apply p-6 rounded-md overflow-x-auto !bg-[#191e3a];
 }
+
+/* 
+// ===============================================
+// Estilos para sweedAlert2
+// =============================================== 
+*/
+
+.dark .swal2-popup.swal2-toast {
+    box-shadow: none;
+}
+
+.dark .swal2-popup .swal2-close { 
+    color: #fff;
+}
+
+.swal2-popup.swal2-toast {
+    gap: 15px;
+}
+
+div:where(.swal2-icon) {
+  margin: 0 auto 0em !important;
+  transform: scale(0.6) !important;
+}
+
+div:where(.swal2-icon) .swal2-icon-content {
+    font-size: 55px !important;
+}
+
+div:where(.swal2-container) {
+  z-index: 10000 !important;
+}
+
+/* Content */
+div:where(.swal2-container) div:where(.swal2-popup) {
+  border-radius: 15px !important;
+  box-shadow: 3px 3px 6px rgba(#000, 0.5) !important;
+  padding: 0.2em 0 1em !important;
+  transform: scale(0.8) !important;
+}
+
+div:where(.swal2-container) h2:where(.swal2-title) {
+  padding: 0px !important;
+}
+
+/* title */
+:is([dir="ltr"] .swal2-popup .swal2-title),
+:is([dir="ltr"] .swal2-popup .swal2-html-container) {
+    padding: 0px !important;
+}

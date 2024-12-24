@@ -61,7 +61,7 @@ const Sidebar = () => {
                             className="collapse-icon w-8 h-8 rounded-full flex items-center hover:bg-gray-500/10 dark:hover:bg-dark-light/10 dark:text-white-light transition duration-300 rtl:rotate-180"
                             onClick={() => dispatch(toggleSidebar())}
                         >
-                            <i class="fa-solid fa-bars-sort m-auto"></i>
+                            <i className="fa-solid fa-bars-sort m-auto"></i>
                         </button>
                     </div>
                     <PerfectScrollbar className="h-[calc(100vh-80px)] relative">
