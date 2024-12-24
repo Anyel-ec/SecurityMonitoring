@@ -220,9 +220,6 @@ const ConnectionDetails = ({
             <button className="btn btn-success" onClick={handleSave}>
               Guardar
             </button>
-            <button className="btn btn-dark" onClick={handleCancel}>
-              Cancelar
-            </button>
           </div>
         </>
       )}

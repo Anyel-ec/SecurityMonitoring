@@ -53,7 +53,7 @@ const Login = () => {
                                     <div className="relative text-white-dark">
                                         <input id="Email" type="email" placeholder="Ingrese su correo" className="form-input ps-10 placeholder:text-white-dark" />
                                         <span className="absolute start-4 top-1/2 -translate-y-1/2">
-                                            <IconMail fill={true} />
+                                            <i className="fa-solid fa-envelope"></i>
                                         </span>
                                     </div>
                                 </div>
@@ -62,7 +62,7 @@ const Login = () => {
                                     <div className="relative text-white-dark">
                                         <input id="Password" type="password" placeholder="Ingrese su contraseña" className="form-input ps-10 placeholder:text-white-dark" />
                                         <span className="absolute start-4 top-1/2 -translate-y-1/2">
-                                            <IconLockDots fill={true} />
+                                            <i className="fa-solid fa-lock"></i>
                                         </span>
                                     </div>
                                 </div>
