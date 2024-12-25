@@ -281,14 +281,14 @@ const Instalation = () => {
                         ) : (
                             <i className="fas fa-check text-green-500 mx-auto" style={{ fontSize: '1.5rem' }}></i>
                         )}
-                        <h2 className="text-2xl font-bold mt-4">Installing...</h2>
+                        <h2 className="text-2xl font-bold mt-4">Instalación...</h2>
                         <p className="mt-2">Verificando el estado de los contenedores. Esto puede tardar unos segundos.</p>
                     </div>
                 );
             case 6:
                 return (
                     <div className="text-center">
-                        <h2 className="text-2xl font-bold">Installation Complete!</h2>
+                        <h2 className="text-2xl font-bold">Instalación completa</h2>
                         <p className="mt-2">Su configuración está lista. Verificación de la configuración del panel y la fuente de datos de Grafana...</p>
                     </div>
                 );
@@ -368,7 +368,7 @@ const Instalation = () => {
                         {steps.map((step, index) => (
                             <div key={index} className="flex flex-col items-center">
                                 <div
-                                    className={`w-10 h-10 rounded-full flex items-center justify-center text-lg font-bold mb-2 
+                                    className={`w-10 h-10 rounded-full flex items-center justify-center text-lg font-bold mb-2
                       ${currentStep > step.number ? 'bg-blue-600 text-white' :
                                             currentStep === step.number ? 'bg-blue-600 text-white' :
                                                 'bg-white dark:bg-dark text-blue-600 dark:text-blue-300 border-2 border-blue-300'}
@@ -406,16 +406,16 @@ const Instalation = () => {
                             onClick={prevStep}
                             className="px-6 py-2 mr-4 btn btn-outline-primary rounded-md hover:bg-white hover:text-primary transition-colors duration-300"
                         >
-                            Previous
+                            Anterior
                         </button>
                     )}
                     <button
                         onClick={nextStep}
                         disabled={currentStep === 5 && isInstalling}
-                        className={`btn btn-primary transition-colors duration-300 
+                        className={`btn btn-primary transition-colors duration-300
                 ${(currentStep === 5 && isInstalling) ? 'opacity-50 cursor-not-allowed' : ''}`}
                     >
-                        {currentStep === 4 ? 'Install' : currentStep < 5 ? 'Next' : 'Finish'}
+                        {currentStep === 4 ? 'Install' : currentStep < 5 ? 'Siguiente' : 'Finalizar'}
                     </button>
                 </div>
             </div>
