@@ -8,7 +8,7 @@ import { checkDockerStatus, checkIfComposeExecuted, runDockerComposeWithDatabase
 
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
-
+import { testPostgresConnection } from '../../hooks/services/connectionService';
 
 const Home = () => {
 
@@ -194,7 +194,7 @@ const Home = () => {
 
                     // Llamada al servicio para crear o actualizar credenciales
                     await createOrUpdateCredential(credentialsData);
-                    // Obtener todas las credenciales de bd 
+                    // Obtener todas las credenciales de bd
                     await fetchAllCredentials();
                     // Ejecutar Docker Compose con la base de datos después de guardar las credenciales
                     await runDockerComposeWithDatabase();

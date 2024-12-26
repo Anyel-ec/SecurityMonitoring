@@ -37,7 +37,4 @@ public class MyCnfFileController {
             return new ResponseEntity<>(new JsonResponseDto(false, HttpStatus.INTERNAL_SERVER_ERROR.value(), errorMessage, null), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
-
-
 }
