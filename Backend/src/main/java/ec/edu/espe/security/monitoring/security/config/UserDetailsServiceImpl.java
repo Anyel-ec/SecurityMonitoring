@@ -3,7 +3,6 @@ package ec.edu.espe.security.monitoring.security.config;
 import ec.edu.espe.security.monitoring.models.UserInfo;
 import ec.edu.espe.security.monitoring.repositories.UserInfoRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

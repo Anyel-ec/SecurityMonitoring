@@ -2,11 +2,9 @@ package ec.edu.espe.security.monitoring.security.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ec.edu.espe.security.monitoring.dto.response.JsonResponseDto;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
@@ -27,7 +25,7 @@ public class JwtEntryPoint implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest req, HttpServletResponse res, AuthenticationException e)
             throws IOException {
-        log.error("Unauthorized error. {}", e.getMessage());
+        log.error("Error no autorizado {}", e.getMessage());
         JsonResponseDto resp = new JsonResponseDto(Boolean.FALSE, HttpStatus.UNAUTHORIZED.value(), "Unauthorized", null);
         res.setContentType("application/json");
         res.setStatus(HttpStatus.UNAUTHORIZED.value());

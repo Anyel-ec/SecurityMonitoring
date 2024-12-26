@@ -30,7 +30,6 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public JsonResponseDto authenticate(LoginRequestDto login) {
         try {
-            log.info("loginCustom: " + login.getUsername());
             String username = login.getUsername() != null ? login.getUsername().trim() : "";
             String pass = login.getPassword() != null ? login.getPassword().trim() : "";
 
@@ -49,7 +48,7 @@ public class AuthServiceImpl implements AuthService {
             String jwt = jwtProvider.generateJwtByUsername(user);
             return new JsonResponseDto(true, HttpStatus.OK.value(), "Login exitoso", jwt);
         } catch (Exception e) {
-            log.error("Catch loginCustom: " + e.getMessage());
+            log.info("Error en el login: {}", e.getMessage());
             return new JsonResponseDto(false, HttpStatus.INTERNAL_SERVER_ERROR.value(), "Error en el login", null);
         }
     }
