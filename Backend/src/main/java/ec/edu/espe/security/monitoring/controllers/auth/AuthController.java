@@ -44,6 +44,7 @@ public class AuthController {
      */
     @PostMapping("/login")
     public ResponseEntity<JsonResponseDto> login(@RequestBody LoginRequestDto loginRequest) {
+        log.info("Login request received: {}", loginRequest.getUsername());
         try {
             // Call the authentication method from AuthServiceImpl
             JsonResponseDto response = authService.authenticate(loginRequest);

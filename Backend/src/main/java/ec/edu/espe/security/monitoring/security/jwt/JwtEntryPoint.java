@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
@@ -18,6 +19,7 @@ import java.io.IOException;
  * Github: https://github.com/Anyel-ec
  * Creation date: 25/12/2024
  */
+@Component
 @Slf4j
 public class JwtEntryPoint implements AuthenticationEntryPoint {
 

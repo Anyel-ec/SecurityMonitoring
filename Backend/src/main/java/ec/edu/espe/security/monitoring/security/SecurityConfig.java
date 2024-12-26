@@ -6,6 +6,7 @@ import ec.edu.espe.security.monitoring.security.jwt.JwtTokenFilter;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -23,6 +24,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
  */
 @AllArgsConstructor
 @Slf4j
+@Configuration
 public class SecurityConfig {
 
     private final UserDetailsServiceImpl userDetailsServiceImpl;
