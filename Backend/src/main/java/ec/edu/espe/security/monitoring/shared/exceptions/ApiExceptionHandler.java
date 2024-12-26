@@ -1,6 +1,7 @@
 package ec.edu.espe.security.monitoring.shared.exceptions;
 
 import ec.edu.espe.security.monitoring.dto.response.JsonResponseDto;
+import io.jsonwebtoken.security.SignatureException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
@@ -173,5 +174,28 @@ public class ApiExceptionHandler {
         log.warn("JSON parse error: {}", ex.getMessage());
         return ApiErrorResponse.badRequest("Error de formato JSON ");
     }
+
+    @ExceptionHandler(SignatureException.class)
+    public ResponseEntity<JsonResponseDto> handleSignatureException(SignatureException ex, HttpServletRequest request) {
+        log.warn("Firma JWT inválida: {}", ex.getMessage());
+        HttpStatus status = HttpStatus.UNAUTHORIZED;
+        JsonResponseDto response = new JsonResponseDto(
+                false,
+                status.value(),
+                "La firma del token es inválida. Por favor, verifica tus credenciales e inténtalo nuevamente.",
+                null
+        );
+        return new ResponseEntity<>(response, status);
+    }
+
+    @ExceptionHandler(io.jsonwebtoken.io.DecodingException.class)
+    public ResponseEntity<JsonResponseDto> handleDecodingException(io.jsonwebtoken.io.DecodingException ex) {
+        log.error("Error al decodificar el token JWT: {}", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
+                new JsonResponseDto(false, HttpStatus.UNAUTHORIZED.value(),
+                        "El token JWT tiene un formato inválido. Verifica y vuelve a intentarlo.", null));
+    }
+
+
 
 }

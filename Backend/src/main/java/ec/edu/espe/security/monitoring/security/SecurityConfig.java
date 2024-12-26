@@ -5,7 +5,6 @@ import ec.edu.espe.security.monitoring.security.jwt.JwtEntryPoint;
 import ec.edu.espe.security.monitoring.security.jwt.JwtTokenFilter;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
@@ -24,7 +23,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
  */
 @AllArgsConstructor
 @Slf4j
-public class WebSecurityConfig {
+public class SecurityConfig {
 
     private final UserDetailsServiceImpl userDetailsServiceImpl;
     private final JwtEntryPoint jwtEntryPoint;
@@ -45,7 +44,6 @@ public class WebSecurityConfig {
             "/h2-console/**",
             "api/v1/auth/login",
             "/api/v1/test/validateToken",
-
     };
 
     @Bean

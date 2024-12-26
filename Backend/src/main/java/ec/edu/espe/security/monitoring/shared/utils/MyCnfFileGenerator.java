@@ -5,6 +5,8 @@ import ec.edu.espe.security.monitoring.models.SystemParameters;
 import ec.edu.espe.security.monitoring.repositories.DatabaseCredentialRepository;
 import ec.edu.espe.security.monitoring.repositories.SystemParametersRepository;
 import ec.edu.espe.security.monitoring.shared.utils.encrypt.AesEncryptorUtil;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -13,6 +15,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.security.SecureRandom;
+import java.util.Base64;
 import java.util.Optional;
 
 @Slf4j
@@ -98,4 +102,19 @@ public class MyCnfFileGenerator {
             log.error("Error al escribir el archivo .my.cnf: {}", e.getMessage());
         }
     }
+    public static void main(String[] args) {
+        // Genera 32 bytes de clave (256 bits)
+        SecureRandom secureRandom = new SecureRandom();
+        byte[] key = new byte[32]; // 256 bits
+        secureRandom.nextBytes(key);
+
+        // Codifica la clave en Base64
+        String base64Key = Base64.getEncoder().encodeToString(key);
+
+        // Imprime la clave generada
+        System.out.println("Clave generada (Base64): " + base64Key);
+    }
 }
+
+
+
