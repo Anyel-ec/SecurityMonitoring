@@ -55,6 +55,7 @@ public class AuthController {
             } else {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
             }
+
         } catch (Exception e) {
             log.error("Error en la autenticación: {}", e.getMessage());
             JsonResponseDto response = new JsonResponseDto(false, HttpStatus.INTERNAL_SERVER_ERROR.value(), "Error interno en la autenticación", null);
