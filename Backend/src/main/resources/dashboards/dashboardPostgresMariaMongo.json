@@ -79,42 +79,25 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "palette-classic"
+            "mode": "thresholds"
           },
-          "custom": {
-            "axisBorderShow": false,
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "barWidthFactor": 0.6,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "insertNulls": false,
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "color": "red",
+                  "index": 1,
+                  "text": "APAGADO"
+                },
+                "1": {
+                  "color": "green",
+                  "index": 0,
+                  "text": "ENCENDIDO"
+                }
+              },
+              "type": "value"
             }
-          },
-          "mappings": [],
+          ],
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -132,30 +115,35 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 8,
+        "h": 3,
         "w": 8,
         "x": 0,
         "y": 1
       },
       "id": 18,
       "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
         },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
       },
       "pluginVersion": "11.4.0",
       "targets": [
         {
           "editorMode": "code",
           "expr": "pg_up",
-          "legendFormat": "__auto",
+          "legendFormat": "Postgres",
           "range": true,
           "refId": "A",
           "datasource": {
@@ -164,8 +152,8 @@
           }
         }
       ],
-      "title": "Panel Title",
-      "type": "timeseries"
+      "title": "Postgres",
+      "type": "stat"
     },
     {
       "datasource": {
@@ -175,42 +163,25 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "palette-classic"
+            "mode": "thresholds"
           },
-          "custom": {
-            "axisBorderShow": false,
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "barWidthFactor": 0.6,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "insertNulls": false,
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "color": "red",
+                  "index": 1,
+                  "text": "APAGADO"
+                },
+                "1": {
+                  "color": "green",
+                  "index": 0,
+                  "text": "ENCENDIDO"
+                }
+              },
+              "type": "value"
             }
-          },
-          "mappings": [],
+          ],
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -228,23 +199,28 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 8,
+        "h": 3,
         "w": 8,
         "x": 8,
         "y": 1
       },
       "id": 19,
       "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
         },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
       },
       "pluginVersion": "11.4.0",
       "targets": [
@@ -260,8 +236,8 @@
           }
         }
       ],
-      "title": "Panel Title",
-      "type": "timeseries"
+      "title": "MariaDB",
+      "type": "stat"
     },
     {
       "datasource": {
@@ -271,42 +247,25 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "palette-classic"
+            "mode": "thresholds"
           },
-          "custom": {
-            "axisBorderShow": false,
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "barWidthFactor": 0.6,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "insertNulls": false,
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "color": "red",
+                  "index": 1,
+                  "text": "APAGADO"
+                },
+                "1": {
+                  "color": "green",
+                  "index": 0,
+                  "text": "ENCENDIDO"
+                }
+              },
+              "type": "value"
             }
-          },
-          "mappings": [],
+          ],
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -324,30 +283,35 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 8,
+        "h": 3,
         "w": 8,
         "x": 16,
         "y": 1
       },
       "id": 20,
       "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
         },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
       },
       "pluginVersion": "11.4.0",
       "targets": [
         {
           "editorMode": "code",
           "expr": "mongodb_up",
-          "legendFormat": "__auto",
+          "legendFormat": "Mongo",
           "range": true,
           "refId": "A",
           "datasource": {
@@ -356,8 +320,8 @@
           }
         }
       ],
-      "title": "Panel Title",
-      "type": "timeseries"
+      "title": "MongoDB",
+      "type": "stat"
     },
     {
       "collapsed": false,
@@ -365,7 +329,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 9
+        "y": 4
       },
       "id": 11,
       "panels": [],
@@ -434,10 +398,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 9,
+        "h": 7,
         "w": 8,
         "x": 0,
-        "y": 10
+        "y": 5
       },
       "id": 4,
       "options": {
@@ -536,10 +500,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 9,
+        "h": 7,
         "w": 8,
         "x": 8,
-        "y": 10
+        "y": 5
       },
       "id": 5,
       "options": {
@@ -638,10 +602,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 9,
+        "h": 7,
         "w": 8,
         "x": 16,
-        "y": 10
+        "y": 5
       },
       "id": 6,
       "options": {
@@ -684,7 +648,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 19
+        "y": 12
       },
       "id": 7,
       "panels": [],
@@ -756,10 +720,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 9,
+        "h": 6,
         "w": 8,
         "x": 0,
-        "y": 20
+        "y": 13
       },
       "id": 1,
       "options": {
@@ -858,10 +822,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 9,
+        "h": 6,
         "w": 8,
         "x": 8,
-        "y": 20
+        "y": 13
       },
       "id": 2,
       "options": {
@@ -960,10 +924,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 9,
+        "h": 6,
         "w": 8,
         "x": 16,
-        "y": 20
+        "y": 13
       },
       "id": 3,
       "options": {
@@ -1006,7 +970,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 29
+        "y": 19
       },
       "id": 13,
       "panels": [],
@@ -1041,10 +1005,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 7,
+        "h": 4,
         "w": 8,
         "x": 0,
-        "y": 30
+        "y": 20
       },
       "id": 14,
       "options": {
@@ -1109,10 +1073,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 7,
+        "h": 4,
         "w": 8,
         "x": 8,
-        "y": 30
+        "y": 20
       },
       "id": 15,
       "options": {
@@ -1177,10 +1141,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 7,
+        "h": 4,
         "w": 8,
         "x": 16,
-        "y": 30
+        "y": 20
       },
       "id": 16,
       "options": {
@@ -1223,7 +1187,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 37
+        "y": 24
       },
       "id": 12,
       "panels": [],
@@ -1293,10 +1257,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 9,
+        "h": 7,
         "w": 8,
         "x": 0,
-        "y": 38
+        "y": 25
       },
       "id": 8,
       "options": {
@@ -1396,10 +1360,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 9,
+        "h": 7,
         "w": 8,
         "x": 8,
-        "y": 38
+        "y": 25
       },
       "id": 9,
       "options": {
@@ -1499,10 +1463,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 9,
+        "h": 7,
         "w": 8,
         "x": 16,
-        "y": 38
+        "y": 25
       },
       "id": 10,
       "options": {
@@ -1561,13 +1525,13 @@
     ]
   },
   "time": {
-    "from": "now-5m",
+    "from": "now-6h",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "browser",
   "title": "Postgres + Maria + Mongo",
   "uid": "fe6hmwui4a134b",
-  "version": 7,
+  "version": 19,
   "weekStart": ""
 }
