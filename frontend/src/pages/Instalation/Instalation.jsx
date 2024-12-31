@@ -9,7 +9,7 @@ import PrometheusStep from './step/PrometheusStep';
 import ExporterStep from './step/ExporterStep';
 import UserInstallStep from './step/UserInstallStep';
 import { grafanaValidationSchema, prometheusValidationSchema, exportersValidationSchema, userInstallValidationSchema } from './validationSchemas';
-import { saveGrafanaInstallService, savePrometheusInstallService, saveOrUpdatePrometheusExportersService, saveUserInstallService } from '../../hooks/services/installationService';
+import { saveGrafanaInstallService, savePrometheusInstallService, saveOrUpdatePrometheusExportersService, saveUserInstallService } from '../../hooks/services/installing/installationService';
 import { checkContainerStatusService, runDockerInstallService } from '../../hooks/services/dockerService';
 import { createDashboard, createPrometheusDatasource } from '../../hooks/services/grafanaService';
 import { showLoadingAlert, closeAlert, showSuccessAlert, showErrorAlert, showRetryAlert } from '../../components/alerts/alerts';
@@ -281,14 +281,14 @@ const Instalation = () => {
                         ) : (
                             <i className="fas fa-check text-green-500 mx-auto" style={{ fontSize: '1.5rem' }}></i>
                         )}
-                        <h2 className="text-2xl font-bold mt-4">Instalación...</h2>
+                        <h2 className="text-2xl font-bold mt-4">Instalando...</h2>
                         <p className="mt-2">Verificando el estado de los contenedores. Esto puede tardar unos segundos.</p>
                     </div>
                 );
             case 6:
                 return (
                     <div className="text-center">
-                        <h2 className="text-2xl font-bold">Instalación completa</h2>
+                        <h2 className="text-2xl font-bold">Instalación Competa!</h2>
                         <p className="mt-2">Su configuración está lista. Verificación de la configuración del panel y la fuente de datos de Grafana...</p>
                     </div>
                 );
@@ -352,9 +352,9 @@ const Instalation = () => {
                 )}
             </div>
 
-            <div className="w-full max-w-6xl p-8">
+            <div className="flex flex-col w-full h-screen max-w-6xl p-8">
                 {/* Progress Steps */}
-                <div className="relative mb-12">
+                <div className="relative mb-12 mt-10">
                     {/* Connecting Lines */}
                     <div className="absolute top-5 dark:bg-dark left-0 right-0 h-[2px] bg-blue-300" >
                         <div
@@ -368,7 +368,7 @@ const Instalation = () => {
                         {steps.map((step, index) => (
                             <div key={index} className="flex flex-col items-center">
                                 <div
-                                    className={`w-10 h-10 rounded-full flex items-center justify-center text-lg font-bold mb-2
+                                    className={`w-10 h-10 rounded-full flex items-center justify-center text-lg font-bold mb-2 
                       ${currentStep > step.number ? 'bg-blue-600 text-white' :
                                             currentStep === step.number ? 'bg-blue-600 text-white' :
                                                 'bg-white dark:bg-dark text-blue-600 dark:text-blue-300 border-2 border-blue-300'}
@@ -385,7 +385,7 @@ const Instalation = () => {
                 </div>
 
                 {/* Content Area */}
-                <div className="panel p-5">
+                <div className="panel p-5 mb-auto">
                     <AnimatePresence mode="wait">
                         <motion.div
                             key={currentStep}
@@ -406,16 +406,16 @@ const Instalation = () => {
                             onClick={prevStep}
                             className="px-6 py-2 mr-4 btn btn-outline-primary rounded-md hover:bg-white hover:text-primary transition-colors duration-300"
                         >
-                            Anterior
+                            Previous
                         </button>
                     )}
                     <button
                         onClick={nextStep}
                         disabled={currentStep === 5 && isInstalling}
-                        className={`btn btn-primary transition-colors duration-300
+                        className={`btn btn-primary transition-colors duration-300 
                 ${(currentStep === 5 && isInstalling) ? 'opacity-50 cursor-not-allowed' : ''}`}
                     >
-                        {currentStep === 4 ? 'Install' : currentStep < 5 ? 'Siguiente' : 'Finalizar'}
+                        {currentStep === 4 ? 'Install' : currentStep < 5 ? 'Next' : 'Finish'}
                     </button>
                 </div>
             </div>

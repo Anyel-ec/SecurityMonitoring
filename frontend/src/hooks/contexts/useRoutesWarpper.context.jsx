@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
-import { checkInstallationStatusService } from '../services/installationService';
+import { checkInstallationStatusService } from '../services/installing/installationService';
 
 // Crea el contexto
 const InstallationContext = createContext();
@@ -28,6 +28,8 @@ export const InstallationProvider = ({ children }) => {
                 console.error('Error al verificar el estado de instalación:', error);
                 Swal.close();
                 Swal.fire('Error', 'Hubo un problema al verificar el estado de instalación.', 'error');
+                window.location.href = '/500';
+
             }
         };
 

@@ -5,7 +5,7 @@ import {
   showWarningAlert,
   closeAlert,
 } from '../../../components/alerts/alerts';
-import { completeInstallService } from '../../../hooks/services/installationService';
+import { completeInstallService } from '../../../hooks/services/installing/installationService';
 import { checkContainerStatusService } from '../../../hooks/services/dockerService';
 
 // Completar la instalación y ejecutar Docker Compose
