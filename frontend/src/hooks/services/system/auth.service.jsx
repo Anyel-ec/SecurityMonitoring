@@ -4,37 +4,39 @@ import { url_auth } from '../static/useApiUrl';
 
 // Función para iniciar sesión
 export const useAuthService = () => {
-
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [message, setMessage] = useState(null);
 
-    // Función `content` para realizar la solicitud de inicio de sesión
     const content = async (username, password) => {
         setLoading(true);
         setError(null);
+        setMessage(null);
 
         try {
-            console.log(username, password)
             const response = await axiosInstance.post(`${url_auth}/login`, { username, password });
-            const result = response.result;
+            const result = response.data;
 
-            // Guardar el token en localStorage si está en la respuesta
-            if (result && result.httpCode === 200 ) {
-                localStorage.setItem('token', result);
+            if (result.success && result.httpCode === 200) {
+                localStorage.setItem('token', result.result);
+                setMessage(result.message);
+            } else {
+                setMessage(result.message);
             }
 
             setLoading(false);
-            return result;
-
+            return result; // Retorna siempre un objeto
         } catch (error) {
-            setError(error.response ? error.response.data.msg : error.message);
+            const errorMessage = error.response ? error.response.data.message : error.message;
+            setError(errorMessage);
             setLoading(false);
-            return undefined;
+            return { success: false, message: errorMessage }; // Asegúrate de retornar un objeto
         }
     };
 
-    return { content, loading, error };
+    return { content, loading, error, message, setMessage };
 };
+
 
 // Función para obtener los detalles del usuario
 export const useDetailsUserService = () => {
@@ -49,7 +51,7 @@ export const useDetailsUserService = () => {
         try {
             const response = await axiosInstance.get(`${url_auth}/userDetails`);
             const result = response.result;
-
+            console.log(response.data.result)
             setLoading(false);
             return result;
 

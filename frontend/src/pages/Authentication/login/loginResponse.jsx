@@ -10,9 +10,9 @@ export default function useLogin() {
     const [usernameError, setUsernameError] = useState('');
     const [password, setPassword] = useState('anyel');
     const [passwordError, setPasswordError] = useState('');
-    
+
     const [errorResponse, setErrorResponse] = useState('');
-    const { content, loading, error } = useAuthService();
+    const { content, loading, error, message, setMessage } = useAuthService();
 
     // Validar cambios en email
     const handleUsernameChange = (e) => {
@@ -41,6 +41,7 @@ export default function useLogin() {
     // Validar formulario
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setMessage(null);
 
         setUsernameError('');
         setPasswordError('');
@@ -61,12 +62,17 @@ export default function useLogin() {
         // Llamar al servicio de autenticación
         const result = await content(username, password);
         console.log(result)
+        // Validar que `result` no sea undefined
         if (result) {
-            // if (result.data.response === 405) {
-            //     return setErrorResponse(result.msg);
-            // } else {
-            //     navigate('/', { replace: true });
-            // }
+            console.log(result.message); // Accede de forma segura a `message`
+            if (result.success) {
+                // Redirigir si es exitoso
+                navigate('/', { replace: true });
+            } else {
+                setMessage(result.message);
+            }
+        } else {
+            setMessage('Ocurrió un error inesperado');
         }
     };
 

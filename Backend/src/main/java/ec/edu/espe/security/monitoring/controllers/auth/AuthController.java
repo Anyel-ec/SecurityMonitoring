@@ -62,4 +62,18 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
+
+    @GetMapping("/userDetails")
+    public ResponseEntity<JsonResponseDto> userDetails(@RequestHeader("Authorization") String authorizationHeader) {
+        try {
+            String token = authorizationHeader.replace("Bearer ", "");
+            JsonResponseDto response = authService.getUserDetails(token);
+            return ResponseEntity.status(response.httpCode()).body(response);
+        } catch (Exception e) {
+            log.error("Error en la obtención de detalles del usuario: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new JsonResponseDto(false, HttpStatus.INTERNAL_SERVER_ERROR.value(), "Error al procesar la solicitud", null));
+        }
+    }
+
 }

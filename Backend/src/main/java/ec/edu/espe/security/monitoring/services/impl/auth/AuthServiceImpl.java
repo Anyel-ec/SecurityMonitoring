@@ -53,4 +53,26 @@ public class AuthServiceImpl implements AuthService {
         }
     }
 
+    public JsonResponseDto getUserDetails(String token) {
+        try {
+            // Extraer el nombre de usuario del token
+            String username = jwtProvider.getNombreUsuarioFromToken(token);
+
+            // Buscar al usuario en la base de datos
+            UserInfo user = userRepository.findByUsernameAndIsActiveTrue(username);
+
+            if (user == null) {
+                return new JsonResponseDto(false, HttpStatus.NOT_FOUND.value(), "Usuario no encontrado.", null);
+            }
+
+            // Devolver la información del usuario
+            return new JsonResponseDto(true, HttpStatus.OK.value(), "Detalles del usuario obtenidos con éxito", user);
+
+        } catch (Exception e) {
+            log.error("Error al obtener detalles del usuario: {}", e.getMessage());
+            return new JsonResponseDto(false, HttpStatus.INTERNAL_SERVER_ERROR.value(), "Error al obtener detalles del usuario", null);
+        }
+    }
+
+
 }
