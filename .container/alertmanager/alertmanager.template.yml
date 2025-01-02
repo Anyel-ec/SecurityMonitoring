@@ -26,7 +26,7 @@ receivers:
               <title>Security Monitoring Alert</title>
               <style>
                   body {
-                      font-family: Arial, sans-serif;
+                      font-family: 'Arial', sans-serif;
                       line-height: 1.6;
                       color: #333;
                       max-width: 600px;
@@ -41,7 +41,7 @@ receivers:
                       overflow: hidden;
                   }
                   .header {
-                      background: linear-gradient(to right, #b71c1c, #8b0000);
+                      background: linear-gradient(135deg, #b71c1c, #8b0000);
                       color: #ffffff;
                       padding: 24px;
                       text-align: center;
@@ -50,18 +50,20 @@ receivers:
                       align-items: center;
                   }
                   .logo {
-                      width: 80px;
-                      height: 80px;
+                      width: 100px;
+                      height: 100px;
                       background-color: white;
                       padding: 10px;
                       border-radius: 50%;
                       margin-bottom: 16px;
+                      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
                   }
                   .header h1 {
                       margin: 0;
                       font-size: 28px;
                       letter-spacing: 1px;
                       font-weight: 600;
+                      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
                   }
                   .content {
                       padding: 24px;
@@ -69,7 +71,7 @@ receivers:
                   .content h2 {
                       color: #b71c1c;
                       margin: 0 0 20px 0;
-                      font-size: 20px;
+                      font-size: 22px;
                       padding-bottom: 10px;
                       border-bottom: 2px solid rgba(183, 28, 28, 0.2);
                   }
@@ -93,7 +95,7 @@ receivers:
                       line-height: 1.5;
                   }
                   .footer {
-                      background: linear-gradient(to right, #b71c1c, #8b0000);
+                      background: linear-gradient(135deg, #b71c1c, #8b0000);
                       color: #ffffff;
                       padding: 16px;
                       text-align: center;
@@ -110,7 +112,7 @@ receivers:
           <body>
               <div class="container">
                   <div class="header">
-                      <img src="https://raw.githubusercontent.com/Anyel-ec/SecurityMonitoring/refs/heads/main/frontend/public/assets/images/logo.png" alt="Security Monitoring Logo" class="logo">
+                      <img src="https://raw.githubusercontent.com/Anyel-ec/SecurityMonitoring/refs/heads/main/frontend/public/logo192.png" alt="Security Monitoring Logo" class="logo">
                       <h1>Security Monitoring</h1>
                   </div>
                   <div class="content">
