@@ -18,7 +18,6 @@ import java.util.List;
 @RequestMapping("api/v1/auth")
 public class AuthController {
     private final AuthServiceImpl authService;
-
     /**
      * Endpoint to retrieve all active users.
      *
@@ -76,8 +75,13 @@ public class AuthController {
         }
     }
 
-    @DeleteMapping("/logout")
-    public ResponseEntity<JsonResponseDto> logout() {
-        return ResponseEntity.ok(new JsonResponseDto(true, HttpStatus.OK.value(), "Sesión cerrada exitosamente", null));
+    @PostMapping("/logout")
+    public ResponseEntity<JsonResponseDto> logout(@RequestHeader(value = "Authorization", required = false) String authorizationHeader) {
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            String token = authorizationHeader.replace("Bearer ", "");
+            JsonResponseDto response = authService.revokeToken(token);
+            return ResponseEntity.status(response.httpCode()).body(response);
+        }
+        return ResponseEntity.badRequest().body(new JsonResponseDto(false, 400, "Encabezado Authorization no encontrado o malformado.", null));
     }
 }
