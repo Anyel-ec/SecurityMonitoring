@@ -15,14 +15,117 @@ receivers:
         from: 'appatino@espe.edu.ec'
         send_resolved: true
         headers:
-            Subject: 'Prometheus Alert: {{ .CommonLabels.alertname }}'
-            To: monitoring-to@example.com
+          Subject: 'Prometheus Alert: {{ .CommonLabels.alertname }}'
+          To: monitoring-to@example.com
         html: |
-          <br><hr><br>TEST ALERTMANAGER
-          {{ range .Alerts }}
-            <p>
-              <strong>{{ .Annotations.summary }}</strong><br>
-              {{ .Annotations.description }}
-            </p>
-            <hr>
-          {{ end }}
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+              <meta charset="UTF-8">
+              <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              <title>Security Monitoring Alert</title>
+              <style>
+                  body {
+                      font-family: Arial, sans-serif;
+                      line-height: 1.6;
+                      color: #333;
+                      max-width: 600px;
+                      margin: 0 auto;
+                      padding: 20px;
+                      background-color: #f4f4f4;
+                  }
+                  .container {
+                      background-color: #ffffff;
+                      border-radius: 8px;
+                      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                      overflow: hidden;
+                  }
+                  .header {
+                      background: linear-gradient(to right, #b71c1c, #8b0000);
+                      color: #ffffff;
+                      padding: 24px;
+                      text-align: center;
+                      display: flex;
+                      flex-direction: column;
+                      align-items: center;
+                  }
+                  .logo {
+                      width: 80px;
+                      height: 80px;
+                      background-color: white;
+                      padding: 10px;
+                      border-radius: 50%;
+                      margin-bottom: 16px;
+                  }
+                  .header h1 {
+                      margin: 0;
+                      font-size: 28px;
+                      letter-spacing: 1px;
+                      font-weight: 600;
+                  }
+                  .content {
+                      padding: 24px;
+                  }
+                  .content h2 {
+                      color: #b71c1c;
+                      margin: 0 0 20px 0;
+                      font-size: 20px;
+                      padding-bottom: 10px;
+                      border-bottom: 2px solid rgba(183, 28, 28, 0.2);
+                  }
+                  .alert {
+                      background-color: #ffffff;
+                      border-left: 4px solid #b71c1c;
+                      margin-bottom: 20px;
+                      padding: 16px;
+                      border-radius: 4px;
+                      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+                  }
+                  .alert strong {
+                      color: #b71c1c;
+                      font-size: 18px;
+                      display: block;
+                      margin-bottom: 8px;
+                  }
+                  .alert p {
+                      margin: 0;
+                      color: #666;
+                      line-height: 1.5;
+                  }
+                  .footer {
+                      background: linear-gradient(to right, #b71c1c, #8b0000);
+                      color: #ffffff;
+                      padding: 16px;
+                      text-align: center;
+                      font-size: 14px;
+                      display: flex;
+                      justify-content: space-between;
+                      align-items: center;
+                  }
+                  .footer span {
+                      opacity: 0.9;
+                  }
+              </style>
+          </head>
+          <body>
+              <div class="container">
+                  <div class="header">
+                      <img src="https://raw.githubusercontent.com/Anyel-ec/SecurityMonitoring/refs/heads/main/frontend/public/assets/images/logo.png" alt="Security Monitoring Logo" class="logo">
+                      <h1>Security Monitoring</h1>
+                  </div>
+                  <div class="content">
+                      <h2>ALERTMANAGER NOTIFICATION</h2>
+                      {{ range .Alerts }}
+                          <div class="alert">
+                              <strong>{{ .Annotations.summary }}</strong>
+                              <p>{{ .Annotations.description }}</p>
+                          </div>
+                      {{ end }}
+                  </div>
+                  <div class="footer">
+                      <span>&copy; 2023 Security Monitoring</span>
+                      <span>All rights reserved</span>
+                  </div>
+              </div>
+          </body>
+          </html>
