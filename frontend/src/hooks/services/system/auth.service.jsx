@@ -20,6 +20,7 @@ export const useAuthService = () => {
             if (result.success && result.httpCode === 200) {
                 localStorage.setItem('token', result.result);
                 setMessage(result.message);
+                console.log(result.result)
             } else {
                 setMessage(result.message);
             }

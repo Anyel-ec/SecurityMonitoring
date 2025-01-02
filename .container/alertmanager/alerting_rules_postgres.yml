@@ -1,0 +1,132 @@
+groups:
+  # Grupo de alertas para verificar si los exportadores están activos
+  - name: Exporter Alerts
+    rules:
+      - alert: PostgresExporterCaido
+        expr: up{job="postgres"} == 0
+        for: 10s
+        labels:
+          severity: critical
+        annotations:
+          summary: "El Exportador de Postgres está caído"
+          description: "El Exportador de Postgres ha estado caído por más de 1 minuto."
+
+  # Grupo de alertas para monitorear el uso promedio de CPU de los exportadores supera el 80%
+  - name: CPU Usage Alerts
+    rules:
+      - alert: HighCPUUsagePostgresExporter
+        expr: avg(rate(process_cpu_seconds_total{instance="postgres-exporter:9187"}[5m]) * 1000) > 80
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Alto uso de CPU en el Exportador de Postgres"
+          description: "El uso promedio de CPU en el Exportador de Postgres ha superado el 80% en los últimos 5 minutos."
+
+  # Grupo de alertas para monitorear el uso promedio de memoria RAM de los exportadores 500MB
+  - name: Memory Usage Alerts
+    rules:
+      - alert: HighMemoryUsagePostgresExporter
+        expr: avg(rate(process_resident_memory_bytes{instance="postgres-exporter:9187"}[5m])) > 500 * 1024 * 1024
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Alto uso de memoria en el Exportador de Postgres"
+          description: "El uso promedio de RAM en el Exportador de Postgres ha superado los 500 MB en los últimos 5 minutos."
+
+  # Grupo de alertas para monitorear las conexiones activas en PostgreSQL
+  - name: Active Connections Alerts
+    rules:
+      - alert: ActiveConnectionsPostgres
+        expr: pg_stat_activity_count{job="postgres", state="active"} != 0
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Conexiones activas en PostgreSQL detectadas"
+          description: "Se han detectado conexiones activas en PostgreSQL en los últimos 60 segundos."
+
+  # Grupo de alertas para monitorear los File Descriptors abiertos en los exportadores
+  - name: Open File Descriptors Alerts
+    rules:
+      - alert: HighOpenFileDescriptorsPostgres
+        expr: process_open_fds{instance="postgres-exporter:9187"} > 1000
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Alto número de File Descriptors abiertos en Postgres Exporter"
+          description: "El número de File Descriptors abiertos por el exportador de Postgres ha superado los 1000 en los últimos 60 segundos."
+
+  # Grupo de alertas para monitorear errores y conflictos en las consultas de las bases de datos
+  - name: Query Errors Alerts
+    rules:
+      - alert: PostgresQueryConflicts
+        expr: sum(pg_stat_database_conflicts) > 10
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Conflictos en las consultas de PostgreSQL detectados"
+          description: "Se han detectado más de 10 conflictos en las consultas de PostgreSQL en los últimos 60 segundos. Revisa la actividad del servidor para resolver el problema."
+
+  # Grupo de alertas para monitorear operaciones de eliminación en bases de datos
+  - name: Deletion Operations Alerts
+    rules:
+      - alert: HighDeleteOperationsPostgres
+        expr: rate(pg_stat_user_tables_n_tup_del[5m]) > 100
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Alto número de operaciones de eliminación en PostgreSQL"
+          description: "Se han detectado más de 100 eliminaciones por segundo en PostgreSQL en los últimos 5 minutos."
+
+  # Grupo de alertas para monitorear operaciones de actualización en bases de datos
+  - name: Update Operations Alerts
+    rules:
+      - alert: HighUpdateOperationsPostgres
+        expr: rate(pg_stat_user_tables_n_tup_upd[5m]) > 100
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Alto número de operaciones de actualización en PostgreSQL"
+          description: "Se han detectado más de 100 operaciones de actualización por segundo en PostgreSQL en los últimos 5 minutos."
+
+  # Grupo de alertas para monitorear operaciones de inserción en bases de datos
+  - name: Insert Operations Alerts
+    rules:
+      - alert: HighInsertOperationsPostgres
+        expr: rate(pg_stat_user_tables_n_tup_ins[5m]) > 100
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Alto número de operaciones de inserción en PostgreSQL"
+          description: "Se han detectado más de 100 operaciones de inserción por segundo en PostgreSQL en los últimos 5 minutos."
+
+  # Grupo de alertas para monitorear la tasa de datos recibidos en bases de datos
+  - name: Data Received Rate Alerts
+    rules:
+      - alert: HighDataReceivedRatePostgres
+        expr: rate(pg_stat_database_tup_returned{datname=~"$datname"}[5m]) > 1e6
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Alta tasa de datos recibidos en PostgreSQL"
+          description: "Se ha detectado una tasa de más de 1 millón de tuplas por segundo devueltas en PostgreSQL para la base de datos $datname en los últimos 5 minutos. Revisa si esta actividad es normal."
+
+  # Grupo de alertas para monitorear la tasa de datos enviados en bases de datos
+  - name: Data Sent Rate Alerts
+    rules:
+      - alert: HighDataSentRatePostgres
+        expr: rate(pg_stat_database_blks_read[5m]) > 1e6
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Alta tasa de datos enviados en PostgreSQL"
+          description: "Se ha detectado una tasa de más de 1 millón de bloques leídos por segundo en PostgreSQL en los últimos 5 minutos. Revisa si esta actividad es esperada."

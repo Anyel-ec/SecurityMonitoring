@@ -76,4 +76,8 @@ public class AuthController {
         }
     }
 
+    @DeleteMapping("/logout")
+    public ResponseEntity<JsonResponseDto> logout() {
+        return ResponseEntity.ok(new JsonResponseDto(true, HttpStatus.OK.value(), "Sesión cerrada exitosamente", null));
+    }
 }
