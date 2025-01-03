@@ -4,6 +4,9 @@ import ec.edu.espe.security.monitoring.dto.response.JsonResponseDto;
 import ec.edu.espe.security.monitoring.services.impl.docker.DockerDbCredentialServiceImpl;
 import ec.edu.espe.security.monitoring.services.impl.docker.DockerInstallationServiceImpl;
 import ec.edu.espe.security.monitoring.services.impl.docker.DockerRunServiceImpl;
+import ec.edu.espe.security.monitoring.services.interfaces.docker.DockerDbCredentialService;
+import ec.edu.espe.security.monitoring.services.interfaces.docker.DockerInstallationService;
+import ec.edu.espe.security.monitoring.services.interfaces.docker.DockerRunService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -16,9 +19,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @Slf4j
 public class DockerRunController {
-    private final DockerRunServiceImpl dockerRunService;
-    private final DockerDbCredentialServiceImpl dockerComposeService;
-    private final DockerInstallationServiceImpl dockerInstallationService;
+    private final DockerRunService dockerRunService;
+    private final DockerDbCredentialService dockerComposeService;
+    private final DockerInstallationService dockerInstallationService;
 
     /**
      * Endpoint to check if Docker is currently running.
@@ -58,6 +61,10 @@ public class DockerRunController {
                 return ResponseEntity.ok(new JsonResponseDto(true, 200, "Docker Compose ya ha sido ejecutado.", true));
             }
 
+        } catch (InterruptedException ie) {
+            log.error("Proceso interrumpido al verificar o ejecutar Docker Compose: {}", ie.getMessage());
+            Thread.currentThread().interrupt();
+            return ResponseEntity.status(500).body(new JsonResponseDto(false, 500, "Proceso interrumpido durante la verificación o ejecución de Docker Compose", null));
         } catch (Exception e) {
             log.error("Error al verificar y ejecutar Docker Compose si no ha sido ejecutado: {}", e.getMessage());
             return ResponseEntity.status(500).body(new JsonResponseDto(false, 500, "Error al verificar o ejecutar Docker Compose", null));
@@ -74,6 +81,10 @@ public class DockerRunController {
             dockerComposeService.runDockerComposeWithDatabase();
             log.info("Docker Compose ejecutado con las credenciales de base de datos activas.");
             return ResponseEntity.ok(new JsonResponseDto(true, 200, "Docker Compose ejecutado con éxito para las credenciales de base de datos activas.", null));
+        } catch (InterruptedException ie) {
+            log.error("Proceso interrumpido mientras se ejecutaba Docker Compose: {}", ie.getMessage());
+            Thread.currentThread().interrupt();
+            return ResponseEntity.status(500).body(new JsonResponseDto(false, 500, "Proceso interrumpido durante la ejecución de Docker Compose", null));
         } catch (Exception e) {
             log.error("Error al ejecutar Docker Compose con credenciales de base de datos activas: {}", e.getMessage());
             return ResponseEntity.status(500).body(new JsonResponseDto(false, 500, "Error al ejecutar Docker Compose con credenciales de base de datos", null));

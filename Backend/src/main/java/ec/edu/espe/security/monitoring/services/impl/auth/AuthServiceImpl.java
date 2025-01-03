@@ -25,11 +25,13 @@ public class AuthServiceImpl implements AuthService {
     private final JwtRevokedToken jwtRevokedToken;
 
     // Retrieves all active users from the database
+    @Override
     public List<UserInfo> getAllActiveUsers() {
         log.info("Obteniendo todos los usuarios activos");
         return userRepository.findByIsActiveTrue();
     }
 
+    // Authenticates a user and returns a JWT token
     @Override
     public JsonResponseDto authenticate(LoginRequestDto login) {
         try {
@@ -60,6 +62,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     // Retrieves user details from the token
+    @Override
     public JsonResponseDto getUserDetails(String token) {
         try {
             // Extract the username from the token
@@ -82,6 +85,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     // Revokes a specific token by adding it to the revoked token list
+    @Override
     public JsonResponseDto revokeToken(String token) {
         try {
             if (token == null || token.trim().isEmpty()) {
@@ -97,6 +101,5 @@ public class AuthServiceImpl implements AuthService {
             return new JsonResponseDto(false, HttpStatus.INTERNAL_SERVER_ERROR.value(), "Error al revocar el token.", null);
         }
     }
-
 
 }

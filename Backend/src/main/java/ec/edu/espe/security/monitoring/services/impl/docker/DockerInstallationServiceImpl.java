@@ -30,6 +30,7 @@ public class DockerInstallationServiceImpl implements DockerInstallationService 
      * Checks if the Docker containers for Grafana and Prometheus are currently running.
      * @return true if both containers are up, otherwise false.
      */
+    @Override
     public boolean areDockerContainersUp() {
         try {
             // Run the "docker ps" command to list active containers

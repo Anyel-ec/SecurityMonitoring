@@ -21,7 +21,9 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/test")
 public class MyCnfFileController {
+
     private final MyCnfFileGenerator myCnfFileGenerator;
+
     @GetMapping("/generate-my-cnf")
     public ResponseEntity<JsonResponseDto> generateMyCnfFile(@RequestParam(name = "path", required = false) String path) {
         try {

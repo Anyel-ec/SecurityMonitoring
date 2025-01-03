@@ -6,6 +6,7 @@ import ec.edu.espe.security.monitoring.models.UserInfo;
 import ec.edu.espe.security.monitoring.repositories.AuditLogRepository;
 import ec.edu.espe.security.monitoring.repositories.UserInfoRepository;
 import ec.edu.espe.security.monitoring.security.jwt.JwtProvider;
+import ec.edu.espe.security.monitoring.services.interfaces.audit.AuditLogService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,11 +23,12 @@ import java.util.Optional;
 @Service
 @AllArgsConstructor
 @Slf4j
-public class AuditLogServiceImpl {
+public class AuditLogServiceImpl implements AuditLogService {
     private final AuditLogRepository auditLogRepository;
     private final UserInfoRepository userInfoRepository;
     private final JwtProvider jwtProvider;
 
+    @Override
     public void saveAuditLog(AuditLog auditLog) {
         // Validate and retrieve the user associated with the username
         if (auditLog.getUsername() != null) {
@@ -50,6 +52,7 @@ public class AuditLogServiceImpl {
      * @param resultMessage Result message to log.
      * @param request      HttpServletRequest containing request details.
      */
+    @Override
     public void saveAuditLogFromRequest(String token, String actionType, int status, String resultMessage, HttpServletRequest request, String requestBody) {
         String username = null;
 

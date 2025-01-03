@@ -4,8 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import ec.edu.espe.security.monitoring.dto.request.DatabaseCredentialRequestDto;
 import ec.edu.espe.security.monitoring.dto.response.JsonResponseDto;
 import ec.edu.espe.security.monitoring.models.DatabaseCredential;
-import ec.edu.espe.security.monitoring.services.impl.credential.DatabaseCredentialService;
+import ec.edu.espe.security.monitoring.services.impl.credential.DatabaseCredentialServiceImpl;
 import ec.edu.espe.security.monitoring.services.impl.audit.AuditLogServiceImpl;
+import ec.edu.espe.security.monitoring.services.interfaces.audit.AuditLogService;
+import ec.edu.espe.security.monitoring.services.interfaces.credential.DatabaseCredentialService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -23,7 +25,7 @@ import java.util.List;
 public class DatabaseCredentialController {
 
     private final DatabaseCredentialService credentialService;
-    private final AuditLogServiceImpl auditLogService;
+    private final AuditLogService auditLogService;
     private final HttpServletRequest request;
 
     /**

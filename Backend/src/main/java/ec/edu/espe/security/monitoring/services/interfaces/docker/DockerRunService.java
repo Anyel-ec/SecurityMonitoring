@@ -1,6 +1,8 @@
 package ec.edu.espe.security.monitoring.services.interfaces.docker;
 
 public interface DockerRunService {
-    void runDockerCompose();
+    boolean isDockerRunning();
 
+    boolean hasBeenExecuted();
+    void runDockerCompose();
 }

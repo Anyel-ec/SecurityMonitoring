@@ -11,7 +11,7 @@ COPY .env .env
 EXPOSE 8080
 
 # Copy the JAR file from the root of the project to the working directory
-COPY monitoring-1.0.0-RELEASE.jar monitoring-1.0.0-RELEASE.jar
+COPY target/monitoring-1.0.0-RELEASE.jar.original monitoring-1.0.0-RELEASE.jar
 
 # Define the entry point to run the application
 ENTRYPOINT ["java", "-jar", "monitoring-1.0.0-RELEASE.jar"]

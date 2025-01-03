@@ -46,6 +46,7 @@ public class AlertConfiguration {
 
     public enum Severity {
         CRITICAL,
-        WARNING
+        WARNING,
+        INFO
     }
 }

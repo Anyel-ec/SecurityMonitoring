@@ -4,6 +4,7 @@ import ec.edu.espe.security.monitoring.dto.request.LoginRequestDto;
 import ec.edu.espe.security.monitoring.dto.response.JsonResponseDto;
 import ec.edu.espe.security.monitoring.models.UserInfo;
 import ec.edu.espe.security.monitoring.services.impl.auth.AuthServiceImpl;
+import ec.edu.espe.security.monitoring.services.interfaces.auth.AuthService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -17,7 +18,7 @@ import java.util.List;
 @RestController
 @RequestMapping("api/v1/auth")
 public class AuthController {
-    private final AuthServiceImpl authService;
+    private final AuthService authService;
     /**
      * Endpoint to retrieve all active users.
      *

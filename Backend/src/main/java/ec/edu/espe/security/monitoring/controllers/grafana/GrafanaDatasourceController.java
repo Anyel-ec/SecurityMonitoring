@@ -2,6 +2,7 @@ package ec.edu.espe.security.monitoring.controllers.grafana;
 
 import ec.edu.espe.security.monitoring.dto.response.JsonResponseDto;
 import ec.edu.espe.security.monitoring.services.impl.grafana.GrafanaDatasourceServiceImpl;
+import ec.edu.espe.security.monitoring.services.interfaces.grafana.GrafanaDatasourceService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class GrafanaDatasourceController {
 
     // Inject the GrafanaDatasourceServiceImpl
-    private final GrafanaDatasourceServiceImpl grafanaDatasourceService;
+    private final GrafanaDatasourceService grafanaDatasourceService;
 
     /**
      * Endpoint to create a Prometheus datasource in Grafana.
