@@ -90,7 +90,7 @@ public class MyCnfFileGenerator {
         return databaseCredentialRepository.findBySystemParameterAndIsActive(existingParam.get(), true);
     }
 
-    private void writeMyCnfFile(String absolutePath, String user, String password) {
+    public void writeMyCnfFile(String absolutePath, String user, String password) {
         try (FileWriter writer = new FileWriter(absolutePath)) {
             writer.write("[client]\n");
             writer.write("user=" + user + "\n");

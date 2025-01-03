@@ -12,6 +12,10 @@ import java.io.InputStreamReader;
 @Slf4j
 public class DockerRunServiceImpl implements DockerRunService {
 
+    public ProcessBuilder createProcessBuilder(String... commands) {
+        return new ProcessBuilder(commands);
+    }
+
     private boolean isExecuted = false;
 
     /**

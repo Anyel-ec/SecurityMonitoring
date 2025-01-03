@@ -1,5 +1,6 @@
 package ec.edu.espe.security.monitoring.shared.utils;
 
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -16,6 +17,7 @@ import java.io.IOException;
  */
 @Component
 @Slf4j
+@Data
 public class AlertManagerConfigUtil {
 
     @Value("${alertmanager.smtp.host}")

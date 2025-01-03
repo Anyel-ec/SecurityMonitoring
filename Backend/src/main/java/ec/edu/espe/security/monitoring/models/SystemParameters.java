@@ -41,4 +41,9 @@ public class SystemParameters {
         this.paramValue = paramValue;
         this.isActive = isActive;
     }
+
+    public SystemParameters(String prometheusInstall, boolean bValue) {
+        this.name = prometheusInstall;
+        this.isActive = bValue;
+    }
 }

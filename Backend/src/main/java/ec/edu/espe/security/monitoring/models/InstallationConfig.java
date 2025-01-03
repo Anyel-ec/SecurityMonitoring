@@ -33,4 +33,12 @@ public class InstallationConfig {
 
     @Column(columnDefinition = "boolean default true")
     private Boolean isActive;
+    // Constructor for testing purposes
+    public InstallationConfig(int internalPort, Integer externalPort, SystemParameters systemParameter, boolean isActive) {
+        this.internalPort = internalPort;
+        this.externalPort = externalPort;
+        this.systemParameter = systemParameter;
+        this.isActive = isActive;
+    }
+
 }
