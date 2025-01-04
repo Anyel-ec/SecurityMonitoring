@@ -6,7 +6,7 @@ package ec.edu.espe.security.monitoring.services.docker;
  * Creation date: 02/01/2025
  */
 
-import ec.edu.espe.security.monitoring.feature.docker.services.impl.DockerRunServiceImpl;
+import ec.edu.espe.security.monitoring.integrations.docker.services.impl.DockerRunServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;

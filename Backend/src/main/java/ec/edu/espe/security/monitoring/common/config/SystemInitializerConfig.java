@@ -1,9 +1,9 @@
 package ec.edu.espe.security.monitoring.common.config;
 
-import ec.edu.espe.security.monitoring.common.system.models.SystemParameters;
-import ec.edu.espe.security.monitoring.feature.auth.model.UserRole;
-import ec.edu.espe.security.monitoring.common.system.repositories.SystemParametersRepository;
-import ec.edu.espe.security.monitoring.feature.auth.repository.UserRoleRepository;
+import ec.edu.espe.security.monitoring.core.system.models.SystemParameters;
+import ec.edu.espe.security.monitoring.features.auth.model.UserRole;
+import ec.edu.espe.security.monitoring.core.system.repositories.SystemParametersRepository;
+import ec.edu.espe.security.monitoring.features.auth.repository.UserRoleRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;

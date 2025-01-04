@@ -1,7 +1,7 @@
 package ec.edu.espe.security.monitoring.common.security.config;
 
-import ec.edu.espe.security.monitoring.feature.auth.model.UserInfo;
-import ec.edu.espe.security.monitoring.feature.auth.repository.UserInfoRepository;
+import ec.edu.espe.security.monitoring.features.auth.model.UserInfo;
+import ec.edu.espe.security.monitoring.features.auth.repository.UserInfoRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

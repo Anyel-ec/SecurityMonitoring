@@ -5,7 +5,7 @@ package ec.edu.espe.security.monitoring.models;
  * Github: https://github.com/Anyel-ec
  * Creation date: 02/01/2025
  */
-import ec.edu.espe.security.monitoring.common.system.models.SystemParameters;
+import ec.edu.espe.security.monitoring.core.system.models.SystemParameters;
 import org.junit.jupiter.api.Test;
 
 import jakarta.validation.Validation;

@@ -1,5 +1,5 @@
 package ec.edu.espe.security.monitoring.models;
-import ec.edu.espe.security.monitoring.feature.auth.model.UserRole;
+import ec.edu.espe.security.monitoring.features.auth.model.UserRole;
 import org.junit.jupiter.api.Test;
 
 

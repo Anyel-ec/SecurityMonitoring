@@ -1,7 +1,7 @@
 package ec.edu.espe.security.monitoring.common.security.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import ec.edu.espe.security.monitoring.common.dto.response.JsonResponseDto;
+import ec.edu.espe.security.monitoring.common.dto.JsonResponseDto;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;

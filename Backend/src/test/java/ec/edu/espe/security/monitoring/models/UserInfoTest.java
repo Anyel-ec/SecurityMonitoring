@@ -5,8 +5,8 @@ package ec.edu.espe.security.monitoring.models;
  * Github: https://github.com/Anyel-ec
  * Creation date: 02/01/2025
  */
-import ec.edu.espe.security.monitoring.feature.auth.model.UserInfo;
-import ec.edu.espe.security.monitoring.feature.auth.model.UserRole;
+import ec.edu.espe.security.monitoring.features.auth.model.UserInfo;
+import ec.edu.espe.security.monitoring.features.auth.model.UserRole;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;
