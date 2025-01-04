@@ -3,7 +3,6 @@ package ec.edu.espe.security.monitoring.controllers.auth;
 import ec.edu.espe.security.monitoring.dto.request.LoginRequestDto;
 import ec.edu.espe.security.monitoring.dto.response.JsonResponseDto;
 import ec.edu.espe.security.monitoring.models.UserInfo;
-import ec.edu.espe.security.monitoring.services.impl.auth.AuthServiceImpl;
 import ec.edu.espe.security.monitoring.services.interfaces.auth.AuthService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
