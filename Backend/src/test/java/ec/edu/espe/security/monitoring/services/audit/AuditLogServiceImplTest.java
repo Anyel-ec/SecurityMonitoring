@@ -1,11 +1,11 @@
 package ec.edu.espe.security.monitoring.services.audit;
 
-import ec.edu.espe.security.monitoring.models.AuditLog;
-import ec.edu.espe.security.monitoring.models.UserInfo;
-import ec.edu.espe.security.monitoring.repositories.AuditLogRepository;
-import ec.edu.espe.security.monitoring.repositories.UserInfoRepository;
-import ec.edu.espe.security.monitoring.security.jwt.JwtProvider;
-import ec.edu.espe.security.monitoring.services.impl.audit.AuditLogServiceImpl;
+import ec.edu.espe.security.monitoring.common.audit.models.AuditLog;
+import ec.edu.espe.security.monitoring.feature.auth.model.UserInfo;
+import ec.edu.espe.security.monitoring.common.audit.repositories.AuditLogRepository;
+import ec.edu.espe.security.monitoring.feature.auth.repository.UserInfoRepository;
+import ec.edu.espe.security.monitoring.common.security.jwt.JwtProvider;
+import ec.edu.espe.security.monitoring.common.audit.services.AuditLogServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

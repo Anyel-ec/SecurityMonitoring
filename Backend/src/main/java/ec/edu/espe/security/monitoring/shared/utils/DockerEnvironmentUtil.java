@@ -5,9 +5,9 @@ package ec.edu.espe.security.monitoring.shared.utils;
  * Creation date: 02/11/2024
  */
 
-import ec.edu.espe.security.monitoring.models.DatabaseCredential;
-import ec.edu.espe.security.monitoring.models.InstallationConfig;
-import ec.edu.espe.security.monitoring.shared.utils.encrypt.AesEncryptorUtil;
+import ec.edu.espe.security.monitoring.feature.credential.models.DatabaseCredential;
+import ec.edu.espe.security.monitoring.feature.installation.models.InstallationConfig;
+import ec.edu.espe.security.monitoring.common.utils.AesEncryptorUtil;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 

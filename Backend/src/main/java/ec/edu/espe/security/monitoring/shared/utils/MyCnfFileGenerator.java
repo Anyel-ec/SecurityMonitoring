@@ -1,12 +1,10 @@
 package ec.edu.espe.security.monitoring.shared.utils;
 
-import ec.edu.espe.security.monitoring.models.DatabaseCredential;
+import ec.edu.espe.security.monitoring.feature.credential.models.DatabaseCredential;
 import ec.edu.espe.security.monitoring.models.SystemParameters;
-import ec.edu.espe.security.monitoring.repositories.DatabaseCredentialRepository;
+import ec.edu.espe.security.monitoring.feature.credential.repositories.DatabaseCredentialRepository;
 import ec.edu.espe.security.monitoring.repositories.SystemParametersRepository;
-import ec.edu.espe.security.monitoring.shared.utils.encrypt.AesEncryptorUtil;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.Keys;
+import ec.edu.espe.security.monitoring.common.utils.AesEncryptorUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

@@ -6,11 +6,11 @@ package ec.edu.espe.security.monitoring.services.docker;
  * Creation date: 02/01/2025
  */
 
-import ec.edu.espe.security.monitoring.repositories.DatabaseCredentialRepository;
-import ec.edu.espe.security.monitoring.repositories.InstallationConfigRepository;
-import ec.edu.espe.security.monitoring.services.impl.docker.DockerDbCredentialServiceImpl;
+import ec.edu.espe.security.monitoring.feature.credential.repositories.DatabaseCredentialRepository;
+import ec.edu.espe.security.monitoring.feature.installation.repositories.InstallationConfigRepository;
+import ec.edu.espe.security.monitoring.feature.docker.services.impl.DockerDbCredentialServiceImpl;
 import ec.edu.espe.security.monitoring.shared.utils.MyCnfFileGenerator;
-import ec.edu.espe.security.monitoring.shared.utils.encrypt.AesEncryptorUtil;
+import ec.edu.espe.security.monitoring.common.utils.AesEncryptorUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;

@@ -1,6 +1,6 @@
 package ec.edu.espe.security.monitoring.shared.utils;
 
-import ec.edu.espe.security.monitoring.models.InstallationConfig;
+import ec.edu.espe.security.monitoring.feature.installation.models.InstallationConfig;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 

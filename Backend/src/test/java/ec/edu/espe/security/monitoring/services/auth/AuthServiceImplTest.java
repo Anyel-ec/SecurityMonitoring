@@ -7,12 +7,12 @@ package ec.edu.espe.security.monitoring.services.auth;
  */
 
 import ec.edu.espe.security.monitoring.dto.request.LoginRequestDto;
-import ec.edu.espe.security.monitoring.dto.response.JsonResponseDto;
-import ec.edu.espe.security.monitoring.models.UserInfo;
-import ec.edu.espe.security.monitoring.repositories.UserInfoRepository;
-import ec.edu.espe.security.monitoring.security.jwt.JwtProvider;
-import ec.edu.espe.security.monitoring.security.jwt.JwtRevokedToken;
-import ec.edu.espe.security.monitoring.services.impl.auth.AuthServiceImpl;
+import ec.edu.espe.security.monitoring.common.dto.response.JsonResponseDto;
+import ec.edu.espe.security.monitoring.feature.auth.model.UserInfo;
+import ec.edu.espe.security.monitoring.feature.auth.repository.UserInfoRepository;
+import ec.edu.espe.security.monitoring.common.security.jwt.JwtProvider;
+import ec.edu.espe.security.monitoring.common.security.jwt.JwtRevokedToken;
+import ec.edu.espe.security.monitoring.feature.auth.service.AuthServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;

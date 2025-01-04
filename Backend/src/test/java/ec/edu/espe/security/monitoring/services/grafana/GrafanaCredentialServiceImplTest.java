@@ -5,11 +5,11 @@ package ec.edu.espe.security.monitoring.services.grafana;
  * Github: https://github.com/Anyel-ec
  * Creation date: 02/01/2025
  */
-import ec.edu.espe.security.monitoring.models.InstallationConfig;
+import ec.edu.espe.security.monitoring.feature.installation.models.InstallationConfig;
 import ec.edu.espe.security.monitoring.models.SystemParameters;
-import ec.edu.espe.security.monitoring.repositories.InstallationConfigRepository;
+import ec.edu.espe.security.monitoring.feature.installation.repositories.InstallationConfigRepository;
 import ec.edu.espe.security.monitoring.repositories.SystemParametersRepository;
-import ec.edu.espe.security.monitoring.services.impl.grafana.GrafanaCredentialServiceImpl;
+import ec.edu.espe.security.monitoring.feature.grafana.services.impl.GrafanaCredentialServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;

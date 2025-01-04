@@ -6,18 +6,12 @@ package ec.edu.espe.security.monitoring.services.docker;
  * Creation date: 02/01/2025
  */
 
-import ec.edu.espe.security.monitoring.services.impl.docker.DockerRunServiceImpl;
+import ec.edu.espe.security.monitoring.feature.docker.services.impl.DockerRunServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockedStatic;
 import org.mockito.MockitoAnnotations;
-
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.io.IOException;
-import java.lang.reflect.Field;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
