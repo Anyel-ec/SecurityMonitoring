@@ -2,10 +2,10 @@ package ec.edu.espe.security.monitoring.feature.grafana.services.impl;
 
 import ec.edu.espe.security.monitoring.feature.grafana.dto.PrometheusDatasourceRequestDto;
 import ec.edu.espe.security.monitoring.feature.installation.models.InstallationConfig;
-import ec.edu.espe.security.monitoring.models.SystemParameters;
+import ec.edu.espe.security.monitoring.common.system.models.SystemParameters;
 import ec.edu.espe.security.monitoring.feature.grafana.services.interfaces.GrafanaDatasourceService;
 import ec.edu.espe.security.monitoring.feature.installation.services.interfaces.PrometheusInstallService;
-import ec.edu.espe.security.monitoring.common.utils.AesEncryptorUtil;
+import ec.edu.espe.security.monitoring.common.encrypt.utils.AesEncryptorUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;

@@ -1,9 +1,9 @@
-package ec.edu.espe.security.monitoring.shared.utils;
+package ec.edu.espe.security.monitoring.feature.credential.utils;
 
 
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
-import ec.edu.espe.security.monitoring.dto.request.DatabaseCredentialRequestDto;
+import ec.edu.espe.security.monitoring.feature.credential.dto.DatabaseCredentialRequestDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 

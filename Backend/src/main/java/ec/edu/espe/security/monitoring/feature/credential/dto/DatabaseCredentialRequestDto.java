@@ -1,6 +1,6 @@
-package ec.edu.espe.security.monitoring.dto.request;
+package ec.edu.espe.security.monitoring.feature.credential.dto;
 
-import ec.edu.espe.security.monitoring.models.SystemParameters;
+import ec.edu.espe.security.monitoring.common.system.models.SystemParameters;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;

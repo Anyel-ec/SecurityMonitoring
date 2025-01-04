@@ -1,9 +1,9 @@
 package ec.edu.espe.security.monitoring.feature.grafana.services.impl;
 import ec.edu.espe.security.monitoring.feature.grafana.dto.GrafanaLoginRequestDto;
 import ec.edu.espe.security.monitoring.feature.installation.models.InstallationConfig;
-import ec.edu.espe.security.monitoring.models.SystemParameters;
+import ec.edu.espe.security.monitoring.common.system.models.SystemParameters;
 import ec.edu.espe.security.monitoring.feature.grafana.services.interfaces.GrafanaLoginService;
-import ec.edu.espe.security.monitoring.common.utils.AesEncryptorUtil;
+import ec.edu.espe.security.monitoring.common.encrypt.utils.AesEncryptorUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

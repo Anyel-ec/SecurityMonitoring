@@ -2,7 +2,7 @@ package ec.edu.espe.security.monitoring.feature.installation.controllers;
 
 import ec.edu.espe.security.monitoring.common.dto.response.JsonResponseDto;
 import ec.edu.espe.security.monitoring.feature.installation.models.InstallationConfig;
-import ec.edu.espe.security.monitoring.models.SystemParameters;
+import ec.edu.espe.security.monitoring.common.system.models.SystemParameters;
 import ec.edu.espe.security.monitoring.feature.docker.services.interfaces.DockerInstallationService;
 import ec.edu.espe.security.monitoring.feature.installation.services.interfaces.ConfigInstallService;
 import lombok.AllArgsConstructor;

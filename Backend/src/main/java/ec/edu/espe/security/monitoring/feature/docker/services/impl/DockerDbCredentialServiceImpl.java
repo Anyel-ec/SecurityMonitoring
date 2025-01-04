@@ -5,9 +5,9 @@ import ec.edu.espe.security.monitoring.feature.installation.models.InstallationC
 import ec.edu.espe.security.monitoring.feature.credential.repositories.DatabaseCredentialRepository;
 import ec.edu.espe.security.monitoring.feature.installation.repositories.InstallationConfigRepository;
 import ec.edu.espe.security.monitoring.feature.docker.services.interfaces.DockerDbCredentialService;
-import ec.edu.espe.security.monitoring.common.utils.AesEncryptorUtil;
-import ec.edu.espe.security.monitoring.shared.utils.DockerEnvironmentUtil;
-import ec.edu.espe.security.monitoring.shared.utils.MyCnfFileGenerator;
+import ec.edu.espe.security.monitoring.common.encrypt.utils.AesEncryptorUtil;
+import ec.edu.espe.security.monitoring.feature.docker.utils.DockerEnvironmentUtil;
+import ec.edu.espe.security.monitoring.feature.docker.utils.MyCnfFileGenerator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.List;
 
-import static ec.edu.espe.security.monitoring.shared.utils.PrometheusConfigUtil.generatePrometheusConfig;
+import static ec.edu.espe.security.monitoring.feature.docker.utils.PrometheusConfigUtil.generatePrometheusConfig;
 
 @Service
 @Slf4j

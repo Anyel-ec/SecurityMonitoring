@@ -1,10 +1,10 @@
 package ec.edu.espe.security.monitoring.feature.test.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import ec.edu.espe.security.monitoring.dto.request.DatabaseCredentialRequestDto;
+import ec.edu.espe.security.monitoring.feature.credential.dto.DatabaseCredentialRequestDto;
 import ec.edu.espe.security.monitoring.common.dto.response.JsonResponseDto;
 import ec.edu.espe.security.monitoring.common.audit.services.AuditLogServiceImpl;
-import ec.edu.espe.security.monitoring.shared.utils.DatabaseUtils;
+import ec.edu.espe.security.monitoring.feature.credential.utils.DatabaseUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

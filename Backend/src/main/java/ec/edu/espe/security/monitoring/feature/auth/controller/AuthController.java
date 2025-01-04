@@ -1,6 +1,6 @@
 package ec.edu.espe.security.monitoring.feature.auth.controller;
 
-import ec.edu.espe.security.monitoring.dto.request.LoginRequestDto;
+import ec.edu.espe.security.monitoring.feature.auth.dto.LoginRequestDto;
 import ec.edu.espe.security.monitoring.common.dto.response.JsonResponseDto;
 import ec.edu.espe.security.monitoring.feature.auth.model.UserInfo;
 import ec.edu.espe.security.monitoring.feature.auth.service.AuthService;

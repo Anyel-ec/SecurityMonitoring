@@ -1,7 +1,7 @@
 package ec.edu.espe.security.monitoring.feature.installation.services.interfaces;
 
 import ec.edu.espe.security.monitoring.feature.installation.models.InstallationConfig;
-import ec.edu.espe.security.monitoring.models.SystemParameters;
+import ec.edu.espe.security.monitoring.common.system.models.SystemParameters;
 
 import java.util.List;
 

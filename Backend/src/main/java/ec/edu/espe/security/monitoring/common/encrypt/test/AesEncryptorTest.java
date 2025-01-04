@@ -1,6 +1,6 @@
-package ec.edu.espe.security.monitoring.test;
+package ec.edu.espe.security.monitoring.common.encrypt.test;
 
-import ec.edu.espe.security.monitoring.common.utils.AesEncryptorUtil;
+import ec.edu.espe.security.monitoring.common.encrypt.utils.AesEncryptorUtil;
 import io.github.cdimascio.dotenv.Dotenv;
 import lombok.extern.slf4j.Slf4j;
 

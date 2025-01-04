@@ -1,4 +1,4 @@
-package ec.edu.espe.security.monitoring.models;
+package ec.edu.espe.security.monitoring.feature.alert.models;
 
 /*
  * Author: Anyel EC

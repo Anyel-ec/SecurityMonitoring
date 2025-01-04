@@ -1,4 +1,4 @@
-package ec.edu.espe.security.monitoring.dto.request;
+package ec.edu.espe.security.monitoring.feature.auth.dto;
 
 import lombok.Data;
 

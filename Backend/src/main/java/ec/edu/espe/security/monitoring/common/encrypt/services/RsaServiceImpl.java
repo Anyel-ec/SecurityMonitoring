@@ -1,6 +1,6 @@
 package ec.edu.espe.security.monitoring.common.encrypt.services;
 
-import ec.edu.espe.security.monitoring.common.utils.RsaEncryptUtil;
+import ec.edu.espe.security.monitoring.common.encrypt.utils.RsaEncryptUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;

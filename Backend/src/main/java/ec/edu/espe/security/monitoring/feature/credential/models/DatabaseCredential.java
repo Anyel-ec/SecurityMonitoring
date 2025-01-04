@@ -1,7 +1,7 @@
 package ec.edu.espe.security.monitoring.feature.credential.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import ec.edu.espe.security.monitoring.models.SystemParameters;
+import ec.edu.espe.security.monitoring.common.system.models.SystemParameters;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

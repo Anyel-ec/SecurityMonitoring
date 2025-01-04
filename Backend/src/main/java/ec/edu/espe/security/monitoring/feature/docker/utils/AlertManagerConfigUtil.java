@@ -1,4 +1,4 @@
-package ec.edu.espe.security.monitoring.shared.utils;
+package ec.edu.espe.security.monitoring.feature.docker.utils;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;

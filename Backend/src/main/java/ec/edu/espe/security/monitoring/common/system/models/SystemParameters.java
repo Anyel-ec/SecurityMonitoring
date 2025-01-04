@@ -1,4 +1,4 @@
-package ec.edu.espe.security.monitoring.models;
+package ec.edu.espe.security.monitoring.common.system.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;

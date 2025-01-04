@@ -6,7 +6,7 @@ package ec.edu.espe.security.monitoring.services.auth;
  * Creation date: 02/01/2025
  */
 
-import ec.edu.espe.security.monitoring.dto.request.LoginRequestDto;
+import ec.edu.espe.security.monitoring.feature.auth.dto.LoginRequestDto;
 import ec.edu.espe.security.monitoring.common.dto.response.JsonResponseDto;
 import ec.edu.espe.security.monitoring.feature.auth.model.UserInfo;
 import ec.edu.espe.security.monitoring.feature.auth.repository.UserInfoRepository;

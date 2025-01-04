@@ -1,11 +1,11 @@
 package ec.edu.espe.security.monitoring.feature.credential.services;
 
-import ec.edu.espe.security.monitoring.dto.request.DatabaseCredentialRequestDto;
+import ec.edu.espe.security.monitoring.feature.credential.dto.DatabaseCredentialRequestDto;
 import ec.edu.espe.security.monitoring.feature.credential.models.DatabaseCredential;
-import ec.edu.espe.security.monitoring.models.SystemParameters;
+import ec.edu.espe.security.monitoring.common.system.models.SystemParameters;
 import ec.edu.espe.security.monitoring.feature.credential.repositories.DatabaseCredentialRepository;
-import ec.edu.espe.security.monitoring.repositories.SystemParametersRepository;
-import ec.edu.espe.security.monitoring.common.utils.AesEncryptorUtil;
+import ec.edu.espe.security.monitoring.common.system.repositories.SystemParametersRepository;
+import ec.edu.espe.security.monitoring.common.encrypt.utils.AesEncryptorUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

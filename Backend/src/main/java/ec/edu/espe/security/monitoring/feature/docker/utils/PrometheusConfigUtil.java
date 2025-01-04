@@ -1,4 +1,4 @@
-package ec.edu.espe.security.monitoring.shared.utils;
+package ec.edu.espe.security.monitoring.feature.docker.utils;
 
 import ec.edu.espe.security.monitoring.feature.installation.models.InstallationConfig;
 import lombok.experimental.UtilityClass;

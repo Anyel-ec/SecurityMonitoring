@@ -1,10 +1,11 @@
-package ec.edu.espe.security.monitoring.models;
+package ec.edu.espe.security.monitoring.feature.alert.models;
 
 /*
  * Author: Anyel EC
  * Github: https://github.com/Anyel-ec
  * Creation date: 06/12/2024
  */
+import ec.edu.espe.security.monitoring.common.system.models.SystemParameters;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

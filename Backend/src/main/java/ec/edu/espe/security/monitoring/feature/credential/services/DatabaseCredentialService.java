@@ -1,6 +1,6 @@
 package ec.edu.espe.security.monitoring.feature.credential.services;
 
-import ec.edu.espe.security.monitoring.dto.request.DatabaseCredentialRequestDto;
+import ec.edu.espe.security.monitoring.feature.credential.dto.DatabaseCredentialRequestDto;
 import ec.edu.espe.security.monitoring.feature.credential.models.DatabaseCredential;
 
 import java.util.List;

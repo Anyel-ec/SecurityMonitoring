@@ -6,9 +6,9 @@ package ec.edu.espe.security.monitoring.services.grafana;
  * Creation date: 02/01/2025
  */
 import ec.edu.espe.security.monitoring.feature.installation.models.InstallationConfig;
-import ec.edu.espe.security.monitoring.models.SystemParameters;
+import ec.edu.espe.security.monitoring.common.system.models.SystemParameters;
 import ec.edu.espe.security.monitoring.feature.installation.repositories.InstallationConfigRepository;
-import ec.edu.espe.security.monitoring.repositories.SystemParametersRepository;
+import ec.edu.espe.security.monitoring.common.system.repositories.SystemParametersRepository;
 import ec.edu.espe.security.monitoring.feature.grafana.services.impl.GrafanaCredentialServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

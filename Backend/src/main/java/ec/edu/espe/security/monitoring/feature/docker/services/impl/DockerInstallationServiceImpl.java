@@ -3,9 +3,9 @@ package ec.edu.espe.security.monitoring.feature.docker.services.impl;
 import ec.edu.espe.security.monitoring.feature.installation.models.InstallationConfig;
 import ec.edu.espe.security.monitoring.feature.installation.repositories.InstallationConfigRepository;
 import ec.edu.espe.security.monitoring.feature.docker.services.interfaces.DockerInstallationService;
-import ec.edu.espe.security.monitoring.common.utils.AesEncryptorUtil;
-import ec.edu.espe.security.monitoring.shared.utils.AlertManagerConfigUtil;
-import ec.edu.espe.security.monitoring.shared.utils.DockerEnvironmentUtil;
+import ec.edu.espe.security.monitoring.common.encrypt.utils.AesEncryptorUtil;
+import ec.edu.espe.security.monitoring.feature.docker.utils.AlertManagerConfigUtil;
+import ec.edu.espe.security.monitoring.feature.docker.utils.DockerEnvironmentUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
 
-import static ec.edu.espe.security.monitoring.shared.utils.PrometheusConfigUtil.generatePrometheusConfig;
+import static ec.edu.espe.security.monitoring.feature.docker.utils.PrometheusConfigUtil.generatePrometheusConfig;
 
 @Service
 @Slf4j

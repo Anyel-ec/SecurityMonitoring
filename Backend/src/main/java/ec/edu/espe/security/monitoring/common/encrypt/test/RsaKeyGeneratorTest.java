@@ -1,4 +1,4 @@
-package ec.edu.espe.security.monitoring.test;
+package ec.edu.espe.security.monitoring.common.encrypt.test;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
