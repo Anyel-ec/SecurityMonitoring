@@ -1,4 +1,4 @@
-package ec.edu.espe.security.monitoring.common.security.config;
+package ec.edu.espe.security.monitoring.shared.security.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

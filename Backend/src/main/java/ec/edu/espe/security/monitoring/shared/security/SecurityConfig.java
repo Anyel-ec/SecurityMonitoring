@@ -1,8 +1,8 @@
-package ec.edu.espe.security.monitoring.common.security;
+package ec.edu.espe.security.monitoring.shared.security;
 
-import ec.edu.espe.security.monitoring.common.security.config.UserDetailsServiceImpl;
-import ec.edu.espe.security.monitoring.common.security.jwt.JwtEntryPoint;
-import ec.edu.espe.security.monitoring.common.security.jwt.JwtTokenFilter;
+import ec.edu.espe.security.monitoring.shared.security.config.UserDetailsServiceImpl;
+import ec.edu.espe.security.monitoring.shared.security.jwt.JwtEntryPoint;
+import ec.edu.espe.security.monitoring.shared.security.jwt.JwtTokenFilter;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;

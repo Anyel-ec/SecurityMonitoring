@@ -1,4 +1,4 @@
-package ec.edu.espe.security.monitoring.common.security.jwt;
+package ec.edu.espe.security.monitoring.shared.security.jwt;
 
 /*
  * Author: Anyel EC

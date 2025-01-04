@@ -1,4 +1,4 @@
-package ec.edu.espe.security.monitoring.common.security.config;
+package ec.edu.espe.security.monitoring.shared.security.config;
 
 import ec.edu.espe.security.monitoring.features.auth.model.UserInfo;
 import org.springframework.security.core.GrantedAuthority;

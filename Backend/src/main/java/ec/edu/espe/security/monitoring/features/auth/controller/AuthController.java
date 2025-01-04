@@ -1,7 +1,7 @@
 package ec.edu.espe.security.monitoring.features.auth.controller;
 
 import ec.edu.espe.security.monitoring.features.auth.dto.LoginRequestDto;
-import ec.edu.espe.security.monitoring.common.dto.JsonResponseDto;
+import ec.edu.espe.security.monitoring.shared.dto.JsonResponseDto;
 import ec.edu.espe.security.monitoring.features.auth.model.UserInfo;
 import ec.edu.espe.security.monitoring.features.auth.service.AuthService;
 import lombok.RequiredArgsConstructor;

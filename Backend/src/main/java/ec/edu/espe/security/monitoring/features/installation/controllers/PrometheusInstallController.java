@@ -1,7 +1,7 @@
 package ec.edu.espe.security.monitoring.features.installation.controllers;
 
 import ec.edu.espe.security.monitoring.features.installation.dto.PrometheusInstallRequestDto;
-import ec.edu.espe.security.monitoring.common.dto.JsonResponseDto;
+import ec.edu.espe.security.monitoring.shared.dto.JsonResponseDto;
 import ec.edu.espe.security.monitoring.features.installation.models.InstallationConfig;
 import ec.edu.espe.security.monitoring.features.installation.services.interfaces.PrometheusInstallService;
 import jakarta.validation.Valid;

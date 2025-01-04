@@ -1,4 +1,4 @@
-package ec.edu.espe.security.monitoring.common.config;
+package ec.edu.espe.security.monitoring.config;
 
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.annotation.Bean;

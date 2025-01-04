@@ -1,4 +1,4 @@
-package ec.edu.espe.security.monitoring.common.config;
+package ec.edu.espe.security.monitoring.core.system.config;
 
 import ec.edu.espe.security.monitoring.core.system.models.SystemParameters;
 import ec.edu.espe.security.monitoring.features.auth.model.UserRole;

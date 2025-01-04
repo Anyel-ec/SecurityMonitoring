@@ -4,7 +4,7 @@ import ec.edu.espe.security.monitoring.core.audit.models.AuditLog;
 import ec.edu.espe.security.monitoring.features.auth.model.UserInfo;
 import ec.edu.espe.security.monitoring.core.audit.repositories.AuditLogRepository;
 import ec.edu.espe.security.monitoring.features.auth.repository.UserInfoRepository;
-import ec.edu.espe.security.monitoring.common.security.jwt.JwtProvider;
+import ec.edu.espe.security.monitoring.shared.security.jwt.JwtProvider;
 import ec.edu.espe.security.monitoring.core.audit.services.AuditLogServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.BeforeEach;

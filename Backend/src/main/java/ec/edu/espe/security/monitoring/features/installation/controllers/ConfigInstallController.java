@@ -1,6 +1,6 @@
 package ec.edu.espe.security.monitoring.features.installation.controllers;
 
-import ec.edu.espe.security.monitoring.common.dto.JsonResponseDto;
+import ec.edu.espe.security.monitoring.shared.dto.JsonResponseDto;
 import ec.edu.espe.security.monitoring.features.installation.models.InstallationConfig;
 import ec.edu.espe.security.monitoring.core.system.models.SystemParameters;
 import ec.edu.espe.security.monitoring.integrations.docker.services.interfaces.DockerInstallationService;

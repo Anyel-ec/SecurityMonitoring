@@ -1,6 +1,6 @@
 package ec.edu.espe.security.monitoring.shared.exceptions;
 
-import ec.edu.espe.security.monitoring.common.dto.JsonResponseDto;
+import ec.edu.espe.security.monitoring.shared.dto.JsonResponseDto;
 import io.jsonwebtoken.security.SignatureException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;

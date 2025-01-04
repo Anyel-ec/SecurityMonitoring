@@ -1,4 +1,4 @@
-package ec.edu.espe.security.monitoring.common.config;
+package ec.edu.espe.security.monitoring.config;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Contact;

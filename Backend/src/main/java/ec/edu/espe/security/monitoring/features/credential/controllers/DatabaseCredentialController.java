@@ -2,7 +2,7 @@ package ec.edu.espe.security.monitoring.features.credential.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ec.edu.espe.security.monitoring.features.credential.dto.DatabaseCredentialRequestDto;
-import ec.edu.espe.security.monitoring.common.dto.JsonResponseDto;
+import ec.edu.espe.security.monitoring.shared.dto.JsonResponseDto;
 import ec.edu.espe.security.monitoring.features.credential.models.DatabaseCredential;
 import ec.edu.espe.security.monitoring.core.audit.services.AuditLogService;
 import ec.edu.espe.security.monitoring.features.credential.services.DatabaseCredentialService;

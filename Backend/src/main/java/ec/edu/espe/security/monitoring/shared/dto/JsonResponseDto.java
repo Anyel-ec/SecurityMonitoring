@@ -1,4 +1,4 @@
-package ec.edu.espe.security.monitoring.common.dto;
+package ec.edu.espe.security.monitoring.shared.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 @Schema(description = "Response structure for the entire system")

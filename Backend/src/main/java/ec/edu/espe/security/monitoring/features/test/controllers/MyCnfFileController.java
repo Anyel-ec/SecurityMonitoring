@@ -5,7 +5,7 @@ package ec.edu.espe.security.monitoring.features.test.controllers;
  * Creation date: 16/11/2024
  */
 
-import ec.edu.espe.security.monitoring.common.dto.JsonResponseDto;
+import ec.edu.espe.security.monitoring.shared.dto.JsonResponseDto;
 import ec.edu.espe.security.monitoring.integrations.docker.utils.MyCnfFileGenerator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
