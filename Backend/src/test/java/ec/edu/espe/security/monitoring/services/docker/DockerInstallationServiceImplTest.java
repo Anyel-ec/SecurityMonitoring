@@ -6,9 +6,9 @@ package ec.edu.espe.security.monitoring.services.docker;
  * Creation date: 02/01/2025
  */
 
-import ec.edu.espe.security.monitoring.features.installation.repositories.InstallationConfigRepository;
-import ec.edu.espe.security.monitoring.integrations.docker.services.impl.DockerInstallationServiceImpl;
-import ec.edu.espe.security.monitoring.integrations.docker.utils.AlertManagerConfigUtil;
+import ec.edu.espe.security.monitoring.modules.features.installation.repositories.InstallationConfigRepository;
+import ec.edu.espe.security.monitoring.modules.integrations.docker.services.impl.DockerInstallationServiceImpl;
+import ec.edu.espe.security.monitoring.modules.integrations.docker.utils.AlertManagerConfigUtil;
 import ec.edu.espe.security.monitoring.shared.encrypt.utils.AesEncryptorUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

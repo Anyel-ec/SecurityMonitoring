@@ -1,6 +1,6 @@
 package ec.edu.espe.security.monitoring.shared.security.jwt;
 
-import ec.edu.espe.security.monitoring.features.auth.model.UserInfo;
+import ec.edu.espe.security.monitoring.modules.features.auth.model.UserInfo;
 import ec.edu.espe.security.monitoring.shared.security.config.PrimaryUser;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;

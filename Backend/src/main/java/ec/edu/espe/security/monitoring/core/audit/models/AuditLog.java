@@ -1,5 +1,5 @@
 package ec.edu.espe.security.monitoring.core.audit.models;
-import ec.edu.espe.security.monitoring.features.auth.model.UserInfo;
+import ec.edu.espe.security.monitoring.modules.features.auth.model.UserInfo;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
