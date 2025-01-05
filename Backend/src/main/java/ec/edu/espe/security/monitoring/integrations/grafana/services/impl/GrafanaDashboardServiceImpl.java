@@ -48,6 +48,10 @@ public class GrafanaDashboardServiceImpl implements GrafanaDashboardService {
             createDashboardFromJsonFile(username, decryptedPassword, "dashboardMaria.json");
             createDashboardFromJsonFile(username, decryptedPassword, "dashboardMongo.json");
             createDashboardFromJsonFile(username, decryptedPassword, "dashboardPostgresMariaMongo.json");
+            createDashboardFromJsonFile(username, decryptedPassword, "dashboardMariaMongo.json");
+            createDashboardFromJsonFile(username, decryptedPassword, "dashboardMariaPostgres.json");
+            createDashboardFromJsonFile(username, decryptedPassword, "dashboardMongoPostgres.json");
+
         } catch (Exception e) {
             log.error("Error creando los dashboards: {}", e.getMessage());
             throw new IllegalStateException("Internal server error: " + e.getMessage(), e);
