@@ -1,7 +1,7 @@
 package ec.edu.espe.security.monitoring.modules.features.installation.controllers;
 
 import ec.edu.espe.security.monitoring.modules.features.installation.dto.GrafanaInstallRequestDto;
-import ec.edu.espe.security.monitoring.shared.dto.JsonResponseDto;
+import ec.edu.espe.security.monitoring.common.dto.JsonResponseDto;
 import ec.edu.espe.security.monitoring.modules.features.installation.models.InstallationConfig;
 import ec.edu.espe.security.monitoring.modules.features.installation.services.interfaces.GrafanaInstallService;
 import jakarta.validation.Valid;

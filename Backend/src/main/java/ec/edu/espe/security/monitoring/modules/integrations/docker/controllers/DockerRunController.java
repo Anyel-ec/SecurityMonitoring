@@ -1,6 +1,6 @@
 package ec.edu.espe.security.monitoring.modules.integrations.docker.controllers;
 
-import ec.edu.espe.security.monitoring.shared.dto.JsonResponseDto;
+import ec.edu.espe.security.monitoring.common.dto.JsonResponseDto;
 import ec.edu.espe.security.monitoring.modules.integrations.docker.services.interfaces.DockerDbCredentialService;
 import ec.edu.espe.security.monitoring.modules.integrations.docker.services.interfaces.DockerInstallationService;
 import ec.edu.espe.security.monitoring.modules.integrations.docker.services.interfaces.DockerRunService;

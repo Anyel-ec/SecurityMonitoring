@@ -5,7 +5,7 @@ import ec.edu.espe.security.monitoring.modules.features.installation.models.Inst
 import ec.edu.espe.security.monitoring.modules.features.credential.repositories.DatabaseCredentialRepository;
 import ec.edu.espe.security.monitoring.modules.features.installation.repositories.InstallationConfigRepository;
 import ec.edu.espe.security.monitoring.modules.integrations.docker.services.interfaces.DockerDbCredentialService;
-import ec.edu.espe.security.monitoring.shared.encrypt.utils.AesEncryptorUtil;
+import ec.edu.espe.security.monitoring.common.encrypt.utils.AesEncryptorUtil;
 import ec.edu.espe.security.monitoring.modules.integrations.docker.utils.DockerEnvironmentUtil;
 import ec.edu.espe.security.monitoring.modules.integrations.docker.utils.MyCnfFileGenerator;
 import lombok.RequiredArgsConstructor;

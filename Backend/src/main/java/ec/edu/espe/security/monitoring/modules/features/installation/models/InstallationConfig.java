@@ -1,7 +1,7 @@
 package ec.edu.espe.security.monitoring.modules.features.installation.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import ec.edu.espe.security.monitoring.core.system.models.SystemParameters;
+import ec.edu.espe.security.monitoring.modules.core.system.models.SystemParameters;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;

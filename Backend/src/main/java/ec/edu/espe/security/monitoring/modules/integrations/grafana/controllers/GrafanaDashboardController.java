@@ -1,6 +1,6 @@
 package ec.edu.espe.security.monitoring.modules.integrations.grafana.controllers;
 
-import ec.edu.espe.security.monitoring.shared.dto.JsonResponseDto;
+import ec.edu.espe.security.monitoring.common.dto.JsonResponseDto;
 import ec.edu.espe.security.monitoring.modules.integrations.grafana.services.interfaces.GrafanaDashboardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

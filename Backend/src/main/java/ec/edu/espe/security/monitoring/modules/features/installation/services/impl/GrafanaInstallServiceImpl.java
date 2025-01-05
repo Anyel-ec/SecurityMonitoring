@@ -3,10 +3,10 @@ package ec.edu.espe.security.monitoring.modules.features.installation.services.i
 import ec.edu.espe.security.monitoring.modules.features.installation.dto.GrafanaInstallRequestDto;
 import ec.edu.espe.security.monitoring.modules.features.installation.models.InstallationConfig;
 import ec.edu.espe.security.monitoring.modules.features.installation.services.interfaces.GrafanaInstallService;
-import ec.edu.espe.security.monitoring.core.system.models.SystemParameters;
+import ec.edu.espe.security.monitoring.modules.core.system.models.SystemParameters;
 import ec.edu.espe.security.monitoring.modules.features.installation.repositories.InstallationConfigRepository;
 import ec.edu.espe.security.monitoring.modules.integrations.grafana.services.impl.GrafanaCredentialServiceImpl;
-import ec.edu.espe.security.monitoring.shared.encrypt.utils.AesEncryptorUtil;
+import ec.edu.espe.security.monitoring.common.encrypt.utils.AesEncryptorUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

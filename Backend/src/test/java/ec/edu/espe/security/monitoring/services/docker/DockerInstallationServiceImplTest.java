@@ -9,7 +9,7 @@ package ec.edu.espe.security.monitoring.services.docker;
 import ec.edu.espe.security.monitoring.modules.features.installation.repositories.InstallationConfigRepository;
 import ec.edu.espe.security.monitoring.modules.integrations.docker.services.impl.DockerInstallationServiceImpl;
 import ec.edu.espe.security.monitoring.modules.integrations.docker.utils.AlertManagerConfigUtil;
-import ec.edu.espe.security.monitoring.shared.encrypt.utils.AesEncryptorUtil;
+import ec.edu.espe.security.monitoring.common.encrypt.utils.AesEncryptorUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;

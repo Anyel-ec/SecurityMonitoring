@@ -7,7 +7,7 @@ package ec.edu.espe.security.monitoring.modules.integrations.docker.utils;
 
 import ec.edu.espe.security.monitoring.modules.features.credential.models.DatabaseCredential;
 import ec.edu.espe.security.monitoring.modules.features.installation.models.InstallationConfig;
-import ec.edu.espe.security.monitoring.shared.encrypt.utils.AesEncryptorUtil;
+import ec.edu.espe.security.monitoring.common.encrypt.utils.AesEncryptorUtil;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 

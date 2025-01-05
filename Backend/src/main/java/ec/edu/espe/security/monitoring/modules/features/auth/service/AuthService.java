@@ -1,7 +1,7 @@
 package ec.edu.espe.security.monitoring.modules.features.auth.service;
 
 import ec.edu.espe.security.monitoring.modules.features.auth.dto.LoginRequestDto;
-import ec.edu.espe.security.monitoring.shared.dto.JsonResponseDto;
+import ec.edu.espe.security.monitoring.common.dto.JsonResponseDto;
 import ec.edu.espe.security.monitoring.modules.features.auth.model.UserInfo;
 
 import java.util.List;

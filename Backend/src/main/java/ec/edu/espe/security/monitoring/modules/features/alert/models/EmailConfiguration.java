@@ -5,7 +5,7 @@ package ec.edu.espe.security.monitoring.modules.features.alert.models;
  * Github: https://github.com/Anyel-ec
  * Creation date: 06/12/2024
  */
-import ec.edu.espe.security.monitoring.core.system.models.SystemParameters;
+import ec.edu.espe.security.monitoring.modules.core.system.models.SystemParameters;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

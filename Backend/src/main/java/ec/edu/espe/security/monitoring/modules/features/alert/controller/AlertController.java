@@ -1,12 +1,10 @@
 package ec.edu.espe.security.monitoring.modules.features.alert.controller;
 
 import ec.edu.espe.security.monitoring.modules.features.alert.services.AlertService;
+import ec.edu.espe.security.monitoring.common.dto.JsonResponseDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 
@@ -26,14 +24,24 @@ public class AlertController {
         this.alertService = alertService;
     }
 
-    @GetMapping("/rules")
-    public ResponseEntity<String> getAlertingRules(@RequestParam String databaseType) {
-        log.info("Getting alerting rules for database type: {}", databaseType);
-        try {
-            String alertingRules = alertService.readAlertingRules(databaseType);
-            return ResponseEntity.ok(alertingRules);
-        } catch (IOException e) {
-            return ResponseEntity.status(500).body("Error leyendo el archivo de reglas de alerta: " + e.getMessage());
-        }
+    @GetMapping("/rules/exist")
+    public ResponseEntity<JsonResponseDto> doesRuleExist(@RequestParam String databaseType) {
+        log.info("Checking if alerting rule exists: {}", databaseType);
+        JsonResponseDto response = alertService.doesRuleExist(databaseType);
+        return ResponseEntity.status(response.httpCode()).body(response);
+    }
+
+    @PostMapping("/rules")
+    public ResponseEntity<JsonResponseDto> addRuleFile(@RequestParam String databaseType) {
+        log.info("Adding alerting rule: {}", databaseType);
+        JsonResponseDto response = alertService.addRuleFile(databaseType);
+        return ResponseEntity.status(response.httpCode()).body(response);
+    }
+
+    @DeleteMapping("/rules")
+    public ResponseEntity<JsonResponseDto> deleteRuleFile(@RequestParam String databaseType) {
+        log.info("Deleting alerting rule: {}", databaseType);
+        JsonResponseDto response = alertService.deleteRuleFile(databaseType);
+        return ResponseEntity.status(response.httpCode()).body(response);
     }
 }

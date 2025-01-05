@@ -2,9 +2,9 @@ package ec.edu.espe.security.monitoring.modules.features.installation.services.i
 import ec.edu.espe.security.monitoring.modules.features.installation.dto.ExporterPrometheusInstallRequestDto;
 import ec.edu.espe.security.monitoring.modules.features.installation.models.InstallationConfig;
 import ec.edu.espe.security.monitoring.modules.features.installation.services.interfaces.PrometheusExporterInstallService;
-import ec.edu.espe.security.monitoring.core.system.models.SystemParameters;
+import ec.edu.espe.security.monitoring.modules.core.system.models.SystemParameters;
 import ec.edu.espe.security.monitoring.modules.features.installation.repositories.InstallationConfigRepository;
-import ec.edu.espe.security.monitoring.core.system.repositories.SystemParametersRepository;
+import ec.edu.espe.security.monitoring.modules.core.system.repositories.SystemParametersRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

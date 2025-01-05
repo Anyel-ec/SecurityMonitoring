@@ -1,7 +1,7 @@
 package ec.edu.espe.security.monitoring.modules.features.credential.repositories;
 
 import ec.edu.espe.security.monitoring.modules.features.credential.models.DatabaseCredential;
-import ec.edu.espe.security.monitoring.core.system.models.SystemParameters;
+import ec.edu.espe.security.monitoring.modules.core.system.models.SystemParameters;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

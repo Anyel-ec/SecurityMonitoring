@@ -1,11 +1,11 @@
 package ec.edu.espe.security.monitoring.modules.features.auth.service;
 
 import ec.edu.espe.security.monitoring.modules.features.auth.dto.LoginRequestDto;
-import ec.edu.espe.security.monitoring.shared.dto.JsonResponseDto;
+import ec.edu.espe.security.monitoring.common.dto.JsonResponseDto;
 import ec.edu.espe.security.monitoring.modules.features.auth.model.UserInfo;
 import ec.edu.espe.security.monitoring.modules.features.auth.repository.UserInfoRepository;
-import ec.edu.espe.security.monitoring.shared.security.jwt.JwtProvider;
-import ec.edu.espe.security.monitoring.shared.security.jwt.JwtRevokedToken;
+import ec.edu.espe.security.monitoring.common.security.jwt.JwtProvider;
+import ec.edu.espe.security.monitoring.common.security.jwt.JwtRevokedToken;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

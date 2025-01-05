@@ -7,11 +7,11 @@ package ec.edu.espe.security.monitoring.services.auth;
  */
 
 import ec.edu.espe.security.monitoring.modules.features.auth.dto.LoginRequestDto;
-import ec.edu.espe.security.monitoring.shared.dto.JsonResponseDto;
+import ec.edu.espe.security.monitoring.common.dto.JsonResponseDto;
 import ec.edu.espe.security.monitoring.modules.features.auth.model.UserInfo;
 import ec.edu.espe.security.monitoring.modules.features.auth.repository.UserInfoRepository;
-import ec.edu.espe.security.monitoring.shared.security.jwt.JwtProvider;
-import ec.edu.espe.security.monitoring.shared.security.jwt.JwtRevokedToken;
+import ec.edu.espe.security.monitoring.common.security.jwt.JwtProvider;
+import ec.edu.espe.security.monitoring.common.security.jwt.JwtRevokedToken;
 import ec.edu.espe.security.monitoring.modules.features.auth.service.AuthServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

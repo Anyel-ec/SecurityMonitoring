@@ -10,7 +10,7 @@ import ec.edu.espe.security.monitoring.modules.features.credential.repositories.
 import ec.edu.espe.security.monitoring.modules.features.installation.repositories.InstallationConfigRepository;
 import ec.edu.espe.security.monitoring.modules.integrations.docker.services.impl.DockerDbCredentialServiceImpl;
 import ec.edu.espe.security.monitoring.modules.integrations.docker.utils.MyCnfFileGenerator;
-import ec.edu.espe.security.monitoring.shared.encrypt.utils.AesEncryptorUtil;
+import ec.edu.espe.security.monitoring.common.encrypt.utils.AesEncryptorUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;

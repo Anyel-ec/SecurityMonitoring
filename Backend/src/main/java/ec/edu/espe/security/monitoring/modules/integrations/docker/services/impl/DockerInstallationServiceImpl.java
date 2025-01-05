@@ -3,7 +3,7 @@ package ec.edu.espe.security.monitoring.modules.integrations.docker.services.imp
 import ec.edu.espe.security.monitoring.modules.features.installation.models.InstallationConfig;
 import ec.edu.espe.security.monitoring.modules.features.installation.repositories.InstallationConfigRepository;
 import ec.edu.espe.security.monitoring.modules.integrations.docker.services.interfaces.DockerInstallationService;
-import ec.edu.espe.security.monitoring.shared.encrypt.utils.AesEncryptorUtil;
+import ec.edu.espe.security.monitoring.common.encrypt.utils.AesEncryptorUtil;
 import ec.edu.espe.security.monitoring.modules.integrations.docker.utils.AlertManagerConfigUtil;
 import ec.edu.espe.security.monitoring.modules.integrations.docker.utils.DockerEnvironmentUtil;
 import lombok.RequiredArgsConstructor;

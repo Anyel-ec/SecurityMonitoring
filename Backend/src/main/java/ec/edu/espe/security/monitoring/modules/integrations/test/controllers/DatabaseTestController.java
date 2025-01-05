@@ -2,8 +2,8 @@ package ec.edu.espe.security.monitoring.modules.integrations.test.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ec.edu.espe.security.monitoring.modules.features.credential.dto.DatabaseCredentialRequestDto;
-import ec.edu.espe.security.monitoring.shared.dto.JsonResponseDto;
-import ec.edu.espe.security.monitoring.core.audit.services.AuditLogServiceImpl;
+import ec.edu.espe.security.monitoring.common.dto.JsonResponseDto;
+import ec.edu.espe.security.monitoring.modules.core.audit.services.AuditLogServiceImpl;
 import ec.edu.espe.security.monitoring.modules.features.credential.utils.DatabaseUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;

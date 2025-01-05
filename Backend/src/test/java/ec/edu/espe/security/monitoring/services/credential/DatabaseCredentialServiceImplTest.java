@@ -7,11 +7,11 @@ package ec.edu.espe.security.monitoring.services.credential;
  */
 import ec.edu.espe.security.monitoring.modules.features.credential.dto.DatabaseCredentialRequestDto;
 import ec.edu.espe.security.monitoring.modules.features.credential.models.DatabaseCredential;
-import ec.edu.espe.security.monitoring.core.system.models.SystemParameters;
+import ec.edu.espe.security.monitoring.modules.core.system.models.SystemParameters;
 import ec.edu.espe.security.monitoring.modules.features.credential.repositories.DatabaseCredentialRepository;
-import ec.edu.espe.security.monitoring.core.system.repositories.SystemParametersRepository;
+import ec.edu.espe.security.monitoring.modules.core.system.repositories.SystemParametersRepository;
 import ec.edu.espe.security.monitoring.modules.features.credential.services.DatabaseCredentialServiceImpl;
-import ec.edu.espe.security.monitoring.shared.encrypt.utils.AesEncryptorUtil;
+import ec.edu.espe.security.monitoring.common.encrypt.utils.AesEncryptorUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
