@@ -58,6 +58,28 @@ public class GrafanaDashboardServiceImpl implements GrafanaDashboardService {
         }
     }
 
+    public void createDashboardFromJson(GrafanaDashboardRequestDto dashboardRequestDto) {
+        try {
+            SystemParameters systemParameter = grafanaService.getGrafanaInstallParameter();
+            InstallationConfig grafanaInstall = grafanaService.getActiveInstallationConfig(systemParameter);
+            String username = grafanaInstall.getUsername();
+            String decryptedPassword = aesEncryptor.decrypt(grafanaInstall.getPassword());
+
+            // Convertir directamente el DTO recibido a JSON
+            String dashboardJson = new ObjectMapper().writeValueAsString(dashboardRequestDto.getDashboard());
+
+            // Enviar la solicitud a Grafana
+            ResponseEntity<String> response = performDashboardCreationRequest(username, decryptedPassword, dashboardJson);
+
+            if (!response.getStatusCode().is2xxSuccessful()) {
+                throw new IllegalStateException("Error al crear el dashboard: " + response.getStatusCode());
+            }
+        } catch (JsonProcessingException e) {
+            throw new IllegalArgumentException("El formato del JSON es inválido", e);
+        }
+    }
+
+
     private void createDashboardFromJsonFile(String username, String password, String dashboardJsonFile) {
         try {
             // Read the JSON file for the dashboard

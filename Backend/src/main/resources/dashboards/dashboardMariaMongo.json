@@ -9,316 +9,7 @@
       "pluginName": "Prometheus"
     }
   ],
-  "__elements": {
-    "fe8jcpwn22n7kd": {
-      "name": "MariaDB",
-      "uid": "fe8jcpwn22n7kd",
-      "kind": 1,
-      "model": {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "${DS_PROMETHEUS}"
-        },
-        "description": "",
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "palette-classic"
-            },
-            "custom": {
-              "axisBorderShow": false,
-              "axisCenteredZero": false,
-              "axisColorMode": "text",
-              "axisLabel": "",
-              "axisPlacement": "auto",
-              "barAlignment": 0,
-              "barWidthFactor": 0.6,
-              "drawStyle": "line",
-              "fillOpacity": 0,
-              "gradientMode": "none",
-              "hideFrom": {
-                "legend": false,
-                "tooltip": false,
-                "viz": false
-              },
-              "insertNulls": false,
-              "lineInterpolation": "smooth",
-              "lineWidth": 1,
-              "pointSize": 1,
-              "scaleDistribution": {
-                "type": "linear"
-              },
-              "showPoints": "auto",
-              "spanNulls": false,
-              "stacking": {
-                "group": "A",
-                "mode": "none"
-              },
-              "thresholdsStyle": {
-                "mode": "off"
-              }
-            },
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "green",
-                  "value": null
-                },
-                {
-                  "color": "red",
-                  "value": 80
-                }
-              ]
-            },
-            "unit": "s"
-          },
-          "overrides": []
-        },
-        "options": {
-          "legend": {
-            "calcs": [
-              "lastNotNull",
-              "mean",
-              "min",
-              "max"
-            ],
-            "displayMode": "table",
-            "placement": "bottom",
-            "showLegend": true
-          },
-          "tooltip": {
-            "mode": "single",
-            "sort": "none"
-          }
-        },
-        "pluginVersion": "11.4.0",
-        "targets": [
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "${DS_PROMETHEUS}"
-            },
-            "editorMode": "code",
-            "expr": "avg(rate(process_cpu_seconds_total{instance=\"mariadb-exporter:9104\"}[5m]) * 1000)",
-            "legendFormat": "CPU Time",
-            "range": true,
-            "refId": "A"
-          }
-        ],
-        "title": "MariaDB",
-        "type": "timeseries"
-      }
-    },
-    "de8jklxlxkikgc": {
-      "name": "Tasa de transacciones MariaDB",
-      "uid": "de8jklxlxkikgc",
-      "kind": 1,
-      "model": {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "${DS_PROMETHEUS}"
-        },
-        "description": "Calcula la tasa de transacciones confirmadas (commit) y revertidas (rollback) en MySQL durante los últimos 5 minutos, proporcionando una visión clara del flujo de transacciones exitosas y fallidas en el sistema.\n\n\n\n\n\n\n",
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "palette-classic"
-            },
-            "custom": {
-              "axisBorderShow": false,
-              "axisCenteredZero": false,
-              "axisColorMode": "text",
-              "axisLabel": "",
-              "axisPlacement": "auto",
-              "barAlignment": 0,
-              "barWidthFactor": 0.6,
-              "drawStyle": "line",
-              "fillOpacity": 0,
-              "gradientMode": "none",
-              "hideFrom": {
-                "legend": false,
-                "tooltip": false,
-                "viz": false
-              },
-              "insertNulls": false,
-              "lineInterpolation": "linear",
-              "lineWidth": 1,
-              "pointSize": 5,
-              "scaleDistribution": {
-                "type": "linear"
-              },
-              "showPoints": "auto",
-              "spanNulls": false,
-              "stacking": {
-                "group": "A",
-                "mode": "none"
-              },
-              "thresholdsStyle": {
-                "mode": "off"
-              }
-            },
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "green",
-                  "value": null
-                },
-                {
-                  "color": "red",
-                  "value": 80
-                }
-              ]
-            }
-          },
-          "overrides": []
-        },
-        "options": {
-          "legend": {
-            "calcs": [
-              "mean",
-              "lastNotNull",
-              "sum"
-            ],
-            "displayMode": "table",
-            "placement": "right",
-            "showLegend": true
-          },
-          "tooltip": {
-            "mode": "multi",
-            "sort": "none"
-          }
-        },
-        "pluginVersion": "11.4.0",
-        "targets": [
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "${DS_PROMETHEUS}"
-            },
-            "editorMode": "code",
-            "expr": "irate(mysql_global_status_commands_total{command=\"commit\"}[5m])",
-            "legendFormat": "{{datname}} commits",
-            "range": true,
-            "refId": "A"
-          },
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "${DS_PROMETHEUS}"
-            },
-            "editorMode": "code",
-            "expr": "irate(mysql_global_status_commands_total{command=\"rollback\"}[5m])",
-            "hide": false,
-            "instant": false,
-            "legendFormat": "{{command}}",
-            "range": true,
-            "refId": "B"
-          }
-        ],
-        "title": "MariaDB",
-        "type": "timeseries"
-      }
-    },
-    "be8jj0hszjtogf": {
-      "name": "Operaciones Eliminado MariaDB",
-      "uid": "be8jj0hszjtogf",
-      "kind": 1,
-      "model": {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "${DS_PROMETHEUS}"
-        },
-        "description": "",
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "palette-classic"
-            },
-            "custom": {
-              "axisBorderShow": false,
-              "axisCenteredZero": false,
-              "axisColorMode": "text",
-              "axisLabel": "",
-              "axisPlacement": "auto",
-              "barAlignment": 0,
-              "barWidthFactor": 0.6,
-              "drawStyle": "line",
-              "fillOpacity": 0,
-              "gradientMode": "none",
-              "hideFrom": {
-                "legend": false,
-                "tooltip": false,
-                "viz": false
-              },
-              "insertNulls": false,
-              "lineInterpolation": "linear",
-              "lineWidth": 1,
-              "pointSize": 5,
-              "scaleDistribution": {
-                "type": "linear"
-              },
-              "showPoints": "auto",
-              "spanNulls": false,
-              "stacking": {
-                "group": "A",
-                "mode": "none"
-              },
-              "thresholdsStyle": {
-                "mode": "off"
-              }
-            },
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "green",
-                  "value": null
-                },
-                {
-                  "color": "red",
-                  "value": 80
-                }
-              ]
-            }
-          },
-          "overrides": []
-        },
-        "options": {
-          "legend": {
-            "calcs": [],
-            "displayMode": "list",
-            "placement": "bottom",
-            "showLegend": true
-          },
-          "tooltip": {
-            "mode": "single",
-            "sort": "none"
-          }
-        },
-        "pluginVersion": "11.4.0",
-        "targets": [
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "${DS_PROMETHEUS}"
-            },
-            "editorMode": "code",
-            "expr": "mysql_global_status_commands_total{command=\"delete\"}",
-            "legendFormat": "{{command}}",
-            "range": true,
-            "refId": "A"
-          }
-        ],
-        "title": "MariaDB",
-        "type": "timeseries"
-      }
-    }
-  },
+  "__elements": {},
   "__requires": [
     {
       "type": "grafana",
@@ -714,6 +405,67 @@
       "type": "row"
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "smooth",
+            "lineWidth": 1,
+            "pointSize": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": []
+      },
       "gridPos": {
         "h": 6,
         "w": 12,
@@ -721,23 +473,142 @@
         "y": 9
       },
       "id": 3,
-      "libraryPanel": {
-        "uid": "fe8jcpwn22n7kd",
-        "name": "MariaDB"
-      }
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull",
+            "mean",
+            "min",
+            "max"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.4.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "avg(rate(process_cpu_seconds_total{instance=\"mariadb-exporter:9104\"}[5m]) * 1000)",
+          "legendFormat": "CPU Time",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "MariaDB",
+      "type": "timeseries"
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "smooth",
+            "lineWidth": 1,
+            "pointSize": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": []
+      },
       "gridPos": {
         "h": 6,
         "w": 12,
         "x": 12,
         "y": 9
       },
-      "id": 6,
-      "libraryPanel": {
-        "uid": "fe8jcpwn22n7kd",
-        "name": "MariaDB"
-      }
+      "id": 38,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull",
+            "mean",
+            "min",
+            "max"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.4.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "avg(rate(process_cpu_seconds_total{instance=\"mongo-exporter:9216\"}[5m]) * 1000)",
+          "legendFormat": "CPU Time",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "MongoDB",
+      "type": "timeseries"
     },
     {
       "collapsed": false,
@@ -1020,7 +891,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -1122,7 +994,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -1237,7 +1110,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -1333,7 +1207,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -1381,7 +1256,7 @@
       "type": "timeseries"
     },
     {
-      "collapsed": true,
+      "collapsed": false,
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -1389,136 +1264,237 @@
         "y": 37
       },
       "id": 31,
-      "panels": [
-        {
-          "gridPos": {
-            "h": 8,
-            "w": 12,
-            "x": 0,
-            "y": 38
+      "panels": [],
+      "title": "Tasa de transacciones",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "Calcula la tasa de transacciones confirmadas (commit) y revertidas (rollback) en MySQL durante los últimos 5 minutos, proporcionando una visión clara del flujo de transacciones exitosas y fallidas en el sistema.\n\n\n\n\n\n\n",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
           },
-          "id": 29,
-          "libraryPanel": {
-            "name": "Tasa de transacciones MariaDB",
-            "uid": "de8jklxlxkikgc"
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
           }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 38
+      },
+      "id": 29,
+      "options": {
+        "legend": {
+          "calcs": [
+            "mean",
+            "lastNotNull",
+            "sum"
+          ],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.4.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "irate(mysql_global_status_commands_total{command=\"commit\"}[5m])",
+          "legendFormat": "{{datname}} commits",
+          "range": true,
+          "refId": "A"
         },
         {
           "datasource": {
             "type": "prometheus",
             "uid": "${DS_PROMETHEUS}"
           },
-          "description": "Calcula la tasa de transacciones que han sido confirmadas (committed) en el motor de almacenamiento WiredTiger de MongoDB durante los últimos 5 minutos. Esta métrica refleja el flujo de transacciones exitosas y es útil para monitorear la carga transaccional y el desempeño del sistema.",
-          "fieldConfig": {
-            "defaults": {
-              "color": {
-                "mode": "palette-classic"
-              },
-              "custom": {
-                "axisBorderShow": false,
-                "axisCenteredZero": false,
-                "axisColorMode": "text",
-                "axisLabel": "",
-                "axisPlacement": "auto",
-                "barAlignment": 0,
-                "barWidthFactor": 0.6,
-                "drawStyle": "line",
-                "fillOpacity": 0,
-                "gradientMode": "none",
-                "hideFrom": {
-                  "legend": false,
-                  "tooltip": false,
-                  "viz": false
-                },
-                "insertNulls": false,
-                "lineInterpolation": "linear",
-                "lineWidth": 1,
-                "pointSize": 5,
-                "scaleDistribution": {
-                  "type": "linear"
-                },
-                "showPoints": "auto",
-                "spanNulls": false,
-                "stacking": {
-                  "group": "A",
-                  "mode": "none"
-                },
-                "thresholdsStyle": {
-                  "mode": "off"
-                }
-              },
-              "mappings": [],
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "green"
-                  },
-                  {
-                    "color": "red",
-                    "value": 80
-                  }
-                ]
-              }
-            },
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 8,
-            "w": 12,
-            "x": 12,
-            "y": 38
-          },
-          "id": 30,
-          "options": {
-            "legend": {
-              "calcs": [
-                "mean",
-                "lastNotNull",
-                "sum"
-              ],
-              "displayMode": "table",
-              "placement": "right",
-              "showLegend": true
-            },
-            "tooltip": {
-              "mode": "multi",
-              "sort": "none"
-            }
-          },
-          "pluginVersion": "11.4.0",
-          "targets": [
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
-              },
-              "editorMode": "code",
-              "expr": "irate(mongodb_mongod_wiredtiger_transactions_total{type=\"committed\"}[5m])",
-              "legendFormat": "{{datname}} commits",
-              "range": true,
-              "refId": "A"
-            },
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
-              },
-              "editorMode": "code",
-              "expr": "irate(mongodb_mongod_wiredtiger_transactions_total{type=\"rolledback\"}[5m])",
-              "hide": false,
-              "instant": false,
-              "legendFormat": "{{command}}",
-              "range": true,
-              "refId": "B"
-            }
-          ],
-          "title": "MongoDB",
-          "type": "timeseries"
+          "editorMode": "code",
+          "expr": "irate(mysql_global_status_commands_total{command=\"rollback\"}[5m])",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "{{command}}",
+          "range": true,
+          "refId": "B"
         }
       ],
-      "title": "Tasa de transacciones",
-      "type": "row"
+      "title": "MariaDB",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "Calcula la tasa de transacciones que han sido confirmadas (committed) en el motor de almacenamiento WiredTiger de MongoDB durante los últimos 5 minutos. Esta métrica refleja el flujo de transacciones exitosas y es útil para monitorear la carga transaccional y el desempeño del sistema.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 38
+      },
+      "id": 30,
+      "options": {
+        "legend": {
+          "calcs": [
+            "mean",
+            "lastNotNull",
+            "sum"
+          ],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.4.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "irate(mongodb_mongod_wiredtiger_transactions_total{type=\"committed\"}[5m])",
+          "legendFormat": "{{datname}} commits",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "irate(mongodb_mongod_wiredtiger_transactions_total{type=\"rolledback\"}[5m])",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "{{command}}",
+          "range": true,
+          "refId": "B"
+        }
+      ],
+      "title": "MongoDB",
+      "type": "timeseries"
     },
     {
       "collapsed": false,
@@ -1526,7 +1502,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 38
+        "y": 46
       },
       "id": 27,
       "panels": [],
@@ -1582,7 +1558,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -1597,7 +1574,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 39
+        "y": 47
       },
       "id": 26,
       "options": {
@@ -1678,7 +1655,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -1693,7 +1671,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 39
+        "y": 47
       },
       "id": 28,
       "options": {
@@ -1731,7 +1709,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 47
+        "y": 55
       },
       "id": 25,
       "panels": [],
@@ -1786,7 +1764,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -1801,7 +1780,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 48
+        "y": 56
       },
       "id": 23,
       "options": {
@@ -1884,7 +1863,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -1899,7 +1879,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 48
+        "y": 56
       },
       "id": 24,
       "options": {
@@ -1937,25 +1917,12 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 56
+        "y": 64
       },
       "id": 22,
       "panels": [],
       "title": "Operaciones de Eliminación ",
       "type": "row"
-    },
-    {
-      "gridPos": {
-        "h": 6,
-        "w": 12,
-        "x": 0,
-        "y": 57
-      },
-      "id": 20,
-      "libraryPanel": {
-        "uid": "be8jj0hszjtogf",
-        "name": "Operaciones Eliminado MariaDB"
-      }
     },
     {
       "datasource": {
@@ -2006,7 +1973,105 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 0,
+        "y": 65
+      },
+      "id": 20,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.4.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "mysql_global_status_commands_total{command=\"delete\"}",
+          "legendFormat": "{{command}}",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "MariaDB",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -2021,7 +2086,7 @@
         "h": 6,
         "w": 12,
         "x": 12,
-        "y": 57
+        "y": 65
       },
       "id": 21,
       "options": {
@@ -2059,7 +2124,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 63
+        "y": 71
       },
       "id": 34,
       "panels": [],
@@ -2115,7 +2180,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -2131,7 +2197,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 64
+        "y": 72
       },
       "id": 32,
       "options": {
@@ -2217,7 +2283,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -2233,7 +2300,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 64
+        "y": 72
       },
       "id": 33,
       "options": {
@@ -2276,7 +2343,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 72
+        "y": 80
       },
       "id": 37,
       "panels": [],
@@ -2332,7 +2399,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -2348,7 +2416,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 73
+        "y": 81
       },
       "id": 35,
       "options": {
@@ -2434,7 +2502,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -2450,7 +2519,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 73
+        "y": 81
       },
       "id": 36,
       "options": {
@@ -2585,8 +2654,8 @@
   },
   "timepicker": {},
   "timezone": "browser",
-  "title": "Maria + Mongo",
-  "uid": "de8jbw8ix4ow0c",
-  "version": 50,
+  "title": "Maria + MongoDB",
+  "uid": "de8jbw8ix4ow0c21",
+  "version": 2,
   "weekStart": ""
 }
