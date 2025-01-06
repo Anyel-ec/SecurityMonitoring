@@ -10,26 +10,13 @@ const axiosInstance = axios.create({
 });
 
 // Configurar el interceptor de solicitudes
-axiosInstance.interceptors.request.use(
-    (config) => {
-        // Obtener el token del localStorage
-        const authToken = localStorage.getItem('token');
-        if (authToken) {
-            // Si el token existe, añadirlo a las cabeceras de la solicitud
-            config.headers['Authorization'] = `Bearer ${authToken}`;
-        }
-        return config;
-    },
-    (error) => {
-        return Promise.reject(error);
+axiosInstance.interceptors.request.use((config) => {
+    const authToken = localStorage.getItem('token'); // Asegúrate de que sea un string
+    console.log("Token enviado desde el cliente:", authToken);
+    if (authToken) {
+        config.headers['Authorization'] = `Bearer ${authToken}`;
     }
-);
-
-// // Extender AxiosRequestConfig para incluir customBaseURL
-// declare module 'axios' {
-//     export interface InternalAxiosRequestConfig {
-//         customBaseURL?: string; // Propiedad personalizada para cambiar la URL
-//     }
-// }
+    return config;
+});
 
 export default axiosInstance;

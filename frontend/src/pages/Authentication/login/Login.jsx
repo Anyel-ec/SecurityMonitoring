@@ -74,7 +74,7 @@ const Login = () => {
                                             <i className="fa-solid fa-user"></i>
                                         </span>
                                     </div>
-                                    <span className='text-danger'>{ usernameError }</span>
+                                    <span className='text-danger'>{usernameError}</span>
                                 </div>
 
                                 <div className='flex flex-col gap-1'>
@@ -92,12 +92,12 @@ const Login = () => {
                                             <i className="fa-solid fa-lock"></i>
                                         </span>
                                     </div>
-                                    <span className='text-danger'>{ passwordError }</span>
+                                    <span className='text-danger'>{passwordError}</span>
                                 </div>
 
-                                <span className='text-danger'>{ errorResponse }</span>
-                                <span className='text-danger'>{ error }</span>
-
+                                <div className='w-full text-center'>
+                                    <span className='text-danger'>{error}</span>
+                                </div>
 
                                 <button type="submit" className="btn btn-gradient !mt-6 w-full border-0 uppercase shadow-[0_10px_20px_-10px_rgba(67,97,238,0.44)]">
                                     Ingresar

@@ -6,13 +6,13 @@ export default function useLogin() {
     // Hook para la navegación
     const navigate = useNavigate();
 
-    const [username, setUsername] = useState('anyel');
+    const [username, setUsername] = useState('');
     const [usernameError, setUsernameError] = useState('');
-    const [password, setPassword] = useState('anyel');
+    const [password, setPassword] = useState('');
     const [passwordError, setPasswordError] = useState('');
 
     const [errorResponse, setErrorResponse] = useState('');
-    const { content, loading, error, message, setMessage } = useAuthService();
+    const { content, loading, error } = useAuthService();
 
     // Validar cambios en email
     const handleUsernameChange = (e) => {
@@ -41,7 +41,6 @@ export default function useLogin() {
     // Validar formulario
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setMessage(null);
 
         setUsernameError('');
         setPasswordError('');
@@ -62,17 +61,14 @@ export default function useLogin() {
         // Llamar al servicio de autenticación
         const result = await content(username, password);
         console.log(result)
-        // Validar que `result` no sea undefined
         if (result) {
-            console.log(result.message); // Accede de forma segura a `message`
-            if (result.success) {
-                // Redirigir si es exitoso
+            if (result.httpCode === 200) {
                 navigate('/', { replace: true });
+                console.log(result.message);
+                console.log('Entro')
             } else {
-                setMessage(result.message);
+                return setErrorResponse(result.message);
             }
-        } else {
-            setMessage('Ocurrió un error inesperado');
         }
     };
 

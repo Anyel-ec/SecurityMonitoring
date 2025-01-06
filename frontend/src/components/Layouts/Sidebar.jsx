@@ -1,11 +1,12 @@
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { toggleSidebar } from '../../store/themeConfigSlice';
 import { useState, useEffect } from 'react';
 import IconCaretsDown from '../Icon/IconCaretsDown';
 import IconMinus from '../Icon/IconMinus';
+import { useLogoutService } from '../../hooks/services/system/auth.service';
 
 const Sidebar = () => {
     const [currentMenu, setCurrentMenu] = useState('');
@@ -44,6 +45,21 @@ const Sidebar = () => {
         }
     }, [location]);
 
+    // Cerrar sesion
+    const { content, loading, error } = useLogoutService();
+    const navigate = useNavigate();
+
+    const handleLogout = async () => {
+        const result = await content();
+
+        if (result.httpCode === 200) {
+            window.location.href = '/';
+            navigate('/');
+        } else {
+            window.location.href = '/';
+        }
+    };
+
     return (
         <div className={semidark ? 'dark' : ''}>
             <nav
@@ -65,7 +81,7 @@ const Sidebar = () => {
                         </button>
                     </div>
                     <PerfectScrollbar className="h-[calc(100vh-80px)] relative">
-                        <ul className="relative font-semibold space-y-0.5 p-4 py-0">
+                        <ul className="relative flex flex-col h-full font-semibold space-y-0.5 p-4 py-0">
 
                             {/* Separadores */}
                             <h2 className="py-3 px-7 flex items-center uppercase font-extrabold bg-white-light/30 dark:bg-dark dark:bg-opacity-[0.08] -mx-4 mb-1">
@@ -84,7 +100,15 @@ const Sidebar = () => {
                             </li>
 
 
-
+                            {/* Cerrar sesion */}
+                            <li className="menu nav-item !mt-auto w-full">
+                                <button className="group" onClick={handleLogout}>
+                                    <div className="flex justify-center items-center w-full text-danger dark:text-red-400 dark:group-hover:text-red-dark">
+                                        <i className="fa-solid fa-arrow-up-left-from-circle"></i>
+                                        <span className="ltr:pl-3 rtl:pr-3 text-center text-danger dark:text-red-400 dark:group-hover:text-red-dark">Cerrar Sesión</span>
+                                    </div>
+                                </button>
+                            </li>
 
 
 

@@ -8,7 +8,6 @@ alerting:
             - "alertmanager:9093"
 
 rule_files:
-  - /etc/prometheus/alerting_rules.yml
   
 scrape_configs:
   - job_name: 'prometheus'

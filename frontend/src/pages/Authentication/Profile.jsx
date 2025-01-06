@@ -6,6 +6,7 @@ import IconCalendar from '../../components/Icon/IconCalendar';
 import IconMapPin from '../../components/Icon/IconMapPin';
 import IconMail from '../../components/Icon/IconMail';
 import IconPhone from '../../components/Icon/IconPhone';
+import { useGlobalContext } from '../../hooks/contexts/global.context';
 
 const Profile = () => {
     const dispatch = useDispatch();
@@ -13,6 +14,10 @@ const Profile = () => {
         dispatch(setPageTitle('Perfil'));
     });
     const isRtl = useSelector((state) => state.themeConfig.rtlClass) === 'rtl' ? true : false;
+
+    // Contexto global para obtener los datos del usuario
+    const { globalVariables, loading: loading_user } = useGlobalContext();
+
     return (
         <div>
             <div className="pt-5">
@@ -24,7 +29,7 @@ const Profile = () => {
                         <div className="mb-5">
                             <div className="flex flex-col justify-center items-center">
                                 <img src="/assets/images/user-profile.jpg" alt="img" className="w-24 h-24 rounded-full object-cover  mb-5" />
-                                <p className="font-semibold text-primary text-xl">Angel Patiño</p>
+                                <p className="font-semibold text-primary text-xl">{globalVariables.username}</p>
                             </div>
                             <ul className="mt-5 flex flex-col max-w-[160px] m-auto space-y-4 font-semibold text-white-dark">
                                 <li className="flex items-center gap-2">
@@ -42,13 +47,13 @@ const Profile = () => {
                                 <li>
                                     <button className="flex items-center gap-2">
                                         <IconMail className="w-5 h-5 shrink-0" />
-                                        <span className="text-primary truncate">angel@gmail.com</span>
+                                        <span className="text-primary truncate">{globalVariables.email}</span>
                                     </button>
                                 </li>
                                 <li className="flex items-center gap-2">
                                     <IconPhone />
                                     <span className="whitespace-nowrap" dir="ltr">
-                                        +593 93 947 0232
+                                        {globalVariables.phone}
                                     </span>
                                 </li>
                             </ul>

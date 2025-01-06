@@ -326,6 +326,7 @@ groups:
         for: 1m
         labels:
           severity: warning
+          enabled: true
         annotations:
           summary: "Alta tasa de datos enviados en MongoDB"
           description: "Se ha detectado una tasa de más de 1 MB por segundo de datos enviados en MongoDB en los últimos 5 minutos. Revisa la actividad para confirmar si esta carga es esperada."

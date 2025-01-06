@@ -17,8 +17,7 @@ services:
   prometheus:
     image: prom/prometheus
     volumes:
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro 
-      - ./alertmanager/alerting_rules.yml:/etc/prometheus/alerting_rules.yml:ro
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
 
     ports:
       - "${PROMETHEUS_PORT_EXTERNAL}:${PROMETHEUS_PORT_INTERNAL}"

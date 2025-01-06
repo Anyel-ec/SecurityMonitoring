@@ -4,40 +4,37 @@ import { url_auth } from '../static/useApiUrl';
 
 // Función para iniciar sesión
 export const useAuthService = () => {
+
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-    const [message, setMessage] = useState(null);
 
+    // Función `content` para realizar la solicitud de inicio de sesión
     const content = async (username, password) => {
         setLoading(true);
         setError(null);
-        setMessage(null);
 
         try {
             const response = await axiosInstance.post(`${url_auth}/login`, { username, password });
             const result = response.data;
 
-            if (result.success && result.httpCode === 200) {
+            // Guardar el token en localStorage si está en la respuesta
+            if (result && result.httpCode === 200) {
                 localStorage.setItem('token', result.result);
-                setMessage(result.message);
-                console.log(result.result)
-            } else {
-                setMessage(result.message);
             }
 
             setLoading(false);
-            return result; // Retorna siempre un objeto
+            return result;
+
         } catch (error) {
             const errorMessage = error.response ? error.response.data.message : error.message;
             setError(errorMessage);
             setLoading(false);
-            return { success: false, message: errorMessage }; // Asegúrate de retornar un objeto
+            return { success: false, message: errorMessage };
         }
     };
 
-    return { content, loading, error, message, setMessage };
+    return { content, loading, error };
 };
-
 
 // Función para obtener los detalles del usuario
 export const useDetailsUserService = () => {
@@ -51,15 +48,16 @@ export const useDetailsUserService = () => {
 
         try {
             const response = await axiosInstance.get(`${url_auth}/userDetails`);
-            const result = response.result;
-            console.log(response.data.result)
+            const result = response.data;
+
             setLoading(false);
             return result;
 
         } catch (error) {
-            setError(error.response ? error.response.data.msg : error.message);
+            const errorMessage = error.response ? error.response.data.message : error.message;
+            setError(errorMessage);
             setLoading(false);
-            return undefined;
+            return { success: false, message: errorMessage };
         }
     }, []); // Dependencias vacías, la función se memoiza y no cambia a menos que cambien las dependencias
 
@@ -78,7 +76,7 @@ export const useLogoutService = () => {
 
         try {
             const response = await axiosInstance.get(`${url_auth}/logout`);
-            const result = response.result;
+            const result = response.data;
 
             // Eliminar el token del localStorage
             localStorage.removeItem('token');
@@ -87,9 +85,10 @@ export const useLogoutService = () => {
             return result;
 
         } catch (error) {
-            setError(error.response ? error.response.data.msg : error.message);
+            const errorMessage = error.response ? error.response.data.message : error.message;
+            setError(errorMessage);
             setLoading(false);
-            return undefined;
+            return { success: false, message: errorMessage };
         }
     };
 
@@ -98,8 +97,8 @@ export const useLogoutService = () => {
 
 // Función para verificar el token
 export const useVerifyToken = () => {
-    const [isValid, setIsValid] = useState(null);
-    const { content } = useDetailsUserService();
+    const [isValid, setIsValid] = useState(null); // Estado para almacenar si el token es válido o no
+    const { content } = useDetailsUserService(); // Función para obtener los detalles del usuario desde la API
 
     useEffect(() => {
         const verify = async () => {
@@ -107,42 +106,43 @@ export const useVerifyToken = () => {
 
             if (!token) {
                 // No hay token, establecer isValid en false
+                console.error("Token no encontrado en localStorage");
                 setIsValid(false);
                 return;
             }
 
-            // Existe un token, procedemos a verificar con la API
-            const result = await content();
+            try {
+                // Llamar a la API para obtener los detalles del usuario
+                const result = await content();
 
-            if (!result || result.msg === "Token revocado") {
+                // Verificar si la API devolvió una respuesta válida
+                if (!result || result.success !== true) {
+                    console.warn("Token revocado o respuesta inválida");
+                    localStorage.removeItem('token');
+                    setIsValid(false);
+                    return;
+                }
+
+                // Aquí podrías verificar otros datos si fueran necesarios (ejemplo: roles o usuario activo)
+                if (result.result && result.result.isActive) {
+                    console.log("Token válido y usuario activo");
+                    setIsValid(true);
+                } else {
+                    console.warn("Usuario inactivo o token inválido");
+                    localStorage.removeItem('token');
+                    setIsValid(false);
+                }
+            } catch (error) {
+                console.error("Error al verificar el token:", error);
                 localStorage.removeItem('token');
                 setIsValid(false);
-                return;
             }
-
-            // Verificamos que `exp` existe en `result`
-            if (!('exp' in result) || !result.exp) {
-                localStorage.removeItem('token');
-                setIsValid(false);
-                return;
-            }
-
-            const { exp } = result;
-
-            const currentTime = Math.floor(Date.now() / 1000);
-
-            if (Number(exp) < currentTime) {
-                localStorage.removeItem('token');
-                setIsValid(false);
-                return;
-            }
-
-            setIsValid(true);
         };
 
         verify();
-    }, []); // Arreglo de dependencias vacío
+    }, [content]); // Se ejecuta cuando `content` cambia
 
     return { isValid };
 };
+
 

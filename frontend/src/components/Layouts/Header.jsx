@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { toggleTheme, toggleSidebar } from '../../store/themeConfigSlice';
 import { useTranslation } from 'react-i18next';
 import Dropdown from '../Dropdown';
@@ -10,6 +10,8 @@ import IconMoon from '../Icon/IconMoon';
 import IconLaptop from '../Icon/IconLaptop';
 import IconUser from '../Icon/IconUser';
 import IconLogout from '../Icon/IconLogout';
+import { useLogoutService } from '../../hooks/services/system/auth.service';
+import { useGlobalContext } from '../../hooks/contexts/global.context';
 
 const Header = () => {
     const location = useLocation();
@@ -42,6 +44,25 @@ const Header = () => {
     const [search, setSearch] = useState(false);
 
     const { t } = useTranslation();
+
+
+    // Contexto global para obtener los datos del usuario
+    const { globalVariables, loading: loading_user } = useGlobalContext();
+
+    // Cerrar sesion
+    const { content, loading, error } = useLogoutService();
+    const navigate = useNavigate();
+
+    const handleLogout = async () => {
+        const result = await content();
+
+        if (result.httpCode === 200) {
+            window.location.href = '/';
+            navigate('/');
+        } else {
+            window.location.href = '/';
+        }
+    };
 
     return (
         <header className={`z-40 ${themeConfig.semidark && themeConfig.menu === 'horizontal' ? 'dark' : ''}`}>
@@ -113,7 +134,7 @@ const Header = () => {
                                 </button>
                             )}
                         </div>
-         
+
                         <div className="dropdown shrink-0 flex">
                             <Dropdown
                                 offset={[0, 8]}
@@ -127,10 +148,10 @@ const Header = () => {
                                             <img className="rounded-md w-10 h-10 object-cover" src="/assets/images/user-profile.jpg" alt="userProfile" />
                                             <div className="ltr:pl-4 rtl:pr-4 truncate">
                                                 <h4 className="text-base">
-                                                    Angel Patiño
+                                                    {globalVariables.username}
                                                 </h4>
                                                 <button type="button" className="text-black/60 hover:text-primary dark:text-dark-light/60 dark:hover:text-white">
-                                                    angel@gmail.com
+                                                    {globalVariables.email}
                                                 </button>
                                             </div>
                                         </div>
@@ -142,10 +163,10 @@ const Header = () => {
                                         </Link>
                                     </li>
                                     <li className="border-t border-white-light dark:border-white-light/10">
-                                        <Link to="/inicio" className="text-danger !py-3">
+                                        <button className="text-danger !py-3" onClick={handleLogout}>
                                             <IconLogout className="w-4.5 h-4.5 ltr:mr-2 rtl:ml-2 rotate-90 shrink-0" />
                                             Cerrar sesión
-                                        </Link>
+                                        </button>
                                     </li>
                                 </ul>
                             </Dropdown>
@@ -153,6 +174,39 @@ const Header = () => {
                     </div>
                 </div>
 
+                {/* horizontal menu */}
+                <ul className="horizontal-menu hidden py-1.5 font-semibold px-6 lg:space-x-1.5 xl:space-x-8 rtl:space-x-reverse bg-white border-t border-[#ebedf2] dark:border-[#191e3a] dark:bg-black text-black dark:text-white-dark">
+                    
+                    <li className="menu relative">
+                        <ul className="nav-link">
+                            <NavLink to="/inicio" className="flex items-center">
+                                <i className="fa-solid fa-house"></i>
+                                <span className="px-1">{t('home')}</span>
+                            </NavLink>
+                        </ul>
+                    </li>
+
+
+                    {/* <li className="menu nav-item relative">
+                        <button type="button" className="nav-link">
+                            <div className="flex items-center">
+                                <i className="fa-solid fa-house"></i>
+                                <span className="px-1">{t('dashboard')}</span>
+                            </div>
+                            <div className="right_arrow">
+                                <i className="fa-solid fa-chevron-down"></i>
+                            </div>
+                        </button>
+                        <ul className="sub-menu">
+                            <li>
+                                <NavLink to="/">{t('sales')}</NavLink>
+                            </li>
+                            <li>
+                                <NavLink to="/analytics">{t('analytics')}</NavLink>
+                            </li>
+                        </ul>
+                    </li> */}
+                </ul>
             </div>
         </header>
     );
