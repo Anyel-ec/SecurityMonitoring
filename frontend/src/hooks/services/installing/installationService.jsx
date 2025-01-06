@@ -40,27 +40,38 @@ export const getGrafanaInstallService = async () => {
   }
 };
 
-// Servicio para guardar la instalación de Grafana usando el DTO
 export const saveGrafanaInstallService = async (grafanaInstallData) => {
-  const BASE_URL = AppEnvironments.baseUrl;
-  const grafanaDto = createGrafanaInstallDto(
-    grafanaInstallData.usuario,
-    grafanaInstallData.password,
-    grafanaInstallData.internalPort,
-    grafanaInstallData.externalPort
-  );
+    const BASE_URL = AppEnvironments.baseUrl;
+    const grafanaDto = createGrafanaInstallDto(
+        grafanaInstallData.usuario,
+        grafanaInstallData.password,
+        grafanaInstallData.internalPort,
+        grafanaInstallData.externalPort
+    );
 
-  try {
-    const response = await axios.post(`${BASE_URL}/api/v1/install/grafana`, grafanaDto);
-    return response.data;
-  } catch (error) {
-    if (error.response?.data) {
-      throw new Error(error.response.data.message || 'Error al guardar la instalación de Grafana');
-    } else {
-      throw new Error('No se pudo conectar al servidor. Verifica tu conexión.');
+    console.log('grafanaDto:', grafanaDto);
+
+    try {
+        console.log('Enviando datos al servidor...');
+        const response = await axios.post(`${BASE_URL}/api/v1/install/grafana`, grafanaDto);
+        console.log('response:', response);
+        return response.data;
+    } catch (error) {
+        if (error.response) {
+            // Capturar error 422 con el puerto rechazado
+            if (error.response.status === 422 && error.response.data.result) {
+                const errorMessages = error.response.data.result
+                    .map(err => `${err.message} (Puerto: ${err.rejectedValue})\n `)
+                    .join('\n');
+                throw new Error(errorMessages);
+            }
+            throw new Error(error.response.data.message || 'Error al guardar la instalación de Grafana');
+        } else {
+            throw new Error('No se pudo conectar al servidor. Verifica tu conexión.');
+        }
     }
-  }
 };
+
 
 // Servicio para obtener la instalación de Prometheus
 export const getPrometheusInstallService = async () => {
@@ -87,23 +98,33 @@ export const getPrometheusInstallService = async () => {
 
 // Servicio para guardar la instalación de Prometheus usando el DTO
 export const savePrometheusInstallService = async (prometheusInstallData) => {
-  const BASE_URL = AppEnvironments.baseUrl;
-  const prometheusDto = createPrometheusInstallDto(
-    prometheusInstallData.internalPort,
-    prometheusInstallData.externalPort
-  );
+    const BASE_URL = AppEnvironments.baseUrl;
+    const prometheusDto = createPrometheusInstallDto(
+        prometheusInstallData.internalPort,
+        prometheusInstallData.externalPort
+    );
 
-  try {
-    const response = await axios.post(`${BASE_URL}/api/v1/install/prometheus`, prometheusDto);
-    return response.data;
-  } catch (error) {
-    if (error.response?.data) {
-      throw new Error(error.response.data.message || 'Error al guardar la instalación de Prometheus');
-    } else {
-      throw new Error('No se pudo conectar al servidor. Verifica tu conexión.');
+    try {
+        console.log('Enviando datos al servidor para la instalación de Prometheus...');
+        const response = await axios.post(`${BASE_URL}/api/v1/install/prometheus`, prometheusDto);
+        console.log('Respuesta recibida:', response);
+        return response.data;
+    } catch (error) {
+        if (error.response) {
+            // Capturar error 422 con mensaje y puerto rechazado
+            if (error.response.status === 422 && error.response.data.result) {
+                const errorMessages = error.response.data.result
+                    .map(err => `${err.message} (Puerto: ${err.rejectedValue})`)
+                    .join('\n');
+                throw new Error(errorMessages);
+            }
+            throw new Error(error.response.data.message || 'Error al guardar la instalación de Prometheus');
+        } else {
+            throw new Error('No se pudo conectar al servidor. Verifica tu conexión.');
+        }
     }
-  }
 };
+
 
 
 // Servicio para obtener las instalaciones activas
@@ -135,19 +156,29 @@ export const completeInstallService = async () => {
 };
 
 
-
 export const saveOrUpdatePrometheusExportersService = async (exporterData) => {
-  const BASE_URL = AppEnvironments.baseUrl;
-  try {
-    const response = await axios.put(`${BASE_URL}/api/v1/install/prometheus-exporters`, exporterData);
-    return response.data;
-  } catch (error) {
-    console.error('Error al actualizar los exportadores de Prometheus:', error);
-    throw error.response?.data || new Error('Error al conectar con el servidor');
-  }
+    const BASE_URL = AppEnvironments.baseUrl;
+    try {
+        console.log('Enviando datos para la actualización de exportadores de Prometheus...');
+        const response = await axios.put(`${BASE_URL}/api/v1/install/prometheus-exporters`, exporterData);
+        console.log('Respuesta recibida:', response);
+        return response.data;
+    } catch (error) {
+        if (error.response) {
+            // Capturar error 422 y manejar múltiples errores
+            if (error.response.status === 422 && error.response.data.result) {
+                const errorMessages = error.response.data.result
+                    .map(err => `${err.message} (Puerto: ${err.rejectedValue})`)
+                    .join('\n');
+
+                throw new Error(`Errores de validación encontrados:\n${errorMessages}`);
+            }
+            throw new Error(error.response.data.message || 'Error al actualizar los exportadores de Prometheus');
+        } else {
+            throw new Error('No se pudo conectar al servidor. Verifica tu conexión.');
+        }
+    }
 };
-
-
 
 // Service to save the user installation
 export const saveUserInstallService = async (userInstallData) => {
@@ -162,7 +193,6 @@ export const saveUserInstallService = async (userInstallData) => {
   );
 
   try {
-    console.log('userInstallDto en servicio:', userInstallDto);	
     const response = await axios.post(`${BASE_URL}/api/v1/install/user`, userInstallDto);
     return response.data;
   } catch (error) {

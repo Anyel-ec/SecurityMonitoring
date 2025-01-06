@@ -12,7 +12,7 @@ import { grafanaValidationSchema, prometheusValidationSchema, exportersValidatio
 import { saveGrafanaInstallService, savePrometheusInstallService, saveOrUpdatePrometheusExportersService, saveUserInstallService } from '../../hooks/services/installing/installationService';
 import { checkContainerStatusService, runDockerInstallService } from '../../hooks/services/dockerService';
 import { createDashboard, createPrometheusDatasource } from '../../hooks/services/grafanaService';
-import { showLoadingAlert, closeAlert, showSuccessAlert, showErrorAlert, showRetryAlert } from '../../components/alerts/alerts';
+import { showLoadingAlert, closeAlert, showSuccessAlert, showErrorAlert, showRetryAlert, showErrorAlertMessage } from '../../components/alerts/alerts';
 import { completeInstallation } from './helper/installationHelper';
 import { toggleTheme } from '../../store/themeConfigSlice';
 import IconLaptop from '../../components/Icon/IconLaptop';
@@ -98,13 +98,15 @@ const Instalation = () => {
 
     const saveStep = async (data, serviceFunction, successMessage) => {
         try {
+            console.log("Guardando datos...", data);
             await serviceFunction(data);
             showSuccessAlert('Guardado exitoso', successMessage);
             setCurrentStep((prev) => prev + 1);
         } catch (error) {
-            showErrorAlert('Error', 'Hubo un problema al guardar los datos.');
+            showErrorAlertMessage('Error al guardar', error.message || 'Hubo un problema al guardar los datos.');
         }
     };
+
 
     useEffect(() => {
         if (touched.passwordConfirm) {
@@ -150,6 +152,7 @@ const Instalation = () => {
             internalPort: parseInt(formState.grafanaLocalPort),
             externalPort: parseInt(formState.grafanaDockerPort),
         };
+        console.log("Se guardo grafana", grafanaInstallData);
 
         saveStep(grafanaInstallData, saveGrafanaInstallService, 'Instalación de Grafana guardada correctamente');
     };
@@ -173,8 +176,15 @@ const Instalation = () => {
             externalPortMongodb: parseInt(formState.externalPortMongodb),
         };
 
-        await saveStep(exportersData, saveOrUpdatePrometheusExportersService, 'Puertos de los exportadores guardados correctamente');
-        runDockerAndCheckStatus();
+        try {
+            console.log("Validando los exportadores de Prometheus...");
+            await saveOrUpdatePrometheusExportersService(exportersData);
+            showSuccessAlert('Exportadores validados correctamente', 'Todos los puertos están disponibles.');
+            runDockerAndCheckStatus();
+        } catch (error) {
+            showErrorAlertMessage('Error de validación', error.message);
+            throw new Error("No se puede continuar debido a errores en los exportadores.");
+        }
     };
 
     const handleCompleteInstallation = async () => {
@@ -368,7 +378,7 @@ const Instalation = () => {
                         {steps.map((step, index) => (
                             <div key={index} className="flex flex-col items-center">
                                 <div
-                                    className={`w-10 h-10 rounded-full flex items-center justify-center text-lg font-bold mb-2 
+                                    className={`w-10 h-10 rounded-full flex items-center justify-center text-lg font-bold mb-2
                       ${currentStep > step.number ? 'bg-blue-600 text-white' :
                                             currentStep === step.number ? 'bg-blue-600 text-white' :
                                                 'bg-white dark:bg-dark text-blue-600 dark:text-blue-300 border-2 border-blue-300'}
@@ -406,16 +416,16 @@ const Instalation = () => {
                             onClick={prevStep}
                             className="px-6 py-2 mr-4 btn btn-outline-primary rounded-md hover:bg-white hover:text-primary transition-colors duration-300"
                         >
-                            Previous
+                            Anterior
                         </button>
                     )}
                     <button
                         onClick={nextStep}
                         disabled={currentStep === 5 && isInstalling}
-                        className={`btn btn-primary transition-colors duration-300 
+                        className={`btn btn-primary transition-colors duration-300
                 ${(currentStep === 5 && isInstalling) ? 'opacity-50 cursor-not-allowed' : ''}`}
                     >
-                        {currentStep === 4 ? 'Install' : currentStep < 5 ? 'Next' : 'Finish'}
+                        {currentStep === 4 ? 'Instalar' : currentStep < 5 ? 'Siguiente' : 'Finalizar'}
                     </button>
                 </div>
             </div>

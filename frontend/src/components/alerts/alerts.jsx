@@ -25,6 +25,18 @@ export const showErrorAlert = (title, message) => {
   });
 };
 
+export const showErrorAlertMessage = (title, message) => {
+    Swal.fire({
+      toast: true,
+      position: 'top-right',
+      icon: 'error',
+      title: title,
+      text: message,  // Mostrar ahora el texto del error
+      showConfirmButton: false,
+      timer: 5000, // Tiempo extendido para leer el error
+    });
+  };
+
 export const showLoadingAlert = (title, message) => {
   Swal.fire({
     icon: 'info',

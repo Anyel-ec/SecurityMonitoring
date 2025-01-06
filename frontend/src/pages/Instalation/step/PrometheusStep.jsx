@@ -19,7 +19,7 @@ export default function PrometheusStep({ values, errors, touched, handleBlur, ha
       </div>
 
       <div>
-        <label htmlFor="prometheusDockerPort" className="block text-sm font-medium mb-1">Puerto para Docket de Prometheus</label>
+        <label htmlFor="prometheusDockerPort" className="block text-sm font-medium mb-1">Puerto para Docker de Prometheus</label>
         <input
           type="text"
           id="prometheusDockerPort"

@@ -24,7 +24,7 @@ public class GrafanaInstallController {
      * @param grafanaInstallRequestDTO Data Transfer Object containing installation details.
      * @return ResponseEntity with a JSON response indicating success or failure.
      */
-    @PostMapping()
+    @PostMapping
     public ResponseEntity<JsonResponseDto> saveGrafanaInstall(@Valid @RequestBody GrafanaInstallRequestDto grafanaInstallRequestDTO) {
         try {
             // Try to save the Grafana installation
