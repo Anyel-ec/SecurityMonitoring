@@ -1,4 +1,4 @@
-package ec.edu.espe.security.monitoring.modules.integrations.test.controllers;
+package ec.edu.espe.security.monitoring.modules.features.credential.controllers;
 /*
  * Author: Anyel EC
  * Github: https://github.com/Anyel-ec

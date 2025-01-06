@@ -1,4 +1,4 @@
-package ec.edu.espe.security.monitoring.modules.integrations.test.controllers;
+package ec.edu.espe.security.monitoring.modules.features.credential.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ec.edu.espe.security.monitoring.modules.features.credential.dto.DatabaseCredentialRequestDto;

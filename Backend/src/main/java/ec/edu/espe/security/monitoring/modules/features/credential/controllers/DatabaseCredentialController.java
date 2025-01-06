@@ -64,18 +64,16 @@ public class DatabaseCredentialController {
     @GetMapping
     public ResponseEntity<JsonResponseDto> getAllCredentials(@RequestHeader("Authorization") String authorizationHeader) {
         try {
+            auditLogService.saveAuditLogFromRequest(authorizationHeader, "GET_ALL_CREDENTIALS", HttpStatus.OK.value(), "Credential list retrieved successfully", request, null);
+
             List<DatabaseCredential> credentials = credentialService.getAllCredentials();
 
             // Save audit log
-            auditLogService.saveAuditLogFromRequest(authorizationHeader, "GET_ALL_CREDENTIALS", HttpStatus.OK.value(), "List of credentials retrieved successfully", request, null);
             return ResponseEntity.ok(new JsonResponseDto(true, 200, "Credential list retrieved successfully", credentials));
         } catch (Exception e) {
             log.error("Error retrieving credentials {}", e.getMessage());
 
-            // Save audit log
-            auditLogService.saveAuditLogFromRequest(authorizationHeader, "GET_ALL_CREDENTIALS", HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage(), request, null);
-
-            return ResponseEntity.status(500).body(new JsonResponseDto(false, 500, "Error retrieving credentials: " + e.getMessage(), null));
+            return ResponseEntity.status(500).body(new JsonResponseDto(false, 500, "Error al recuperar las credenciales: " + e.getMessage(), null));
         }
     }
 
@@ -83,32 +81,18 @@ public class DatabaseCredentialController {
      * Endpoint to retrieve a specific credential by ID.
      *
      * @param id                  The ID of the credential to be retrieved.
-     * @param authorizationHeader Authorization token from the client.
      * @return ResponseEntity with the credential data if found, or an error message if not.
      */
     @GetMapping("/{id}")
-    public ResponseEntity<JsonResponseDto> getCredentialById(@PathVariable Long id,
-                                                             @RequestHeader("Authorization") String authorizationHeader) {
+    public ResponseEntity<JsonResponseDto> getCredentialById(@PathVariable Long id) {
         try {
             DatabaseCredential credential = credentialService.getCredentialById(id);
-            String requestBody = String.format("ID requested: %d", id); // Prepare request details for audit log
-
-            if (credential == null) {
-                // Save audit log
-                auditLogService.saveAuditLogFromRequest(authorizationHeader, "GET_CREDENTIAL_BY_ID", HttpStatus.NOT_FOUND.value(), "Credential not found", request, requestBody);
-                return ResponseEntity.status(404).body(new JsonResponseDto(false, 404, "Credential not found", null));
-            }
-
-            // Save audit log
-            auditLogService.saveAuditLogFromRequest(authorizationHeader, "GET_CREDENTIAL_BY_ID", HttpStatus.OK.value(), "Credential retrieved successfully", request, requestBody);
-
             return ResponseEntity.ok(new JsonResponseDto(true, 200, "Credential retrieved successfully", credential));
+        } catch (IllegalArgumentException e) {
+            log.warn("Credential not found: {}", e.getMessage());
+            return ResponseEntity.status(404).body(new JsonResponseDto(false, 404, e.getMessage(), null));
         } catch (Exception e) {
-            log.error("Error retrieving credential {}", e.getMessage());
-
-            // Save audit log
-            auditLogService.saveAuditLogFromRequest(authorizationHeader, "GET_CREDENTIAL_BY_ID", HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage(), request, null);
-
+            log.error("Error retrieving credential: {}", e.getMessage());
             return ResponseEntity.status(500).body(new JsonResponseDto(false, 500, "Error retrieving credential", null));
         }
     }
@@ -124,18 +108,19 @@ public class DatabaseCredentialController {
     public ResponseEntity<JsonResponseDto> deleteCredential(@PathVariable Long id,
                                                             @RequestHeader("Authorization") String authorizationHeader) {
         try {
+            // Verificar si existe antes de eliminar
+            credentialService.getCredentialById(id); // Lanza excepción si no existe
+
             credentialService.deleteCredential(id);
-
-            String requestBody = String.format("ID deleted: %d", id); // Prepare request details for audit log
-
-            // Save audit log
-            auditLogService.saveAuditLogFromRequest(authorizationHeader, "DELETE_CREDENTIAL", HttpStatus.OK.value(), "Credential deleted successfully", request, requestBody);
+            auditLogService.saveAuditLogFromRequest(authorizationHeader, "DELETE_CREDENTIAL", HttpStatus.OK.value(), "Credential deleted successfully", request, null);
 
             return ResponseEntity.ok(new JsonResponseDto(true, 200, "Credential deleted successfully", null));
-        } catch (Exception e) {
-            log.error("Error deleting credential {}", e.getMessage());
 
-            // Save audit log
+        } catch (IllegalArgumentException e) {
+            log.warn("Credential not found for deletion: {}", e.getMessage());
+            return ResponseEntity.status(404).body(new JsonResponseDto(false, 404, e.getMessage(), null));
+        } catch (Exception e) {
+            log.error("Error deleting credential: {}", e.getMessage());
             auditLogService.saveAuditLogFromRequest(authorizationHeader, "DELETE_CREDENTIAL", HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage(), request, null);
             return ResponseEntity.status(500).body(new JsonResponseDto(false, 500, "Error deleting credential", null));
         }

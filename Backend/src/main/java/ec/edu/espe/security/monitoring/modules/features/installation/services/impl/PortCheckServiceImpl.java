@@ -1,11 +1,11 @@
-package ec.edu.espe.security.monitoring.modules.integrations.test.services.impl;
+package ec.edu.espe.security.monitoring.modules.features.installation.services.impl;
 
 /*
  * Author: Anyel EC
  * Github: https://github.com/Anyel-ec
  * Creation date: 03/01/2025
  */
-import ec.edu.espe.security.monitoring.modules.integrations.test.services.interfaces.PortCheckService;
+import ec.edu.espe.security.monitoring.modules.features.installation.services.interfaces.PortCheckService;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;

@@ -49,6 +49,7 @@ public class SecurityConfig {
             "/api/v1/test/validateToken",
             "/api/v1/**",
             "/api/v1/install/**",
+            "/test/**"
     };
 
     @Bean

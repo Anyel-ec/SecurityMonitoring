@@ -1,10 +1,10 @@
-import axios from 'axios';
 import AppEnvironments from '../../../core/config/AppEnvironments';
+import axiosInstance from '../../axios/axiosInstance';
 
 export const testPostgresConnection = async (credentials) => {
   const BASE_URL = AppEnvironments.baseUrl;
   try {
-    const response = await axios.post(`${BASE_URL}/api/v1/test/connectionDB`, credentials);
+    const response = await axiosInstance.post(`${BASE_URL}/api/v1/test/connectionDB`, credentials);
 
     if (response.data.success) {
       return response.data;

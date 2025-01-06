@@ -5,7 +5,7 @@ package ec.edu.espe.security.monitoring.modules.features.installation.validation
  * Github: https://github.com/Anyel-ec
  * Creation date: 05/01/2025
  */
-import ec.edu.espe.security.monitoring.modules.integrations.test.services.interfaces.PortCheckService;
+import ec.edu.espe.security.monitoring.modules.features.installation.services.interfaces.PortCheckService;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import lombok.RequiredArgsConstructor;

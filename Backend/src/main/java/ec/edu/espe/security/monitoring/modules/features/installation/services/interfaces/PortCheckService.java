@@ -1,4 +1,4 @@
-package ec.edu.espe.security.monitoring.modules.integrations.test.services.interfaces;
+package ec.edu.espe.security.monitoring.modules.features.installation.services.interfaces;
 
 import java.util.List;
 

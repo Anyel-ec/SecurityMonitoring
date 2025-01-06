@@ -7,11 +7,12 @@ import ec.edu.espe.security.monitoring.modules.features.credential.repositories.
 import ec.edu.espe.security.monitoring.modules.core.system.repositories.SystemParametersRepository;
 import ec.edu.espe.security.monitoring.common.encrypt.utils.AesEncryptorUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class DatabaseCredentialServiceImpl implements DatabaseCredentialService {
@@ -76,25 +77,30 @@ public class DatabaseCredentialServiceImpl implements DatabaseCredentialService 
 
     // Retrieve a specific credential by its ID
     public DatabaseCredential getCredentialById(Long id) {
-        DatabaseCredential credential = databaseCredentialRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Credencial con ID no encontrada: " + id));
-
-        try {
-            if (credential.getPassword() != null) {
-                String decryptedPassword = aesEncryptor.decrypt(credential.getPassword());
-                credential.setPassword(decryptedPassword);
-            }
-        } catch (Exception e) {
-            throw new IllegalStateException("Error al desencriptar la contraseña", e);
-        }
-        return credential;
+        return databaseCredentialRepository.findById(id)
+                .map(credential -> {
+                    try {
+                        if (credential.getPassword() != null) {
+                            credential.setPassword(aesEncryptor.decrypt(credential.getPassword()));
+                        }
+                        return credential;
+                    } catch (Exception e) {
+                        log.error("Error decrypting password for credential ID {}: {}", id, e.getMessage());
+                        throw new IllegalStateException("Error al desencriptar la contraseña", e);
+                    }
+                })
+                .orElseThrow(() -> new IllegalArgumentException("Credencial con ID " + id + " no encontrada."));
     }
 
     // Delete a credential by its ID
     public void deleteCredential(Long id) {
-        DatabaseCredential credential = databaseCredentialRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Credencial con ID no encontrada: " + id));
-
-        databaseCredentialRepository.delete(credential);
+        DatabaseCredential credential = getCredentialById(id); // Lanza excepción si no existe
+        try {
+            databaseCredentialRepository.delete(credential);
+            log.info("Credential with ID {} deleted successfully.", id);
+        } catch (Exception e) {
+            log.error("Error deleting credential ID {}: {}", id, e.getMessage());
+            throw new IllegalStateException("Error al eliminar la credencial", e);
+        }
     }
 }

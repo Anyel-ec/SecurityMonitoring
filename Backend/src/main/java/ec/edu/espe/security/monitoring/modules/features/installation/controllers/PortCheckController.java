@@ -1,4 +1,4 @@
-package ec.edu.espe.security.monitoring.modules.integrations.test.controllers;
+package ec.edu.espe.security.monitoring.modules.features.installation.controllers;
 
 /*
  * Author: Anyel EC
@@ -7,7 +7,7 @@ package ec.edu.espe.security.monitoring.modules.integrations.test.controllers;
  */
 
 import ec.edu.espe.security.monitoring.common.dto.JsonResponseDto;
-import ec.edu.espe.security.monitoring.modules.integrations.test.services.interfaces.PortCheckService;
+import ec.edu.espe.security.monitoring.modules.features.installation.services.interfaces.PortCheckService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

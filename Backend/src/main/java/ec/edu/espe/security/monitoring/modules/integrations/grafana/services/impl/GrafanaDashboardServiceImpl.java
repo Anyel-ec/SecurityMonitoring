@@ -18,6 +18,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.Map;
 
 @Slf4j
@@ -65,10 +71,10 @@ public class GrafanaDashboardServiceImpl implements GrafanaDashboardService {
             String username = grafanaInstall.getUsername();
             String decryptedPassword = aesEncryptor.decrypt(grafanaInstall.getPassword());
 
-            // Convertir directamente el DTO recibido a JSON
+            // convert
             String dashboardJson = new ObjectMapper().writeValueAsString(dashboardRequestDto.getDashboard());
 
-            // Enviar la solicitud a Grafana
+            // send the request to create the dashboard
             ResponseEntity<String> response = performDashboardCreationRequest(username, decryptedPassword, dashboardJson);
 
             if (!response.getStatusCode().is2xxSuccessful()) {
@@ -76,6 +82,18 @@ public class GrafanaDashboardServiceImpl implements GrafanaDashboardService {
             }
         } catch (JsonProcessingException e) {
             throw new IllegalArgumentException("El formato del JSON es inválido", e);
+        } catch (InvalidAlgorithmParameterException e) {
+            throw new RuntimeException(e);
+        } catch (NoSuchPaddingException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalBlockSizeException e) {
+            throw new RuntimeException(e);
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        } catch (BadPaddingException e) {
+            throw new RuntimeException(e);
+        } catch (InvalidKeyException e) {
+            throw new RuntimeException(e);
         }
     }
 
