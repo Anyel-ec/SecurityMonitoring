@@ -1,5 +1,6 @@
 package ec.edu.espe.security.monitoring.modules.features.installation.dto;
 
+import ec.edu.espe.security.monitoring.modules.features.installation.validations.PortNotInUse;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -19,9 +20,11 @@ public class GrafanaInstallRequestDto {
 
     @Min(value = 1, message = "El puerto interno debe ser mayor a 0")
     @Max(value = 65535, message = "El puerto interno debe ser menor o igual a 65535")
+    @PortNotInUse(message = "El puerto interno ya está en uso por Docker", checkDocker = true)
     private int internalPort;
 
     @Min(value = 1, message = "El puerto externo debe ser mayor a 0")
     @Max(value = 65535, message = "El puerto externo debe ser menor o igual a 65535")
+    @PortNotInUse(message = "El puerto externo ya está en uso")
     private int externalPort;
 }
