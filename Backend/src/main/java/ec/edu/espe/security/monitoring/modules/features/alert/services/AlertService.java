@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /*
  * Author: Anyel EC
@@ -19,7 +21,7 @@ import java.nio.file.Paths;
 public class AlertService {
 
     private final Path projectRoot = Paths.get(System.getProperty("user.dir"));
-    private final Path alertingRulesPath = projectRoot.resolve("../.container/prometheus.yml");
+    private final Path alertingRulesPath = projectRoot.resolve("../.container/prometheus.template.yml");
     private final Path dockerComposePath = projectRoot.resolve("../.container/docker-compose.yml");
 
     private String getRulePath(String databaseType) {
@@ -66,21 +68,33 @@ public class AlertService {
     public JsonResponseDto deleteRuleFile(String databaseType) {
         try {
             JsonResponseDto existsResponse = doesRuleExist(databaseType);
-            if (existsResponse.result() instanceof Boolean exists && Boolean.TRUE.equals(!exists)) {
+            if (existsResponse.result() instanceof Boolean exists && !exists) {
                 return new JsonResponseDto(false, 404, "Rule not found", null);
             }
+
             String rulePath = getRulePath(databaseType);
+
+            // Leer los contenidos de los archivos
             String prometheusContent = Files.readString(alertingRulesPath);
             String dockerComposeContent = Files.readString(dockerComposePath);
 
-            prometheusContent = prometheusContent.replace("  - " + rulePath + "\n", "");
-            dockerComposeContent = dockerComposeContent.replace("      - ./alertmanager/alerting_rules_" + databaseType.toLowerCase() + ".yml:" + rulePath + ":ro\n", "");
+            // Eliminar la regla de Prometheus (sin modificar la estructura)
+            List<String> prometheusLines = prometheusContent.lines().collect(Collectors.toList());
+            prometheusLines.removeIf(line -> line.trim().equals("- " + rulePath));
 
-            Files.writeString(alertingRulesPath, prometheusContent);
-            Files.writeString(dockerComposePath, dockerComposeContent);
+            // Eliminar la regla del docker-compose (sin modificar la estructura)
+            List<String> dockerComposeLines = dockerComposeContent.lines().collect(Collectors.toList());
+            dockerComposeLines.removeIf(line -> line.trim().contains("./alertmanager/alerting_rules_" + databaseType.toLowerCase() + ".yml"));
+
+            // Volver a escribir los archivos manteniendo la estructura intacta
+            Files.writeString(alertingRulesPath, String.join("\n", prometheusLines) + "\n");
+            Files.writeString(dockerComposePath, String.join("\n", dockerComposeLines) + "\n");
+
             return new JsonResponseDto(true, 200, "Rule deleted successfully", null);
         } catch (IOException e) {
             return new JsonResponseDto(false, 500, "Error deleting rule", e.getMessage());
         }
     }
+
+
 }
