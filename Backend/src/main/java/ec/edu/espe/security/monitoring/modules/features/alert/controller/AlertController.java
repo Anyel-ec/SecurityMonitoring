@@ -1,12 +1,11 @@
 package ec.edu.espe.security.monitoring.modules.features.alert.controller;
 
-import ec.edu.espe.security.monitoring.modules.features.alert.services.AlertService;
 import ec.edu.espe.security.monitoring.common.dto.JsonResponseDto;
+import ec.edu.espe.security.monitoring.modules.features.alert.services.AlertService;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.io.IOException;
 
 /*
  * Author: Anyel EC
@@ -14,15 +13,13 @@ import java.io.IOException;
  * Creation date: 04/01/2025
  */
 @RestController
-@RequestMapping("/api/alert")
+@RequestMapping("/api/v1/alert")
 @Slf4j
+@AllArgsConstructor
 public class AlertController {
 
     private final AlertService alertService;
 
-    public AlertController(AlertService alertService) {
-        this.alertService = alertService;
-    }
 
     @GetMapping("/rules/exist")
     public ResponseEntity<JsonResponseDto> doesRuleExist(@RequestParam String databaseType) {
@@ -44,4 +41,12 @@ public class AlertController {
         JsonResponseDto response = alertService.deleteRuleFile(databaseType);
         return ResponseEntity.status(response.httpCode()).body(response);
     }
+
+    @GetMapping("/rules/check-all")
+    public ResponseEntity<JsonResponseDto> checkMultipleRuleExistence() {
+        log.info("Checking if multiple alerting rules exist");
+        JsonResponseDto response = alertService.checkMultipleRuleExistence();
+        return ResponseEntity.status(response.httpCode()).body(response);
+    }
+
 }

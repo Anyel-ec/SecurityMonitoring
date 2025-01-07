@@ -1,6 +1,7 @@
 package ec.edu.espe.security.monitoring.modules.features.alert.services;
 
 import ec.edu.espe.security.monitoring.common.dto.JsonResponseDto;
+import ec.edu.espe.security.monitoring.modules.features.alert.dto.AlertResponseDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -74,19 +75,18 @@ public class AlertService {
 
             String rulePath = getRulePath(databaseType);
 
-            // Leer los contenidos de los archivos
             String prometheusContent = Files.readString(alertingRulesPath);
             String dockerComposeContent = Files.readString(dockerComposePath);
 
-            // Eliminar la regla de Prometheus (sin modificar la estructura)
+            // delete the rule from the prometheus file (without modifying the structure)
             List<String> prometheusLines = prometheusContent.lines().collect(Collectors.toList());
             prometheusLines.removeIf(line -> line.trim().equals("- " + rulePath));
 
-            // Eliminar la regla del docker-compose (sin modificar la estructura)
+            // delete the rule from the docker-compose file (without modifying the structure)
             List<String> dockerComposeLines = dockerComposeContent.lines().collect(Collectors.toList());
             dockerComposeLines.removeIf(line -> line.trim().contains("./alertmanager/alerting_rules_" + databaseType.toLowerCase() + ".yml"));
 
-            // Volver a escribir los archivos manteniendo la estructura intacta
+            // rewrite the files
             Files.writeString(alertingRulesPath, String.join("\n", prometheusLines) + "\n");
             Files.writeString(dockerComposePath, String.join("\n", dockerComposeLines) + "\n");
 
@@ -96,5 +96,13 @@ public class AlertService {
         }
     }
 
+    public JsonResponseDto checkMultipleRuleExistence() {
+        boolean activeMongo = doesRuleExist("mongo").result() instanceof Boolean exists && exists;
+        boolean activeMaria = doesRuleExist("maria").result() instanceof Boolean exists && exists;
+        boolean activePostgres = doesRuleExist("postgres").result() instanceof Boolean exists && exists;
+
+        AlertResponseDto alertResponse = new AlertResponseDto(activeMongo, activeMaria, activePostgres);
+        return new JsonResponseDto(true, 200, "Existing rules", alertResponse);
+    }
 
 }
