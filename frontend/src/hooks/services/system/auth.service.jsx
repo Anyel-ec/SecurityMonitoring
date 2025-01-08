@@ -8,13 +8,13 @@ export const useAuthService = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
-    // Función content para realizar la solicitud de inicio de sesión
+    // Función `content` para realizar la solicitud de inicio de sesión
     const content = async (username, password) => {
         setLoading(true);
         setError(null);
 
         try {
-            const response = await axiosInstance.post(`${url_auth}/login, { username, password }`);
+            const response = await axiosInstance.post(`${url_auth}/login`, { username, password });
             const result = response.data;
 
             // Guardar el token en localStorage si está en la respuesta
@@ -41,7 +41,7 @@ export const useDetailsUserService = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
-    // Memoizamos la función content con useCallback
+    // Memoizamos la función `content` con useCallback
     const content = useCallback(async () => {
         setLoading(true);
         setError(null);
@@ -69,7 +69,7 @@ export const useLogoutService = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
-    // Función content para cerrar sesión
+    // Función `content` para cerrar sesión
     const content = async () => {
         setLoading(true);
         setError(null);
@@ -140,7 +140,8 @@ export const useVerifyToken = () => {
         };
 
         verify();
-    }, [content]); // Se ejecuta cuando content cambia
+    }, [content]); // Se ejecuta cuando `content` cambia
 
     return { isValid };
 };
+

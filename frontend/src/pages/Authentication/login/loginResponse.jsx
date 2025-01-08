@@ -6,9 +6,9 @@ export default function useLogin() {
     // Hook para la navegación
     const navigate = useNavigate();
 
-    const [username, setUsername] = useState('anyel');
+    const [username, setUsername] = useState('');
     const [usernameError, setUsernameError] = useState('');
-    const [password, setPassword] = useState('anyel');
+    const [password, setPassword] = useState('');
     const [passwordError, setPasswordError] = useState('');
 
     const [errorResponse, setErrorResponse] = useState('');
