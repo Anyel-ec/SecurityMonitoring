@@ -3,7 +3,7 @@ package ec.edu.espe.security.monitoring.modules.features.installation.services.i
 import ec.edu.espe.security.monitoring.modules.features.installation.dto.GrafanaInstallRequestDto;
 import ec.edu.espe.security.monitoring.modules.features.installation.models.InstallationConfig;
 import ec.edu.espe.security.monitoring.modules.features.installation.services.interfaces.GrafanaInstallService;
-import ec.edu.espe.security.monitoring.modules.core.system.models.SystemParameters;
+import ec.edu.espe.security.monitoring.modules.core.initializer.models.SystemParameters;
 import ec.edu.espe.security.monitoring.modules.features.installation.repositories.InstallationConfigRepository;
 import ec.edu.espe.security.monitoring.modules.integrations.grafana.services.impl.GrafanaCredentialServiceImpl;
 import ec.edu.espe.security.monitoring.common.encrypt.utils.AesEncryptorUtil;

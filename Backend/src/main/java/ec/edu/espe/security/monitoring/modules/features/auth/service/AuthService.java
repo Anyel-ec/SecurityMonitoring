@@ -19,4 +19,6 @@ public interface AuthService {
     JsonResponseDto revokeToken(String token);
 
     List<UserInfo> getAllActiveUsers();
+
+
 }

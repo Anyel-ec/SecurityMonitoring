@@ -2,7 +2,7 @@ package ec.edu.espe.security.monitoring.modules.integrations.grafana.services.im
 
 import ec.edu.espe.security.monitoring.modules.integrations.grafana.dto.PrometheusDatasourceRequestDto;
 import ec.edu.espe.security.monitoring.modules.features.installation.models.InstallationConfig;
-import ec.edu.espe.security.monitoring.modules.core.system.models.SystemParameters;
+import ec.edu.espe.security.monitoring.modules.core.initializer.models.SystemParameters;
 import ec.edu.espe.security.monitoring.modules.integrations.grafana.services.interfaces.GrafanaDatasourceService;
 import ec.edu.espe.security.monitoring.modules.features.installation.services.interfaces.PrometheusInstallService;
 import ec.edu.espe.security.monitoring.common.encrypt.utils.AesEncryptorUtil;

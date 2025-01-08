@@ -2,9 +2,9 @@ package ec.edu.espe.security.monitoring.modules.features.credential.services;
 
 import ec.edu.espe.security.monitoring.modules.features.credential.dto.DatabaseCredentialRequestDto;
 import ec.edu.espe.security.monitoring.modules.features.credential.models.DatabaseCredential;
-import ec.edu.espe.security.monitoring.modules.core.system.models.SystemParameters;
+import ec.edu.espe.security.monitoring.modules.core.initializer.models.SystemParameters;
 import ec.edu.espe.security.monitoring.modules.features.credential.repositories.DatabaseCredentialRepository;
-import ec.edu.espe.security.monitoring.modules.core.system.repositories.SystemParametersRepository;
+import ec.edu.espe.security.monitoring.modules.core.initializer.repositories.SystemParametersRepository;
 import ec.edu.espe.security.monitoring.common.encrypt.utils.AesEncryptorUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

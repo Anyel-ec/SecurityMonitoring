@@ -112,7 +112,7 @@ receivers:
           <body>
               <div class="container">
                   <div class="header">
-                      <img src="https://raw.githubusercontent.com/Anyel-ec/SecurityMonitoring/refs/heads/main/frontend/public/logo192.png" alt="Security Monitoring Logo" class="logo">
+                      <img src="https://raw.githubusercontent.com/Anyel-ec/SecurityMonitoring/refs/heads/main/frontend/public/logo192.png" alt="Security Monitoring Logo" class="logo" width="100" height="100">
                       <h1>Security Monitoring</h1>
                   </div>
                   <div class="content">

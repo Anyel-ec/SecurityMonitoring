@@ -1,8 +1,8 @@
-package ec.edu.espe.security.monitoring.modules.core.system.config;
+package ec.edu.espe.security.monitoring.modules.core.initializer.config;
 
-import ec.edu.espe.security.monitoring.modules.core.system.models.SystemParameters;
+import ec.edu.espe.security.monitoring.modules.core.initializer.models.SystemParameters;
 import ec.edu.espe.security.monitoring.modules.features.auth.model.UserRole;
-import ec.edu.espe.security.monitoring.modules.core.system.repositories.SystemParametersRepository;
+import ec.edu.espe.security.monitoring.modules.core.initializer.repositories.SystemParametersRepository;
 import ec.edu.espe.security.monitoring.modules.features.auth.repository.UserRoleRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

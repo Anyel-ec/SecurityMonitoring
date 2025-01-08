@@ -4,6 +4,7 @@ import ec.edu.espe.security.monitoring.modules.features.auth.dto.LoginRequestDto
 import ec.edu.espe.security.monitoring.common.dto.JsonResponseDto;
 import ec.edu.espe.security.monitoring.modules.features.auth.model.UserInfo;
 import ec.edu.espe.security.monitoring.modules.features.auth.service.AuthService;
+import ec.edu.espe.security.monitoring.modules.features.auth.service.AuthServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -76,7 +77,7 @@ public class AuthController {
         }
     }
 
-    @PostMapping("/logout")
+    @GetMapping("/logout")
     public ResponseEntity<JsonResponseDto> logout(@RequestHeader(value = "Authorization", required = false) String authorizationHeader) {
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             String token = authorizationHeader.replace("Bearer ", "");

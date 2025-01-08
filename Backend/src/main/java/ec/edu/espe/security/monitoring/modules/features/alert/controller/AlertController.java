@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
  * Github: https://github.com/Anyel-ec
  * Creation date: 04/01/2025
  */
+
 @RestController
 @RequestMapping("/api/v1/alert")
 @Slf4j

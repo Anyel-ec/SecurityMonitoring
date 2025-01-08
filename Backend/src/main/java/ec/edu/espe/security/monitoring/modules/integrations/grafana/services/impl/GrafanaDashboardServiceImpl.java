@@ -5,7 +5,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ec.edu.espe.security.monitoring.modules.integrations.grafana.dto.GrafanaDashboardRequestDto;
 import ec.edu.espe.security.monitoring.modules.features.installation.models.InstallationConfig;
-import ec.edu.espe.security.monitoring.modules.core.system.models.SystemParameters;
+import ec.edu.espe.security.monitoring.modules.core.initializer.models.SystemParameters;
 import ec.edu.espe.security.monitoring.modules.integrations.grafana.services.interfaces.GrafanaDashboardService;
 import ec.edu.espe.security.monitoring.common.encrypt.utils.AesEncryptorUtil;
 import ec.edu.espe.security.monitoring.modules.integrations.grafana.utils.JsonUtils;

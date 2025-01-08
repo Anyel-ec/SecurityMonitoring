@@ -8,6 +8,7 @@ import ec.edu.espe.security.monitoring.common.security.jwt.JwtProvider;
 import ec.edu.espe.security.monitoring.common.security.jwt.JwtRevokedToken;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
+
     private final UserInfoRepository userRepository;
     private final PasswordEncoder encoder;
     private final JwtProvider jwtProvider;

@@ -1,9 +1,9 @@
 package ec.edu.espe.security.monitoring.modules.integrations.grafana.services.impl;
 
 import ec.edu.espe.security.monitoring.modules.features.installation.models.InstallationConfig;
-import ec.edu.espe.security.monitoring.modules.core.system.models.SystemParameters;
+import ec.edu.espe.security.monitoring.modules.core.initializer.models.SystemParameters;
 import ec.edu.espe.security.monitoring.modules.features.installation.repositories.InstallationConfigRepository;
-import ec.edu.espe.security.monitoring.modules.core.system.repositories.SystemParametersRepository;
+import ec.edu.espe.security.monitoring.modules.core.initializer.repositories.SystemParametersRepository;
 import ec.edu.espe.security.monitoring.modules.integrations.grafana.services.interfaces.GrafanaCredentialService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
