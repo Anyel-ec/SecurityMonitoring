@@ -6,9 +6,14 @@ import ec.edu.espe.security.monitoring.modules.features.installation.services.in
 import ec.edu.espe.security.monitoring.modules.core.initializer.models.SystemParameters;
 import ec.edu.espe.security.monitoring.modules.features.installation.repositories.InstallationConfigRepository;
 import ec.edu.espe.security.monitoring.modules.core.initializer.repositories.SystemParametersRepository;
+
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.Map;
+
 @Service
 @Slf4j
 @AllArgsConstructor
@@ -17,62 +22,111 @@ public class PrometheusInstallServiceImpl implements PrometheusInstallService {
     private final SystemParametersRepository systemParametersRepository;
 
     @Override
-    public InstallationConfig savePrometheusInstall(PrometheusInstallRequestDto prometheusInstallRequestDto) {
+    public Map<String, InstallationConfig> savePrometheusInstall(PrometheusInstallRequestDto prometheusInstallRequestDto) {
         try {
-            // Fetch the PROMETHEUS_INSTALL system parameter
-            SystemParameters systemParameter = systemParametersRepository
-                    .findByNameAndIsActiveTrue("PROMETHEUS_INSTALL")
-                    .orElseThrow(() -> new IllegalArgumentException("El parámetro PROMETHEUS_INSTALL no fue encontrado"));
+            InstallationConfig prometheusInstall = savePrometheusConfig(prometheusInstallRequestDto);
+            InstallationConfig alertmanagerInstall = saveAlertmanagerConfig(prometheusInstallRequestDto);
 
-            // Check if a Prometheus installation with this parameter already exists
-            InstallationConfig prometheusInstall = installationConfigRepository
-                    .findFirstBySystemParameterAndIsActiveTrue(systemParameter)
-                    .orElse(null);
+            log.info("Datos a guardar de Prometheus: {} y Alertmanager: {}", prometheusInstall, alertmanagerInstall);
 
-            // If it exists, update the necessary fields
-            if (prometheusInstall != null) {
-                prometheusInstall.setInternalPort(prometheusInstallRequestDto.getInternalPort());
-                prometheusInstall.setExternalPort(prometheusInstallRequestDto.getExternalPort());
-            } else {
-                // If it doesn't exist, create a new installation
-                prometheusInstall = InstallationConfig.builder()
-                        .internalPort(prometheusInstallRequestDto.getInternalPort())
-                        .externalPort(prometheusInstallRequestDto.getExternalPort())
-                        .systemParameter(systemParameter)
-                        .isActive(true)
-                        .build();
-            }
-            log.info("Los datos a guardar de prometheus es: {}", prometheusInstall);
-            // Save or update the installation in the database
-            return installationConfigRepository.save(prometheusInstall);
+            installationConfigRepository.save(prometheusInstall);
+            installationConfigRepository.save(alertmanagerInstall);
+
+            Map<String, InstallationConfig> result = new HashMap<>();
+            result.put("prometheus", prometheusInstall);
+            result.put("alertmanager", alertmanagerInstall);
+
+            return result;
         } catch (IllegalArgumentException e) {
             log.error(e.getMessage());
-            throw e; // Rethrow to handle specific exception (400 Bad Request)
+            throw e;
         } catch (Exception e) {
-            log.error("Error inesperado al guardar la instalación de Prometheus", e);
-            throw new IllegalStateException("Error interno del servidor al guardar la instalación de Prometheus", e); // Handle unexpected errors (500)
+            log.error("Error inesperado al guardar la instalación", e);
+            throw new IllegalStateException("Error interno del servidor al guardar la instalación", e);
         }
     }
 
+    private InstallationConfig savePrometheusConfig(PrometheusInstallRequestDto prometheusInstallRequestDto) {
+        SystemParameters prometheusParameter = systemParametersRepository
+                .findByNameAndIsActiveTrue("PROMETHEUS_INSTALL")
+                .orElseThrow(() -> new IllegalArgumentException("El parámetro PROMETHEUS_INSTALL no fue encontrado"));
+
+        InstallationConfig prometheusInstall = installationConfigRepository
+                .findFirstBySystemParameterAndIsActiveTrue(prometheusParameter)
+                .orElse(null);
+
+        if (prometheusInstall != null) {
+            prometheusInstall.setInternalPort(prometheusInstallRequestDto.getInternalPort());
+            prometheusInstall.setExternalPort(prometheusInstallRequestDto.getExternalPort());
+        } else {
+            prometheusInstall = InstallationConfig.builder()
+                    .internalPort(prometheusInstallRequestDto.getInternalPort())
+                    .externalPort(prometheusInstallRequestDto.getExternalPort())
+                    .systemParameter(prometheusParameter)
+                    .isActive(true)
+                    .build();
+        }
+        return prometheusInstall;
+    }
+
+    private InstallationConfig saveAlertmanagerConfig(PrometheusInstallRequestDto prometheusInstallRequestDto) {
+        SystemParameters alertmanagerParameter = systemParametersRepository
+                .findByNameAndIsActiveTrue("ALERTMANAGER_INSTALL")
+                .orElseThrow(() -> new IllegalArgumentException("El parámetro ALERTMANAGER_INSTALL no fue encontrado"));
+
+        InstallationConfig alertmanagerInstall = installationConfigRepository
+                .findFirstBySystemParameterAndIsActiveTrue(alertmanagerParameter)
+                .orElse(null);
+
+        if (alertmanagerInstall != null) {
+            alertmanagerInstall.setInternalPort(prometheusInstallRequestDto.getInternalPortAlertmanager());
+            alertmanagerInstall.setExternalPort(prometheusInstallRequestDto.getExternalPortAlertmanager());
+        } else {
+            alertmanagerInstall = InstallationConfig.builder()
+                    .internalPort(prometheusInstallRequestDto.getInternalPortAlertmanager())
+                    .externalPort(prometheusInstallRequestDto.getExternalPortAlertmanager())
+                    .systemParameter(alertmanagerParameter)
+                    .isActive(true)
+                    .build();
+        }
+        return alertmanagerInstall;
+    }
 
     @Override
     public InstallationConfig getPrometheusInstall() {
         try {
-            // Search for the active system parameter PROMETHEUS_INSTALL
-            SystemParameters systemParameter = systemParametersRepository
+            SystemParameters prometheusParameter = systemParametersRepository
                     .findByNameAndIsActiveTrue("PROMETHEUS_INSTALL")
                     .orElseThrow(() -> new IllegalArgumentException("El parámetro PROMETHEUS_INSTALL no fue encontrado"));
 
-            // Search for the Prometheus installation configuration using the system parameter
             return installationConfigRepository
-                    .findFirstBySystemParameterAndIsActiveTrue(systemParameter)
+                    .findFirstBySystemParameterAndIsActiveTrue(prometheusParameter)
                     .orElseThrow(() -> new IllegalArgumentException("No se encontró la configuración de instalación de Prometheus"));
         } catch (IllegalArgumentException e) {
             log.error(e.getMessage());
-            throw e; // Throw specific exception (400 Bad Request)
+            throw e;
         } catch (Exception e) {
             log.error("Error inesperado al recuperar la instalación de Prometheus", e);
-            throw new IllegalStateException("Error interno del servidor al recuperar la instalación de Prometheus", e); // Error 500
+            throw new IllegalStateException("Error interno del servidor al recuperar la instalación de Prometheus", e);
+        }
+    }
+
+    @Override
+    public InstallationConfig getAlertmanagerInstall() {
+        try {
+            SystemParameters alertmanagerParameter = systemParametersRepository
+                    .findByNameAndIsActiveTrue("ALERTMANAGER_INSTALL")
+                    .orElseThrow(() -> new IllegalArgumentException("El parámetro ALERTMANAGER_INSTALL no fue encontrado"));
+
+            return installationConfigRepository
+                    .findFirstBySystemParameterAndIsActiveTrue(alertmanagerParameter)
+                    .orElseThrow(() -> new IllegalArgumentException("No se encontró la configuración de instalación de Alertmanager"));
+        } catch (IllegalArgumentException e) {
+            log.error(e.getMessage());
+            throw e;
+        } catch (Exception e) {
+            log.error("Error inesperado al recuperar la instalación de Alertmanager", e);
+            throw new IllegalStateException("Error interno del servidor al recuperar la instalación de Alertmanager", e);
         }
     }
 }

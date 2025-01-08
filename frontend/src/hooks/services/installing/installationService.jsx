@@ -101,11 +101,13 @@ export const savePrometheusInstallService = async (prometheusInstallData) => {
     const BASE_URL = AppEnvironments.baseUrl;
     const prometheusDto = createPrometheusInstallDto(
         prometheusInstallData.internalPort,
-        prometheusInstallData.externalPort
+        prometheusInstallData.externalPort,
+        prometheusInstallData.internalPortAlertmanager,
+        prometheusInstallData.externalPortAlertmanager
     );
 
     try {
-        console.log('Enviando datos al servidor para la instalación de Prometheus...');
+        console.log('Enviando datos al servidor para la instalación de Prometheus y Alertmanager...');
         const response = await axios.post(`${BASE_URL}/api/v1/install/prometheus`, prometheusDto);
         console.log('Respuesta recibida:', response);
         return response.data;
@@ -118,13 +120,12 @@ export const savePrometheusInstallService = async (prometheusInstallData) => {
                     .join('\n');
                 throw new Error(errorMessages);
             }
-            throw new Error(error.response.data.message || 'Error al guardar la instalación de Prometheus');
+            throw new Error(error.response.data.message || 'Error al guardar la instalación de Prometheus y Alertmanager');
         } else {
             throw new Error('No se pudo conectar al servidor. Verifica tu conexión.');
         }
     }
 };
-
 
 
 // Servicio para obtener las instalaciones activas

@@ -3,10 +3,12 @@ package ec.edu.espe.security.monitoring.modules.features.installation.services.i
 import ec.edu.espe.security.monitoring.modules.features.installation.dto.PrometheusInstallRequestDto;
 import ec.edu.espe.security.monitoring.modules.features.installation.models.InstallationConfig;
 
-public interface PrometheusInstallService {
-    // Save Prometheus installation configuration
-    InstallationConfig savePrometheusInstall(PrometheusInstallRequestDto prometheusInstallRequestDto);
+import java.util.Map;
 
+public interface PrometheusInstallService {
     // Retrieve Prometheus installation configuration
     InstallationConfig getPrometheusInstall();
+
+    InstallationConfig getAlertmanagerInstall();
+    Map<String, InstallationConfig> savePrometheusInstall(PrometheusInstallRequestDto prometheusInstallRequestDto);
 }

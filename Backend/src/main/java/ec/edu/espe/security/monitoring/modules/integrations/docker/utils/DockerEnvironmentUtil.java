@@ -31,6 +31,10 @@ public class DockerEnvironmentUtil {
                 putEnvIfNotNull(processBuilder, "PROMETHEUS_PORT_EXTERNAL", String.valueOf(config.getExternalPort()));
                 putEnvIfNotNull(processBuilder, "PROMETHEUS_PORT_INTERNAL", String.valueOf(config.getInternalPort()));
                 break;
+            case "ALERTMANAGER_INSTALL":
+                putEnvIfNotNull(processBuilder, "ALERTMANAGER_PORT_EXTERNAL", String.valueOf(config.getExternalPort()));
+                putEnvIfNotNull(processBuilder, "ALERTMANAGER_PORT_INTERNAL", String.valueOf(config.getInternalPort()));
+                break;
 
             case "PROMETHEUS_EXPORTER_POSTGRESQL":
                 putEnvIfNotNull(processBuilder, "EXPORT_POSTGRES_PORT_EXTERNAL", String.valueOf(config.getExternalPort()));

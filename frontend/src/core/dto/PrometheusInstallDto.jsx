@@ -1,4 +1,6 @@
-export const createPrometheusInstallDto = (internalPort, externalPort) => ({
+export const createPrometheusInstallDto = (internalPort, externalPort, internalPortAlertmanager, externalPortAlertmanager) => ({
     internalPort,
-    externalPort
+    externalPort,
+    internalPortAlertmanager,
+    externalPortAlertmanager
 });

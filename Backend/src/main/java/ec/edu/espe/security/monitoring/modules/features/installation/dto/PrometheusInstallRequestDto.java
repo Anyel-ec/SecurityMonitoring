@@ -20,10 +20,19 @@ public class PrometheusInstallRequestDto {
     @NotNull(message = "El puerto externo no puede ser nulo")
     @Min(value = 1, message = "El puerto externo debe ser mayor a 0")
     @Max(value = 65535, message = "El puerto externo debe ser menor o igual a 65535")
-    @PortNotInUse(message = "El puerto interno ya está en uso por Docker", checkDocker = true)
+    @PortNotInUse(message = "El puerto externo ya está en uso por Docker", checkDocker = true)
     private int externalPort;
 
+    @NotNull(message = "El puerto interno de alertamanager no puede ser nulo")
+    @Min(value = 1, message = "El puerto interno  de alertamanager debe ser mayor a 0")
+    @Max(value = 65535, message = "El puerto interno de alertamanager debe ser menor o igual a 65535")
+    @PortNotInUse(message = "El puerto interno de alertamanager ya está en uso")
+    private int internalPortAlertmanager;
 
-    public PrometheusInstallRequestDto(int internalPort, int externalPort) {
-    }
+    @NotNull(message = "El puerto externo de alertamanager no puede ser nulo")
+    @Min(value = 1, message = "El puerto externo de alertamanager debe ser mayor a 0")
+    @Max(value = 65535, message = "El puerto externo  de alertamanagerdebe ser menor o igual a 65535")
+    @PortNotInUse(message = "El puerto externo ya está en uso por Docker", checkDocker = true)
+    private int externalPortAlertmanager;
+
 }

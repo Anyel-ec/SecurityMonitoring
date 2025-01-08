@@ -5,7 +5,7 @@ alerting:
   alertmanagers:
     - static_configs:
         - targets:
-            - "alertmanager:9093"
+            - "alertmanager:${ALERTMANAGER_PORT_INTERNAL}"
 
 rule_files:
   - /etc/prometheus/alerting_rules_maria.yml

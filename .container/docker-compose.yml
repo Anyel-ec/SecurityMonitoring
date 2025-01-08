@@ -31,7 +31,7 @@ services:
     volumes:
       - ./alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml
     ports:
-      - "9093:9093"
+      - "${ALERTMANAGER_PORT_EXTERNAL}:${ALERTMANAGER_PORT_INTERNAL}"
     networks:
       - monitoring
 

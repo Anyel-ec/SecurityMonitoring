@@ -32,6 +32,37 @@ export default function PrometheusStep({ values, errors, touched, handleBlur, ha
         />
         {touched.prometheusDockerPort && errors.prometheusDockerPort && <p className="mt-1 text-sm text-red-500">{errors.prometheusDockerPort}</p>}
       </div>
+
+      <div>
+        <label htmlFor="alertmanagerLocalPort" className="block text-sm font-medium mb-1">Puerto Local de Alertmanager</label>
+        <input
+          type="text"
+          id="alertmanagerLocalPort"
+          name="alertmanagerLocalPort"
+          placeholder="e.g., 9093"
+          value={values.alertmanagerLocalPort}
+          onChange={handleChange}
+          onBlur={() => handleBlur('alertmanagerLocalPort')}
+          className="form-input"
+        />
+        {touched.alertmanagerLocalPort && errors.alertmanagerLocalPort && <p className="mt-1 text-sm text-red-500">{errors.alertmanagerLocalPort}</p>}
+      </div>
+
+      <div>
+        <label htmlFor="alertmanagerDockerPort" className="block text-sm font-medium mb-1">Puerto para Docker de Alertmanager</label>
+        <input
+          type="text"
+          id="alertmanagerDockerPort"
+          name="alertmanagerDockerPort"
+          placeholder="e.g., 9093"
+          value={values.alertmanagerDockerPort}
+          onChange={handleChange}
+          onBlur={() => handleBlur('alertmanagerDockerPort')}
+          className="form-input"
+        />
+        {touched.alertmanagerDockerPort && errors.alertmanagerDockerPort && <p className="mt-1 text-sm text-red-500">{errors.alertmanagerDockerPort}</p>}
+      </div>
+      
     </form>
   );
 }

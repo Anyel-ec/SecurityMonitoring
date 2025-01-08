@@ -36,7 +36,8 @@ public class SystemInitializerConfig implements CommandLineRunner {
                 new SystemParameters("PROMETHEUS_EXPORTER_MARIADB", "Configuración para el exportador de MariaDB en Prometheus", null, true),
                 new SystemParameters("POSTGRESQL", "Configuración para la base de datos PostgreSQL", null, true),
                 new SystemParameters("MARIADB", "Configuración para la base de datos MariaDB", null, true),
-                new SystemParameters("MONGODB", "Configuración para la base de datos MongoDB", null, true)
+                new SystemParameters("MONGODB", "Configuración para la base de datos MongoDB", null, true),
+                new SystemParameters("ALERTMANAGER_INSTALL", "Configuración para instalar Alertmanager", null, true)
         );
 
         // Filter out existing parameters

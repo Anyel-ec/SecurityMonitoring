@@ -31,6 +31,10 @@ public class PrometheusConfigUtil {
                         case "PROMETHEUS_INSTALL":
                             line = line.replace("${PROMETHEUS_PORT_INTERNAL}", String.valueOf(config.getInternalPort()));
                             break;
+                        case "ALERTMANAGER_INSTALL":
+                            line = line.replace("${ALERTMANAGER_PORT_INTERNAL}", String.valueOf(config.getInternalPort()));
+                            break;
+
                         case "PROMETHEUS_EXPORTER_POSTGRESQL":
                             line = line.replace("${EXPORT_POSTGRES_PORT_INTERNAL}", String.valueOf(config.getInternalPort()));
                             break;

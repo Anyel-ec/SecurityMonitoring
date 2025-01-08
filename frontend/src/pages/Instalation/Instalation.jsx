@@ -39,6 +39,8 @@ const Instalation = () => {
         prometheusLocalPort: '9090', prometheusDockerPort: '9090',
         internalPortPostgres: '9187', externalPortPostgres: '9187', internalPortMariadb: '9104', externalPortMariadb: '9104',
         internalPortMongodb: '9216', externalPortMongodb: '9216',
+        alertmanagerLocalPort: '9093', alertmanagerDockerPort: '9093'
+
     });
 
     useEffect(() => {
@@ -161,9 +163,11 @@ const Instalation = () => {
         const prometheusInstallData = {
             internalPort: parseInt(formState.prometheusLocalPort),
             externalPort: parseInt(formState.prometheusDockerPort),
+            internalPortAlertmanager: parseInt(formState.alertmanagerLocalPort),
+            externalPortAlertmanager: parseInt(formState.alertmanagerDockerPort)
         };
 
-        saveStep(prometheusInstallData, savePrometheusInstallService, 'Instalación de Prometheus guardada correctamente');
+        saveStep(prometheusInstallData, savePrometheusInstallService, 'Instalación de Prometheus y Alertmanager guardada correctamente');
     };
 
     const savePrometheusExporters = async () => {
