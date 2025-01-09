@@ -4,13 +4,13 @@ import { Navigate } from 'react-router-dom';
 import PublicRoute from '../hooks/guards/PublicRoute';
 import PrivateRoute from '../hooks/guards/ProtectedRoute';
 
+const ConfigAlert = lazy(() => import('../pages/ConfigAlert/ConfigAlert'));
 const Instalation = lazy(() => import('../pages/Instalation/Instalation'));
 const Home = lazy(() => import('../pages/Home/Home'));
-const Profile = lazy(() => import('../pages/Authentication/Profile'));
+const Profile = lazy(() => import('../pages/Authentication/profile/Profile'));
 const Login = lazy(() => import('../pages/Authentication/login/Login'));
 const ERROR404 = lazy(() => import('../pages/Error/Error404'));
 const ERROR500 = lazy(() => import('../pages/Error/Error500'));
-
 // Componente para manejar redirecciones basadas en el estado de instalación
 const ProtectedRoute = ({ children, requiresInstallation }) => {
     const isInstalled = useInstallation();
@@ -87,6 +87,18 @@ const routes = [
                 <ProtectedRoute requiresInstallation={false}>
                     <PrivateRoute
                         element={<Profile />}
+                    />
+                </ProtectedRoute>
+            </InstallationProvider>
+        ),
+    },
+    {
+        path: '/alertas',
+        element: (
+            <InstallationProvider>
+                <ProtectedRoute requiresInstallation={false}>
+                    <PrivateRoute
+                        element={<ConfigAlert />}
                     />
                 </ProtectedRoute>
             </InstallationProvider>

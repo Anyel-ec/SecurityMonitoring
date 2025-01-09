@@ -9,7 +9,6 @@ const Login = () => {
     useEffect(() => {
         dispatch(setPageTitle('Login'));
     });
-    const navigate = useNavigate();
 
     // Datos del formulario
     const {

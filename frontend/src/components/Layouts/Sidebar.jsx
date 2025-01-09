@@ -99,6 +99,15 @@ const Sidebar = () => {
                                 </NavLink>
                             </li>
 
+                            <li className="menu nav-item">
+                                <NavLink to="/alertas" className="group">
+                                    <div className="flex items-center">
+                                        <i className="fa-solid fa-gears group-hover:!text-primary shrink-0"></i>
+                                        <span className="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">Alertas</span>
+                                    </div>
+                                </NavLink>
+                            </li>
+
 
                             {/* Cerrar sesion */}
                             <li className="menu nav-item !mt-auto w-full">

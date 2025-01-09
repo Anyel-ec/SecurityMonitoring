@@ -44,6 +44,7 @@ const Instalation = () => {
     });
 
     useEffect(() => {
+        localStorage.removeItem('token');
         if (touched.grafanaPasswordConfirm) {
             const errorMessage =
                 formState.grafanaPassword !== formState.grafanaPasswordConfirm ? 'Las contraseñas no coinciden' : '';
@@ -182,7 +183,7 @@ const Instalation = () => {
 
         try {
             console.log("Validando los exportadores de Prometheus...");
-            await saveOrUpdatePrometheusExportersService(exportersData);
+            await saveStep(exportersData, saveOrUpdatePrometheusExportersService, 'Puertos de los exportadores guardados correctamente');
             showSuccessAlert('Exportadores validados correctamente', 'Todos los puertos están disponibles.');
             runDockerAndCheckStatus();
         } catch (error) {
@@ -206,7 +207,6 @@ const Instalation = () => {
                     // Cerrar el spinner de carga y mostrar éxito
                     closeAlert();
                     showSuccessAlert('Configuración Completa', 'Dashboard y datasource creados en Grafana.');
-                    // Redirige al inicio ("/") después de la configuración exitosa
                     completeInstallation(navigate);
 
                 } catch (error) {
@@ -260,6 +260,10 @@ const Instalation = () => {
                 savePrometheusExporters();
                 break;
             case 5:
+                runDockerInstallService();
+                break;
+
+            case 6:
                 handleCompleteInstallation();
                 break;
             default:
@@ -373,7 +377,7 @@ const Instalation = () => {
                     <div className="absolute top-5 dark:bg-dark left-0 right-0 h-[2px] bg-blue-300" >
                         <div
                             className="h-full bg-blue-600 dark:bg-red transition-all duration-300 ease-in-out"
-                            style={{ width: `${((currentStep - 1) / (steps.length - 1)) * 100}%` }}
+                            style={{ width: `${((currentStep - 1) / (steps.length - 1)) * 100}% }`}}
                         />
                     </div>
 
