@@ -70,7 +70,8 @@ public class GrafanaLoginServiceImpl implements GrafanaLoginService {
 
     @Override
     public void accessDashboardWithSession(HttpServletResponse response) {
-        String grafanaUrl = "http://localhost:3000/d/000000039/postgresql-database?orgId=1&refresh=10s";
+        String grafanaUrl = getGrafanaDashboardUrlByDbType();
+
         if (grafanaCookies != null) {
             grafanaCookies.forEach(cookie -> response.addHeader(SET_COOKIE, cookie));
         }
@@ -85,6 +86,7 @@ public class GrafanaLoginServiceImpl implements GrafanaLoginService {
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         GrafanaLoginRequestDto loginRequest = new GrafanaLoginRequestDto(username, decryptedPassword);
+        log.info("El usuario es{} y la contra es {}", username, decryptedPassword);
         HttpEntity<GrafanaLoginRequestDto> request = new HttpEntity<>(loginRequest, headers);
 
         return restTemplate.postForEntity(url, request, String.class);
@@ -117,7 +119,7 @@ public class GrafanaLoginServiceImpl implements GrafanaLoginService {
 
         //  return the URL based on the database types present
         if (dbTypes.contains("postgresql") && dbTypes.contains("mariadb") && dbTypes.contains("mongodb")) {
-            return "http://localhost:3000/d/be8l1909phr0gf";
+            return "http://localhost:3000/d/fe6hmwui4a134b";
         } else if (dbTypes.contains("postgresql") && dbTypes.contains("mariadb")) {
             return "http://localhost:3000/d/be8l1909phr0gf";
         } else if (dbTypes.contains("postgresql") && dbTypes.contains("mongodb")) {

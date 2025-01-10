@@ -24,7 +24,10 @@ public class DatabaseCredential {
     private String host;
     private int port;
     private String username;
+
+    @Column(columnDefinition = "TEXT")
     private String password;
+
 
     // Only BD
     @OneToOne

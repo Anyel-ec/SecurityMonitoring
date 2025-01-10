@@ -82,19 +82,11 @@ public class GrafanaDashboardServiceImpl implements GrafanaDashboardService {
             }
         } catch (JsonProcessingException e) {
             throw new IllegalArgumentException("El formato del JSON es inválido", e);
-        } catch (InvalidAlgorithmParameterException e) {
-            throw new RuntimeException(e);
-        } catch (NoSuchPaddingException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalBlockSizeException e) {
-            throw new RuntimeException(e);
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
-        } catch (BadPaddingException e) {
-            throw new RuntimeException(e);
-        } catch (InvalidKeyException e) {
-            throw new RuntimeException(e);
+
+        } catch (Exception e) {
+            throw new IllegalStateException("Error al crear el dashboard: " + e.getMessage(), e);
         }
+
     }
 
 

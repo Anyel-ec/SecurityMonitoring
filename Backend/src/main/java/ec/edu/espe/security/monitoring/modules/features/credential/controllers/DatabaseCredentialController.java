@@ -108,11 +108,12 @@ public class DatabaseCredentialController {
     public ResponseEntity<JsonResponseDto> deleteCredential(@PathVariable Long id,
                                                             @RequestHeader("Authorization") String authorizationHeader) {
         try {
-            // Verificar si existe antes de eliminar
-            credentialService.getCredentialById(id); // Lanza excepción si no existe
+            auditLogService.saveAuditLogFromRequest(authorizationHeader, "DELETE_CREDENTIAL", HttpStatus.OK.value(), "Credential deleted successfully", request, null);
+
+            // if exits credential
+            credentialService.getCredentialById(id);
 
             credentialService.deleteCredential(id);
-            auditLogService.saveAuditLogFromRequest(authorizationHeader, "DELETE_CREDENTIAL", HttpStatus.OK.value(), "Credential deleted successfully", request, null);
 
             return ResponseEntity.ok(new JsonResponseDto(true, 200, "Credential deleted successfully", null));
 

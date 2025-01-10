@@ -6,9 +6,6 @@ import org.springframework.stereotype.Component;
 import javax.crypto.*;
 import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Base64;
 
@@ -26,63 +23,76 @@ public class AesEncryptorUtil {
     private static final String AES_TRANSFORMATION = "AES/GCM/NoPadding";
 
     private static final int GCM_TAG_LENGTH = 16; // Length of authentication tag (in bytes)
+    private static final int IV_LENGTH = 12;
+
 
     public void setSecretKey(String secretKey) {
         this.secretKey = secretKey;
     }
 
     // Encrypt a string using AES GCM
-    public String encrypt(String data) throws NoSuchAlgorithmException, InvalidKeyException,
-            NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidAlgorithmParameterException {
+    public String encrypt(String data) {
+        try {
+            // validate data is not empty
+            if (data == null || data.isEmpty()) {
+                data = defaultEmptyPassword;
+            }
 
+            SecretKeySpec key = new SecretKeySpec(hexStringToByteArray(secretKey), ALGORITHM);
+            Cipher cipher = Cipher.getInstance(AES_TRANSFORMATION);
 
-        // Handle null or empty input
-        if (data == null || data.isEmpty()) {
-            data = defaultEmptyPassword;
+            // generate IV
+            byte[] iv = new byte[IV_LENGTH];
+            new SecureRandom().nextBytes(iv);
+            GCMParameterSpec gcmSpec = new GCMParameterSpec(GCM_TAG_LENGTH * 8, iv);
+
+            cipher.init(Cipher.ENCRYPT_MODE, key, gcmSpec);
+            byte[] encryptedData = cipher.doFinal(data.getBytes());
+
+            // combine IV and encrypted data
+            byte[] combined = new byte[iv.length + encryptedData.length];
+            System.arraycopy(iv, 0, combined, 0, iv.length);
+            System.arraycopy(encryptedData, 0, combined, iv.length, encryptedData.length);
+
+            return Base64.getEncoder().encodeToString(combined);
+        } catch (Exception e) {
+            throw new IllegalStateException("Error al cifrar los datos", e);
         }
-
-        SecretKeySpec key = new SecretKeySpec(hexStringToByteArray(secretKey), ALGORITHM);
-        Cipher cipher = Cipher.getInstance(AES_TRANSFORMATION);
-
-        // Generate a random IV
-        byte[] iv = new byte[12]; // GCM standard recommends 12 bytes IV
-        new SecureRandom().nextBytes(iv);
-        GCMParameterSpec gcmSpec = new GCMParameterSpec(GCM_TAG_LENGTH * 8, iv); // 128-bit tag length
-
-        cipher.init(Cipher.ENCRYPT_MODE, key, gcmSpec);
-        byte[] encryptedData = cipher.doFinal(data.getBytes());
-
-        // Combine IV and encrypted data
-        byte[] combined = new byte[iv.length + encryptedData.length];
-        System.arraycopy(iv, 0, combined, 0, iv.length);
-        System.arraycopy(encryptedData, 0, combined, iv.length, encryptedData.length);
-
-        return Base64.getEncoder().encodeToString(combined);
     }
 
     // Decrypt a string using AES GCM
-    public String decrypt(String encryptedData) throws NoSuchAlgorithmException, InvalidKeyException,
-            NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidAlgorithmParameterException {
+    public String decrypt(String encryptedData) {
+        try {
+            if (encryptedData == null || encryptedData.isEmpty()) {
+                return "";
+            }
 
-        byte[] decodedData = Base64.getDecoder().decode(encryptedData);
+            byte[] decodedData = Base64.getDecoder().decode(encryptedData);
 
-        // Extract IV and encrypted data
-        byte[] iv = new byte[12];
-        byte[] cipherText = new byte[decodedData.length - iv.length];
-        System.arraycopy(decodedData, 0, iv, 0, iv.length);
-        System.arraycopy(decodedData, iv.length, cipherText, 0, cipherText.length);
+            // validate long enough to contain IV and GCM tag
+            if (decodedData.length < IV_LENGTH + GCM_TAG_LENGTH) {
+                throw new IllegalStateException("Datos cifrados inválidos o corruptos.");
+            }
 
-        SecretKeySpec key = new SecretKeySpec(hexStringToByteArray(secretKey), ALGORITHM);
-        Cipher cipher = Cipher.getInstance(AES_TRANSFORMATION);
-        GCMParameterSpec gcmSpec = new GCMParameterSpec(GCM_TAG_LENGTH * 8, iv);
+            byte[] iv = new byte[IV_LENGTH];
+            byte[] cipherText = new byte[decodedData.length - IV_LENGTH];
 
-        cipher.init(Cipher.DECRYPT_MODE, key, gcmSpec);
-        byte[] decryptedData = cipher.doFinal(cipherText);
+            System.arraycopy(decodedData, 0, iv, 0, iv.length);
+            System.arraycopy(decodedData, iv.length, cipherText, 0, cipherText.length);
 
-        String result = new String(decryptedData);
+            SecretKeySpec key = new SecretKeySpec(hexStringToByteArray(secretKey), ALGORITHM);
+            Cipher cipher = Cipher.getInstance(AES_TRANSFORMATION);
+            GCMParameterSpec gcmSpec = new GCMParameterSpec(GCM_TAG_LENGTH * 8, iv);
 
-        // Return empty string if the decrypted value matches the special value for an empty password
-        return result.equals(defaultEmptyPassword) ? "" : result;
+            cipher.init(Cipher.DECRYPT_MODE, key, gcmSpec);
+            byte[] decryptedData = cipher.doFinal(cipherText);
+
+            String result = new String(decryptedData);
+            return result.equals(defaultEmptyPassword) ? "" : result;
+        } catch (Exception e) {
+           // return empty string if error
+            return "";
+        }
     }
 
     // Convert hex string to byte array
