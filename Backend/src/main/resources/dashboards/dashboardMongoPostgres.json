@@ -242,12 +242,162 @@
       "type": "stat"
     },
     {
-      "collapsed": false,
+      "collapsed": true,
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
         "y": 4
+      },
+      "id": 13,
+      "panels": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 4,
+            "w": 12,
+            "x": 0,
+            "y": 21
+          },
+          "id": 14,
+          "options": {
+            "colorMode": "none",
+            "graphMode": "none",
+            "justifyMode": "auto",
+            "orientation": "horizontal",
+            "percentChangeColorMode": "standard",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "showPercentChange": false,
+            "textMode": "auto",
+            "wideLayout": true
+          },
+          "pluginVersion": "11.4.0",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${DS_PROMETHEUS}"
+              },
+              "editorMode": "code",
+              "expr": "pg_stat_activity_count{job=\"postgres\",state=\"active\"} !=0",
+              "legendFormat": "__auto",
+              "range": true,
+              "refId": "A"
+            }
+          ],
+          "title": "PostgreSQL",
+          "type": "stat"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 4,
+            "w": 12,
+            "x": 12,
+            "y": 21
+          },
+          "id": 16,
+          "options": {
+            "colorMode": "none",
+            "graphMode": "none",
+            "justifyMode": "auto",
+            "orientation": "horizontal",
+            "percentChangeColorMode": "standard",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "showPercentChange": false,
+            "textMode": "auto",
+            "wideLayout": true
+          },
+          "pluginVersion": "11.4.0",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${DS_PROMETHEUS}"
+              },
+              "editorMode": "code",
+              "expr": "mongodb_connections{instance=\"mongo-exporter:9216\", state=\"current\"}",
+              "legendFormat": "__auto",
+              "range": true,
+              "refId": "A"
+            }
+          ],
+          "title": "Mongo",
+          "type": "stat"
+        }
+      ],
+      "title": "Conexiones Activas",
+      "type": "row"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 5
       },
       "id": 7,
       "panels": [],
@@ -323,7 +473,7 @@
         "h": 7,
         "w": 12,
         "x": 0,
-        "y": 5
+        "y": 6
       },
       "id": 1,
       "options": {
@@ -425,7 +575,7 @@
         "h": 7,
         "w": 12,
         "x": 12,
-        "y": 5
+        "y": 6
       },
       "id": 3,
       "options": {
@@ -468,7 +618,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 12
+        "y": 13
       },
       "id": 11,
       "panels": [],
@@ -541,7 +691,7 @@
         "h": 7,
         "w": 12,
         "x": 0,
-        "y": 13
+        "y": 14
       },
       "id": 4,
       "options": {
@@ -643,7 +793,7 @@
         "h": 7,
         "w": 12,
         "x": 12,
-        "y": 13
+        "y": 14
       },
       "id": 6,
       "options": {
@@ -686,156 +836,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 20
-      },
-      "id": 13,
-      "panels": [],
-      "title": "Conexiones Activas",
-      "type": "row"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 4,
-        "w": 12,
-        "x": 0,
         "y": 21
-      },
-      "id": 14,
-      "options": {
-        "colorMode": "none",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "horizontal",
-        "percentChangeColorMode": "standard",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "showPercentChange": false,
-        "textMode": "auto",
-        "wideLayout": true
-      },
-      "pluginVersion": "11.4.0",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
-          "editorMode": "code",
-          "expr": "pg_stat_activity_count{job=\"postgres\",state=\"active\"} !=0",
-          "legendFormat": "__auto",
-          "range": true,
-          "refId": "A"
-        }
-      ],
-      "title": "PostgreSQL",
-      "type": "stat"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 4,
-        "w": 12,
-        "x": 12,
-        "y": 21
-      },
-      "id": 16,
-      "options": {
-        "colorMode": "none",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "horizontal",
-        "percentChangeColorMode": "standard",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "showPercentChange": false,
-        "textMode": "auto",
-        "wideLayout": true
-      },
-      "pluginVersion": "11.4.0",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
-          "editorMode": "code",
-          "expr": "mongodb_connections{instance=\"mongo-exporter:9216\", state=\"current\"}",
-          "legendFormat": "__auto",
-          "range": true,
-          "refId": "A"
-        }
-      ],
-      "title": "Mongo",
-      "type": "stat"
-    },
-    {
-      "collapsed": false,
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 25
       },
       "id": 12,
       "panels": [],
@@ -908,7 +909,7 @@
         "h": 7,
         "w": 12,
         "x": 0,
-        "y": 26
+        "y": 22
       },
       "id": 51,
       "options": {
@@ -1011,7 +1012,7 @@
         "h": 7,
         "w": 12,
         "x": 12,
-        "y": 26
+        "y": 22
       },
       "id": 10,
       "options": {
@@ -1054,7 +1055,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 33
+        "y": 29
       },
       "id": 21,
       "panels": [],
@@ -1126,13 +1127,18 @@
         "h": 9,
         "w": 12,
         "x": 0,
-        "y": 34
+        "y": 30
       },
       "id": 22,
       "options": {
         "legend": {
-          "calcs": [],
-          "displayMode": "list",
+          "calcs": [
+            "lastNotNull",
+            "mean",
+            "min",
+            "max"
+          ],
+          "displayMode": "table",
           "placement": "bottom",
           "showLegend": true
         },
@@ -1223,13 +1229,18 @@
         "h": 9,
         "w": 12,
         "x": 12,
-        "y": 34
+        "y": 30
       },
       "id": 24,
       "options": {
         "legend": {
-          "calcs": [],
-          "displayMode": "list",
+          "calcs": [
+            "lastNotNull",
+            "mean",
+            "min",
+            "max"
+          ],
+          "displayMode": "table",
           "placement": "bottom",
           "showLegend": true
         },
@@ -1261,7 +1272,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 43
+        "y": 39
       },
       "id": 50,
       "panels": [],
@@ -1333,13 +1344,18 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 44
+        "y": 40
       },
       "id": 46,
       "options": {
         "legend": {
-          "calcs": [],
-          "displayMode": "list",
+          "calcs": [
+            "lastNotNull",
+            "mean",
+            "min",
+            "max"
+          ],
+          "displayMode": "table",
           "placement": "bottom",
           "showLegend": true
         },
@@ -1429,13 +1445,18 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 44
+        "y": 40
       },
       "id": 48,
       "options": {
         "legend": {
-          "calcs": [],
-          "displayMode": "list",
+          "calcs": [
+            "lastNotNull",
+            "mean",
+            "min",
+            "max"
+          ],
+          "displayMode": "table",
           "placement": "bottom",
           "showLegend": true
         },
@@ -1467,7 +1488,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 52
+        "y": 48
       },
       "id": 49,
       "panels": [],
@@ -1539,13 +1560,18 @@
         "h": 7,
         "w": 12,
         "x": 0,
-        "y": 53
+        "y": 49
       },
       "id": 43,
       "options": {
         "legend": {
-          "calcs": [],
-          "displayMode": "list",
+          "calcs": [
+            "lastNotNull",
+            "mean",
+            "min",
+            "max"
+          ],
+          "displayMode": "table",
           "placement": "bottom",
           "showLegend": true
         },
@@ -1635,13 +1661,18 @@
         "h": 7,
         "w": 12,
         "x": 12,
-        "y": 53
+        "y": 49
       },
       "id": 45,
       "options": {
         "legend": {
-          "calcs": [],
-          "displayMode": "list",
+          "calcs": [
+            "lastNotNull",
+            "mean",
+            "min",
+            "max"
+          ],
+          "displayMode": "table",
           "placement": "bottom",
           "showLegend": true
         },
@@ -1673,7 +1704,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 60
+        "y": 56
       },
       "id": 41,
       "panels": [],
@@ -1745,13 +1776,18 @@
         "h": 7,
         "w": 12,
         "x": 0,
-        "y": 61
+        "y": 57
       },
       "id": 38,
       "options": {
         "legend": {
-          "calcs": [],
-          "displayMode": "list",
+          "calcs": [
+            "lastNotNull",
+            "mean",
+            "min",
+            "max"
+          ],
+          "displayMode": "table",
           "placement": "bottom",
           "showLegend": true
         },
@@ -1841,13 +1877,18 @@
         "h": 7,
         "w": 12,
         "x": 12,
-        "y": 61
+        "y": 57
       },
       "id": 40,
       "options": {
         "legend": {
-          "calcs": [],
-          "displayMode": "list",
+          "calcs": [
+            "lastNotNull",
+            "mean",
+            "min",
+            "max"
+          ],
+          "displayMode": "table",
           "placement": "bottom",
           "showLegend": true
         },
@@ -1879,7 +1920,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 68
+        "y": 64
       },
       "id": 25,
       "panels": [],
@@ -1951,7 +1992,7 @@
         "h": 6,
         "w": 12,
         "x": 0,
-        "y": 69
+        "y": 65
       },
       "id": 26,
       "options": {
@@ -2065,7 +2106,7 @@
         "h": 6,
         "w": 12,
         "x": 12,
-        "y": 69
+        "y": 65
       },
       "id": 28,
       "options": {
@@ -2120,7 +2161,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 75
+        "y": 71
       },
       "id": 29,
       "panels": [],
@@ -2193,7 +2234,7 @@
         "h": 7,
         "w": 12,
         "x": 0,
-        "y": 76
+        "y": 72
       },
       "id": 31,
       "options": {
@@ -2296,7 +2337,7 @@
         "h": 7,
         "w": 12,
         "x": 12,
-        "y": 76
+        "y": 72
       },
       "id": 32,
       "options": {
@@ -2339,7 +2380,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 83
+        "y": 79
       },
       "id": 37,
       "panels": [],
@@ -2412,7 +2453,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 84
+        "y": 80
       },
       "id": 34,
       "options": {
@@ -2510,7 +2551,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 84
+        "y": 80
       },
       "id": 35,
       "options": {
@@ -2648,6 +2689,6 @@
   "timezone": "browser",
   "title": "Postgres + Mongo",
   "uid": "fe6hmwui4a134baa",
-  "version": 3,
+  "version": 9,
   "weekStart": ""
 }
