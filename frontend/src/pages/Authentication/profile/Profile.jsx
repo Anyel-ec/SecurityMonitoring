@@ -43,6 +43,7 @@ const Profile = () => {
 
     return (
         <div>
+<<<<<<< HEAD
                 <div className="grid grid-cols-1 gap-5">
 
                     <div className="panel lg:col-span-2 xl:col-span-3">
@@ -50,6 +51,16 @@ const Profile = () => {
 
                             <div className="table-responsive text-[#515365] dark:text-white-light font-semibold">
                                 <form className="border border-[#ebedf2] dark:border-[#191e3a] rounded-md p-4 bg-white dark:bg-black" onSubmit={handleSubmit}>
+=======
+            <div className="pt-5">
+                <div className="grid grid-cols-1 gap-5 mb-5">
+
+                    <div className="panel lg:col-span-2 xl:col-span-3">
+                        <div className="mb-5">
+                            <div className="table-responsive text-[#515365] dark:text-white-light font-semibold">
+
+                                <form className="border border-[#ebedf2] dark:border-[#191e3a] rounded-md p-4 mb-5 bg-white dark:bg-black" onSubmit={handleSubmit}>
+>>>>>>> 5cab696e0c6bb6b7b93258d40dba6b4f4b55f302
                                     <h6 className="text-lg font-bold mb-5">Información General</h6>
                                     <div className="flex flex-col sm:flex-row">
                                         <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-5">
@@ -79,7 +90,10 @@ const Profile = () => {
                                                 />
                                                 <span className='text-danger'>{phoneError}</span>
                                             </div>
+<<<<<<< HEAD
                                             
+=======
+>>>>>>> 5cab696e0c6bb6b7b93258d40dba6b4f4b55f302
                                             <div className='flex flex-col gap-1'>
                                                 <label htmlFor="email">Correo electrónico</label>
                                                 <input
@@ -105,6 +119,7 @@ const Profile = () => {
                                         </div>
                                     </div>
                                 </form>
+<<<<<<< HEAD
                             </div>
 
                         </div>
@@ -115,6 +130,14 @@ const Profile = () => {
                         <div>
 
                             <div className="table-responsive text-[#515365] dark:text-white-light font-semibold">
+=======
+
+                            </div>
+
+
+                            <div className="table-responsive text-[#515365] dark:text-white-light font-semibold">
+
+>>>>>>> 5cab696e0c6bb6b7b93258d40dba6b4f4b55f302
                                 <form className="border border-[#ebedf2] dark:border-[#191e3a] rounded-md p-4 bg-white dark:bg-black" onSubmit={handleSubmitPassword}>
                                     <h6 className="text-lg font-bold mb-5">Cambiar contraseña</h6>
                                     <div className="flex flex-col sm:flex-row">
@@ -158,10 +181,18 @@ const Profile = () => {
                                         </div>
                                     </div>
                                 </form>
+<<<<<<< HEAD
+=======
+
+>>>>>>> 5cab696e0c6bb6b7b93258d40dba6b4f4b55f302
                             </div>
 
                         </div>
                     </div>
+<<<<<<< HEAD
+=======
+                </div>
+>>>>>>> 5cab696e0c6bb6b7b93258d40dba6b4f4b55f302
             </div>
         </div>
     );

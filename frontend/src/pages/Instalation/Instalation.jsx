@@ -207,7 +207,11 @@ const Instalation = () => {
                     // Cerrar el spinner de carga y mostrar éxito
                     closeAlert();
                     showSuccessAlert('Configuración Completa', 'Dashboard y datasource creados en Grafana.');
+<<<<<<< HEAD
                     completeInstallation();
+=======
+                    completeInstallation(navigate);
+>>>>>>> 5cab696e0c6bb6b7b93258d40dba6b4f4b55f302
 
                 } catch (error) {
                     // Manejo de error y opción para reintentar

@@ -9,11 +9,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+<<<<<<< HEAD
 /*
  * Author: Anyel EC
  * Github: https://github.com/Anyel-ec
  * Creation date: 10/01/2025
  */
+=======
+
+>>>>>>> 5cab696e0c6bb6b7b93258d40dba6b4f4b55f302
 @Slf4j
 @RequiredArgsConstructor
 @RestController
@@ -67,4 +71,8 @@ public class ProfileController {
         }
     }
 
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 5cab696e0c6bb6b7b93258d40dba6b4f4b55f302
