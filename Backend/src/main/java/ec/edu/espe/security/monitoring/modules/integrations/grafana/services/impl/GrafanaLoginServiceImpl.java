@@ -1,4 +1,6 @@
 package ec.edu.espe.security.monitoring.modules.integrations.grafana.services.impl;
+import ec.edu.espe.security.monitoring.modules.features.credential.models.DatabaseCredential;
+import ec.edu.espe.security.monitoring.modules.features.credential.repositories.DatabaseCredentialRepository;
 import ec.edu.espe.security.monitoring.modules.integrations.grafana.dto.GrafanaLoginRequestDto;
 import ec.edu.espe.security.monitoring.modules.features.installation.models.InstallationConfig;
 import ec.edu.espe.security.monitoring.modules.core.initializer.models.SystemParameters;
@@ -17,6 +19,9 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 @Slf4j
 @RequiredArgsConstructor
 @Service
@@ -24,7 +29,7 @@ public class GrafanaLoginServiceImpl implements GrafanaLoginService {
     // Dependency injection
     private final GrafanaCredentialServiceImpl grafanaService;
     private final AesEncryptorUtil aesEncryptor;
-
+    private final DatabaseCredentialRepository databaseCredentialRepository;
     // Const
     private static final String SET_COOKIE = "Set-Cookie";
 
@@ -99,25 +104,44 @@ public class GrafanaLoginServiceImpl implements GrafanaLoginService {
         return responseHeaders.get(SET_COOKIE);
     }
 
-    @Override
-    public String getGrafanaDashboardUrlByDbType(String dbType) {
-        return switch (dbType.toLowerCase()) {
-            case "postgresql" -> "http://localhost:3000/d/000000039/postgresql-database";
-            case "mariadb" -> "http://localhost:3000/d/r4uc0hUGk/mysql-dashboard";
-            case "mongodb" -> "http://localhost:3000/d/fe5usr0w1cglcb/mongodb";
-            default -> null;
-        };
-    }
 
-    @Override
-    public String getGrafanaDashboardUrlWithSession() {
-        return "http://localhost:3000/d/000000039/postgresql-database?orgId=1&refresh=10s";
-    }
 
     @Override
     public List<String> getGrafanaCookies() {
         return grafanaCookies;
     }
+
+    @Override
+    public String getGrafanaDashboardUrlByDbType() {
+        // Consultar todas las credenciales activas de la base de datos
+        List<DatabaseCredential> activeCredentials = databaseCredentialRepository.findByIsActiveTrue();
+
+        // Obtener una lista de los nombres de bases de datos únicas activas
+        Set<String> dbTypes = activeCredentials.stream()
+                .map(credential -> credential.getSystemParameter().getName().toLowerCase())
+                .collect(Collectors.toSet());
+
+        // Determinar la URL de Grafana en base a las bases de datos presentes
+        if (dbTypes.contains("postgresql") && dbTypes.contains("mariadb") && dbTypes.contains("mongodb")) {
+            return "http://localhost:3000/d/be8l1909phr0gf";
+        } else if (dbTypes.contains("postgresql") && dbTypes.contains("mariadb")) {
+            return "http://localhost:3000/d/be8l1909phr0gf";
+        } else if (dbTypes.contains("postgresql") && dbTypes.contains("mongodb")) {
+            return "http://localhost:3000/d/fe6hmwui4a134baa";
+        } else if (dbTypes.contains("mariadb") && dbTypes.contains("mongodb")) {
+            return "http://localhost:3000/d/de8jbw8ix4ow0c21";
+        } else if (dbTypes.contains("postgresql")) {
+            return "http://localhost:3000/d/000000039/postgresql-database";
+        } else if (dbTypes.contains("mariadb")) {
+            return "http://localhost:3000/d/r4uc0hUGk/mysql-dashboard";
+        } else if (dbTypes.contains("mongodb")) {
+            return "http://localhost:3000/d/fe5usr0w1cglcb/mongodb";
+        } else {
+            // Si no hay credenciales, retornar nulo o un mensaje de error
+            return null;
+        }
+    }
+
 
     private boolean cookiesAreInvalid() {
         return grafanaCookies == null || grafanaCookies.isEmpty();

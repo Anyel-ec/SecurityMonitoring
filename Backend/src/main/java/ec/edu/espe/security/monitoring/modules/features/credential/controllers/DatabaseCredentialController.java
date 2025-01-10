@@ -1,7 +1,8 @@
 package ec.edu.espe.security.monitoring.modules.features.credential.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import ec.edu.espe.security.monitoring.modules.features.credential.dto.DatabaseCredentialRequestDto;
+import ec.edu.espe.security.monitoring.modules.features.credential.dto
+        .DatabaseCredentialRequestDto;
 import ec.edu.espe.security.monitoring.common.dto.JsonResponseDto;
 import ec.edu.espe.security.monitoring.modules.features.credential.models.DatabaseCredential;
 import ec.edu.espe.security.monitoring.modules.core.audit.services.AuditLogService;
@@ -55,24 +56,15 @@ public class DatabaseCredentialController {
         }
     }
 
-    /**
-     * Endpoint to retrieve all database credentials.
-     *
-     * @param authorizationHeader Authorization token from the client.
-     * @return ResponseEntity containing a JSON response with the list of credentials or an error message.
-     */
+
     @GetMapping
-    public ResponseEntity<JsonResponseDto> getAllCredentials(@RequestHeader("Authorization") String authorizationHeader) {
+    public ResponseEntity<JsonResponseDto> getAllCredentials() {
         try {
-            auditLogService.saveAuditLogFromRequest(authorizationHeader, "GET_ALL_CREDENTIALS", HttpStatus.OK.value(), "Credential list retrieved successfully", request, null);
-
             List<DatabaseCredential> credentials = credentialService.getAllCredentials();
-
-            // Save audit log
             return ResponseEntity.ok(new JsonResponseDto(true, 200, "Credential list retrieved successfully", credentials));
         } catch (Exception e) {
             log.error("Error retrieving credentials {}", e.getMessage());
-
+            log.error("Este es el error principal", e);
             return ResponseEntity.status(500).body(new JsonResponseDto(false, 500, "Error al recuperar las credenciales: " + e.getMessage(), null));
         }
     }

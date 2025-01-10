@@ -10,9 +10,8 @@ public interface GrafanaLoginService {
 
     void accessDashboardWithSession(HttpServletResponse response);
 
-    String getGrafanaDashboardUrlWithSession();
     List<String> getGrafanaCookies();
 
-    String getGrafanaDashboardUrlByDbType(String dbType);
 
+    String getGrafanaDashboardUrlByDbType();
 }
