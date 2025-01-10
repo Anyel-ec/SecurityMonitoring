@@ -115,9 +115,14 @@ export const useVerifyToken = () => {
                 // Llamar a la API para obtener los detalles del usuario
                 const result = await content();
 
+                console.log(result);
+                console.log(result.success);
+                console.log(result.message);
+
                 // Verificar si la API devolvió una respuesta válida
                 if (!result || result.success !== true) {
-                    console.warn("Token revocado o respuesta inválida");
+                    console.log('entra 1')
+                    console.log("Token revocado o respuesta inválida");
                     localStorage.removeItem('token');
                     setIsValid(false);
                     return;
@@ -125,13 +130,16 @@ export const useVerifyToken = () => {
 
                 // Aquí podrías verificar otros datos si fueran necesarios (ejemplo: roles o usuario activo)
                 if (result.result && result.result.isActive) {
+                    console.log('entra 2')
                     console.log("Token válido y usuario activo");
                     setIsValid(true);
                 } else {
-                    console.warn("Usuario inactivo o token inválido");
+                    console.log('entra 3')
+                    console.log("Usuario inactivo o token inválido");
                     localStorage.removeItem('token');
                     setIsValid(false);
                 }
+
             } catch (error) {
                 console.error("Error al verificar el token:", error);
                 localStorage.removeItem('token');

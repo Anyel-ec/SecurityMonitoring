@@ -1,10 +1,7 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useAuthService } from '../../../hooks/services/system/auth.service';
 
 export default function useLogin() {
-    // Hook para la navegación
-    const navigate = useNavigate();
 
     const [username, setUsername] = useState('');
     const [usernameError, setUsernameError] = useState('');
@@ -60,12 +57,9 @@ export default function useLogin() {
 
         // Llamar al servicio de autenticación
         const result = await content(username, password);
-        console.log(result)
         if (result) {
             if (result.httpCode === 200) {
-                navigate('/', { replace: true });
-                console.log(result.message);
-                console.log('Entro')
+                window.location.href = '/';
             } else {
                 return setErrorResponse(result.message);
             }

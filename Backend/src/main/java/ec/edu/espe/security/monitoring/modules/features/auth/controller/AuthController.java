@@ -12,7 +12,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+/*
+ * Author: Anyel EC
+ * Github: https://github.com/Anyel-ec
+ * Creation date: 10/01/2025
+ */
 @Slf4j
 @RequiredArgsConstructor
 @RestController
