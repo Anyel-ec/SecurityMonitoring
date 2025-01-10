@@ -22,20 +22,17 @@ public class GrafanaLoginDashboardController {
     /**
      * Endpoint to log in to Grafana and redirect to the dashboard with session details.
      *
-     * @param response HttpServletResponse for managing cookies and redirection headers.
      * @return ResponseEntity containing a JSON response with the redirection URL or an error message.
      */
     @GetMapping("/grafana-login-and-access-dashboard")
-    public ResponseEntity<JsonResponseDto> loginAndAccessDashboard(
-            @RequestParam("dbType") String dbType,
-            HttpServletResponse response) {
-        log.info("Entró al login de Grafana con base de datos: {}", dbType);
+    public ResponseEntity<JsonResponseDto> loginAndAccessDashboard() {
+
 
         ResponseEntity<String> loginResponse = grafanaLoginService.loginToGrafana();
 
         if (loginResponse.getStatusCode().is2xxSuccessful()) {
             // Get the appropriate Grafana dashboard URL based on dbType
-            String grafanaUrl = grafanaLoginService.getGrafanaDashboardUrlByDbType(dbType);
+            String grafanaUrl = grafanaLoginService.getGrafanaDashboardUrlByDbType();
 
             if (grafanaUrl == null) {
                 return ResponseEntity.status(HttpServletResponse.SC_BAD_REQUEST)

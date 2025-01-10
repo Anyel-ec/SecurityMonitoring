@@ -29,17 +29,11 @@ const Home = () => {
     const isDragging = useRef(false);
 
 
-    // En tu componente MainComponent
-    const handleMonitor = async (dbType) => {
-        if (!dbType) {
-            showErrorAlert('No se ha seleccionado una base de datos válida.');
-            return;
-        }
-
+    const handleMonitor = async () => {
         try {
-            const response = await loginAndAccessDashboard(dbType);
+            const response = await loginAndAccessDashboard();
             if (response && response.redirectUrl) {
-                window.location.href = response.redirectUrl; // Redirige en el frontend
+                window.location.href = response.redirectUrl;
             } else {
                 showErrorAlert('No se pudo acceder al dashboard de Grafana.');
             }
@@ -311,10 +305,10 @@ const Home = () => {
                         setSelectedConnection={handleSelectConnection}
                         handleDelete={handleDelete}
                         handleMonitor={() => {
-                            if (selectedConnection && selectedConnection.systemParameter) {
-                                handleMonitor(selectedConnection.systemParameter.name);
-                            } else {
-                                showErrorAlert('No se ha seleccionado una conexión válida.');
+                            try {
+                                handleMonitor();
+                            } catch (error) {
+                                showErrorAlert('Error al acceder al dashboard de Grafana.');
                             }
                         }}
                         setNewConnection={setNewConnection}

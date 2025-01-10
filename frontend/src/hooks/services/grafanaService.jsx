@@ -36,16 +36,13 @@ export const accessDashboardWithSession = async () => {
 
 /**
  * Realiza el inicio de sesión en Grafana y, si es exitoso, accede al dashboard.
- * 
+ *
  * @param {string} dbType - Tipo de base de datos (por ejemplo, 'postgres', 'mariadb', 'mongodb').
  * @returns {Promise} Promesa que devuelve la respuesta del proceso de acceso al dashboard.
  */
 export const loginAndAccessDashboard = async (dbType) => {
   try {
-    const response = await axios.get(`${BASE_URL}/grafana-login-and-access-dashboard`, {
-      params: { dbType: dbType.toLowerCase() },
-      withCredentials: true,
-    });
+    const response = await axios.get(`${BASE_URL}/grafana-login-and-access-dashboard`)
     console.log('Respuesta de loginAndAccessDashboard:', response.data);
     if (response.data.success && response.data.result?.redirectUrl) {
       return response.data.result; // Retornar el resultado con la URL
