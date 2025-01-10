@@ -49,7 +49,7 @@ export default function GrafanaStep({ values, errors, touched, handleBlur, handl
             </div>
 
             <div>
-                <label htmlFor="grafanaLocalPort" className="block text-sm font-medium mb-1">Puerto Local de Grafana</label>
+                <label htmlFor="grafanaLocalPort" className="block text-sm font-medium mb-1">Puerto Docker de Grafana</label>
                 <input
                     type="text"
                     id="grafanaLocalPort"
@@ -64,7 +64,7 @@ export default function GrafanaStep({ values, errors, touched, handleBlur, handl
             </div>
 
             <div>
-                <label htmlFor="grafanaDockerPort" className="block text-sm font-medium mb-1">Puerto para Docker de Grafana</label>
+                <label htmlFor="grafanaDockerPort" className="block text-sm font-medium mb-1">Puerto Externo de Grafana</label>
                 <input
                     type="text"
                     id="grafanaDockerPort"
