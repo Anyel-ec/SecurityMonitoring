@@ -4,7 +4,6 @@ const ConfigAlert = () => {
 
     return (
         <div>
-<<<<<<< HEAD
             <div className="grid grid-cols-1 gap-5 mb-5">
                 <div className="panel lg:col-span-2 xl:col-span-3">
                     <div className='className="table-responsive text-[#515365] dark:text-white-light font-semibold"'>
@@ -36,9 +35,6 @@ const ConfigAlert = () => {
                     </div>
                 </div>
             </div>
-=======
-            <h1>ConfigAlert</h1>
->>>>>>> 5cab696e0c6bb6b7b93258d40dba6b4f4b55f302
         </div>
     );
 }

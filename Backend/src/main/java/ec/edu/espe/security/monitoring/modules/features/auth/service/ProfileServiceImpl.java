@@ -1,44 +1,29 @@
 package ec.edu.espe.security.monitoring.modules.features.auth.service;
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 5cab696e0c6bb6b7b93258d40dba6b4f4b55f302
 import ec.edu.espe.security.monitoring.common.dto.JsonResponseDto;
 import ec.edu.espe.security.monitoring.common.security.jwt.JwtProvider;
 import ec.edu.espe.security.monitoring.common.security.jwt.JwtRevokedToken;
 import ec.edu.espe.security.monitoring.modules.features.auth.dto.ProfileDto;
 import ec.edu.espe.security.monitoring.modules.features.auth.dto.ProfilePasswordDto;
 import ec.edu.espe.security.monitoring.modules.features.auth.model.UserInfo;
-<<<<<<< HEAD
 import ec.edu.espe.security.monitoring.modules.features.auth.repository.UserInfoRepository;
-=======
-import ec.edu.espe.security.monitoring.modules.features.auth.repository.UserProfileRepository;
->>>>>>> 5cab696e0c6bb6b7b93258d40dba6b4f4b55f302
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-<<<<<<< HEAD
 /*
  * Author: Anyel EC
  * Github: https://github.com/Anyel-ec
  * Creation date: 10/01/2025
  */
-=======
->>>>>>> 5cab696e0c6bb6b7b93258d40dba6b4f4b55f302
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class ProfileServiceImpl implements ProfileService {
 
-<<<<<<< HEAD
     private final UserInfoRepository userInfoRepository;
-=======
-    private final UserProfileRepository userInfoRepository;
->>>>>>> 5cab696e0c6bb6b7b93258d40dba6b4f4b55f302
     private final PasswordEncoder encoder;
     private final JwtProvider jwtProvider;
     private final JwtRevokedToken jwtRevokedToken;
@@ -129,8 +114,4 @@ public class ProfileServiceImpl implements ProfileService {
     }
 
 
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 5cab696e0c6bb6b7b93258d40dba6b4f4b55f302
