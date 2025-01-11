@@ -1,16 +1,25 @@
 package ec.edu.espe.security.monitoring.modules.integrations.docker.services.impl;
 
 import ec.edu.espe.security.monitoring.modules.integrations.docker.services.interfaces.DockerRunService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import org.springframework.core.io.Resource;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class DockerRunServiceImpl implements DockerRunService {
+
+    private final ResourceLoader resourceLoader;
 
     public ProcessBuilder createProcessBuilder(String... commands) {
         return new ProcessBuilder(commands);
@@ -78,23 +87,26 @@ public class DockerRunServiceImpl implements DockerRunService {
             log.info("Docker Compose ya ha sido ejecutado. No se volverá a ejecutar.");
             return;
         }
-        ProcessBuilder processBuilder = new ProcessBuilder(
-                "docker-compose",
-                "-f", "../.container/docker-compose.yml",
-                "up", "-d"
-        );
 
         try {
-            // Log before execution
-            log.info("Executing docker-compose up -d to bring up services...");
+            String dockerComposePath = "src/main/resources/docker/integraciones_security_monitoring/docker-compose.yml";
+            if (!Files.exists(Path.of(dockerComposePath))) {
+                throw new IllegalStateException("El archivo docker-compose.yml no fue encontrado en: " + dockerComposePath);
+            }
 
-            // Inherit IO to display output in the current terminal and start the process
+            ProcessBuilder processBuilder = new ProcessBuilder(
+                    "docker-compose",
+                    "-f", dockerComposePath,
+                    "up", "-d"
+            );
+
+            log.info("Executing docker-compose up -d using the specified path...");
             processBuilder.inheritIO().start().waitFor();
-            isExecuted = true;  // Mark as executed after successful execution
+            isExecuted = true;
             log.info("Docker Compose executed successfully.");
         } catch (IOException | InterruptedException e) {
             log.error("Error while executing docker-compose up: ", e);
-            Thread.currentThread().interrupt();  // Restore the interrupted status if interrupted
+            Thread.currentThread().interrupt();
         }
     }
 

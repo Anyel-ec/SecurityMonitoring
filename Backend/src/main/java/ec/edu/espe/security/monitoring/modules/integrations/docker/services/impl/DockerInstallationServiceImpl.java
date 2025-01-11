@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
@@ -33,26 +34,13 @@ public class DockerInstallationServiceImpl implements DockerInstallationService 
     @Override
     public boolean areDockerContainersUp() {
         try {
-            // Run the "docker ps" command to list active containers
             Process process = new ProcessBuilder("docker", "ps").start();
-    
-            // Use try-with-resources to ensure BufferedReader is closed properly
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
                 List<String> lines = reader.lines().toList();
-    
                 boolean grafanaUp = lines.stream().anyMatch(line -> line.contains("grafana") && line.contains("Up"));
                 boolean prometheusUp = lines.stream().anyMatch(line -> line.contains("prometheus") && line.contains("Up"));
-    
-                // Return true if both Grafana and Prometheus containers are up, otherwise false
-                if (grafanaUp && prometheusUp) {
-                    log.info("Tanto los contenedores Grafana como Prometheus están activos.");
-                    return true;
-                } else {
-                    log.warn("Uno o ambos contenedores no están arriba.");
-                    return false;
-                }
+                return grafanaUp && prometheusUp;
             }
-    
         } catch (IOException e) {
             throw new IllegalStateException("Error checking Docker container status", e);
         }
@@ -67,21 +55,26 @@ public class DockerInstallationServiceImpl implements DockerInstallationService 
             List<InstallationConfig> activeInstallations = installationConfigRepository.findByIsActiveTrue();
 
             // Paths to the Prometheus configuration files
-            String templatePath = "../.container/prometheus.template.yml";
-            String outputPath = "../.container/prometheus.yml";
-            String alertManagerTemplatePath = "../.container/alertmanager/alertmanager.template.yml";
-            String alertManagerOutputPath = "../.container/alertmanager/alertmanager.yml";
+            String basePath = "src/main/resources/docker/integraciones_security_monitoring/";
+            String templatePath = basePath + "prometheus.template.yml";
+            String outputPath = basePath + "prometheus.yml";
+            String alertManagerTemplatePath = basePath + "alertmanager/alertmanager.template.yml";
+            String alertManagerOutputPath = basePath + "alertmanager/alertmanager.yml";
+            String dockerComposePath = basePath + "docker-compose.yml";
 
-            // Generate the prometheus.yml file dynamically with environment variables
+            // Ensure files exist
+            if (!new File(dockerComposePath).exists()) {
+                throw new IllegalStateException("El archivo docker-compose.yml no fue encontrado en: " + dockerComposePath);
+            }
+
+            // Generate configuration files
             generatePrometheusConfig(activeInstallations, templatePath, outputPath);
-
-            // Generate the alertmanager.yml file dynamically
             alertManagerConfigUtil.generateAlertManagerConfig(alertManagerTemplatePath, alertManagerOutputPath);
 
             // Create the ProcessBuilder for docker-compose
             ProcessBuilder dockerComposeProcessBuilder = new ProcessBuilder(
                     "docker-compose",
-                    "-f", "../.container/docker-compose.yml",
+                    "-f", dockerComposePath,
                     "up", "-d"
             );
 
@@ -91,15 +84,13 @@ public class DockerInstallationServiceImpl implements DockerInstallationService 
                 DockerEnvironmentUtil.configureInstallationEnv(dockerComposeProcessBuilder, config, decryptedPassword);
             }
 
-            // Execute docker-compose
-            dockerComposeProcessBuilder.inheritIO().start();
+            dockerComposeProcessBuilder.inheritIO().start().waitFor();
             log.info("Docker Compose ejecutado exitosamente con las configuraciones activas de instalación.");
-        } catch (IOException e) {
+
+        } catch (IOException | InterruptedException e) {
             log.error("Error al ejecutar Docker Compose: {}", e.getMessage());
+            Thread.currentThread().interrupt();
             throw new IllegalStateException("Error al ejecutar Docker Compose con configuraciones de instalación activas", e);
-        } catch (Exception e) {
-            log.error("Error inesperado en la configuración del entorno Docker Compose: {}", e.getMessage());
-            throw new IllegalStateException("Error inesperado en la configuración del entorno Docker Compose", e);
         }
     }
 }
