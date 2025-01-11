@@ -1,0 +1,30 @@
+global:
+  scrape_interval: 5s
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+            - "alertmanager:9093"
+
+rule_files:
+  - /etc/prometheus/alerting_rules_maria.yml
+  - /etc/prometheus/alerting_rules_mongo.yml
+  
+  
+scrape_configs:
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['prometheus:9090']
+
+  - job_name: 'postgres'
+    static_configs:
+      - targets: ['postgres-exporter:9187']
+
+  - job_name: 'mongo'
+    static_configs:
+      - targets: ['mongo-exporter:9216']
+
+  - job_name: 'mariadb'
+    static_configs:
+      - targets: ['mariadb-exporter:9104']
