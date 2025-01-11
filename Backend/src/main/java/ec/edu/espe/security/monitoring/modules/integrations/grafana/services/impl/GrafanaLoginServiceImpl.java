@@ -29,20 +29,15 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Service
 public class GrafanaLoginServiceImpl implements GrafanaLoginService {
-    // Dependency injection
     private final GrafanaCredentialUtil grafanaService;
     private final AesEncryptorUtil aesEncryptor;
     private final DatabaseCredentialRepository databaseCredentialRepository;
     private final GrafanaUrlUtil grafanaUrlUtil;
-    // Const
     private static final String SET_COOKIE = "Set-Cookie";
 
-    // Value injection
     @Value("${cookies.expiration.time.hours}")
     private int cookieExpirationTimeHours;
 
-
-    // Variable to store cookies dynamically
     private List<String> grafanaCookies;
 
     @Override
@@ -84,12 +79,12 @@ public class GrafanaLoginServiceImpl implements GrafanaLoginService {
 
     private ResponseEntity<String> performLoginRequest(String username, String decryptedPassword) {
         String url = grafanaUrlUtil.getGrafanaBaseUrl() + "/login";
+        log.info("URL de login: {}", url);
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         GrafanaLoginRequestDto loginRequest = new GrafanaLoginRequestDto(username, decryptedPassword);
-        log.info("El usuario es{} y la contra es {}", username, decryptedPassword);
         HttpEntity<GrafanaLoginRequestDto> request = new HttpEntity<>(loginRequest, headers);
 
         return restTemplate.postForEntity(url, request, String.class);
@@ -98,16 +93,18 @@ public class GrafanaLoginServiceImpl implements GrafanaLoginService {
     private void updateCookiesWithSecurityAttributes() {
         grafanaCookies = grafanaCookies.stream()
                 .map(cookie -> cookie
-                        .replace("Max-Age=2592000", "Max-Age=" + (cookieExpirationTimeHours * 3600)) // Set expiration time
-                        .concat("; HttpOnly") // Add HttpOnly flag
-                        .concat("; Secure") // Add Secure flag (works with HTTPS)
-                        .concat("; SameSite=Lax")) // Add SameSite attribute
+                        .replace("Max-Age=2592000", "Max-Age=" + (cookieExpirationTimeHours * 3600))
+                        .concat("; HttpOnly")
+                        .concat("; Secure")
+                        .concat("; SameSite=Lax"))
                 .toList();
     }
 
     private List<String> extractCookiesFromResponse(ResponseEntity<String> response) {
         HttpHeaders responseHeaders = response.getHeaders();
-        return responseHeaders.get(SET_COOKIE);
+        List<String> cookies = responseHeaders.get(SET_COOKIE);
+        log.info("Cookies recibidas: {}", cookies);  // <-- Agregando log para verificar
+        return cookies;
     }
 
     @Override

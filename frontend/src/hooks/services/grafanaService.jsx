@@ -42,7 +42,9 @@ export const accessDashboardWithSession = async () => {
  */
 export const loginAndAccessDashboard = async (dbType) => {
   try {
-    const response = await axios.get(`${BASE_URL}/grafana-login-and-access-dashboard`)
+    const response = await axios.get(`${BASE_URL}/grafana-login-and-access-dashboard`, {
+        withCredentials: true,
+      });
     console.log('Respuesta de loginAndAccessDashboard:', response.data);
     if (response.data.success && response.data.result?.redirectUrl) {
       return response.data.result; // Retornar el resultado con la URL
@@ -83,4 +85,3 @@ export const createPrometheusDatasource = async () => {
     throw error;
   }
 };
-

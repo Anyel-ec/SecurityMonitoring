@@ -26,7 +26,7 @@ public class GrafanaLoginDashboardController {
      */
     @GetMapping("/grafana-login-and-access-dashboard")
     public ResponseEntity<JsonResponseDto> loginAndAccessDashboard() {
-
+        log.info("Ingresando a loginAndAccessDashboard");
 
         ResponseEntity<String> loginResponse = grafanaLoginService.loginToGrafana();
 
