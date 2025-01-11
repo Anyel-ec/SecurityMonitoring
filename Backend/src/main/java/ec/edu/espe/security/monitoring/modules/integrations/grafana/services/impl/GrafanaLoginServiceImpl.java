@@ -1,4 +1,5 @@
 package ec.edu.espe.security.monitoring.modules.integrations.grafana.services.impl;
+import ec.edu.espe.security.monitoring.common.enums.DatabaseTypeEnum;
 import ec.edu.espe.security.monitoring.modules.features.credential.models.DatabaseCredential;
 import ec.edu.espe.security.monitoring.modules.features.credential.repositories.DatabaseCredentialRepository;
 import ec.edu.espe.security.monitoring.modules.integrations.grafana.dto.GrafanaLoginRequestDto;
@@ -6,6 +7,8 @@ import ec.edu.espe.security.monitoring.modules.features.installation.models.Inst
 import ec.edu.espe.security.monitoring.modules.core.initializer.models.SystemParameters;
 import ec.edu.espe.security.monitoring.modules.integrations.grafana.services.interfaces.GrafanaLoginService;
 import ec.edu.espe.security.monitoring.common.encrypt.utils.AesEncryptorUtil;
+import ec.edu.espe.security.monitoring.modules.integrations.grafana.utils.GrafanaCredentialUtil;
+import ec.edu.espe.security.monitoring.modules.integrations.grafana.utils.GrafanaUrlUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,10 +30,10 @@ import java.util.stream.Collectors;
 @Service
 public class GrafanaLoginServiceImpl implements GrafanaLoginService {
     // Dependency injection
-    private final GrafanaCredentialServiceImpl grafanaService;
+    private final GrafanaCredentialUtil grafanaService;
     private final AesEncryptorUtil aesEncryptor;
     private final DatabaseCredentialRepository databaseCredentialRepository;
-
+    private final GrafanaUrlUtil grafanaUrlUtil;
     // Const
     private static final String SET_COOKIE = "Set-Cookie";
 
@@ -80,7 +83,7 @@ public class GrafanaLoginServiceImpl implements GrafanaLoginService {
     }
 
     private ResponseEntity<String> performLoginRequest(String username, String decryptedPassword) {
-        String url = "http://localhost:3000/login";
+        String url = grafanaUrlUtil.getGrafanaBaseUrl() + "/login";
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -109,39 +112,29 @@ public class GrafanaLoginServiceImpl implements GrafanaLoginService {
 
     @Override
     public String getGrafanaDashboardUrlByDbType() {
-        // Consultar todas las credenciales activas de la base de datos
         List<DatabaseCredential> activeCredentials = databaseCredentialRepository.findByIsActiveTrue();
 
-        // get list the names of the database types present uniquely
-        Set<String> dbTypes = activeCredentials.stream()
-                .map(credential -> credential.getSystemParameter().getName().toLowerCase())
+        Set<DatabaseTypeEnum> dbTypes = activeCredentials.stream()
+                .map(credential -> DatabaseTypeEnum.fromString(credential.getSystemParameter().getName()))
                 .collect(Collectors.toSet());
 
-        //  return the URL based on the database types present
-        if (dbTypes.contains("postgresql") && dbTypes.contains("mariadb") && dbTypes.contains("mongodb")) {
-            return "http://localhost:3000/d/fe6hmwui4a134b";
-        } else if (dbTypes.contains("postgresql") && dbTypes.contains("mariadb")) {
-            return "http://localhost:3000/d/be8l1909phr0gf";
-        } else if (dbTypes.contains("postgresql") && dbTypes.contains("mongodb")) {
-            return "http://localhost:3000/d/fe6hmwui4a134baa";
-        } else if (dbTypes.contains("mariadb") && dbTypes.contains("mongodb")) {
-            return "http://localhost:3000/d/de8jbw8ix4ow0c21";
-        } else if (dbTypes.contains("postgresql")) {
-            return "http://localhost:3000/d/000000039/postgresql-database";
-        } else if (dbTypes.contains("mariadb")) {
-            return "http://localhost:3000/d/r4uc0hUGk/mysql-dashboard";
-        } else if (dbTypes.contains("mongodb")) {
-            return "http://localhost:3000/d/fe5usr0w1cglcb/mongodb";
+        if (dbTypes.containsAll(Set.of(DatabaseTypeEnum.POSTGRESQL, DatabaseTypeEnum.MARIADB, DatabaseTypeEnum.MONGODB))) {
+            return grafanaUrlUtil.getGrafanaBaseUrl() + "/d/fe6hmwui4a134b";
+        } else if (dbTypes.containsAll(Set.of(DatabaseTypeEnum.POSTGRESQL, DatabaseTypeEnum.MARIADB))) {
+            return grafanaUrlUtil.getGrafanaBaseUrl() + "/d/be8l1909phr0gf";
+        } else if (dbTypes.containsAll(Set.of(DatabaseTypeEnum.POSTGRESQL, DatabaseTypeEnum.MONGODB))) {
+            return grafanaUrlUtil.getGrafanaBaseUrl() + "/d/fe6hmwui4a134baa";
+        } else if (dbTypes.containsAll(Set.of(DatabaseTypeEnum.MARIADB, DatabaseTypeEnum.MONGODB))) {
+            return grafanaUrlUtil.getGrafanaBaseUrl() + "/d/de8jbw8ix4ow0c21";
+        } else if (dbTypes.contains(DatabaseTypeEnum.POSTGRESQL)) {
+            return grafanaUrlUtil.getGrafanaBaseUrl() + "/d/000000039/postgresql-database";
+        } else if (dbTypes.contains(DatabaseTypeEnum.MARIADB)) {
+            return grafanaUrlUtil.getGrafanaBaseUrl() + "/d/r4uc0hUGk/mysql-dashboard";
+        } else if (dbTypes.contains(DatabaseTypeEnum.MONGODB)) {
+            return grafanaUrlUtil.getGrafanaBaseUrl() + "/d/fe5usr0w1cglcb/mongodb";
         } else {
-            // not exist any database
             return null;
         }
-    }
-
-
-    @Override
-    public String getGrafanaDashboardUrlWithSession() {
-        return "http://localhost:3000/d/000000039/postgresql-database?orgId=1&refresh=10s";
     }
 
     @Override

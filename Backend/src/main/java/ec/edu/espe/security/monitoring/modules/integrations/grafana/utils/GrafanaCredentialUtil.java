@@ -1,10 +1,9 @@
-package ec.edu.espe.security.monitoring.modules.integrations.grafana.services.impl;
+package ec.edu.espe.security.monitoring.modules.integrations.grafana.utils;
 
 import ec.edu.espe.security.monitoring.modules.features.installation.models.InstallationConfig;
 import ec.edu.espe.security.monitoring.modules.core.initializer.models.SystemParameters;
 import ec.edu.espe.security.monitoring.modules.features.installation.repositories.InstallationConfigRepository;
 import ec.edu.espe.security.monitoring.modules.core.initializer.repositories.SystemParametersRepository;
-import ec.edu.espe.security.monitoring.modules.integrations.grafana.services.interfaces.GrafanaCredentialService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -12,7 +11,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class GrafanaCredentialServiceImpl implements GrafanaCredentialService {
+public class GrafanaCredentialUtil{
 
     private final InstallationConfigRepository installationConfigRepository;
     private final SystemParametersRepository systemParametersRepository;

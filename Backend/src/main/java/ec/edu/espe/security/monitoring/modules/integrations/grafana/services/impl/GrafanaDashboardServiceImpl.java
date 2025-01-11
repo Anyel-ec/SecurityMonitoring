@@ -8,6 +8,8 @@ import ec.edu.espe.security.monitoring.modules.features.installation.models.Inst
 import ec.edu.espe.security.monitoring.modules.core.initializer.models.SystemParameters;
 import ec.edu.espe.security.monitoring.modules.integrations.grafana.services.interfaces.GrafanaDashboardService;
 import ec.edu.espe.security.monitoring.common.encrypt.utils.AesEncryptorUtil;
+import ec.edu.espe.security.monitoring.modules.integrations.grafana.utils.GrafanaCredentialUtil;
+import ec.edu.espe.security.monitoring.modules.integrations.grafana.utils.GrafanaUrlUtil;
 import ec.edu.espe.security.monitoring.modules.integrations.grafana.utils.JsonUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,25 +20,21 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
 import java.util.Map;
 
 @Slf4j
 @RequiredArgsConstructor
 @Service
 public class GrafanaDashboardServiceImpl implements GrafanaDashboardService {
-    private final GrafanaCredentialServiceImpl grafanaService;
+    private final GrafanaCredentialUtil grafanaService;
     private final AesEncryptorUtil aesEncryptor;
     private final JsonUtils jsonUtils;
+    private final GrafanaUrlUtil grafanaUrlUtil;
 
-    // TODO: URL dynamic
-    private static final String GRAFANA_API_URL = "http://localhost:3000/api/dashboards/db"; // Grafana API endpoint
 
+    private String getGrafanaApiUrl() {
+        return grafanaUrlUtil.getGrafanaBaseUrl() + "/api/dashboards/db";
+    }
     /**
      * Creates a Grafana dashboard using the predefined JSON file located in resources/dashboards/dash_pg_v1.json.
      */
@@ -128,7 +126,7 @@ public class GrafanaDashboardServiceImpl implements GrafanaDashboardService {
 
         HttpEntity<GrafanaDashboardRequestDto> request = new HttpEntity<>(dashboardRequestDto, headers);
 
-        return restTemplate.postForEntity(GRAFANA_API_URL, request, String.class);
+        return restTemplate.postForEntity(getGrafanaApiUrl(), request, String.class);
     }
 
     private Map<String, Object> parseDashboardJson(String dashboardJson) {

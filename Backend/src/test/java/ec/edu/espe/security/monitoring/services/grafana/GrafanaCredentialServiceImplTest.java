@@ -9,7 +9,7 @@ import ec.edu.espe.security.monitoring.modules.features.installation.models.Inst
 import ec.edu.espe.security.monitoring.modules.core.initializer.models.SystemParameters;
 import ec.edu.espe.security.monitoring.modules.features.installation.repositories.InstallationConfigRepository;
 import ec.edu.espe.security.monitoring.modules.core.initializer.repositories.SystemParametersRepository;
-import ec.edu.espe.security.monitoring.modules.integrations.grafana.services.impl.GrafanaCredentialServiceImpl;
+import ec.edu.espe.security.monitoring.modules.integrations.grafana.utils.GrafanaCredentialUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -31,7 +31,7 @@ class GrafanaCredentialServiceImplTest {
     private SystemParametersRepository systemParametersRepository;
 
     @InjectMocks
-    private GrafanaCredentialServiceImpl grafanaCredentialService;
+    private GrafanaCredentialUtil grafanaCredentialService;
 
     @BeforeEach
     void setUp() {
