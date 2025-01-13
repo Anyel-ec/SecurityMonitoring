@@ -87,6 +87,8 @@ export default function EnterCode({ setChange, timeCode, setTimeCode, mail = "ap
                             setOtp(e.target.value);
                             setOptError(''); // Clear error message on input change
                         }}
+                        maxLength={6}
+                        minLength={6}
                     />
                     <span className="absolute start-4 top-1/2 -translate-y-1/2">
                         <i className="fa-solid fa-shield"></i>

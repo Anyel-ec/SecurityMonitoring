@@ -1,11 +1,12 @@
-// UserInstallRequestDto.js
-
-export const createUserInstallRequestDto = (usuario, password, numberPhone, email) => {
+export const createUserInstallRequestDto = (usuario, password, passwordConfirm, numberPhone, email, name, lastname, company) => {
     return {
-      usuario,
-      password,
-      numberPhone,
-      email,
+        usuario,
+        password,
+        passwordConfirm,
+        numberPhone,
+        email,
+        name,
+        lastname,
+        company
     };
-  };
-  
+};

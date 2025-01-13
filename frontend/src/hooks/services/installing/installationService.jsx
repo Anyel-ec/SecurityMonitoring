@@ -189,9 +189,13 @@ export const saveUserInstallService = async (userInstallData) => {
   const userInstallDto = createUserInstallRequestDto(
     userInstallData.usuario,
     userInstallData.password,
+    userInstallData.passwordConfirm,
     userInstallData.numberPhone,
-    userInstallData.email
-  );
+    userInstallData.email,
+    userInstallData.name,
+    userInstallData.lastname,
+    userInstallData.company
+);
 
   try {
     const response = await axios.post(`${BASE_URL}/api/v1/install/user`, userInstallDto);

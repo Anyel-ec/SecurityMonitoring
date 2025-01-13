@@ -61,19 +61,34 @@ export const exportersValidationSchema = Yup.object().shape({
 export const userInstallValidationSchema = Yup.object().shape({
     usuario: Yup.string()
         .min(3, 'El nombre de usuario debe tener al menos 3 caracteres')
-        .required('Nombre de usuario es requerido'),
+        .required('El nombre de usuario es requerido'),
+
     password: Yup.string()
         .min(5, 'La contraseña debe tener al menos 5 caracteres')
         .required('La contraseña es requerida'),
+
     passwordConfirm: Yup.string()
         .oneOf([Yup.ref('password')], 'Las contraseñas no coinciden')
         .required('Debes confirmar la contraseña'),
+
     numberPhone: Yup.string()
         .matches(/^\d+$/, 'El número de teléfono debe contener solo dígitos')
         .min(7, 'El número de teléfono debe tener al menos 7 dígitos')
         .required('El número de teléfono es requerido'),
+
     email: Yup.string()
         .email('Correo electrónico inválido')
         .required('El correo electrónico es requerido'),
-});
 
+    name: Yup.string()
+        .min(3, 'El nombre debe tener al menos 3 caracteres')
+        .required('El nombre es requerido'),
+
+    lastname: Yup.string()
+        .min(3, 'El apellido debe tener al menos 3 caracteres')
+        .required('El apellido es requerido'),
+
+    company: Yup.string()
+        .min(3, 'La empresa debe tener al menos 3 caracteres')
+        .required('La empresa es requerida'),
+});

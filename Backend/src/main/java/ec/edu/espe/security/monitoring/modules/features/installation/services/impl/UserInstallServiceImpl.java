@@ -39,15 +39,14 @@ public class UserInstallServiceImpl implements UserInstallService {
 
             if (user != null) {
                 log.info("Actualizando usuario existente con rol superadmin: {}", user.getUsername());
-                user = UserInfo.builder()
-                        .id(user.getId())
-                        .username(user.getUsername())
-                        .password(encryptedPassword)
-                        .email(userInstallRequestDto.getEmail())
-                        .phone(userInstallRequestDto.getNumberPhone())
-                        .isActive(true)
-                        .roles(user.getRoles()) // Mantener roles existentes
-                        .build();
+                user.setUsername(userInstallRequestDto.getUsuario());
+                user.setPassword(encryptedPassword);
+                user.setEmail(userInstallRequestDto.getEmail());
+                user.setPhone(userInstallRequestDto.getNumberPhone());
+                user.setName(userInstallRequestDto.getName());
+                user.setLastname(userInstallRequestDto.getLastname());
+                user.setCompany(userInstallRequestDto.getCompany());
+                user.setIsActive(true);
             } else {
                 // Crear nuevo usuario
                 log.info("Creando nuevo usuario con rol superadmin: {}", userInstallRequestDto.getUsuario());
@@ -56,6 +55,9 @@ public class UserInstallServiceImpl implements UserInstallService {
                         .password(encryptedPassword)
                         .email(userInstallRequestDto.getEmail())
                         .phone(userInstallRequestDto.getNumberPhone())
+                        .name(userInstallRequestDto.getName())
+                        .lastname(userInstallRequestDto.getLastname())
+                        .company(userInstallRequestDto.getCompany())
                         .isActive(true)
                         .build();
             }

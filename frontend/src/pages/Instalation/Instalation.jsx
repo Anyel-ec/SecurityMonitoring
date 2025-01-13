@@ -34,7 +34,7 @@ const Instalation = () => {
     const navigate = useNavigate();
 
     const [formState, setFormState] = useState({
-        usuario: 'anyel', password: 'anyel', passwordConfirm: 'anyel', numberPhone: '0939470232', email: 'appatino@espe.edu.ec',
+        name: 'Anyel', lastname: 'Patino', company: 'ESPE', usuario: 'anyel', password: 'anyel', passwordConfirm: 'anyel', numberPhone: '0939470232', email: 'appatino@espe.edu.ec',
         grafanaAdmin: 'anyel', grafanaPassword: 'anyel', grafanaPasswordConfirm: 'anyel', grafanaLocalPort: '3000', grafanaDockerPort: '3000',
         prometheusLocalPort: '9090', prometheusDockerPort: '9090',
         internalPortPostgres: '9187', externalPortPostgres: '9187', internalPortMariadb: '9104', externalPortMariadb: '9104',
@@ -141,12 +141,17 @@ const Instalation = () => {
         const userInstallData = {
             usuario: formState.usuario,
             password: formState.password,
+            passwordConfirm: formState.passwordConfirm,
             numberPhone: formState.numberPhone,
             email: formState.email,
+            name: formState.name,
+            lastname: formState.lastname,
+            company: formState.company
         };
 
         saveStep(userInstallData, saveUserInstallService, 'Usuario guardado correctamente');
     };
+
 
     const saveGrafanaInstall = () => {
         const grafanaInstallData = {
