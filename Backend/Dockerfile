@@ -10,20 +10,24 @@ WORKDIR /app
 # Copy the JAR and necessary files
 COPY target/monitoring-1.0.0-RELEASE.jar monitoring-1.0.0-RELEASE.jar
 
-# Copiar el archivo .env (si es necesario)
+# Copy the entrypoint script and make it executable
+COPY entrypoint.sh /app/entrypoint.sh
+RUN chmod +x /app/entrypoint.sh
+
+# Copy the .env file if needed
 COPY .env .env
 
-# Copiar los recursos de docker al contenedor
+# Copy Docker resources
 COPY src/main/resources/docker /app/docker
 
-# Definir un volumen nombrado para los archivos de configuración compartidos
+# Define a named volume for shared configurations
 VOLUME ["/app/docker/integraciones_security_monitoring", "/var/run/docker.sock"]
 
-# Asegurar los permisos necesarios para ejecutar el docker-compose
+# Ensure permissions for docker-compose
 RUN chmod +x /app/docker/integraciones_security_monitoring/docker-compose.yml
 
-# Exponer el puerto para la aplicación Spring Boot
+# Expose the application port
 EXPOSE 8080
 
-# Establecer el punto de entrada para ejecutar la aplicación Spring Boot
-ENTRYPOINT ["java", "-jar", "monitoring-1.0.0-RELEASE.jar"]
+# Use the entrypoint script
+ENTRYPOINT ["/app/entrypoint.sh"]
