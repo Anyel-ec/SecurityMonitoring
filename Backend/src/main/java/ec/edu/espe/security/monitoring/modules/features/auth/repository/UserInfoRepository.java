@@ -14,5 +14,9 @@ public interface UserInfoRepository extends JpaRepository<UserInfo, Long> {
 
     // Retrieves all active users
     List<UserInfo> findByIsActiveTrue();
+
+    // Finds an active user by their email
+    UserInfo findByEmailAndIsActiveTrue(String email);
+
 }
 

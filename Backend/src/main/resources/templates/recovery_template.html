@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security Monitoring - OTP</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f7f9;
+            color: #333;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            background-color: #3498db;
+            color: #ffffff;
+            text-align: center;
+            padding: 20px;
+        }
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        .content {
+            padding: 30px;
+        }
+        .info {
+            margin-bottom: 20px;
+        }
+        .info p {
+            margin-bottom: 10px;
+        }
+        .otp-code {
+            background-color: #e8f4fd;
+            border-radius: 6px;
+            padding: 20px;
+            text-align: center;
+            font-size: 32px;
+            font-weight: bold;
+            color: #3498db;
+            letter-spacing: 5px;
+            margin-bottom: 20px;
+        }
+        .footer {
+            background-color: #f4f7f9;
+            text-align: center;
+            padding: 15px;
+            font-size: 14px;
+            color: #888;
+        }
+        @media only screen and (max-width: 600px) {
+            .container {
+                width: 100%;
+                margin: 0;
+                border-radius: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>MONITOREO DE SEGURIDAD</h1>
+    </div>
+    <div class="content">
+        <div class="info">
+            <p>Hola <strong>{{username}}</strong>,</p>
+            <p>Hemos recibido una solicitud para restablecer la contraseña de tu cuenta. Para completar el proceso, por favor usa el siguiente código de un solo uso (OTP):</p>
+        </div>
+        <div class="otp-code">
+            {{otp_code}}
+        </div>
+        <div class="info">
+            <p>Este código expirará en {{otp_expiration_minutes}} minutos.</p>
+            <p>Fecha y hora: <strong>{{current_date_time}}</strong></p>
+            <p>Si no solicitaste el restablecimiento de tu contraseña, por favor ignora este correo electrónico o contacta a nuestro equipo de soporte inmediatamente.</p>
+        </div>
+    </div>
+    <div class="footer">
+        <p>&copy; 2025 Security Monitoring. Todos los derechos reservados.</p>
+    </div>
+</div>
+</body>
+</html>

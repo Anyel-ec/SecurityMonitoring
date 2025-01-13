@@ -12,7 +12,7 @@ import ec.edu.espe.security.monitoring.modules.features.auth.model.UserInfo;
 import ec.edu.espe.security.monitoring.modules.features.auth.repository.UserInfoRepository;
 import ec.edu.espe.security.monitoring.common.security.jwt.JwtProvider;
 import ec.edu.espe.security.monitoring.common.security.jwt.JwtRevokedToken;
-import ec.edu.espe.security.monitoring.modules.features.auth.service.AuthServiceImpl;
+import ec.edu.espe.security.monitoring.modules.features.auth.service.impl.AuthServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;

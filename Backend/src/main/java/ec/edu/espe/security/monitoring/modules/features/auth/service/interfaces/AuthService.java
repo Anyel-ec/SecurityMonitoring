@@ -1,4 +1,4 @@
-package ec.edu.espe.security.monitoring.modules.features.auth.service;
+package ec.edu.espe.security.monitoring.modules.features.auth.service.interfaces;
 
 import ec.edu.espe.security.monitoring.modules.features.auth.dto.LoginRequestDto;
 import ec.edu.espe.security.monitoring.common.dto.JsonResponseDto;

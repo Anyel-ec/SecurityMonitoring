@@ -16,9 +16,6 @@ import java.util.Properties;
 @Configuration
 public class MailConfig {
 
-    @Value("${ALERT_SMTP_HOST}")
-    private String host;
-
     @Value("${ALERT_SMTP_USER}")
     private String username;
 
@@ -31,6 +28,7 @@ public class MailConfig {
     @Bean
     public JavaMailSender javaMailSender() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
+        String host = "smtp.gmail.com";
         mailSender.setHost(host);
         mailSender.setPort(587);
         mailSender.setUsername(username);

@@ -1,4 +1,4 @@
-package ec.edu.espe.security.monitoring.modules.features.auth.service;
+package ec.edu.espe.security.monitoring.modules.features.auth.service.impl;
 
 import ec.edu.espe.security.monitoring.common.dto.JsonResponseDto;
 import ec.edu.espe.security.monitoring.common.security.jwt.JwtProvider;
@@ -7,6 +7,7 @@ import ec.edu.espe.security.monitoring.modules.features.auth.dto.ProfileDto;
 import ec.edu.espe.security.monitoring.modules.features.auth.dto.ProfilePasswordDto;
 import ec.edu.espe.security.monitoring.modules.features.auth.model.UserInfo;
 import ec.edu.espe.security.monitoring.modules.features.auth.repository.UserInfoRepository;
+import ec.edu.espe.security.monitoring.modules.features.auth.service.interfaces.ProfileService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

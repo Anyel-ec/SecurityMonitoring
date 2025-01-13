@@ -30,6 +30,16 @@ public class UserInfo {
 
     private String phone;
 
+    private String name;
+    private String lastname;
+
+    private String company;
+
+    @Column
+    private String recoveryCode;
+    @Column
+    private LocalDateTime recoveryExpirationDate;
+
     @JsonIgnore
     private String password;
 
