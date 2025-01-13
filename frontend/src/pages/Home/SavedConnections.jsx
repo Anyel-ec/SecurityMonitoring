@@ -20,7 +20,7 @@ const SavedConnections = ({ connections, selectedConnection, setSelectedConnecti
     <div className="h-full flex flex-col box-border">
       {/* Contenedor del contenido con scroll */}
       <div className="flex-grow overflow-y-auto">
-        <div className="flex items-center justify-center">
+      <div className="flex items-center justify-center overflow-y-auto" style={{ height: `calc(100vh - ${leftPanelWidth}px)` }}>
           {connections.map((conn) => (
             <button
               key={conn.id}

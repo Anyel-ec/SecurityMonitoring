@@ -33,7 +33,9 @@ const Home = () => {
         try {
             const response = await loginAndAccessDashboard();
             if (response && response.redirectUrl) {
-                window.location.href = response.redirectUrl;
+                // window.location.href = response.redirectUrl;
+                window.open(response.redirectUrl, '_blank');
+
             } else {
                 showErrorAlert('No se pudo acceder al dashboard de Grafana.');
             }

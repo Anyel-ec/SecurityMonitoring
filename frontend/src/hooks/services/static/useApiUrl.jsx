@@ -5,3 +5,5 @@ export const url_base = `${url_backend}/api/v1`
 
 export const url_auth = `/auth`
 export const url_profile = `/profile`
+export const url_recovery = `/recovery`
+

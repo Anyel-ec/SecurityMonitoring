@@ -34,8 +34,8 @@ const Instalation = () => {
     const navigate = useNavigate();
 
     const [formState, setFormState] = useState({
-        usuario: '', password: '', passwordConfirm: '', numberPhone: '', email: '',
-        grafanaAdmin: 'admin', grafanaPassword: '', grafanaPasswordConfirm: '', grafanaLocalPort: '3000', grafanaDockerPort: '3000',
+        usuario: 'anyel', password: 'anyel', passwordConfirm: 'anyel', numberPhone: '0939470232', email: 'appatino@espe.edu.ec',
+        grafanaAdmin: 'anyel', grafanaPassword: 'anyel', grafanaPasswordConfirm: 'anyel', grafanaLocalPort: '3000', grafanaDockerPort: '3000',
         prometheusLocalPort: '9090', prometheusDockerPort: '9090',
         internalPortPostgres: '9187', externalPortPostgres: '9187', internalPortMariadb: '9104', externalPortMariadb: '9104',
         internalPortMongodb: '9216', externalPortMongodb: '9216',
