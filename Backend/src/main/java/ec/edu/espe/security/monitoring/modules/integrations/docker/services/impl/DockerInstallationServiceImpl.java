@@ -1,13 +1,14 @@
 package ec.edu.espe.security.monitoring.modules.integrations.docker.services.impl;
 
+import ec.edu.espe.security.monitoring.common.encrypt.utils.AesEncryptorUtil;
 import ec.edu.espe.security.monitoring.modules.features.installation.models.InstallationConfig;
 import ec.edu.espe.security.monitoring.modules.features.installation.repositories.InstallationConfigRepository;
 import ec.edu.espe.security.monitoring.modules.integrations.docker.services.interfaces.DockerInstallationService;
-import ec.edu.espe.security.monitoring.common.encrypt.utils.AesEncryptorUtil;
 import ec.edu.espe.security.monitoring.modules.integrations.docker.utils.AlertManagerConfigUtil;
 import ec.edu.espe.security.monitoring.modules.integrations.docker.utils.DockerEnvironmentUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
@@ -27,8 +28,23 @@ public class DockerInstallationServiceImpl implements DockerInstallationService 
     private final AesEncryptorUtil aesEncryptor;
     private final AlertManagerConfigUtil alertManagerConfigUtil;
 
-    private static final String SHARED_VOLUME_PATH = "/app/docker/integraciones_security_monitoring/";
+    @Value("${app.shared.volume.path}")
+    private String sharedVolumePath;
 
+    @Value("${app.prometheus.template.path}")
+    private String prometheusTemplatePath;
+
+    @Value("${app.prometheus.output.path}")
+    private String prometheusOutputPath;
+
+    @Value("${app.alertmanager.template.path}")
+    private String alertManagerTemplatePath;
+
+    @Value("${app.alertmanager.output.path}")
+    private String alertManagerOutputPath;
+
+    @Value("${app.docker.compose.path}")
+    private String dockerComposePath;
 
     /**
      * Checks if the Docker containers for Grafana and Prometheus are currently running.
@@ -55,49 +71,42 @@ public class DockerInstallationServiceImpl implements DockerInstallationService 
     @Override
     public void runDockerComposeWithActiveInstallations() {
         try {
-            // Recuperar todas las instalaciones activas
+            // get active installation configurations
             List<InstallationConfig> activeInstallations = installationConfigRepository.findByIsActiveTrue();
 
-            // Definir rutas de los archivos de configuración dentro del volumen compartido
-            String templatePath = SHARED_VOLUME_PATH + "prometheus.template.yml";
-            String outputPath = SHARED_VOLUME_PATH + "prometheus.yml";
-            String alertManagerTemplatePath = SHARED_VOLUME_PATH + "alertmanager/alertmanager.template.yml";
-            String alertManagerOutputPath = SHARED_VOLUME_PATH + "alertmanager/alertmanager.yml";
-            String dockerComposePath = SHARED_VOLUME_PATH + "docker-compose.yml";
-
-            // Validar existencia del volumen compartido
-            File sharedVolume = new File(SHARED_VOLUME_PATH);
+            // validate shared volume
+            File sharedVolume = new File(sharedVolumePath);
             if (!sharedVolume.exists()) {
-                sharedVolume.mkdirs();  // Crear la carpeta si no existe
-                log.warn("El volumen compartido no existía, se creó: {}", SHARED_VOLUME_PATH);
+                sharedVolume.mkdirs();
+                log.warn("El volumen compartido no existía, se creó: {}", sharedVolumePath);
             }
 
-            // Generar archivos de configuración
-            generatePrometheusConfig(activeInstallations, templatePath, outputPath);
+            // generate Prometheus and AlertManager configurations
+            generatePrometheusConfig(activeInstallations, prometheusTemplatePath, prometheusOutputPath);
             alertManagerConfigUtil.generateAlertManagerConfig(alertManagerTemplatePath, alertManagerOutputPath);
 
             // Verificar archivos generados correctamente
-            if (!new File(outputPath).exists()) {
+            if (!new File(prometheusOutputPath).exists()) {
                 throw new IllegalStateException("El archivo prometheus.yml no se generó correctamente.");
             }
             if (!new File(alertManagerOutputPath).exists()) {
                 throw new IllegalStateException("El archivo alertmanager.yml no se generó correctamente.");
             }
 
-            // Asegurar que el volumen nombrado esté correctamente mapeado y declarado
+            // set up the Docker Compose process
             ProcessBuilder dockerComposeProcessBuilder = new ProcessBuilder(
                     "docker-compose",
                     "-f", dockerComposePath,
                     "up", "-d"
             );
 
-            // Configurar variables de entorno solo si no son nulas
+            // config environment variables for active installations
             for (InstallationConfig config : activeInstallations) {
                 String decryptedPassword = DockerEnvironmentUtil.decryptPassword(config.getPassword(), aesEncryptor);
                 DockerEnvironmentUtil.configureInstallationEnv(dockerComposeProcessBuilder, config, decryptedPassword);
             }
 
-            // Ejecutar el proceso de Docker Compose
+            // execute the Docker Compose process
             dockerComposeProcessBuilder.inheritIO().start().waitFor();
             log.info("Docker Compose ejecutado exitosamente desde el volumen compartido.");
 
