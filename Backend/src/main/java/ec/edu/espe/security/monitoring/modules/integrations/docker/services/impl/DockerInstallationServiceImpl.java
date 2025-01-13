@@ -27,6 +27,9 @@ public class DockerInstallationServiceImpl implements DockerInstallationService 
     private final AesEncryptorUtil aesEncryptor;
     private final AlertManagerConfigUtil alertManagerConfigUtil;
 
+    private static final String SHARED_VOLUME_PATH = "/app/docker/integraciones_security_monitoring/";
+
+
     /**
      * Checks if the Docker containers for Grafana and Prometheus are currently running.
      * @return true if both containers are up, otherwise false.
@@ -49,48 +52,59 @@ public class DockerInstallationServiceImpl implements DockerInstallationService 
     /**
      * Runs a Docker Compose process to set up the services based on the active installation configurations.
      */
+    @Override
     public void runDockerComposeWithActiveInstallations() {
         try {
-            // Retrieve all active installations
+            // Recuperar todas las instalaciones activas
             List<InstallationConfig> activeInstallations = installationConfigRepository.findByIsActiveTrue();
 
-            // Paths to the Prometheus configuration files
-            String basePath = "src/main/resources/docker/integraciones_security_monitoring/";
-            String templatePath = basePath + "prometheus.template.yml";
-            String outputPath = basePath + "prometheus.yml";
-            String alertManagerTemplatePath = basePath + "alertmanager/alertmanager.template.yml";
-            String alertManagerOutputPath = basePath + "alertmanager/alertmanager.yml";
-            String dockerComposePath = basePath + "docker-compose.yml";
+            // Definir rutas de los archivos de configuración dentro del volumen compartido
+            String templatePath = SHARED_VOLUME_PATH + "prometheus.template.yml";
+            String outputPath = SHARED_VOLUME_PATH + "prometheus.yml";
+            String alertManagerTemplatePath = SHARED_VOLUME_PATH + "alertmanager/alertmanager.template.yml";
+            String alertManagerOutputPath = SHARED_VOLUME_PATH + "alertmanager/alertmanager.yml";
+            String dockerComposePath = SHARED_VOLUME_PATH + "docker-compose.yml";
 
-            // Ensure files exist
-            if (!new File(dockerComposePath).exists()) {
-                throw new IllegalStateException("El archivo docker-compose.yml no fue encontrado en: " + dockerComposePath);
+            // Validar existencia del volumen compartido
+            File sharedVolume = new File(SHARED_VOLUME_PATH);
+            if (!sharedVolume.exists()) {
+                sharedVolume.mkdirs();  // Crear la carpeta si no existe
+                log.warn("El volumen compartido no existía, se creó: {}", SHARED_VOLUME_PATH);
             }
 
-            // Generate configuration files
+            // Generar archivos de configuración
             generatePrometheusConfig(activeInstallations, templatePath, outputPath);
             alertManagerConfigUtil.generateAlertManagerConfig(alertManagerTemplatePath, alertManagerOutputPath);
 
-            // Create the ProcessBuilder for docker-compose
+            // Verificar archivos generados correctamente
+            if (!new File(outputPath).exists()) {
+                throw new IllegalStateException("El archivo prometheus.yml no se generó correctamente.");
+            }
+            if (!new File(alertManagerOutputPath).exists()) {
+                throw new IllegalStateException("El archivo alertmanager.yml no se generó correctamente.");
+            }
+
+            // Asegurar que el volumen nombrado esté correctamente mapeado y declarado
             ProcessBuilder dockerComposeProcessBuilder = new ProcessBuilder(
                     "docker-compose",
                     "-f", dockerComposePath,
                     "up", "-d"
             );
 
-            // Configure the environment variables based on the active installations
+            // Configurar variables de entorno solo si no son nulas
             for (InstallationConfig config : activeInstallations) {
                 String decryptedPassword = DockerEnvironmentUtil.decryptPassword(config.getPassword(), aesEncryptor);
                 DockerEnvironmentUtil.configureInstallationEnv(dockerComposeProcessBuilder, config, decryptedPassword);
             }
 
+            // Ejecutar el proceso de Docker Compose
             dockerComposeProcessBuilder.inheritIO().start().waitFor();
-            log.info("Docker Compose ejecutado exitosamente con las configuraciones activas de instalación.");
+            log.info("Docker Compose ejecutado exitosamente desde el volumen compartido.");
 
         } catch (IOException | InterruptedException e) {
             log.error("Error al ejecutar Docker Compose: {}", e.getMessage());
             Thread.currentThread().interrupt();
-            throw new IllegalStateException("Error al ejecutar Docker Compose con configuraciones de instalación activas", e);
+            throw new IllegalStateException("Error al ejecutar Docker Compose con configuraciones activas", e);
         }
     }
 }

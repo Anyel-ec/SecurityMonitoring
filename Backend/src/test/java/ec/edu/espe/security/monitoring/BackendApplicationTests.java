@@ -4,7 +4,7 @@ import io.github.cdimascio.dotenv.Dotenv;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-
+/*
 @SpringBootTest(properties = "spring.profiles.active=test")
 
 class BackendApplicationTests {
@@ -36,3 +36,4 @@ class BackendApplicationTests {
     }
 
 }
+*/

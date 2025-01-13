@@ -1,7 +1,6 @@
-version: '3'
+version: '3.8'
 
 services:
-
   grafana:
     image: grafana/grafana:11.3.1
     ports:
@@ -11,27 +10,31 @@ services:
       GF_SECURITY_ADMIN_PASSWORD: "${GRAFANA_PASSWORD}"
     volumes:
       - grafana_storage:/var/lib/grafana
+      - shared_configs:/app/docker/integraciones_security_monitoring
     networks:
       - monitoring
 
   prometheus:
     image: prom/prometheus
     volumes:
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
-      - ./alertmanager/alerting_rules_maria.yml:/etc/prometheus/alerting_rules_maria.yml:ro
-      - ./alertmanager/alerting_rules_mongo.yml:/etc/prometheus/alerting_rules_mongo.yml:ro
-
+      - shared_configs:/app/docker/integraciones_security_monitoring
+      - shared_configs_prometheus:/etc/prometheus
     ports:
       - "${PROMETHEUS_PORT_EXTERNAL}:${PROMETHEUS_PORT_INTERNAL}"
     networks:
       - monitoring
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
 
   alertmanager:
     image: prom/alertmanager
     volumes:
-      - ./alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml
+      - shared_configs:/app/docker/integraciones_security_monitoring
+      - shared_configs_alertmanager:/etc/alertmanager
     ports:
       - "${ALERTMANAGER_PORT_EXTERNAL}:${ALERTMANAGER_PORT_INTERNAL}"
+    command:
+      - "--config.file=/etc/alertmanager/alertmanager.yml"
     networks:
       - monitoring
 
@@ -52,14 +55,14 @@ services:
       - "${EXPORT_MONGO_PORT_EXTERNAL}:${EXPORT_MONGO_PORT_INTERNAL}"
     networks:
       - monitoring
-  
+
   mariadb-exporter:
     image: prom/mysqld-exporter
     command:
       - --config.my-cnf=/cfg/.my.cnf
-      - --mysqld.address=${MARIADB_HOST}:${MARIADB_PORT}
     volumes:
-      - ".my.cnf:/cfg/.my.cnf"
+      - shared_configs:/app/docker/integraciones_security_monitoring
+      - shared_configs_mariadb:/cfg
     ports:
       - "${EXPORT_MARIADB_PORT_EXTERNAL}:${EXPORT_MARIADB_PORT_INTERNAL}"
     networks:
@@ -71,3 +74,11 @@ networks:
 
 volumes:
   grafana_storage:
+  shared_configs:
+    external: true
+  shared_configs_prometheus:
+    driver: local
+  shared_configs_alertmanager:
+    driver: local
+  shared_configs_mariadb:
+    driver: local

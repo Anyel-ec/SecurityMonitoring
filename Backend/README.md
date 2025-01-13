@@ -1,139 +1,277 @@
-# Archetype Spring Boot Accelerator
+# API de Monitoreo de Seguridad
 
-This project is an **archetype** for Spring Boot-based projects. It allows developers to quickly generate a basic project structure with predefined configurations for CORS, Swagger, and essential dependencies.
+Este proyecto es una API para monitorear conexiones a bases de datos como PostgreSQL, MariaDB, MongoDB, y servicios adicionales como Prometheus y Grafana, utilizando Spring Boot. La API permite la configuración, almacenamiento y actualización de credenciales de bases de datos, la instalación de exportadores de Prometheus y la ejecución de comandos Docker Compose para iniciar contenedores con estas configuraciones.
 
-## Features
-- **CORS** configuration to enable requests from any origin.
-- **Swagger/OpenAPI** integration for API documentation.
-- Basic Spring Boot dependencies such as `spring-boot-starter-web`, `spring-boot-starter-validation`, and `springdoc-openapi-starter-webmvc-ui`.
-- Compatible with **Java 17**.
-- Optimized build configuration with Maven.
+## Características
 
-## Prerequisites
-- **Java 17** or higher.
-- **Maven 3.8.1** or higher.
-- Git to clone the repository.
-- **Maven settings.xml** file configured in the `.m2` folder.
+- **Configuración de Conexiones**: Administra conexiones para múltiples bases de datos, permitiendo guardar y actualizar credenciales.
+- **Compatibilidad con Docker**: Ejecuta comandos Docker Compose para inicializar bases de datos PostgreSQL utilizando las credenciales configuradas.
+- **Instalación de Exportadores de Prometheus**: Permite configurar exportadores de Prometheus para PostgreSQL, MongoDB y MariaDB.
+- **Instalación de Grafana**: Administra la configuración e instalación de Grafana.
+- **Autenticación Básica**: Implementa seguridad básica usando Spring Security y BCrypt para el cifrado de contraseñas.
+- **Prueba de Conexión**: Proporciona utilidades para probar la conexión a bases de datos configuradas.
+- **Estado de la Instalación**: Permite consultar el estado de la instalación, incluyendo si está completa o no.
 
-### Maven settings.xml File
-To ensure the correct functioning of Maven, you must have the following `settings.xml` file in your `.m2` directory:
+## Tecnologías Utilizadas
 
-```xml
-<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
-          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
-    <localRepository>${user.home}/.m2/repository</localRepository>
-</settings>
-```
+- **Java 17**
+- **Spring Boot 3**
+- **Spring Security**: Para la configuración de seguridad.
+- **JPA / Hibernate**: Para la persistencia de datos.
+- **Docker**: Para gestionar bases de datos a través de Docker Compose.
+- **Lombok**: Para reducir el código repetitivo.
 
-This ensures that Maven can access the local repository properly.
+## Estructura del Proyecto
 
-## Project Structure
-The project has the following main structure:
+- **Controladores**: Contiene los controladores REST para gestionar conexiones, instalaciones y exportadores.
+   - **ConnectionNameController**: Administra las conexiones, incluyendo la obtención, almacenamiento y actualización de credenciales.
+   - **ConfigInstallController**: Administra la instalación y configuración de servicios, verifica el estado de la instalación y actualiza parámetros.
+   - **ExporterPrometheusInstallController**: Administra la configuración e instalación de exportadores de Prometheus para PostgreSQL, MariaDB y MongoDB.
+   - **GrafanaInstallController**: Administra la instalación y configuración de Grafana.
+   - **PrometheusInstallController**: Administra la instalación y configuración de Prometheus.
+   - **UserInstallController**: Administra la instalación y configuración de usuarios.
 
-```
-├── .mvn/                    # Maven Wrapper configuration files
-├── src/
-│   ├── main/
-│   │   ├── java/
-│   │   │   └── top.anyel.archetypespringboot/
-│   │   │       ├── config/  # Main configurations
-│   │   │       │   ├── CorsConfig.java       # CORS configuration
-│   │   │       │   ├── OpenApiConfig.java    # Swagger configuration
-│   │   │       └── ArchetypeSpringbootApplication.java # Main class
-│   │   └── resources/       # Resource files (application.properties)
-│   └── test/                # Test files
-├── target/
-│   └── generated-sources/
-│       └── archetype/       # Generated archetype files
-├── pom.xml                  # Maven configuration file
-├── HELP.md                  # Help documentation
-├── mvnw, mvnw.cmd           # Maven Wrapper scripts
-├── .gitignore               # Git ignored files
-```
+- **Modelos**: Define las entidades que representan conexiones, credenciales y configuraciones de instalación.
+   - **ConnectionName**: Entidad que representa una conexión a base de datos.
+   - **InstallationConfig**: Entidad que representa la configuración de instalación para servicios como Grafana y Prometheus.
+   - **PostgresCredentials, MariaDBCredentials, MongoDBCredentials**: Representan credenciales para las diferentes bases de datos.
+   - **SystemParameters**: Entidad que representa parámetros del sistema, tales como los utilizados para definir el estado de la instalación.
 
-## Steps to Create and Generate an Archetype
+- **Servicios**: Contiene la lógica de negocio.
+   - **ConnectionNameService**: Proporciona operaciones para obtener, guardar y actualizar conexiones.
+   - **DockerService**: Ejecuta comandos Docker Compose para iniciar contenedores PostgreSQL con las credenciales proporcionadas.
+   - **PostgresCredentialsService**: Administra las credenciales de PostgreSQL y ejecuta Docker Compose para las bases de datos.
+   - **ConfigInstallService**: Administra las instalaciones del sistema y verifica el estado de la instalación.
+   - **PrometheusExporterInstallService**: Administra la instalación y actualización de exportadores de Prometheus.
+   - **GrafanaInstallService**: Administra la instalación y actualización de Grafana.
+   - **PrometheusInstallService**: Administra la instalación y actualización de Prometheus.
+   - **UserInstallService**: Administra la instalación de usuarios.
 
-### 1. Create an Archetype from a Base Project
+- **Repositorios**: Interactúa con la base de datos utilizando JPA.
+   - **ConnectionNameRepository, PostgresCredentialsRepository, MariaDBCredentialsRepository, MongoDBCredentialsRepository**: Repositorios para las respectivas entidades.
+   - **InstallationConfigRepository**: Administra las configuraciones de instalación.
 
-To create an archetype from an existing project, follow these steps:
+- **Seguridad**: Configura la seguridad básica usando Spring Security.
+   - **SecurityConfig**: Permite el acceso a la consola de H2 y desactiva CSRF para los endpoints abiertos.
 
-1. **Initial structure:**
-   Set up a base project with the structure and configurations you want to reuse (e.g., dependencies, Spring Boot configurations, etc.).
+- **Utilidades**: Contiene clases de utilidad.
+   - **AesEncryptor**: Proporciona métodos para cifrar y descifrar contraseñas usando AES/GCM.
+   - **DatabaseUtils**: Proporciona métodos para probar conexiones a bases de datos.
 
-2. **Generate the archetype:**
-   From the root of the base project, run the following command:
+## Endpoints
 
-   ```bash
-   mvn archetype:create-from-project
-   ```
+### Instalación de Exportadores de Prometheus
 
-   This will generate an archetype in the folder:
+#### `PUT /api/v1/install/prometheus-exporters`
+Actualiza o guarda la configuración de los exportadores de Prometheus para PostgreSQL, MariaDB y MongoDB.
 
-   ```
-   target/generated-sources/archetype
-   ```
+- **Cuerpo de la solicitud**:
+  ```json
+  {
+    "postgresPort": 9187,
+    "mongoPort": 9216,
+    "mariaPort": 9104
+  }
+  ```
+- **Respuesta**:
+  ```json
+  {
+    "success": true,
+    "code": 200,
+    "message": "Exportadores de Prometheus actualizados correctamente"
+  }
+  ```
 
-3. **Customize the archetype:**
-   Modify the files in the `archetype` folder to include additional configurations or code templates, such as the `archetype-metadata.xml` file.
+### Instalación de Grafana
 
-### 2. Install the Archetype in the Local Repository
+#### `POST /api/v1/install/grafana`
+Guarda la configuración de la instalación de Grafana.
 
-From the `target/generated-sources/archetype` folder, install the archetype into your local Maven repository by running:
+- **Cuerpo de la solicitud**:
+  ```json
+  {
+    "usuario": "admin",
+    "password": "admin123",
+    "internalPort": 3000,
+    "externalPort": 8080
+  }
+  ```
+- **Respuesta**:
+  ```json
+  {
+    "success": true,
+    "code": 200,
+    "message": "Instalación de Grafana guardada exitosamente",
+    "data": {
+      "id": 1,
+      "internalPort": 3000,
+      "externalPort": 8080,
+      "usuario": "admin"
+    }
+  }
+  ```
+
+#### `GET /api/v1/install/grafana`
+Obtiene la configuración de la instalación de Grafana.
+
+- **Respuesta**:
+  ```json
+  {
+    "success": true,
+    "code": 200,
+    "message": "Instalación de Grafana recuperada exitosamente",
+    "data": {
+      "id": 1,
+      "internalPort": 3000,
+      "externalPort": 8080,
+      "usuario": "admin"
+    }
+  }
+  ```
+
+### Instalación de Prometheus
+
+#### `POST /api/v1/install/prometheus`
+Guarda la configuración de la instalación de Prometheus.
+
+- **Cuerpo de la solicitud**:
+  ```json
+  {
+    "usuario": "prometheus",
+    "password": "prometheus123",
+    "internalPort": 9090,
+    "externalPort": 9090
+  }
+  ```
+- **Respuesta**:
+  ```json
+  {
+    "success": true,
+    "code": 200,
+    "message": "Instalación de Prometheus guardada exitosamente"
+  }
+  ```
+
+#### `GET /api/v1/install/prometheus`
+Obtiene la configuración de la instalación de Prometheus.
+
+- **Respuesta**:
+  ```json
+  {
+    "success": true,
+    "code": 200,
+    "message": "Instalación de Prometheus recuperada exitosamente",
+    "data": {
+      "id": 1,
+      "internalPort": 9090,
+      "externalPort": 9090,
+      "usuario": "prometheus"
+    }
+  }
+  ```
+
+### Instalación de Usuarios
+
+#### `POST /api/v1/install/user`
+Guarda la configuración de la instalación de usuarios.
+
+- **Cuerpo de la solicitud**:
+  ```json
+  {
+    "nombreUsuario": "user1",
+    "password": "userpass"
+  }
+  ```
+- **Respuesta**:
+  ```json
+  {
+    "success": true,
+    "code": 200,
+    "message": "Registro de usuario guardado exitosamente"
+  }
+  ```
+
+### Estado de la Instalación
+
+#### `GET /api/v1/install/status`
+Verifica si la instalación está completa.
+
+- **Respuesta**:
+  ```json
+  {
+    "success": true,
+    "code": 200,
+    "message": "Estado de la instalación recuperado exitosamente",
+    "data": true
+  }
+  ```
+
+#### `PUT /api/v1/install/complete`
+Actualiza el estado de la instalación a completo.
+
+- **Respuesta**:
+  ```json
+  {
+    "success": true,
+    "code": 200,
+    "message": "El parámetro COMPLETE_INSTALL fue actualizado exitosamente"
+  }
+  ```
+
+## Configuración
+
+### Requisitos
+
+- Docker y Docker Compose deben estar instalados para ejecutar correctamente los servicios Docker.
+- PostgreSQL, MariaDB o MongoDB deben estar configurados correctamente para la prueba de conexión.
+
+### Variables de Entorno
+
+- POSTGRES_USER: Usuario de la base de datos PostgreSQL.
+- POSTGRES_PASSWORD: Contraseña de la base de datos PostgreSQL.
+- POSTGRES_HOST: Host de la base de datos PostgreSQL.
+- POSTGRES_PORT_HOST: Puerto del host de PostgreSQL.
+
+## Instalación
+
+1. Clonar el repositorio:
 
 ```bash
-mvn install
+git clone https://github.com/Anyel-ec/SecurityMonitoring/Backend
 ```
 
-This makes the archetype available for use in future projects.
+2. Configura tu archivo `application.properties` o usa un archivo `.env
 
-### 3. Generate a New Project from the Archetype
+` para las credenciales de la base de datos.
 
-Run the following command to generate a new project based on the archetype:
+3. Ejecuta la aplicación:
 
 ```bash
-mvn archetype:generate \
-    -DarchetypeGroupId=top.anyel \
-    -DarchetypeArtifactId=archetype-springboot \
-    -DarchetypeVersion=0.0.1-SNAPSHOT \
-    -DgroupId=com.example \
-    -DartifactId=my-springboot-app \
-    -Dversion=1.0-SNAPSHOT
+./mvnw spring-boot:run
 ```
 
-Replace:
-- `com.example` with the **groupId** of the new project.
-- `my-springboot-app` with the **artifactId** of the new project.
+4. Accede a la API en [http://localhost:8080](http://localhost:8080).
 
-### 4. Run the Generated Project
+## Ejecutando Docker Compose
 
-1. Navigate to the folder of the generated project:
-   ```bash
-   cd my-springboot-app
-   ```
-2. Run the project with Maven:
-   ```bash
-   mvn spring-boot:run
-   ```
+Para ejecutar Docker Compose con las credenciales de PostgreSQL configuradas, asegúrate de tener el archivo `docker-compose.yml` configurado en la ruta indicada en `DockerService.java`.
 
-## Included Configurations
+## Pruebas
 
-### CORS
-The `CorsConfig.java` file configures CORS to allow requests from any origin with the permitted methods and headers.
+- Para probar la conexión a la base de datos, puedes utilizar los endpoints proporcionados. La respuesta indicará si la conexión fue exitosa o no.
 
-### Swagger/OpenAPI
-The `OpenApiConfig.java` file configures Swagger to document the project's APIs. Access the documentation at:
+## Contribuciones
 
-```
-http://localhost:8080/swagger-ui.html
-```
+Si deseas contribuir a este proyecto, por favor abre un issue o envía un pull request.
 
-### Key Dependencies
-- **Spring Boot Starter Web**: For web development.
-- **Spring Boot Starter Validation**: For model validations.
-- **SpringDoc OpenAPI**: To generate Swagger documentation.
+## Licencia
 
-## Additional Resources
-- **GitHub Repository**: [Archetype Spring Boot Accelerator](https://github.com/Anyel-ec/Springboot-Archetype-Accelerators-Introduce/)
-- **Author**: [Angel Patiño](https://www.linkedin.com/in/anyel-ec/)
+Este proyecto está licenciado bajo la [Licencia Apache 2.0](LICENSE).
 
+## Información del Equipo y del Proyecto
+
+Herramienta de código abierto para el monitoreo dinámico de tres SGBD: MongoDB, PostgreSQL y MariaDB/MySQL.
+
+**Project Manager(PM): Ing. Luis Chica, Mgtr** - [Perfil en GitHub](https://github.com/LuisChica18)
+
+**Desarrollador: Ing. Ángel Patiño** - [Perfil en GitHub](https://github.com/Anyel-ec)
