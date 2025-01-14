@@ -30,6 +30,7 @@
         "formik": "^2.2.9",
         "framer-motion": "^11.15.0",
         "highlight.js": "^11.6.0",
+        "js-yaml": "^4.1.0",
         "mantine-datatable": "^1.7.17",
         "nouislider-react": "^3.4.1",
         "react": "^18.2.0",
