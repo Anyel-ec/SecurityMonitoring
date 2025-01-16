@@ -8,7 +8,7 @@ alerting:
             - "alertmanager:9093"
 
 rule_files:
-  - /etc/prometheus/alerting_rules_maria.yml
+  - /etc/prometheus/alerting_rules_mongo12122.yml
   - /etc/prometheus/alerting_rules_mongo.yml
   
   

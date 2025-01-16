@@ -120,6 +120,18 @@ const routes = [
         ),
     },
     {
+        path: '/activacion',
+        element: (
+            <InstallationProvider>
+                <ProtectedRoute requiresInstallation={false}>
+                    <PrivateRoute
+                        element={<Activate />}
+                    />
+                </ProtectedRoute>
+            </InstallationProvider>
+        ),
+    },
+    {
         path: '/500',
         element: (
             <ERROR500 />

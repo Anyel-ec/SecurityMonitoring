@@ -9,6 +9,7 @@ groups:
         annotations:
           summary: El Exportador de MariaDB está caído
           description: El Exportador de MariaDB ha estado caído por más de 1 minuto. xxxx
+          
   - name: CPU Usage Alerts
     rules:
       - alert: HighCPUUsageMariadbExporter

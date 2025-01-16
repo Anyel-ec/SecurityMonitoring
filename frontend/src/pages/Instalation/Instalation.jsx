@@ -311,7 +311,7 @@ const Instalation = () => {
             case 6:
                 return (
                     <div className="text-center">
-                        <h2 className="text-2xl font-bold">Instalación Competa!</h2>
+                        <h2 className="text-2xl font-bold">Instalación Completa!</h2>
                         <p className="mt-2">Su configuración está lista. Verificación de la configuración del panel y la fuente de datos de Grafana...</p>
                     </div>
                 );

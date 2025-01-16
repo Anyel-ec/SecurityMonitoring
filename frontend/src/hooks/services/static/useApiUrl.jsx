@@ -9,4 +9,6 @@ export const url_profile = `/profile`
 
 export const url_recovery = `/recovery`
 
+export const url_aletRule = `/alert/rules`
+
 export const url_alert_rules = `/alert_rules`

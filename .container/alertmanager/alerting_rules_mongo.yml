@@ -1,5 +1,4 @@
 groups:
-  # Grupo de alertas para verificar si los exportadores están activos
   - name: Exporter Alerts
     rules:
       - alert: MongoExporterCaido
@@ -8,46 +7,50 @@ groups:
         labels:
           severity: critical
         annotations:
-          summary: "El Exportador de Mongo está caído"
-          description: "El Exportador de Mongo ha estado caído por más de 1 minuto."
-
-  # Grupo de alertas para monitorear el uso promedio de CPU del exportador
+          summary: El Exportador de Mongo esta caido
+          description: El Exportador de Mongo ha estado caído por más de 1 minuto.
   - name: CPU Usage Alerts
     rules:
       - alert: HighCPUUsageMongoExporter
-        expr: avg(rate(process_cpu_seconds_total{instance="mongo-exporter:9216"}[5m]) * 1000) > 80
+        expr: >-
+          avg(rate(process_cpu_seconds_total{instance="mongo-exporter:9216"}[5m])
+          * 1000) > 80
         for: 1m
         labels:
           severity: warning
         annotations:
-          summary: "Alto uso de CPU en el Exportador de Mongo"
-          description: "El uso promedio de CPU en el Exportador de Mongo ha superado el 80% en los últimos 5 minutos."
-
-  # Grupo de alertas para monitorear el uso promedio de memoria RAM del exportador
+          summary: Alto uso de CPU en el Exportador de Mongo
+          description: >-
+            El uso promedio de CPU en el Exportador de Mongo ha superado el 80%
+            en los últimos 5 minutos.
   - name: Memory Usage Alerts
     rules:
       - alert: HighMemoryUsageMongoExporter
-        expr: avg(rate(process_resident_memory_bytes{instance="mongo-exporter:9216"}[5m])) > 500 * 1024 * 1024
+        expr: >-
+          avg(rate(process_resident_memory_bytes{instance="mongo-exporter:9216"}[5m]))
+          > 500 * 1024 * 1024
         for: 1m
         labels:
           severity: warning
         annotations:
-          summary: "Alto uso de memoria en el Exportador de Mongo"
-          description: "El uso promedio de RAM en el Exportador de Mongo ha superado los 500 MB en los últimos 5 minutos."
-
-  # Grupo de alertas para monitorear las conexiones activas en MongoDB
+          summary: Alto uso de memoria en el Exportador de Mongo
+          description: >-
+            El uso promedio de RAM en el Exportador de Mongo ha superado los 500
+            MB en los últimos 5 minutos.
   - name: Active Connections Alerts
     rules:
       - alert: HighActiveConnectionsMongoDB
-        expr: mongodb_connections{instance="mongo-exporter:9216", state="current"} > 100
+        expr: >-
+          mongodb_connections{instance="mongo-exporter:9216", state="current"} >
+          100
         for: 1m
         labels:
           severity: warning
         annotations:
-          summary: "Muchas conexiones activas en MongoDB"
-          description: "El número de conexiones activas en MongoDB ha superado las 100 en los últimos 60 segundos."
-
-  # Grupo de alertas para monitorear los File Descriptors abiertos en el exportador
+          summary: Muchas conexiones activas en MongoDB
+          description: >-
+            El número de conexiones activas en MongoDB ha superado las 100 en
+            los últimos 60 segundos.
   - name: Open File Descriptors Alerts
     rules:
       - alert: HighOpenFileDescriptorsMongo
@@ -56,10 +59,10 @@ groups:
         labels:
           severity: warning
         annotations:
-          summary: "Alto número de File Descriptors abiertos en MongoDB Exporter"
-          description: "El número de File Descriptors abiertos por el exportador de MongoDB ha superado los 1000 en los últimos 60 segundos."
-
-  # Grupo de alertas para monitorear operaciones en MongoDB
+          summary: Alto número de File Descriptors abiertos en MongoDB Exporter
+          description: >-
+            El número de File Descriptors abiertos por el exportador de MongoDB
+            ha superado los 1000 en los últimos 60 segundos.
   - name: MongoDB Operations Alerts
     rules:
       - alert: HighDeleteOperationsMongoDB
@@ -68,28 +71,30 @@ groups:
         labels:
           severity: warning
         annotations:
-          summary: "Alto número de operaciones de eliminación en MongoDB"
-          description: "Se han detectado más de 100 operaciones de eliminación por segundo en MongoDB en los últimos 5 minutos."
-
+          summary: Alto número de operaciones de eliminación en MongoDB
+          description: >-
+            Se han detectado más de 100 operaciones de eliminación por segundo
+            en MongoDB en los últimos 5 minutos.
       - alert: HighUpdateOperationsMongoDB
         expr: rate(mongodb_op_counters_total{type="update"}[5m]) > 100
         for: 1m
         labels:
           severity: warning
         annotations:
-          summary: "Alto número de operaciones de actualización en MongoDB"
-          description: "Se han detectado más de 100 operaciones de actualización por segundo en MongoDB en los últimos 5 minutos."
-
+          summary: Alto número de operaciones de actualización en MongoDB
+          description: >-
+            Se han detectado más de 100 operaciones de actualización por segundo
+            en MongoDB en los últimos 5 minutos.
       - alert: HighInsertOperationsMongoDB
         expr: rate(mongodb_op_counters_total{type="insert"}[5m]) > 100
         for: 1m
         labels:
           severity: warning
         annotations:
-          summary: "Alto número de operaciones de inserción en MongoDB"
-          description: "Se han detectado más de 100 operaciones de inserción por segundo en MongoDB en los últimos 5 minutos."
-
-  # Grupo de alertas para monitorear la tasa de datos en MongoDB
+          summary: Alto número de operaciones de inserción en MongoDB
+          description: >-
+            Se han detectado más de 100 operaciones de inserción por segundo en
+            MongoDB en los últimos 5 minutos.
   - name: Data Rate Alerts
     rules:
       - alert: HighDataReceivedRateMongoDB
@@ -98,14 +103,19 @@ groups:
         labels:
           severity: warning
         annotations:
-          summary: "Alta tasa de datos recibidos en MongoDB"
-          description: "Se ha detectado una tasa de más de 1 MB por segundo de datos recibidos en MongoDB en los últimos 5 minutos. Revisa la actividad del sistema para validar si es normal."
-
+          summary: Alta tasa de datos recibidos en MongoDB
+          description: >-
+            Se ha detectado una tasa de más de 1 MB por segundo de datos
+            recibidos en MongoDB en los últimos 5 minutos. Revisa la actividad
+            del sistema para validar si es normal.
       - alert: HighDataSentRateMongoDB
         expr: rate(mongodb_network_bytes_total{state="out_bytes"}[5m]) > 1e6
         for: 1m
         labels:
           severity: warning
         annotations:
-          summary: "Alta tasa de datos enviados en MongoDB"
-          description: "Se ha detectado una tasa de más de 1 MB por segundo de datos enviados en MongoDB en los últimos 5 minutos. Revisa la actividad para confirmar si esta carga es esperada."
+          summary: Alta tasa de datos enviados en MongoDB
+          description: >-
+            Se ha detectado una tasa de más de 1 MB por segundo de datos
+            enviados en MongoDB en los últimos 5 minutos. Revisa la actividad
+            para confirmar si esta carga es esperada.

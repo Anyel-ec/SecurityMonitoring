@@ -123,6 +123,7 @@ groups:
             Se ha detectado una tasa de más de 1 millón de tuplas por segundo
             devueltas en PostgreSQL para la base de datos $datname en los
             últimos 5 minutos. Revisa si esta actividad es normal.
+            
   - name: Data Sent Rate Alerts
     rules:
       - alert: HighDataSentRatePostgres

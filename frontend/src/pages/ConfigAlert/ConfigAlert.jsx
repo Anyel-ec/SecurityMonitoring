@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import axiosInstance from '../../hooks/axios/axiosInstance';
 import yaml from 'js-yaml';
-import { url_alert_rules } from '../../hooks/services/static/useApiUrl';
 import { useAlertRulesService, useAlertRulesUpdateService } from '../../hooks/services/system/alert_rules.service';
 import { showErrorAlert, showSuccessAlert } from '../../components/alerts/alerts';
+import { useActivateDBService } from '../../hooks/services/system/activate_database.service';
 
 const ConfigAlert = () => {
     const [databases, setDatabases] = useState(["Postgres", "Maria", "Mongo"]);
@@ -11,9 +10,28 @@ const ConfigAlert = () => {
     const [configurations, setConfigurations] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-
+    const { content: context_activateDB, loading: loading_activateDB, error: error_activateDB } = useActivateDBService();
     const { content: context_alertRules, loading: loading_alertRules, error: error_alertRules } = useAlertRulesService();
     const { content: context_alertRulesUpdate, loading: loading_alertRulesUpdate, error: error_alertRulesUpdate } = useAlertRulesUpdateService();
+
+    // Cargar las bases de datos disponibles
+    useEffect(() => {
+        const databases = async () => {
+            const response = await context_activateDB();
+            console.log(response.result)
+            if (response.result) {
+                const data = {
+                    Postgres: response.result.activePostgres,
+                    Maria: response.result.activeMaria,
+                    Mongo: response.result.activeMongo
+                }
+                // Filtrar las claves con valor `true` y actualizar el estado
+                const activeDatabases = Object.keys(data).filter(key => data[key]);
+                setDatabases(activeDatabases);
+            }
+        }
+        databases();
+    }, []);
 
     // Cargar las configuraciones al seleccionar una base de datos
     useEffect(() => {
@@ -236,12 +254,12 @@ const ConfigAlert = () => {
                     <button type="submit" className="btn btn-primary mt-4">Guardar</button>
                 </form>
             ) || (
-                <>
-                    <div className='panel min-h-[500px] text-center flex items-center justify-center text-3xl'>
-                        Seleccione una base de datos para cargar las configuraciones.
-                    </div>
-                </>
-            )}
+                     <>
+                        <div className='panel min-h-[500px] text-center flex items-center justify-center text-3xl'>
+                            Seleccione una base de datos para cargar las configuraciones.
+                        </div>
+                    </>
+                )}
 
         </div>
     );
