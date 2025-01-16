@@ -8,7 +8,7 @@ RUN apk add --no-cache docker-cli docker-compose
 WORKDIR /app
 
 # Copy the JAR and necessary files
-COPY target/monitoring-1.0.0-RELEASE.jar monitoring-1.0.0-RELEASE.jar
+COPY monitoring-1.0.0-RELEASE.jar monitoring-1.0.0-RELEASE.jar
 
 # Copy the entrypoint script and make it executable
 COPY entrypoint.sh /app/entrypoint.sh
