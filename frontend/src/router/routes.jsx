@@ -10,7 +10,7 @@ const Home = lazy(() => import('../pages/Home/Home'));
 const Profile = lazy(() => import('../pages/Authentication/profile/Profile'));
 const Login = lazy(() => import('../pages/Authentication/login/Login'));
 const RecoveryPassword = lazy(() => import('../pages/Authentication/recovery-password/RecoveryPassword'));
-
+const Active = lazy(() => import('../pages/Activate/Activate.jsx'));
 const ERROR404 = lazy(() => import('../pages/Error/Error404'));
 const ERROR500 = lazy(() => import('../pages/Error/Error500'));
 // Componente para manejar redirecciones basadas en el estado de instalación
@@ -125,7 +125,7 @@ const routes = [
             <InstallationProvider>
                 <ProtectedRoute requiresInstallation={false}>
                     <PrivateRoute
-                        element={<Activate />}
+                        element={<Active />}
                     />
                 </ProtectedRoute>
             </InstallationProvider>

@@ -312,6 +312,12 @@ const Instalation = () => {
                 return (
                     <div className="text-center">
                         <h2 className="text-2xl font-bold">Instalación Completa!</h2>
+                        <img
+                            src="https://cdn-icons-png.flaticon.com/512/4685/4685238.png"
+                            alt="Instalación Completa"
+                            className="my-4 mx-auto"
+                            style={{ maxWidth: "300px" }} 
+                        />
                         <p className="mt-2">Su configuración está lista. Verificación de la configuración del panel y la fuente de datos de Grafana...</p>
                     </div>
                 );
@@ -382,7 +388,7 @@ const Instalation = () => {
                     <div className="absolute top-5 dark:bg-dark left-0 right-0 h-[2px] bg-blue-300" >
                         <div
                             className="h-full bg-blue-600 dark:bg-red transition-all duration-300 ease-in-out"
-                            style={{ width: `${((currentStep - 1) / (steps.length - 1)) * 100}% }`}}
+                            style={{ width: `${((currentStep - 1) / (steps.length - 1)) * 100}% }` }}
                         />
                     </div>
 
