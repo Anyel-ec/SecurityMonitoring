@@ -9,6 +9,7 @@ import ec.edu.espe.security.monitoring.modules.core.initializer.repositories.Sys
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.info.GitProperties;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -24,6 +25,7 @@ public class PrometheusInstallServiceImpl implements PrometheusInstallService {
     @Override
     public Map<String, InstallationConfig> savePrometheusInstall(PrometheusInstallRequestDto prometheusInstallRequestDto) {
         try {
+            prometheusInstallRequestDto.validateUniquePorts();
             InstallationConfig prometheusInstall = savePrometheusConfig(prometheusInstallRequestDto);
             InstallationConfig alertmanagerInstall = saveAlertmanagerConfig(prometheusInstallRequestDto);
 
@@ -47,6 +49,7 @@ public class PrometheusInstallServiceImpl implements PrometheusInstallService {
     }
 
     private InstallationConfig savePrometheusConfig(PrometheusInstallRequestDto prometheusInstallRequestDto) {
+        prometheusInstallRequestDto.validateUniquePorts();
         SystemParameters prometheusParameter = systemParametersRepository
                 .findByNameAndIsActiveTrue("PROMETHEUS_INSTALL")
                 .orElseThrow(() -> new IllegalArgumentException("El parámetro PROMETHEUS_INSTALL no fue encontrado"));
@@ -70,6 +73,7 @@ public class PrometheusInstallServiceImpl implements PrometheusInstallService {
     }
 
     private InstallationConfig saveAlertmanagerConfig(PrometheusInstallRequestDto prometheusInstallRequestDto) {
+        prometheusInstallRequestDto.validateUniquePorts();
         SystemParameters alertmanagerParameter = systemParametersRepository
                 .findByNameAndIsActiveTrue("ALERTMANAGER_INSTALL")
                 .orElseThrow(() -> new IllegalArgumentException("El parámetro ALERTMANAGER_INSTALL no fue encontrado"));

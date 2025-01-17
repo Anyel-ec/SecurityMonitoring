@@ -7,6 +7,9 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Data
 @RequiredArgsConstructor
 public class PrometheusInstallRequestDto {
@@ -35,4 +38,18 @@ public class PrometheusInstallRequestDto {
     @PortNotInUse(message = "El puerto externo ya está en uso por Docker", checkDocker = true)
     private int externalPortAlertmanager;
 
+    public void validateUniquePorts() {
+        Set<Integer> usedPorts = new HashSet<>();
+
+        // add Prometheus ports
+        usedPorts.add(internalPort);
+        usedPorts.add(externalPort);
+
+        // validare Alertmanager ports
+        if (usedPorts.contains(internalPortAlertmanager) || usedPorts.contains(externalPortAlertmanager)) {
+            throw new IllegalArgumentException("Los puertos de Alertmanager no pueden repetirse con otros servicios");
+        }
+        usedPorts.add(internalPortAlertmanager);
+        usedPorts.add(externalPortAlertmanager);
+    }
 }
