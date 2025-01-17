@@ -63,9 +63,11 @@ export default function Activate() {
                         console.log(`${databaseType} activado`);
                     } else {
                         // Desactivar regla
+                        console.log("Entrando x aqui")
                         await context_deleteDB(databaseType);
                         console.log(`${databaseType} desactivado`);
                     }
+                console.log("Saliendo x aqui")
                 }
             }
             // Actualiza los estados iniciales después de guardar
@@ -105,7 +107,7 @@ export default function Activate() {
                     ))}
                     <button
                         type="submit"
-                        className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                        className="w-full hover:bg-blue-600 text-white btn-dark dark:btn-light font-bold py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                         disabled={loading_activateDB || loading_updateDB || loading_deleteDB || loading_docker_install}
                     >
                         Guardar cambios

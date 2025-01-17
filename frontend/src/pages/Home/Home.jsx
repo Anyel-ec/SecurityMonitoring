@@ -295,9 +295,9 @@ const Home = () => {
 
     return (
         <div>
-            <div className="grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-3 gap-5 mb-3">
+            <div className="grid grid-cols-1 lg:grid-cols- xl:grid-cols-4 gap-5 ">
                 <div className="panel">
-                    <div className="flex items-center justify-between">
+                    <div className="flex items-center justify-between mb-5 ">
                         <h5 className="font-semibold text-lg dark:text-white-light">Conexiones guardadas</h5>
                     </div>
 
@@ -319,7 +319,7 @@ const Home = () => {
 
                 </div>
 
-                <div className="panel lg:col-span-2 xl:col-span-2">
+                <div className="panel lg:col-span-2 xl:col-span-3 pl-5">
 
                     <ConnectionDetails
                         selectedConnection={selectedConnection}

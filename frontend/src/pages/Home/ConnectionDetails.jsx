@@ -208,7 +208,7 @@ const ConnectionDetails = ({
                     ></textarea>
                   </div>
 
-                  <button className="btn btn-primary mb-3" onClick={() => testConnection(type)}>
+                  <button className="btn  text-white btn-dark dark:btn-light mb-3" onClick={() => testConnection(type)}>
                     {testingConnection === type ? 'Probando...' : 'Probar conexión'}
                   </button>
                 </div>
@@ -217,7 +217,7 @@ const ConnectionDetails = ({
           </div>
 
           <div className="flex justify-end gap-2 border-t border-gray-200 dark:border-[#1b2e4b] pt-3">
-            <button className="btn btn-success" onClick={handleSave}>
+            <button className="btn text-white btn-dark dark:btn-light " onClick={handleSave}>
               Guardar
             </button>
           </div>

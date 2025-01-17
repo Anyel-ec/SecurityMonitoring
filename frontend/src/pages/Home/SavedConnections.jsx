@@ -1,4 +1,3 @@
-// SavedConnections.js
 import React from 'react';
 
 const SavedConnections = ({ connections, selectedConnection, setSelectedConnection, handleDelete, handleMonitor, leftPanelWidth }) => {
@@ -17,10 +16,10 @@ const SavedConnections = ({ connections, selectedConnection, setSelectedConnecti
   };
 
   return (
-    <div className="h-full flex flex-col box-border">
+    <div className="h-full flex flex-col box-border ">
       {/* Contenedor del contenido con scroll */}
       <div className="flex-grow overflow-y-auto">
-      <div className="flex flex-col items-center overflow-y-auto" style={{ height: `calc(100vh - ${leftPanelWidth}px)` }}>
+      <div className="flex  overflow-y-auto flex-col ">
           {connections.map((conn) => (
             <button
               key={conn.id}
@@ -33,7 +32,7 @@ const SavedConnections = ({ connections, selectedConnection, setSelectedConnecti
                 <div className="flex items-center gap-2">
                   <i className="fa-regular fa-database text-sm"></i>
                   <span className="truncate">{`${conn.host}:${conn.port}`}</span>
-                </div>
+                  </div>
                 <small className="truncate text-right">
                   {getFriendlyName(conn.systemParameter?.name) || 'No disponible'}
                 </small>
@@ -46,8 +45,8 @@ const SavedConnections = ({ connections, selectedConnection, setSelectedConnecti
       </div>
 
       {/* Botones fijos al final */}
-      <div className="flex justify-between p-3 border-t border-gray-200 dark:border-[#1b2e4b] mb-5">
-        <button className="btn btn-primary" onClick={handleMonitor}>
+      <div className="flex justify-between p-3 border-t border-gray-200 dark:border-[#1b2e4b] mb-9">
+        <button className="btn  btn-dark dark:btn-light " onClick={handleMonitor}>
           Monitorear
         </button>
         <button className="btn btn-danger" onClick={handleDelete}>

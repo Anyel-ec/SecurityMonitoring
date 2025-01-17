@@ -41,7 +41,7 @@ public class ProfileServiceImpl implements ProfileService {
             if (user == null) {
                 return new JsonResponseDto(false, HttpStatus.NOT_FOUND.value(), "Usuario no encontrado.", null);
             }
-
+            log.info("El usuario obtenido es: {}", user);
             return new JsonResponseDto(true, HttpStatus.OK.value(), "Detalles del usuario obtenidos con éxito", user);
         } catch (Exception e) {
             log.error("Error en la obtención perfil del usuario: {}", e.getMessage());
@@ -53,21 +53,23 @@ public class ProfileServiceImpl implements ProfileService {
     @Override
     public JsonResponseDto updateProfile(String token, ProfileDto updateUserRequestDto) {
         try {
-            // Extraer el username del token
+            // extarct the username from the token
             String username = jwtProvider.getNombreUsuarioFromToken(token);
 
-            // Buscar al usuario por username
+            // search name
             UserInfo user = userInfoRepository.findByUsernameAndIsActiveTrue(username);
 
             if (user == null) {
                 return new JsonResponseDto(false, HttpStatus.NOT_FOUND.value(), "Usuario no encontrado.", null);
             }
 
-            // Actualizar los datos del usuario
+            // update
             user.setUsername(updateUserRequestDto.getUsername());
             user.setPhone(updateUserRequestDto.getPhone());
             user.setEmail(updateUserRequestDto.getEmail());
-
+            user.setName(updateUserRequestDto.getName());
+            user.setCompany(updateUserRequestDto.getCompany());
+            user.setLastname(updateUserRequestDto.getLastname());
             // Guardar los cambios
             userInfoRepository.save(user);
 

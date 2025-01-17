@@ -51,15 +51,16 @@ export const useUpdateDBService = () => {
 export const useDeleteDBService = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-    // Función `content` para realizar la solicitud de inicio de sesión
+
     const content = async (databaseType) => {
         setLoading(true);
         setError(null);
         try {
-            const response = await axiosInstance.delete(`${url_aletRule}`, null, {
-                params: { databaseType }
+            const response = await axiosInstance.delete(`${url_aletRule}`, {
+                params: { databaseType }, // Los parámetros deben ir aquí
             });
             const result = response.data;
+            console.log("Consola del eliminado de bd", result);
             setLoading(false);
             return result;
         } catch (error) {
@@ -69,8 +70,10 @@ export const useDeleteDBService = () => {
             return { success: false, message: errorMessage };
         }
     };
+
     return { content, loading, error };
 };
+
 // Función para eliminar las reglas de alerta para todas las bases de datos
 export const useDockerInstallService = () => {
     const [loading, setLoading] = useState(false);

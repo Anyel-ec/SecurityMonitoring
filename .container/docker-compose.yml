@@ -19,7 +19,6 @@ services:
     image: prom/prometheus
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
-      - ./alertmanager/alerting_rules_mongo.yml:/etc/prometheus/alerting_rules_mongo.yml:ro
     ports:
       - "${PROMETHEUS_PORT_EXTERNAL}:${PROMETHEUS_PORT_INTERNAL}"
     networks:
