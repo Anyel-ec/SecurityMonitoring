@@ -20,6 +20,8 @@ public class ExporterPrometheusInstallServiceImpl implements PrometheusExporterI
 
     @Override
     public void saveOrUpdatePrometheusExporters(ExporterPrometheusInstallRequestDto requestDto) {
+        // validate unique ports
+        requestDto.validateUniquePorts();
         saveOrUpdateExporter("PROMETHEUS_EXPORTER_POSTGRESQL", requestDto.getInternalPortPostgres(), requestDto.getExternalPortPostgres());
         saveOrUpdateExporter("PROMETHEUS_EXPORTER_MARIADB", requestDto.getInternalPortMariadb(), requestDto.getExternalPortMariadb());
         saveOrUpdateExporter("PROMETHEUS_EXPORTER_MONGODB", requestDto.getInternalPortMongodb(), requestDto.getExternalPortMongodb());

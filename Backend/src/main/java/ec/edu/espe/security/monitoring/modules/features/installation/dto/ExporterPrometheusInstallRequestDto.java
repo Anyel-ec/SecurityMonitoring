@@ -8,6 +8,9 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @ToString
 @Data
 @RequiredArgsConstructor
@@ -49,5 +52,24 @@ public class ExporterPrometheusInstallRequestDto {
     @PortNotInUse(message = "El puerto externo de MongoDB ya está en uso")
     private int externalPortMongodb;
 
+    public void validateUniquePorts() {
+        Set<Integer> usedPorts = new HashSet<>();
 
+        usedPorts.add(internalPortPostgres);
+        usedPorts.add(externalPortPostgres);
+
+        // validate mariabd
+        if (usedPorts.contains(internalPortMariadb) || usedPorts.contains(externalPortMariadb)) {
+            throw new IllegalArgumentException("Los puertos de MariaDB no pueden repetir valores con Postgres");
+        }
+        usedPorts.add(internalPortMariadb);
+        usedPorts.add(externalPortMariadb);
+
+        // validate mongodb
+        if (usedPorts.contains(internalPortMongodb) || usedPorts.contains(externalPortMongodb)) {
+            throw new IllegalArgumentException("Los puertos de MongoDB no pueden repetir valores con Postgres o MariaDB");
+        }
+        usedPorts.add(internalPortMongodb);
+        usedPorts.add(externalPortMongodb);
+    }
 }
