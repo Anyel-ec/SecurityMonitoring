@@ -71,7 +71,7 @@ const Header = () => {
                     <div className="horizontal-logo flex lg:hidden justify-between items-center ltr:mr-2 rtl:ml-2">
                         <Link to="/inicio" className="main-logo flex items-center shrink-0">
                             <img className="w-8 ltr:-ml-1 rtl:-mr-1 inline" src="/assets/images/logo.png" alt="logo" />
-                            <span className="text-xl ltr:ml-1.5 rtl:mr-1.5  font-semibold  align-middle hidden md:inline dark:text-white-light transition-all duration-300">Security Monitor</span>
+                            <span className="text-xl ltr:ml-1.5 rtl:mr-1.5  font-semibold  align-middle hidden md:inline dark:text-white-light transition-all duration-300">Security Monitoring</span>
                         </Link>
                         <button
                             type="button"
@@ -176,37 +176,35 @@ const Header = () => {
 
                 {/* horizontal menu */}
                 <ul className="horizontal-menu hidden py-1.5 font-semibold px-6 lg:space-x-1.5 xl:space-x-8 rtl:space-x-reverse bg-white border-t border-[#ebedf2] dark:border-[#191e3a] dark:bg-black text-black dark:text-white-dark">
-                    
+
                     <li className="menu relative">
                         <ul className="nav-link">
                             <NavLink to="/inicio" className="flex items-center">
                                 <i className="fa-solid fa-house"></i>
-                                <span className="px-1">{t('home')}</span>
+                                <span className="px-1">{t('Inicio')}</span>
                             </NavLink>
                         </ul>
                     </li>
 
-
-                    {/* <li className="menu nav-item relative">
-                        <button type="button" className="nav-link">
-                            <div className="flex items-center">
-                                <i className="fa-solid fa-house"></i>
-                                <span className="px-1">{t('dashboard')}</span>
-                            </div>
-                            <div className="right_arrow">
-                                <i className="fa-solid fa-chevron-down"></i>
-                            </div>
-                        </button>
-                        <ul className="sub-menu">
-                            <li>
-                                <NavLink to="/">{t('sales')}</NavLink>
-                            </li>
-                            <li>
-                                <NavLink to="/analytics">{t('analytics')}</NavLink>
-                            </li>
+                    <li className="menu relative">
+                        <ul className="nav-link">
+                            <NavLink to="/activacion" className="flex items-center">
+                                <i className="fa-solid fa-square-check"></i>
+                                <span className="px-1">{t('Activación de Alertas')}</span>
+                            </NavLink>
                         </ul>
-                    </li> */}
+                    </li>
+
+                    <li className="menu relative">
+                        <ul className="nav-link">
+                            <NavLink to="/alertas" className="flex items-center">
+                                <i className="fa-solid fa-gears"></i>
+                                <span className="px-1">{t('Modificar alertas')}</span>
+                            </NavLink>
+                        </ul>
+                    </li>
                 </ul>
+
             </div>
         </header>
     );

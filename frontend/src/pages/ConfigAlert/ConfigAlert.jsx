@@ -3,7 +3,6 @@ import yaml from 'js-yaml';
 import { useAlertRulesService, useAlertRulesUpdateService } from '../../hooks/services/system/alert_rules.service';
 import { showErrorAlert, showSuccessAlert } from '../../components/alerts/alerts';
 import { useActivateDBService } from '../../hooks/services/system/activate_database.service';
-
 const ConfigAlert = () => {
     const [databases, setDatabases] = useState(["Postgres", "Maria", "Mongo"]);
     const [selectedDatabase, setSelectedDatabase] = useState(null);
