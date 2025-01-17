@@ -8,6 +8,7 @@ alerting:
             - "alertmanager:${ALERTMANAGER_PORT_INTERNAL}"
 
 rule_files:
+  - /etc/prometheus/alerting_rules_postgres.yml
   
   
 scrape_configs:

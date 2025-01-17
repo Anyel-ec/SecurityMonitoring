@@ -1,4 +1,4 @@
-package ec.edu.espe.security.monitoring.modules.features.auth.service.impl;
+package ec.edu.espe.security.monitoring.modules.features.auth.controller;
 import ec.edu.espe.security.monitoring.common.dto.JsonResponseDto;
 import ec.edu.espe.security.monitoring.modules.features.auth.service.interfaces.RoleService;
 import lombok.RequiredArgsConstructor;

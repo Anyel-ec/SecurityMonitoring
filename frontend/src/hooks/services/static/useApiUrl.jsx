@@ -12,3 +12,8 @@ export const url_recovery = `/recovery`
 export const url_aletRule = `/alert/rules`
 
 export const url_alert_rules = `/alert_rules`
+
+export const url_users = `/users`
+
+export const url_roles = `/roles`
+

@@ -3,6 +3,7 @@ import { InstallationProvider, useInstallation } from '../hooks/contexts/useRout
 import { Navigate } from 'react-router-dom';
 import PublicRoute from '../hooks/guards/PublicRoute';
 import PrivateRoute from '../hooks/guards/ProtectedRoute';
+import Users from '../pages/Authentication/users/users.jsx';
 
 const ConfigAlert = lazy(() => import('../pages/ConfigAlert/ConfigAlert'));
 const Instalation = lazy(() => import('../pages/Instalation/Instalation'));
@@ -126,6 +127,18 @@ const routes = [
                 <ProtectedRoute requiresInstallation={false}>
                     <PrivateRoute
                         element={<Active />}
+                    />
+                </ProtectedRoute>
+            </InstallationProvider>
+        ),
+    },
+    {
+        path: '/gestion-usuarios',
+        element: (
+            <InstallationProvider>
+                <ProtectedRoute requiresInstallation={false}>
+                    <PrivateRoute
+                        element={<Users />}
                     />
                 </ProtectedRoute>
             </InstallationProvider>

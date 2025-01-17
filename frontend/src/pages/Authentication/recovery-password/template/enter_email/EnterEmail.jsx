@@ -67,7 +67,14 @@ export default function EnterEmail({ setChange, setTimeCode, setMail }) {
                 <span className='text-danger'>{errorResponse}</span>
             </div>}
             <button type="submit" className="btn btn-gradient !mt-6 w-full border-0 uppercase shadow-[0_10px_20px_-10px_rgba(67,97,238,0.44)]">
-                RECUPERAR
+                {loading ? (
+                    <div className="flex items-center justify-center">
+                        <i className="fas fa-spinner fa-spin"></i>
+                        <span className="ml-2">Cargando...</span>
+                    </div>
+                ) : (
+                    'RECUPERAR'
+                )}
             </button>
         </form>
     )
