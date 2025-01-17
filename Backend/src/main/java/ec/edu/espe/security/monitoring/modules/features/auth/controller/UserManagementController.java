@@ -27,6 +27,7 @@ public class UserManagementController {
     public ResponseEntity<JsonResponseDto> createUser(
             @RequestHeader("Authorization") String authorizationHeader,
             @Valid @RequestBody UserCreateDto userCreateDto) {
+        log.info("Creating user: {}", userCreateDto);
         try {
             String token = authorizationHeader.replace("Bearer ", "");
             JsonResponseDto response = userManagementService.createUser(token, userCreateDto);

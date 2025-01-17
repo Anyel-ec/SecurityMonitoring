@@ -8,7 +8,6 @@ export const useGetAllRolesService = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
-    console.log(url_roles);
     const content = useCallback(async () => {
         setLoading(true);
         setError(null);

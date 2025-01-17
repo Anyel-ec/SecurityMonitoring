@@ -8,6 +8,7 @@ alerting:
             - "alertmanager:9093"
 
 rule_files:
+  - /etc/prometheus/alerting_rules_postgres.yml
   
   
 scrape_configs:

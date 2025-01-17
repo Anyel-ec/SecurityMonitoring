@@ -12,7 +12,7 @@ import { grafanaValidationSchema, prometheusValidationSchema, exportersValidatio
 import { saveGrafanaInstallService, savePrometheusInstallService, saveOrUpdatePrometheusExportersService, saveUserInstallService } from '../../hooks/services/installing/installationService';
 import { checkContainerStatusService, runDockerInstallService } from '../../hooks/services/dockerService';
 import { createDashboard, createPrometheusDatasource } from '../../hooks/services/grafanaService';
-import { showLoadingAlert, closeAlert, showSuccessAlert, showErrorAlert, showRetryAlert, showErrorAlertMessage } from '../../components/alerts/alerts';
+import { showLoadingAlert, closeAlert, showSuccessAlert, showErrorAlert, showRetryAlert, showErrorAlertMessage } from '../../components/alerts/Alerts';
 import { completeInstallation } from './helper/installationHelper';
 import { toggleTheme } from '../../store/themeConfigSlice';
 import IconLaptop from '../../components/Icon/IconLaptop';
@@ -312,12 +312,6 @@ const Instalation = () => {
                 return (
                     <div className="text-center">
                         <h2 className="text-2xl font-bold">Instalación Completa!</h2>
-                        <img
-                            src="https://cdn-icons-png.flaticon.com/512/4685/4685238.png"
-                            alt="Instalación Completa"
-                            className="my-4 mx-auto"
-                            style={{ maxWidth: "300px" }}
-                        />
                         <p className="mt-2">Su configuración está lista. Verificación de la configuración del panel y la fuente de datos de Grafana...</p>
                     </div>
                 );
@@ -338,7 +332,8 @@ const Instalation = () => {
     const themeConfig = useSelector((state) => state.themeConfig);
 
     return (
-        <div className="min-h-screen flex items-center justify-center  absolute inset-0 -z-10 h-full w-full bg-white bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px]" >            {/* Theme Configuration */}
+        <div className="min-h-screen flex items-center justify-center">
+            {/* Theme Configuration */}
             <div className='fixed top-6 right-6'>
                 {themeConfig.theme === 'light' ? (
                     <button
@@ -387,7 +382,7 @@ const Instalation = () => {
                     <div className="absolute top-5 dark:bg-dark left-0 right-0 h-[2px] bg-blue-300" >
                         <div
                             className="h-full bg-blue-600 dark:bg-red transition-all duration-300 ease-in-out"
-                            style={{ width: `${((currentStep - 1) / (steps.length - 1)) * 100}% }` }}
+                            style={{ width: `${((currentStep - 1) / (steps.length - 1)) * 100}% }`}}
                         />
                     </div>
 
