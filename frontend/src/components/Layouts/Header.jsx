@@ -203,6 +203,17 @@ const Header = () => {
                             </NavLink>
                         </ul>
                     </li>
+
+
+                    <li className="menu relative">
+                        <ul className="nav-link">
+                            <NavLink to="/gestion-usuarios" className="flex items-center">
+                                <i className="fa-solid fa-users"></i>
+                                <span className="px-1">{t('Gestionar usuarios')}</span>
+                            </NavLink>
+                        </ul>
+                    </li>
+
                 </ul>
 
             </div>

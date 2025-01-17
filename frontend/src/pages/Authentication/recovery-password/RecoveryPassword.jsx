@@ -49,7 +49,7 @@ const RecoveryPassword = () => {
           <div className="relative flex flex-col justify-center rounded-md bg-white/60 backdrop-blur-lg dark:bg-black/50 px-6 py-20">
             {/* Boton para regresar */}
             <div className='absolute flex top-5 start-5'>
-              <button className='flex w-[30px] h-[30px] items-center justify-center hover:bg-gray-800 rounded-full' onClick={handdleBack}><i className='fa-regular fa-arrow-left'></i></button>
+              <button className='flex w-[30px] h-[30px] items-center justify-center hover:bg-gray-200  dark:hover:bg-gray-800  rounded-full' onClick={handdleBack}><i className='fa-regular fa-arrow-left'></i></button>
             </div>
             <div className="mx-auto w-full max-w-[440px]">
               <div className="mb-7">

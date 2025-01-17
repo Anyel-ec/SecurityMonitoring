@@ -1,196 +1,109 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useGlobalContext } from '../../../hooks/contexts/global.context';
-import { useUpdateProfileUserService } from '../../../hooks/services/system/profile.service';
+import { useProfileUserService, useUpdateProfileUserService } from '../../../hooks/services/system/profile.service';
 import { showErrorAlert, showSuccessAlert } from '../../../components/alerts/alerts';
 import { emailRegex, phoneRegex } from '../../../hooks/services/static/useRegularExplession';
 
 export default function useProfile() {
     const { globalVariables, setGlobalVariables } = useGlobalContext();
+    const { content: fetchProfile, loading: loadingProfile } = useProfileUserService();
 
-    const [username, setUsername] = useState(`${globalVariables.username}`);
+    const [username, setUsername] = useState('');
+    const [phone, setPhone] = useState('');
+    const [email, setEmail] = useState('');
+    const [name, setName] = useState('');
+    const [lastname, setLastname] = useState('');
+    const [company, setCompany] = useState('');
     const [usernameError, setUsernameError] = useState('');
-    const [phone, setPhone] = useState(`${globalVariables.phone}`);
     const [phoneError, setPhoneError] = useState('');
-    const [email, setEmail] = useState(`${globalVariables.email}`);
     const [emailError, setEmailError] = useState('');
-    const [name, setName] = useState(`${globalVariables.name}`);
     const [nameError, setNameError] = useState('');
-    const [lastname, setLastname] = useState(`${globalVariables.lastname}`);
     const [lastnameError, setLastnameError] = useState('');
-    const [company, setCompany] = useState(`${globalVariables.company}`);
     const [companyError, setCompanyError] = useState('');
-
     const [errorResponse, setErrorResponse] = useState('');
-    const { content, loading, error } = useUpdateProfileUserService();
 
-    // Validar cambios en username
+    const { content: updateProfile, loading: loadingUpdate } = useUpdateProfileUserService();
+
+    // Cargar los datos del perfil al montar el componente
+    useEffect(() => {
+        const loadProfile = async () => {
+            const result = await fetchProfile();
+            if (result.success && result.result) {
+                const { username, phone, email, name, lastname, company } = result.result;
+                setUsername(username);
+                setPhone(phone);
+                setEmail(email);
+                setName(name);
+                setLastname(lastname);
+                setCompany(company);
+
+                // Actualizar el contexto global si es necesario
+                setGlobalVariables((prev) => ({
+                    ...prev,
+                    username,
+                    phone,
+                    email,
+                    name,
+                    lastname,
+                    company,
+                }));
+            } else {
+                showErrorAlert(result.message || 'Error al cargar el perfil');
+            }
+        };
+
+        loadProfile();
+    }, [fetchProfile, setGlobalVariables]);
+
+    // Manejo de cambios para cada campo
     const handleUsernameChange = (e) => {
-        const value = e.target.value;
-        setUsername(value);
-
-        if (!value) {
-            setUsernameError('El usuario es requerido');
-        } else {
-            setUsernameError('');
-        }
+        setUsername(e.target.value);
+        setUsernameError(!e.target.value ? 'El usuario es requerido' : '');
     };
 
-    // Validar cambios en phone
     const handlePhoneChange = (e) => {
         const value = e.target.value;
         setPhone(value);
-
-        if (!value) {
-            setPhoneError('El teléfono es requerido');
-        } else if (!phoneRegex.test(value)) {
-            setPhoneError('El teléfono no es válido');
-        } else {
-            setPhoneError('');
-        }
+        setPhoneError(!value ? 'El teléfono es requerido' : !phoneRegex.test(value) ? 'El teléfono no es válido' : '');
     };
 
-    // Validar cambios en email
     const handleEmailChange = (e) => {
         const value = e.target.value;
         setEmail(value);
-
-        if (!value) {
-            setEmailError('El correo es requerido');
-        } else if (!emailRegex.test(value)) {
-            setEmailError('El correo no es válido');
-        } else {
-            setEmailError('');
-        }
+        setEmailError(!value ? 'El correo es requerido' : !emailRegex.test(value) ? 'El correo no es válido' : '');
     };
 
-    // Validar cambios en name
     const handleNameChange = (e) => {
         const value = e.target.value;
         setName(value);
-
-        if (!value) {
-            setNameError('El nombre es requerido');
-        } else if (value.length < 3 || value.length > 50) {
-            setNameError('El nombre debe tener entre 3 y 50 caracteres');
-        } else {
-            setNameError('');
-        }
+        setNameError(!value ? 'El nombre es requerido' : value.length < 3 || value.length > 50 ? 'El nombre debe tener entre 3 y 50 caracteres' : '');
     };
 
-    // Validar cambios en lastname
     const handleLastnameChange = (e) => {
         const value = e.target.value;
         setLastname(value);
-
-        if (!value) {
-            setLastnameError('El apellido es requerido');
-        } else if (value.length < 3 || value.length > 50) {
-            setLastnameError('El apellido debe tener entre 3 y 50 caracteres');
-        } else {
-            setLastnameError('');
-        }
+        setLastnameError(!value ? 'El apellido es requerido' : value.length < 3 || value.length > 50 ? 'El apellido debe tener entre 3 y 50 caracteres' : '');
     };
 
-    // Validar cambios en company
     const handleCompanyChange = (e) => {
         const value = e.target.value;
         setCompany(value);
-
-        if (!value) {
-            setCompanyError('La compañía es requerida');
-        } else if (value.length < 3 || value.length > 50) {
-            setCompanyError('La compañía debe tener entre 3 y 50 caracteres');
-        } else {
-            setCompanyError('');
-        }
+        setCompanyError(!value ? 'La compañía es requerida' : value.length < 3 || value.length > 50 ? 'La compañía debe tener entre 3 y 50 caracteres' : '');
     };
 
-    // Validar formulario
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if ([username, phone, email, name, lastname, company].some((field) => !field)) return;
 
-        setUsernameError('');
-        setPhoneError('');
-        setEmailError('');
-        setNameError('');
-        setLastnameError('');
-        setCompanyError('');
+        const formdata = { username, phone, email, name, lastname, company };
+        const result = await updateProfile(formdata);
 
-        let valid = true;
-
-        if (!username) {
-            setUsernameError('El usuario es requerido');
-            valid = false;
-        }
-
-        if (!phone) {
-            setPhoneError('El teléfono es requerido');
-            valid = false;
-        } else if (!phoneRegex.test(phone)) {
-            setPhoneError('El teléfono no es válido');
-            valid = false;
-        }
-
-        if (!email) {
-            setEmailError('El correo es requerido');
-            valid = false;
-        } else if (!emailRegex.test(email)) {
-            setEmailError('El correo no es válido');
-            valid = false;
-        }
-
-        if (!name) {
-            setNameError('El nombre es requerido');
-            valid = false;
-        } else if (name.length < 3 || name.length > 50) {
-            setNameError('El nombre debe tener entre 3 y 50 caracteres');
-            valid = false;
-        }
-
-        if (!lastname) {
-            setLastnameError('El apellido es requerido');
-            valid = false;
-        } else if (lastname.length < 3 || lastname.length > 50) {
-            setLastnameError('El apellido debe tener entre 3 y 50 caracteres');
-            valid = false;
-        }
-
-        if (!company) {
-            setCompanyError('La compañía es requerida');
-            valid = false;
-        } else if (company.length < 3 || company.length > 50) {
-            setCompanyError('La compañía debe tener entre 3 y 50 caracteres');
-            valid = false;
-        }
-
-        if (!valid) return;
-
-        const formdata = {
-            username,
-            phone,
-            email,
-            name,
-            lastname,
-            company,
-        };
-
-        const result = await content(formdata);
-        if (result) {
-            if (result.httpCode === 200) {
-                setGlobalVariables((prev) => ({
-                    ...prev,
-                    username: formdata.username,
-                    phone: formdata.phone,
-                    email: formdata.email,
-                    name: formdata.name,
-                    lastname: formdata.lastname,
-                    company: formdata.company,
-                }));
-                showSuccessAlert('Guardado exitoso');
-            } else {
-                showErrorAlert(result.message);
-                setErrorResponse(result.message);
-            }
+        if (result.success) {
+            setGlobalVariables((prev) => ({ ...prev, ...formdata }));
+            showSuccessAlert('Perfil actualizado exitosamente');
+        } else {
+            showErrorAlert(result.message || 'Error al actualizar el perfil');
+            setErrorResponse(result.message);
         }
     };
 
@@ -208,8 +121,7 @@ export default function useProfile() {
         lastnameError,
         companyError,
         errorResponse,
-        loading,
-        error,
+        loading: loadingProfile || loadingUpdate,
         handleUsernameChange,
         handlePhoneChange,
         handleEmailChange,
