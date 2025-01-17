@@ -163,7 +163,7 @@ const UserModal = ({ isOpen, onClose, onSave, user }) => {
                                                 <button type="button" className="btn btn-outline-danger" onClick={onClose}>
                                                     Cancelar
                                                 </button>
-                                                <button type="submit" className="btn btn-primary ltr:ml-4 rtl:mr-4">
+                                                <button type="submit" className="btn btn-dark ltr:ml-4 rtl:mr-4">
                                                     {user ? 'Actualizar' : 'Agregar'}
                                                 </button>
                                             </div>

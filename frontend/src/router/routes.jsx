@@ -4,7 +4,6 @@ import { Navigate } from 'react-router-dom';
 import PublicRoute from '../hooks/guards/PublicRoute';
 import PrivateRoute from '../hooks/guards/ProtectedRoute';
 import Users from '../pages/Authentication/users/users.jsx';
-
 const ConfigAlert = lazy(() => import('../pages/ConfigAlert/ConfigAlert'));
 const Instalation = lazy(() => import('../pages/Instalation/Instalation'));
 const Home = lazy(() => import('../pages/Home/Home'));

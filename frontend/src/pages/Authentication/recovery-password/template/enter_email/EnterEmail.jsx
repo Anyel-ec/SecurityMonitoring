@@ -66,7 +66,7 @@ export default function EnterEmail({ setChange, setTimeCode, setMail }) {
             {errorResponse && <div className='w-full text-center'>
                 <span className='text-danger'>{errorResponse}</span>
             </div>}
-            <button type="submit" className="btn btn-gradient !mt-6 w-full border-0 uppercase shadow-[0_10px_20px_-10px_rgba(67,97,238,0.44)]">
+            <button type="submit" className="btn btn-dark !mt-6 w-full border-0 uppercase shadow-[0_10px_20px_-10px_rgba(67,97,238,0.44)]">
                 {loading ? (
                     <div className="flex items-center justify-center">
                         <i className="fas fa-spinner fa-spin"></i>

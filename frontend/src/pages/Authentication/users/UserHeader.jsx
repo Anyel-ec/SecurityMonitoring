@@ -16,7 +16,7 @@ const UserHeader = ({ search, setSearch, onAddUser }) => {
             </div>
             <div className="flex sm:flex-row flex-col sm:items-center sm:gap-3 gap-4 w-full sm:w-auto">
                 <div className="flex gap-3">
-                    <button type="button" className="btn btn-primary" onClick={onAddUser}>
+                    <button type="button" className="btn btn-dark" onClick={onAddUser}>
                         <IconUserPlus className="ltr:mr-2 rtl:ml-2" />
                         Agregar Usuario
                     </button>

@@ -153,7 +153,7 @@ const ConfigAlert = () => {
 
     return (
         <div>
-            <h6 className="text-2xl font-bold mb-5">Configuración de alertas</h6>
+            <h6 className="text-3xl font-bold mb-5">Configuración de alertas</h6>
             <div className="mb-5">
                 <select
                     value={selectedDatabase || ""}
@@ -253,11 +253,19 @@ const ConfigAlert = () => {
                     <button type="submit" className="btn btn-primary mt-4">Guardar</button>
                 </form>
             ) || (
-                     <>
-                        <div className='panel min-h-[500px] text-center flex items-center justify-center text-3xl'>
-                            Seleccione una base de datos para cargar las configuraciones.
+
+                    <div className="panel min-h-[500px] text-center flex items-center justify-center text-2xl">
+                        <div>
+                            <img
+                                src="/assets/images/seleccionar_bd.png"
+                                alt="Seleccionar base de datos"
+                                className="mx-auto mb-4 w-[400px] h-auto grayscale"
+                            />
+                            <p>Seleccione una base de datos para cargar las configuraciones.</p>
                         </div>
-                    </>
+                    </div>
+
+
                 )}
 
         </div>

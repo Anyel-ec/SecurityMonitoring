@@ -8,7 +8,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
                         type="button"
                         onClick={() => onPageChange(currentPage - 1)}
                         disabled={currentPage === 1}
-                        className="flex justify-center font-semibold px-3.5 py-2 rounded transition bg-white-light text-dark hover:text-white hover:bg-primary dark:text-white-light dark:bg-[#191e3a] dark:hover:bg-primary"
+                        className="flex justify-center font-semibold px-3.5 py-2 rounded transition bg-white-light text-dark hover:text-white hover:bg-dark dark:text-white-light dark:bg-[#191e3a] dark:hover:bg-primary"
                     >
                         &lt;
                     </button>
@@ -20,8 +20,8 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
                             onClick={() => onPageChange(index + 1)}
                             className={`flex justify-center font-semibold px-3.5 py-2 rounded transition ${
                                 currentPage === index + 1
-                                    ? 'bg-primary text-white dark:bg-primary dark:text-white-light'
-                                    : 'bg-white-light text-dark hover:text-white hover:bg-primary dark:text-white-light dark:bg-[#191e3a] dark:hover:bg-primary'
+                                    ? 'bg-dark text-white dark:bg-dark dark:text-white-light'
+                                    : 'bg-white-light text-dark hover:text-white hover:bg-dark dark:text-white-light dark:bg-[#191e3a] dark:hover:bg-dark'
                             }`}
                         >
                             {index + 1}
@@ -33,7 +33,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
                         type="button"
                         onClick={() => onPageChange(currentPage + 1)}
                         disabled={currentPage === totalPages}
-                        className="flex justify-center font-semibold px-3.5 py-2 rounded transition bg-white-light text-dark hover:text-white hover:bg-primary dark:text-white-light dark:bg-[#191e3a] dark:hover:bg-primary"
+                        className="flex justify-center font-semibold px-3.5 py-2 rounded transition bg-white-light text-dark hover:text-white hover:bg-dark dark:text-white-light dark:bg-[#191e3a] dark:hover:bg-primary"
                     >
                         &gt;
                     </button>

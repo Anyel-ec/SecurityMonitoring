@@ -69,7 +69,7 @@ const UsersTable = ({ users, onEdit, onDelete }) => {
                                     </td>
                                     <td>
                                         <div className="flex gap-4 items-center justify-center">
-                                            <button type="button" className="btn btn-sm btn-outline-primary" onClick={() => onEdit(user)}>
+                                            <button type="button" className="btn btn-sm btn-dark" onClick={() => onEdit(user)}>
                                                 Editar
                                             </button>
                                             <button type="button" className="btn btn-sm btn-outline-danger" onClick={() => onDelete(user)}>
