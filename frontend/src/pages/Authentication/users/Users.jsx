@@ -75,14 +75,12 @@ const Users = () => {
                     console.error('Error al crear usuario:', newUserResponse.message);
                 }
             }
-            resetForm();
+            resetForm(); // Utiliza resetForm directamente
             setAddUserModal(false);
         } catch (error) {
             console.error('Error al guardar usuario:', error);
         }
     };
-
-
 
     const editUser = (user) => {
         setEditingUser(user);

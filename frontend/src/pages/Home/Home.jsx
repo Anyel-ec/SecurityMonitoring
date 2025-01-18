@@ -3,7 +3,7 @@ import SavedConnections from './SavedConnections';
 import ConnectionDetails from './ConnectionDetails';
 import { loginAndAccessDashboard } from '../../hooks/services/grafanaService';
 import { testPostgresConnection } from '../../hooks/services/connection/connectionService';
-import { showSuccessAlert, showErrorAlert, showConfirmationAlert, showDockerErrorAlert } from '../../components/alerts/alerts';
+import { showSuccessAlert, showErrorAlert, showConfirmationAlert, showDockerErrorAlert } from '../../components/alerts/Alerts';
 import { getAllCredentials, deleteConnectionById, createOrUpdateCredential } from '../../hooks/services/connection/databaseCredentialService';
 import { checkDockerStatus, checkIfComposeExecuted, runDockerComposeWithDatabase } from '../../hooks/services/dockerService';
 import Swal from 'sweetalert2';

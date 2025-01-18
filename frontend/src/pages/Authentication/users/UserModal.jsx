@@ -7,7 +7,7 @@ import Select from 'react-select';
 import { HandleMode } from './selectStyles';
 import { useSelector } from 'react-redux';
 import { useGetAllRolesService } from '../../../hooks/services/system/users_services';
-import { showErrorAlert, showSuccessAlert } from '../../../components/Alerts/Alerts';
+import { showErrorAlert, showSuccessAlert } from '../../../components/alerts/Alerts';
 
 const validationSchema = Yup.object().shape({
     username: Yup.string().required('El nombre de usuario es requerido').max(50, 'Máximo 50 caracteres'),
@@ -85,22 +85,22 @@ const UserModal = ({ isOpen, onClose, onSave, user }) => {
                                     }}
                                     enableReinitialize={true}
                                     validationSchema={validationSchema}
-                                    onSubmit={async (values, { resetForm }) => {
+                                    onSubmit={async (values, formikHelpers) => {
                                         try {
-                                            await onSave(values); // Llamada para guardar o actualizar el usuario
-                                            showSuccessAlert(
-                                                user ? 'Usuario actualizado' : 'Usuario creado',
-                                                user ? 'El usuario fue actualizado con éxito.' : 'El usuario fue creado con éxito.'
-                                            );
-                                            resetForm();
+                                            await onSave(values, formikHelpers);
+                                            formikHelpers.resetForm();
                                             onClose();
                                         } catch (error) {
+                                            console.error("Error en onSave:", error);
                                             showErrorAlert(
-                                                'Error al guardar usuario',
-                                                'Ocurrió un error al intentar guardar el usuario. Inténtalo de nuevo.'
+                                                "Error al guardar usuario",
+                                                "Ocurrió un error al intentar guardar el usuario. Inténtalo de nuevo."
                                             );
                                         }
                                     }}
+
+
+
                                     >
                                     {({ values, setFieldValue }) => (
                                         <Form className="grid grid-cols-1 gap-4 sm:grid-cols-2">

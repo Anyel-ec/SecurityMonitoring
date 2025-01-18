@@ -24,7 +24,7 @@ const Instalation = () => {
     useEffect(() => {
         dispatch(setPageTitle('Instalación'));
     });
-
+    const [showModal, setShowModal] = useState(true);
     const [currentStep, setCurrentStep] = useState(1);
     const [darkMode, setDarkMode] = useState(false);
     const [errors, setErrors] = useState({});
@@ -32,6 +32,10 @@ const Instalation = () => {
     const [isInstalling, setIsInstalling] = useState(false);
 
     const navigate = useNavigate();
+
+    const handleModalClose = () => {
+        setShowModal(false);
+    };
 
     const [formState, setFormState] = useState({
         name: 'Anyel', lastname: 'Patino', company: 'ESPE', usuario: 'anyel', password: 'anyel', passwordConfirm: 'anyel', numberPhone: '0939470232', email: 'appatino@espe.edu.ec',
@@ -312,6 +316,12 @@ const Instalation = () => {
                 return (
                     <div className="text-center">
                         <h2 className="text-2xl font-bold">Instalación Completa!</h2>
+                        <img
+                            src="https://cdn-icons-png.flaticon.com/512/4685/4685238.png"
+                            alt="Instalación Completa"
+                            className="my-4 mx-auto"
+                            style={{ maxWidth: "300px" }}
+                        />
                         <p className="mt-2">Su configuración está lista. Verificación de la configuración del panel y la fuente de datos de Grafana...</p>
                     </div>
                 );
@@ -330,120 +340,186 @@ const Instalation = () => {
     ];
 
     const themeConfig = useSelector((state) => state.themeConfig);
+    const features = [
+        { icon: "fas fa-database", title: "Monitoreo Unificado", description: "Seguimiento de múltiples bases de datos en una plataforma" },
+        { icon: "fas fa-server", title: "Backend Robusto", description: "Desarrollado en Spring Boot para un rendimiento óptimo" },
+        { icon: "fas fa-chart-line", title: "Visualización Avanzada", description: "Métricas detalladas con Grafana y Prometheus" },
+        { icon: "fas fa-code", title: "Código Abierto", description: "Personalizable y mejorable según tus necesidades" },
+    ]
+
+
+    const tags = ["MongoDB", "PostgreSQL", "MariaDB", "React", "Spring Boot", "Grafana"]
 
     return (
         <div className="min-h-screen flex items-center justify-center">
-            {/* Theme Configuration */}
-            <div className='fixed top-6 right-6'>
-                {themeConfig.theme === 'light' ? (
-                    <button
-                        className={`${themeConfig.theme === 'light' &&
-                            'flex items-center p-2 rounded-full bg-white-light/40 dark:bg-dark/40 hover:text-primary hover:bg-white-light/90 dark:hover:bg-dark/60'
-                            }`}
-                        onClick={() => {
-                            dispatch(toggleTheme('dark'));
-                        }}
+            {/* Modal de Bienvenida */}
+            {/* Modal de Bienvenida */}
+            {showModal && (
+                <div className="fixed inset-0 bg-opacity-80 flex items-center justify-center z-50">
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 0.3 }}
+                        className="bg-white-900 rounded-lg shadow-lg max-w-4xl w-full p-8 border border-gray-100"
                     >
-                        <IconSun />
-                    </button>
-                ) : (
-                    ''
-                )}
-                {themeConfig.theme === 'dark' && (
-                    <button
-                        className={`${themeConfig.theme === 'dark' &&
-                            'flex items-center p-2 rounded-full bg-white-light/40 dark:bg-dark/40 hover:text-primary hover:bg-white-light/90 dark:hover:bg-dark/60'
-                            }`}
-                        onClick={() => {
-                            dispatch(toggleTheme('system'));
-                        }}
-                    >
-                        <IconMoon />
-                    </button>
-                )}
-                {themeConfig.theme === 'system' && (
-                    <button
-                        className={`${themeConfig.theme === 'system' &&
-                            'flex items-center p-2 rounded-full bg-white-light/40 dark:bg-dark/40 hover:text-primary hover:bg-white-light/90 dark:hover:bg-dark/60'
-                            }`}
-                        onClick={() => {
-                            dispatch(toggleTheme('light'));
-                        }}
-                    >
-                        <IconLaptop />
-                    </button>
-                )}
-            </div>
+                        <h2 className="text-3xl font-bold mb-4 bg-gradient-to-r from-dark to-pink-600 bg-clip-text text-dark text-center">
+                            Bienvenido a la Herramienta de Monitoreo
+                        </h2>
+                        <p className="text-gray-400 leading-relaxed mb-6">
+                            Esta herramienta está diseñada para ofrecer una solución integral para el monitoreo de bases de datos.
+                            Descubre cómo gestionar y visualizar tus métricas con facilidad utilizando nuestras tecnologías avanzadas.
+                        </p>
 
-            <div className="flex flex-col w-full h-screen max-w-6xl p-8">
-                {/* Progress Steps */}
-                <div className="relative mb-12 mt-10">
-                    {/* Connecting Lines */}
-                    <div className="absolute top-5 dark:bg-dark left-0 right-0 h-[2px] bg-blue-300" >
-                        <div
-                            className="h-full bg-blue-600 dark:bg-red transition-all duration-300 ease-in-out"
-                            style={{ width: `${((currentStep - 1) / (steps.length - 1)) * 100}% }`}}
-                        />
-                    </div>
-
-                    {/* Steps */}
-                    <div className="flex justify-between relative z-10">
-                        {steps.map((step, index) => (
-                            <div key={index} className="flex flex-col items-center">
-                                <div
-                                    className={`w-10 h-10 rounded-full flex items-center justify-center text-lg font-bold mb-2
-                      ${currentStep > step.number ? 'bg-blue-600 text-white' :
-                                            currentStep === step.number ? 'bg-blue-600 text-white' :
-                                                'bg-white dark:bg-dark text-blue-600 dark:text-blue-300 border-2 border-blue-300'}
-                      transition-all duration-300`}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                            {features.map((feature, index) => (
+                                <motion.div
+                                    key={index}
+                                    initial={{ opacity: 0, scale: 0.9 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    transition={{ duration: 0.3, delay: index * 0.1 }}
+                                    className="border-gray-700 rounded-lg p-4 hover:bg-gray-750 transition-colors duration-300 flex items-start space-x-4"
                                 >
-                                    {step.number}
-                                </div>
-                                <span className={`text-xs font-semibold uppercase tracking-wider whitespace-nowrap dark:text-blue-600 text-blue-500`}>
-                                    {step.title}
-                                </span>
-                            </div>
-                        ))}
-                    </div>
-                </div>
+                                    <i className={`${feature.icon} text-dark-400 text-2xl`}></i>
+                                    <div>
+                                        <h3 className="font-semibold text-lg mb-2">{feature.title}</h3>
+                                        <p className="text-gray-400 text-sm">{feature.description}</p>
+                                    </div>
+                                </motion.div>
+                            ))}
+                        </div>
 
-                {/* Content Area */}
-                <div className="panel p-5 mb-auto">
-                    <AnimatePresence mode="wait">
-                        <motion.div
-                            key={currentStep}
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -20 }}
-                            transition={{ duration: 0.5 }}
-                        >
-                            {renderStepContent()}
-                        </motion.div>
-                    </AnimatePresence>
-                </div>
+                        <div className="flex flex-wrap justify-center gap-2 mb-6">
+                            {tags.map((tag, index) => (
+                                <motion.div
+                                    key={index}
+                                    initial={{ opacity: 0, scale: 0.8 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    transition={{ duration: 0.3, delay: index * 0.05 }}
+                                    className="relative group"
+                                >
+                                    <span className="bg-gray-100 text-dark border border-purple-100 px-3 py-1 rounded-full hover:bg-dark hover:text-white transition-colors duration-300">
+                                        {tag}
+                                    </span>
+                                    <div className="absolute bottom-full mb-2 left-1/2 transform -translate-x-1/2 bg-gray-700 text-white text-sm px-3 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">
+                                        Tecnología soportada
+                                    </div>
+                                </motion.div>
+                            ))}
+                        </div>
 
-                {/* Navigation Buttons */}
-                <div className="flex justify-end mt-5">
-                    {currentStep > 1 && (
                         <button
-                            onClick={prevStep}
-                            className="px-6 py-2 mr-4 btn btn-outline-primary rounded-md hover:bg-white hover:text-primary transition-colors duration-300"
+                            onClick={() => setShowModal(false)}
+                            className="w-full py-3 bg-dark from-purple-600 to-pink-600 text-white font-bold rounded-md shadow-md hover:from-purple-700 hover:to-pink-700 transition duration-300"
                         >
-                            Anterior
+                            Continuar
                         </button>
-                    )}
-                    <button
-                        onClick={nextStep}
-                        disabled={currentStep === 5 && isInstalling}
-                        className={`btn btn-primary transition-colors duration-300
-                ${(currentStep === 5 && isInstalling) ? 'opacity-50 cursor-not-allowed' : ''}`}
-                    >
-                        {currentStep === 4 ? 'Instalar' : currentStep < 5 ? 'Siguiente' : 'Finalizar'}
-                    </button>
+                    </motion.div>
                 </div>
-            </div>
+            )}
+
+            {/* Contenido Principal */}
+            {!showModal && (
+                <>
+                    {/* Theme Configuration */}
+                    <div className="fixed top-6 right-6">
+                        {themeConfig.theme === 'light' && (
+                            <button
+                                className="flex items-center p-2 rounded-full bg-white-light/40 dark:bg-dark/40 hover:text-primary hover:bg-white-light/90 dark:hover:bg-dark/60"
+                                onClick={() => dispatch(toggleTheme('dark'))}
+                            >
+                                <IconSun />
+                            </button>
+                        )}
+                        {themeConfig.theme === 'dark' && (
+                            <button
+                                className="flex items-center p-2 rounded-full bg-white-light/40 dark:bg-dark/40 hover:text-primary hover:bg-white-light/90 dark:hover:bg-dark/60"
+                                onClick={() => dispatch(toggleTheme('system'))}
+                            >
+                                <IconMoon />
+                            </button>
+                        )}
+                        {themeConfig.theme === 'system' && (
+                            <button
+                                className="flex items-center p-2 rounded-full bg-white-light/40 dark:bg-dark/40 hover:text-primary hover:bg-white-light/90 dark:hover:bg-dark/60"
+                                onClick={() => dispatch(toggleTheme('light'))}
+                            >
+                                <IconLaptop />
+                            </button>
+                        )}
+                    </div>
+
+                    <div className="flex flex-col w-full h-screen max-w-6xl p-8">
+                        {/* Progress Steps */}
+                        <div className="relative mb-12 mt-10">
+                            {/* Connecting Lines */}
+                            <div className="absolute top-5 dark:bg-dark left-0 right-0 h-[2px] bg-blue-300">
+                                <div
+                                    className="h-full bg-blue-600 transition-all duration-300 ease-in-out"
+                                    style={{ width: `${((currentStep - 1) / (steps.length - 1)) * 100}%` }}
+                                />
+                            </div>
+
+                            {/* Steps */}
+                            <div className="flex justify-between relative z-10">
+                                {steps.map((step, index) => (
+                                    <div key={index} className="flex flex-col items-center">
+                                        <div
+                                            className={`w-10 h-10 rounded-full flex items-center justify-center text-lg font-bold mb-2 ${currentStep > step.number
+                                                ? 'bg-blue-600 text-white'
+                                                : currentStep === step.number
+                                                    ? 'bg-blue-600 text-white'
+                                                    : 'bg-white dark:bg-dark text-blue-600 dark:text-blue-300 border-2 border-blue-300'
+                                                } transition-all duration-300`}
+                                        >
+                                            {step.number}
+                                        </div>
+                                        <span className="text-xs font-semibold uppercase tracking-wider whitespace-nowrap dark:text-blue-600 text-blue-500">
+                                            {step.title}
+                                        </span>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Content Area */}
+                        <div className="panel p-5 mb-auto">
+                            <AnimatePresence mode="wait">
+                                <motion.div
+                                    key={currentStep}
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: -20 }}
+                                    transition={{ duration: 0.5 }}
+                                >
+                                    {renderStepContent()}
+                                </motion.div>
+                            </AnimatePresence>
+                        </div>
+
+                        {/* Navigation Buttons */}
+                        <div className="flex justify-end mt-5">
+                            {currentStep > 1 && (
+                                <button
+                                    onClick={prevStep}
+                                    className="px-6 py-2 mr-4 btn btn-outline-primary rounded-md hover:bg-white hover:text-primary transition-colors duration-300"
+                                >
+                                    Anterior
+                                </button>
+                            )}
+                            <button
+                                onClick={nextStep}
+                                disabled={currentStep === 5 && isInstalling}
+                                className={`btn btn-primary transition-colors duration-300 ${currentStep === 5 && isInstalling ? 'opacity-50 cursor-not-allowed' : ''
+                                    }`}
+                            >
+                                {currentStep === 4 ? 'Instalar' : currentStep < 5 ? 'Siguiente' : 'Finalizar'}
+                            </button>
+                        </div>
+                    </div>
+                </>
+            )}
         </div>
     );
-};
+}
 
 export default Instalation;
