@@ -21,7 +21,8 @@ import org.springframework.context.annotation.Configuration;
                 description = """
                     Open source tool service for dynamic monitoring of three DBMS: MongoDB, PostgreSQL, and MariaDB/MySQL.
                     
-                    **Project Manager: Ing. Luis Chica Moncayo, Mgtr** [Linkedin Profile](https://www.linkedin.com/in/luis-chica-moncayo-7970232a/) - [Github Profile](https://github.com/LuisChica18)
+                    **Product Owner: Ing. Luis Chica Moncayo, Mgtr** [Linkedin Profile](https://www.linkedin.com/in/luis-chica-moncayo-7970232a/) - [Github Profile](https://github.com/LuisChica18)
+                    **Project Manager: Ing. Veronica Martinez, Mgtr** - Docente de la ESPE
                     
                     **Developer: Ing. Angel Patiño**  [Linkedin Profile](https://www.linkedin.com/in/anyel-ec/) - [GitHub Profile](https://github.com/Anyel-ec)
                     """,
