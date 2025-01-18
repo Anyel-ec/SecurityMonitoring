@@ -11,7 +11,11 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-
+/*
+ * Author: Anyel EC
+ * Github: https://github.com/Anyel-ec
+ * Creation date: 10/01/2025
+ */
 @Component
 @RequiredArgsConstructor
 @Slf4j

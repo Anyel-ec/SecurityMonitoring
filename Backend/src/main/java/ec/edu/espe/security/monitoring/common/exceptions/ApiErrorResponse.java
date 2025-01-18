@@ -14,7 +14,11 @@ import static java.util.Collections.emptyList;
 import static java.util.Objects.isNull;
 import static org.springframework.http.HttpStatus.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
-
+/*
+ * Author: Anyel EC
+ * Github: https://github.com/Anyel-ec
+ * Creation date: 10/01/2025
+ */
 @ToString
 @Getter
 public final class ApiErrorResponse {

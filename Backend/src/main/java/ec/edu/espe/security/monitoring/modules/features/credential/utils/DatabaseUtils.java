@@ -10,7 +10,11 @@ import org.springframework.stereotype.Component;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-
+/*
+ * Author: Anyel EC
+ * Github: https://github.com/Anyel-ec
+ * Creation date: 04/11/2024
+ */
 @Component
 @Slf4j
 public class DatabaseUtils {

@@ -27,7 +27,11 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.concurrent.TimeoutException;
-
+/*
+ * Author: Anyel EC
+ * Github: https://github.com/Anyel-ec
+ * Creation date: 10/01/2025
+ */
 @RestControllerAdvice
 @Slf4j
 public class ApiExceptionHandler {

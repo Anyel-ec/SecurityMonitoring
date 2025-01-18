@@ -7,7 +7,11 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
-
+/*
+ * Author: Anyel EC
+ * Github: https://github.com/Anyel-ec
+ * Creation date: 04/11/2024
+ */
 
 @Repository
 public interface InstallationConfigRepository extends JpaRepository<InstallationConfig, Long> {

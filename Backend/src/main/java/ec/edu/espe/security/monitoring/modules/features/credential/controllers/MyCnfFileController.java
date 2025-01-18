@@ -1,10 +1,4 @@
 package ec.edu.espe.security.monitoring.modules.features.credential.controllers;
-/*
- * Author: Anyel EC
- * Github: https://github.com/Anyel-ec
- * Creation date: 16/11/2024
- */
-
 import ec.edu.espe.security.monitoring.common.dto.JsonResponseDto;
 import ec.edu.espe.security.monitoring.modules.integrations.docker.utils.MyCnfFileGenerator;
 import lombok.RequiredArgsConstructor;
@@ -13,9 +7,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-/**
- * Controlador para probar la generación del archivo .my.cnf
+/*
+ * Author: Anyel EC
+ * Github: https://github.com/Anyel-ec
+ * Creation date: 04/11/2024
  */
+
 @Slf4j
 @RestController
 @RequiredArgsConstructor

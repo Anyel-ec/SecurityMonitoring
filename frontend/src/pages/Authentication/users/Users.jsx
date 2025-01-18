@@ -11,7 +11,11 @@ import {
     useUpdateUserService,
     useDeleteUserService,
 } from '../../../hooks/services/system/users_services';
-
+import {
+    showSuccessAlert,
+    showErrorAlert,
+    showConfirmationAlert,
+} from '../../../components/alerts/Alerts';
 const Users = () => {
     const dispatch = useDispatch();
 
@@ -36,9 +40,11 @@ const Users = () => {
             if (response.success && Array.isArray(response.result)) {
                 setUsers(response.result);
             } else {
+                showErrorAlert('Error al cargar usuarios', response.message || 'Datos inválidos');
                 console.error('Error al cargar usuarios:', response.message || 'Datos inválidos');
             }
         } catch (error) {
+            showErrorAlert('Error al cargar usuarios', error.message || 'Ocurrió un error inesperado');
             console.error('Error al cargar usuarios:', error);
         }
     }, [fetchUsers]);
@@ -67,17 +73,22 @@ const Users = () => {
                         user.id === editingUser.id ? { ...user, ...values } : user
                     )
                 );
+                showSuccessAlert('Usuario actualizado', 'El usuario se actualizó correctamente.');
+
             } else {
                 const newUserResponse = await createUser(payload);
                 if (newUserResponse.success && newUserResponse.result) {
                     setUsers((prev) => [newUserResponse.result, ...prev]);
+                    showSuccessAlert('Usuario creado', 'El usuario se creó correctamente.');
                 } else {
+                    showErrorAlert('Error al crear usuario', newUserResponse.message);
                     console.error('Error al crear usuario:', newUserResponse.message);
                 }
             }
             resetForm(); // Utiliza resetForm directamente
             setAddUserModal(false);
         } catch (error) {
+            showErrorAlert('Error al guardar usuario', error.message || 'Ocurrió un error inesperado');
             console.error('Error al guardar usuario:', error);
         }
     };
@@ -101,7 +112,12 @@ const Users = () => {
             try {
                 await deleteUser(user.id);
                 setUsers((prev) => prev.filter((u) => u.id !== user.id));
+                showSuccessAlert('Usuario eliminado', 'El usuario fue eliminado correctamente.');
             } catch (error) {
+                showErrorAlert(
+                    'Error al eliminar usuario',
+                    error.message || 'Ocurrió un error inesperado'
+                );
                 console.error('Error al eliminar usuario:', error);
             }
         }

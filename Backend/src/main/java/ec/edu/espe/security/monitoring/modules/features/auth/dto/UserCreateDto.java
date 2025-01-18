@@ -11,7 +11,6 @@ import java.util.Set;
  * Creation date: 16/01/2025
  */
 
-
 @Data
 public class UserCreateDto {
     @NotBlank(message = "El nombre de usuario no puede estar vacío")

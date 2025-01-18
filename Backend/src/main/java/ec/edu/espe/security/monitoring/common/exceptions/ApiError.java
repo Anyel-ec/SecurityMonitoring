@@ -1,5 +1,9 @@
 package ec.edu.espe.security.monitoring.common.exceptions;
-
+/*
+ * Author: Anyel EC
+ * Github: https://github.com/Anyel-ec
+ * Creation date: 10/01/2025
+ */
 public interface ApiError {
 
     // This method returns the error message
