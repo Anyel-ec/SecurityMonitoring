@@ -57,7 +57,7 @@ public class MailServiceImpl implements MailService {
             String formattedOtp = otp != null ? otp : "N/A";
             String currentDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 
-            // Reemplazo de valores en la plantilla con verificación nula
+
             String emailBody = emailContent.toString()
                     .replace("{{username}}", username)
                     .replace("{{otp_code}}", formattedOtp)

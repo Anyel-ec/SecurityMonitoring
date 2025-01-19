@@ -25,12 +25,17 @@ public class MailConfig {
     @Value("${ALERT_SMTP_TO}")
     private String to;
 
+    @Value("${alertmanager.smtp.port}")
+    private int port;
+    @Value("${alertmanager.smtp.host}")
+    private String host;
+
+
     @Bean
     public JavaMailSender javaMailSender() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-        String host = "smtp.gmail.com";
         mailSender.setHost(host);
-        mailSender.setPort(587);
+        mailSender.setPort(port);
         mailSender.setUsername(username);
         mailSender.setPassword(password);
 
