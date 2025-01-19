@@ -1,0 +1,117 @@
+{
+    "Category": 
+        {
+        "picture": null,
+        "entityId": 1,
+        "description": "Soft drinks, coffees, teas, beers, and ales",
+        "categoryName": "Beverages"
+    }, 
+    "Customer": {
+        "fax": "030-0123456",
+        "city": "Berlin",
+        "email": null,
+        "phone": "030-3456789",
+        "mobile": null,
+        "region": null,
+        "address": "Obere Str. 0123",
+        "country": "Germany",
+        "entityId": 1,
+        "postalCode": "10092",
+        "companyName": "Customer NRZBB",
+        "contactName": "Allen, Michael",
+        "contactTitle": "Sales Representative"
+    }, 
+    "Employee": {
+        "city": "Seattle",
+        "email": null,
+        "mgrId": null,
+        "notes": null,
+        "phone": "(206) 555-0101",
+        "photo": null,
+        "title": "CEO",
+        "mobile": null,
+        "region": "WA",
+        "address": "7890 - 20th Ave. E., Apt. 2A",
+        "country": "USA",
+        "entityId": 1,
+        "hireDate": "2002-05-01 00:00:00.000000",
+        "lastname": "Davis",
+        "birthDate": "1958-12-08 00:00:00.000000",
+        "extension": null,
+        "firstname": "Sara",
+        "photoPath": null,
+        "postalCode": "10003",
+        "titleOfCourtesy": "Ms."
+    }, 
+    "EmployeeTerritory": {
+        "entityId": 1,
+        "employeeId": 1,
+        "territoryCode": "06897"
+    }, 
+    "OrderDetail": {
+        "orderId": 10248,
+        "discount": 0.00,
+        "entityId": 1,
+        "quantity": 12,
+        "productId": 11,
+        "unitPrice": 14.00
+    },
+    "Product": {
+        "entityId": 1,
+        "unitPrice": 18.00,
+        "categoryId": 1,
+        "supplierId": 1,
+        "productName": "Product HHYDP",
+        "discontinued": "0",
+        "reorderLevel": null,
+        "unitsInStock": null,
+        "unitsOnOrder": null,
+        "quantityPerUnit": null
+    },
+    "Region": {
+        "entityId": 1,
+        "regiondescription": "Eastern"
+    },
+    "SalesOrder":{
+        "freight": 32.38,
+        "entityId": 10248,
+        "shipCity": "Reims",
+        "shipName": "Ship to 85-B",
+        "orderDate": "2006-07-04 00:00:00.000000",
+        "shipperId": 3,
+        "customerId": 85,
+        "employeeId": 5,
+        "shipRegion": null,
+        "shipAddress": "6789 rue de l'Abbaye",
+        "shipCountry": "France",
+        "shippedDate": "2006-07-16 00:00:00.000000",
+        "requiredDate": "2006-08-01 00:00:00.000000",
+        "shipPostalCode": "10345"
+    }, 
+    "Shipper": {
+        "phone": "(503) 555-0137",
+        "entityId": 1,
+        "companyName": "Shipper GVSUA"
+    },
+    "Supplier": {
+        "fax": null,
+        "city": "London",
+        "email": null,
+        "phone": "(171) 456-7890",
+        "region": null,
+        "address": "2345 Gilbert St.",
+        "country": "UK",
+        "HomePage": null,
+        "entityId": 1,
+        "postalCode": "10023",
+        "companyName": "Supplier SWRXU",
+        "contactName": "Adolphi, Stephan",
+        "contactTitle": "Purchasing Manager"
+    },
+    "Territory": {
+        "entityId": 1,
+        "regionId": 1,
+        "territoryCode": "01581",
+        "territorydescription": "Westboro"
+    }
+}

@@ -95,6 +95,7 @@ groups:
           description: >-
             Se han detectado más de 100 operaciones de inserción por segundo en
             MongoDB en los últimos 5 minutos.
+            
   - name: Data Rate Alerts
     rules:
       - alert: HighDataReceivedRateMongoDB

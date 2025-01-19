@@ -4,7 +4,7 @@ import {
   showErrorAlert,
   showWarningAlert,
   closeAlert,
-} from '../../../components/alerts/alerts';
+} from '../../../components/alerts/Alerts';
 import { completeInstallService } from '../../../hooks/services/installing/installationService';
 import { checkContainerStatusService } from '../../../hooks/services/dockerService';
 

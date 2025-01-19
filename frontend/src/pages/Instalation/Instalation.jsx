@@ -79,7 +79,7 @@ const Instalation = () => {
     };
 
     const runDockerAndCheckStatus = async () => {
-        showLoadingAlert('Ejecutando Docker...', 'Por favor, espera mientras se ejecuta Docker.');
+        showLoadingAlert('Ejecutando Docker-Compose...', 'Por favor, espera mientras se descargan las imagenes en Docker.');
         try {
             await runDockerInstallService();
             closeAlert();
@@ -192,19 +192,28 @@ const Instalation = () => {
 
         try {
             console.log("Validando los exportadores de Prometheus...");
-            await saveStep(exportersData, saveOrUpdatePrometheusExportersService, 'Puertos de los exportadores guardados correctamente');
-            showSuccessAlert('Exportadores validados correctamente', 'Todos los puertos están disponibles.');
-            runDockerAndCheckStatus();
+            // Realiza la validación llamando al servicio directamente
+            const response = await saveOrUpdatePrometheusExportersService(exportersData);
+
+            // Verifica si la respuesta fue exitosa
+            if (response.success) {
+                showSuccessAlert('Exportadores validados correctamente', 'Todos los puertos están disponibles.');
+                runDockerAndCheckStatus(); // Solo ejecuta la instalación si todo es exitoso
+            } else {
+                throw new Error(response.message || "Validación fallida. Revisa los exportadores.");
+            }
         } catch (error) {
-            showErrorAlertMessage('Error de validación', error.message);
-            throw new Error("No se puede continuar debido a errores en los exportadores.");
+            // Manejo de errores: muestra un mensaje y no permite continuar
+            showErrorAlertMessage('Error de validación', error.message || "Hubo un problema con los exportadores.");
+            console.error("No se puede continuar debido a errores en los exportadores:", error);
         }
     };
+
 
     const handleCompleteInstallation = async () => {
         try {
             // Mostrar el spinner de carga con SweetAlert
-            showLoadingAlert('Finalizando Configuración...', 'Configurando Grafana...');
+            showLoadingAlert('Finalizando Configuración...', 'Configurando Grafana con el dashboard y datasource.');
 
             const attemptGrafanaSetup = async () => {
                 try {
@@ -267,6 +276,7 @@ const Instalation = () => {
                     externalPortMongodb: true,
                 });
                 savePrometheusExporters();
+
                 break;
             case 5:
                 runDockerInstallService();
@@ -280,7 +290,10 @@ const Instalation = () => {
         }
     };
 
-    const prevStep = () => setCurrentStep((prev) => Math.max(prev - 1, 1));
+    const prevStep = () => {
+        if (currentStep === steps.length) return; // Evita regresar desde el paso final
+        setCurrentStep((prev) => Math.max(prev - 1, 1));
+    };
 
     const handleBlur = (field) => {
         setTouched((prev) => ({ ...prev, [field]: true }));
@@ -308,8 +321,14 @@ const Instalation = () => {
                         ) : (
                             <i className="fas fa-check text-green-500 mx-auto" style={{ fontSize: '1.5rem' }}></i>
                         )}
-                        <h2 className="text-2xl font-bold mt-4">Instalando...</h2>
-                        <p className="mt-2">Verificando el estado de los contenedores. Esto puede tardar unos segundos.</p>
+                        <h2 className="text-2xl font-bold mt-4">Se estan descargando las imagenes en docker</h2>
+                        <img
+                            src="https://www.libertya.org/wp-content/uploads/2021/02/icono1.gif"
+                            alt="Instalación Completa"
+                            className="my-4 mx-auto"
+                            style={{ maxWidth: "300px" }}
+                        />
+                        <p className="mt-2">Solo falta un último paso....</p>
                     </div>
                 );
             case 6:
@@ -322,7 +341,7 @@ const Instalation = () => {
                             className="my-4 mx-auto"
                             style={{ maxWidth: "300px" }}
                         />
-                        <p className="mt-2">Su configuración está lista. Verificación de la configuración del panel y la fuente de datos de Grafana...</p>
+                        <p className="mt-2">Su configuración está lista. Verificación de la configuración del panel y la fuente de datos de Grafana.</p>
                     </div>
                 );
             default:
@@ -420,6 +439,8 @@ const Instalation = () => {
             {/* Contenido Principal */}
             {!showModal && (
                 <>
+                    {/* Agregar el título principal */}
+
                     {/* Theme Configuration */}
                     <div className="fixed top-6 right-6">
                         {themeConfig.theme === 'light' && (
@@ -448,21 +469,34 @@ const Instalation = () => {
                         )}
                     </div>
 
+
                     <div className="flex flex-col w-full h-screen max-w-6xl p-8">
                         {/* Progress Steps */}
+                        <div className="text-center my-8">
+                            <h1 className="text-4xl font-bold text-blue-600 mb-2">Parámetros de Instalación del Sistema</h1>
+                            <p className="text-gray-500 text-lg">
+                                Configure los parámetros necesarios para la instalación del sistema de monitoreo.
+                            </p>
+                        </div>
                         <div className="relative mb-12 mt-10">
                             {/* Connecting Lines */}
+
                             <div className="absolute top-5 dark:bg-dark left-0 right-0 h-[2px] bg-blue-300">
                                 <div
                                     className="h-full bg-blue-600 transition-all duration-300 ease-in-out"
                                     style={{ width: `${((currentStep - 1) / (steps.length - 1)) * 100}%` }}
                                 />
+                                <div>
+
+                                </div>
                             </div>
+
 
                             {/* Steps */}
                             <div className="flex justify-between relative z-10">
                                 {steps.map((step, index) => (
                                     <div key={index} className="flex flex-col items-center">
+
                                         <div
                                             className={`w-10 h-10 rounded-full flex items-center justify-center text-lg font-bold mb-2 ${currentStep > step.number
                                                 ? 'bg-blue-600 text-white'
@@ -498,7 +532,7 @@ const Instalation = () => {
 
                         {/* Navigation Buttons */}
                         <div className="flex justify-end mt-5">
-                            {currentStep > 1 && (
+                            {currentStep > 1 && currentStep < steps.length && (
                                 <button
                                     onClick={prevStep}
                                     className="px-6 py-2 mr-4 btn btn-outline-primary rounded-md hover:bg-white hover:text-primary transition-colors duration-300"
@@ -507,7 +541,14 @@ const Instalation = () => {
                                 </button>
                             )}
                             <button
-                                onClick={nextStep}
+                                onClick={() => {
+                                    if (currentStep === 4) {
+                                        setCurrentStep(5); // Cambia directamente al paso 5
+                                        runDockerAndCheckStatus(); // Inicia el proceso de instalación
+                                    } else {
+                                        nextStep(); // Continúa con la lógica normal para otros pasos
+                                    }
+                                }}
                                 disabled={currentStep === 5 && isInstalling}
                                 className={`btn btn-primary transition-colors duration-300 ${currentStep === 5 && isInstalling ? 'opacity-50 cursor-not-allowed' : ''
                                     }`}
@@ -515,6 +556,7 @@ const Instalation = () => {
                                 {currentStep === 4 ? 'Instalar' : currentStep < 5 ? 'Siguiente' : 'Finalizar'}
                             </button>
                         </div>
+
                     </div>
                 </>
             )}
