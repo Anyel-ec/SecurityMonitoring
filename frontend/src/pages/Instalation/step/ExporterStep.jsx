@@ -5,7 +5,7 @@ export default function ExporterStep({ values, errors, touched, handleBlur, hand
     <form className="space-y-4">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <h3 className="text-lg font-semibold mb-2">Puerto de PostgreSQL</h3>
+          <h3 className="text-lg font-semibold mb-2">Puerto del Exportador de PostgreSQL</h3>
           <div>
             <label htmlFor="internalPortPostgres" className="block text-sm font-medium mb-1">Puerto Interno</label>
             <input
@@ -37,7 +37,7 @@ export default function ExporterStep({ values, errors, touched, handleBlur, hand
         </div>
 
         <div>
-          <h3 className="text-lg font-semibold mb-2">Puerto de MariaDB</h3>
+          <h3 className="text-lg font-semibold mb-2">Puerto del Exportador MariaDB</h3>
           <div>
             <label htmlFor="internalPortMariadb" className="block text-sm font-medium mb-1">Puerto Interno</label>
             <input
@@ -71,7 +71,7 @@ export default function ExporterStep({ values, errors, touched, handleBlur, hand
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <h3 className="text-lg font-semibold mb-2">Puerto de MongoDB</h3>
+          <h3 className="text-lg font-semibold mb-2">Puerto del Exportador MongoDB</h3>
           <div>
             <label htmlFor="internalPortMongodb" className="block text-sm font-medium mb-1">Puerto Interno</label>
             <input

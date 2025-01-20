@@ -191,23 +191,21 @@ const Instalation = () => {
         };
 
         try {
-            console.log("Validando los exportadores de Prometheus...");
-            // Realiza la validación llamando al servicio directamente
+            console.log('Datos de exportadores a enviar:', exportersData);
+
             const response = await saveOrUpdatePrometheusExportersService(exportersData);
 
-            // Verifica si la respuesta fue exitosa
-            if (response.success) {
-                showSuccessAlert('Exportadores validados correctamente', 'Todos los puertos están disponibles.');
-                runDockerAndCheckStatus(); // Solo ejecuta la instalación si todo es exitoso
-            } else {
-                throw new Error(response.message || "Validación fallida. Revisa los exportadores.");
+            if (!response.success) {
+                throw new Error(response.message || "Error en la validación de los exportadores.");
             }
+
+            console.log("Validación de exportadores exitosa:", response);
         } catch (error) {
-            // Manejo de errores: muestra un mensaje y no permite continuar
-            showErrorAlertMessage('Error de validación', error.message || "Hubo un problema con los exportadores.");
-            console.error("No se puede continuar debido a errores en los exportadores:", error);
+            console.error("Error en savePrometheusExporters:", error);
+            throw error; // Lanza el error para manejarlo en el botón
         }
     };
+
 
 
     const handleCompleteInstallation = async () => {
@@ -275,6 +273,7 @@ const Instalation = () => {
                     internalPortMongodb: true,
                     externalPortMongodb: true,
                 });
+                console.log("Validando los exportadores de Prometheus... CASO 4");
                 savePrometheusExporters();
 
                 break;
@@ -541,12 +540,24 @@ const Instalation = () => {
                                 </button>
                             )}
                             <button
-                                onClick={() => {
+                                onClick={async () => {
                                     if (currentStep === 4) {
-                                        setCurrentStep(5); // Cambia directamente al paso 5
-                                        runDockerAndCheckStatus(); // Inicia el proceso de instalación
+                                        console.log("Validando los exportadores de Prometheus...");
+
+                                        try {
+                                            // Ejecuta el método para validar y guardar los exportadores
+                                            await savePrometheusExporters();
+
+                                            // Si no hay errores, avanza al paso 5
+                                            console.log("Exportadores validados correctamente, avanzando al paso 5...");
+                                            setCurrentStep(5);
+                                            runDockerAndCheckStatus();
+                                        } catch (error) {
+                                            // Maneja errores durante la validación de exportadores
+                                            console.error("Error en la validación de exportadores:", error);
+                                        }
                                     } else {
-                                        nextStep(); // Continúa con la lógica normal para otros pasos
+                                        nextStep(); // Continúa con el flujo normal para otros pasos
                                     }
                                 }}
                                 disabled={currentStep === 5 && isInstalling}
@@ -555,6 +566,7 @@ const Instalation = () => {
                             >
                                 {currentStep === 4 ? 'Instalar' : currentStep < 5 ? 'Siguiente' : 'Finalizar'}
                             </button>
+
                         </div>
 
                     </div>

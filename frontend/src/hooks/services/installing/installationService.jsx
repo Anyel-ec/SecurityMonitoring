@@ -5,6 +5,30 @@ import { createPrometheusInstallDto } from '../../../core/dto/PrometheusInstallD
 import { createInstallationConfig } from '../../../core/models/InstallationConfig';
 import { createUserInstallRequestDto } from '../../../core/dto/UserInstallRequestDto';
 
+export const saveOrUpdatePrometheusExportersService = async (exporterData) => {
+    const BASE_URL = AppEnvironments.baseUrl;
+    try {
+        console.log('Enviando datos para la actualización de exportadores de Prometheus...');
+        const response = await axios.put(`${BASE_URL}/api/v1/install/prometheus-exporters`, exporterData);
+        console.log('Respuesta recibida:', response);
+        return response.data;
+    } catch (error) {
+        if (error.response) {
+            // Capturar error 422 y manejar múltiples errores
+            if (error.response.status === 422 && error.response.data.result) {
+                const errorMessages = error.response.data.result
+                    .map(err => `${err.message} (Puerto: ${err.rejectedValue})`)
+                    .join('\n');
+
+                throw new Error(`Errores de validación encontrados:\n${errorMessages}`);
+            }
+            throw new Error(error.response.data.message || 'Error al actualizar los exportadores de Prometheus');
+        } else {
+            throw new Error('No se pudo conectar al servidor. Verifica tu conexión.');
+        }
+    }
+};
+
 // Servicio para verificar el estado de la instalación
 export const checkInstallationStatusService = async () => {
   const BASE_URL = AppEnvironments.baseUrl;
@@ -157,29 +181,7 @@ export const completeInstallService = async () => {
 };
 
 
-export const saveOrUpdatePrometheusExportersService = async (exporterData) => {
-    const BASE_URL = AppEnvironments.baseUrl;
-    try {
-        console.log('Enviando datos para la actualización de exportadores de Prometheus...');
-        const response = await axios.put(`${BASE_URL}/api/v1/install/prometheus-exporters`, exporterData);
-        console.log('Respuesta recibida:', response);
-        return response.data;
-    } catch (error) {
-        if (error.response) {
-            // Capturar error 422 y manejar múltiples errores
-            if (error.response.status === 422 && error.response.data.result) {
-                const errorMessages = error.response.data.result
-                    .map(err => `${err.message} (Puerto: ${err.rejectedValue})`)
-                    .join('\n');
 
-                throw new Error(`Errores de validación encontrados:\n${errorMessages}`);
-            }
-            throw new Error(error.response.data.message || 'Error al actualizar los exportadores de Prometheus');
-        } else {
-            throw new Error('No se pudo conectar al servidor. Verifica tu conexión.');
-        }
-    }
-};
 
 // Service to save the user installation
 export const saveUserInstallService = async (userInstallData) => {
