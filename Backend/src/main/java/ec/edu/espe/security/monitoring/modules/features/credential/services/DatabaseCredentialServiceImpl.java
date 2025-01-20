@@ -6,6 +6,7 @@ import ec.edu.espe.security.monitoring.modules.core.initializer.models.SystemPar
 import ec.edu.espe.security.monitoring.modules.features.credential.repositories.DatabaseCredentialRepository;
 import ec.edu.espe.security.monitoring.modules.core.initializer.repositories.SystemParametersRepository;
 import ec.edu.espe.security.monitoring.common.encrypt.utils.AesEncryptorUtil;
+import ec.edu.espe.security.monitoring.modules.features.credential.utils.DatabaseUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -26,9 +27,14 @@ public class DatabaseCredentialServiceImpl implements DatabaseCredentialService 
     private final DatabaseCredentialRepository databaseCredentialRepository;
     private final AesEncryptorUtil aesEncryptor;
     private final SystemParametersRepository systemParametersRepository;
+    private final DatabaseUtils databaseUtils;
 
     // Create or update database credentials
     public DatabaseCredential createOrUpdateCredential(DatabaseCredentialRequestDto credentialRequestDto) {
+        if (!databaseUtils.testDatabaseConnection(credentialRequestDto)) {
+            log.error("No se puede guardar las credenciales: No se pudo establecer conexión con la base de datos.");
+            throw new IllegalArgumentException("Error: No se pudo conectar a la base de datos con las credenciales proporcionadas.");
+        }
         // Find the SystemParameter  its name
         SystemParameters systemParameter = systemParametersRepository
                 .findByNameAndIsActiveTrue(credentialRequestDto.getSystemParameter().getName())

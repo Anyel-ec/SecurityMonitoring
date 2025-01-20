@@ -61,6 +61,7 @@ public class ExporterPrometheusInstallServiceImpl implements PrometheusExporterI
                 log.info("Creando nueva configuración de {}", paramName);
             }
 
+
             installationConfigRepository.save(config);
             log.info("Configuración de {} guardada con éxito.", paramName);
 

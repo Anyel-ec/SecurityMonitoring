@@ -36,6 +36,7 @@ public class AlertService {
                 String prometheusContent = Files.readString(alertingRulesPath);
                 String dockerComposeContent = Files.readString(dockerComposePath);
                 boolean exists = prometheusContent.contains(rulePath) && dockerComposeContent.contains(rulePath);
+                log.info("Existen dichos archivos. ");
                 return new JsonResponseDto(true, 200, "Check completed", exists);
             }
             return new JsonResponseDto(false, 404, "Prometheus or Docker Compose file not found", false);
@@ -57,8 +58,9 @@ public class AlertService {
             prometheusContent = prometheusContent.replace("rule_files:", "rule_files:\n  - " + rulePath);
             dockerComposeContent = dockerComposeContent.replace("- ./prometheus.yml:/etc/prometheus/prometheus.yml:ro",
                     "- ./prometheus.yml:/etc/prometheus/prometheus.yml:ro\n      - ./alertmanager/alerting_rules_" + databaseType.toLowerCase() + ".yml:" + rulePath + ":ro");
-
+            log.info("Se ha escrito en el archivo de alertas de Prometheus. {} docker", prometheusContent);
             Files.writeString(alertingRulesPath, prometheusContent);
+            log.info("Se ha escrito en el archivo de alertas de Prometheus. {} docker", dockerComposeContent);
             Files.writeString(dockerComposePath, dockerComposeContent);
             return new JsonResponseDto(true, 200, "Rule added successfully", null);
         } catch (IOException e) {
