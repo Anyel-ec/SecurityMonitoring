@@ -31,6 +31,8 @@ public class BackendApplication {
         System.setProperty("ALERT_SMTP_PASSWORD", dotenv.get("ALERT_SMTP_PASSWORD", ""));
         System.setProperty("ALERT_SMTP_TO", dotenv.get("ALERT_SMTP_TO", ""));
         System.setProperty("ALERT_SMTP_PORT", dotenv.get("ALERT_SMTP_PORT", ""));
+        System.setProperty("ALERT_SMTP_HOST_WITHOUT_PORT", dotenv.get("ALERT_SMTP_HOST_WITHOUT_PORT", ""));
+
 
         // URL
         System.setProperty("URL_SERVER_DEPLOY", dotenv.get("URL_SERVER_DEPLOY", ""));

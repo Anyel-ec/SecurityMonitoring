@@ -27,7 +27,7 @@ public class MailConfig {
 
     @Value("${alertmanager.smtp.port}")
     private int port;
-    @Value("${alertmanager.smtp.host}")
+    @Value("${alertmanager.smtp.without.host}")
     private String host;
 
 
