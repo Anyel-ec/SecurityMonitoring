@@ -1,6 +1,7 @@
 package ec.edu.espe.security.monitoring.modules.features.credential.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ec.edu.espe.security.monitoring.common.security.jwt.JwtProvider;
 import ec.edu.espe.security.monitoring.modules.features.credential.dto.DatabaseCredentialRequestDto;
 import ec.edu.espe.security.monitoring.common.dto.JsonResponseDto;
 import ec.edu.espe.security.monitoring.modules.features.credential.models.DatabaseCredential;
@@ -30,6 +31,7 @@ public class DatabaseCredentialController {
     private final DatabaseCredentialService credentialService;
     private final AuditLogService auditLogService;
     private final HttpServletRequest request;
+    private final JwtProvider jwtProvider;
 
     /**
      * Endpoint to create or update database credentials.
@@ -43,7 +45,10 @@ public class DatabaseCredentialController {
                                                             @RequestHeader("Authorization") String authorizationHeader) {
         try {
             log.info("Creating or updating database credentials");
-            DatabaseCredential credential = credentialService.createOrUpdateCredential(dto);
+            String token = authorizationHeader.replace("Bearer ", "").trim();
+
+            String username = jwtProvider.getNombreUsuarioFromToken(token);
+            DatabaseCredential credential = credentialService.createOrUpdateCredential(dto, username);
 
             // Capture request body
             String requestBody = new ObjectMapper().writeValueAsString(dto);
@@ -69,9 +74,13 @@ public class DatabaseCredentialController {
     @GetMapping
     public ResponseEntity<JsonResponseDto> getAllCredentials(@RequestHeader("Authorization") String authorizationHeader) {
         try {
+            String token = authorizationHeader.replace("Bearer ", "").trim();
+
+            String username = jwtProvider.getNombreUsuarioFromToken(token);
+
             auditLogService.saveAuditLogFromRequest(authorizationHeader, "GET_ALL_CREDENTIALS", HttpStatus.OK.value(), "Credential list retrieved successfully", request, null);
 
-            List<DatabaseCredential> credentials = credentialService.getAllCredentials();
+            List<DatabaseCredential> credentials = credentialService.getAllCredentials(username);
 
             // Save audit log
             return ResponseEntity.ok(new JsonResponseDto(true, 200, "Credential list retrieved successfully", credentials));

@@ -19,7 +19,7 @@ public class CorsConfig {
             @Override
             public void addCorsMappings(@NotNull CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("http://localhost:4173") // origin the frontend
+                        .allowedOrigins("http://localhost:5173") // origin the frontend
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
                         .exposedHeaders("Set-Cookie") // permit header Set-Cookie

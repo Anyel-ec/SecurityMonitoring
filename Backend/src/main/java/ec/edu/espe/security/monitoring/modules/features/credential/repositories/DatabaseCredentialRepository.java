@@ -1,5 +1,6 @@
 package ec.edu.espe.security.monitoring.modules.features.credential.repositories;
 
+import ec.edu.espe.security.monitoring.modules.features.auth.model.UserInfo;
 import ec.edu.espe.security.monitoring.modules.features.credential.models.DatabaseCredential;
 import ec.edu.espe.security.monitoring.modules.core.initializer.models.SystemParameters;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -25,8 +26,13 @@ public interface DatabaseCredentialRepository extends JpaRepository<DatabaseCred
     // Retrieves all active database credentials
     List<DatabaseCredential> findByIsActiveTrue();
 
+    // Finds all active database credentials by username
+    List<DatabaseCredential> findByUser_UsernameAndIsActiveTrue(String username);
+
     // Find active MariaDB credentials
     List<DatabaseCredential> findBySystemParameterNameAndIsActive(String systemParameterName, Boolean isActive);
+    Optional<DatabaseCredential> findByUserAndSystemParameterAndIsActiveTrue(UserInfo user, SystemParameters systemParameter);
+
 
 }
 

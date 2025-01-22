@@ -1,5 +1,7 @@
 package ec.edu.espe.security.monitoring.modules.features.credential.services;
 
+import ec.edu.espe.security.monitoring.modules.features.auth.model.UserInfo;
+import ec.edu.espe.security.monitoring.modules.features.auth.repository.UserInfoRepository;
 import ec.edu.espe.security.monitoring.modules.features.credential.dto.DatabaseCredentialRequestDto;
 import ec.edu.espe.security.monitoring.modules.features.credential.models.DatabaseCredential;
 import ec.edu.espe.security.monitoring.modules.core.initializer.models.SystemParameters;
@@ -10,6 +12,7 @@ import ec.edu.espe.security.monitoring.modules.features.credential.utils.Databas
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -28,49 +31,71 @@ public class DatabaseCredentialServiceImpl implements DatabaseCredentialService 
     private final AesEncryptorUtil aesEncryptor;
     private final SystemParametersRepository systemParametersRepository;
     private final DatabaseUtils databaseUtils;
+    private final UserInfoRepository userInfoRepository;
 
-    // Create or update database credentials
-    public DatabaseCredential createOrUpdateCredential(DatabaseCredentialRequestDto credentialRequestDto) {
+    @Transactional
+    public DatabaseCredential createOrUpdateCredential(DatabaseCredentialRequestDto credentialRequestDto, String username) {
+        // Verificar la conexión a la base de datos
         if (!databaseUtils.testDatabaseConnection(credentialRequestDto)) {
             log.error("No se puede guardar las credenciales: No se pudo establecer conexión con la base de datos.");
             throw new IllegalArgumentException("Error: No se pudo conectar a la base de datos con las credenciales proporcionadas.");
         }
-        // Find the SystemParameter  its name
-        SystemParameters systemParameter = systemParametersRepository
-                .findByNameAndIsActiveTrue(credentialRequestDto.getSystemParameter().getName())
-                .orElseThrow(() -> new IllegalArgumentException("Parámetro del sistema no encontrado: " + credentialRequestDto.getSystemParameter().getName()));
 
-        // Check if a credential with the same host and system parameter already exists
-        Optional<DatabaseCredential> existingCredentialOpt = databaseCredentialRepository.findBySystemParameterAndIsActive(systemParameter, true);
-
-        // Encrypt the password
-        String encryptedPassword;
-        try {
-            encryptedPassword = aesEncryptor.encrypt(credentialRequestDto.getPassword());
-        } catch (Exception e) {
-            throw new IllegalStateException("Error encrypting the password", e);
+        // Obtener el usuario actual
+        UserInfo user = userInfoRepository.findByUsernameAndIsActiveTrue(username);
+        if (user == null) {
+            log.error("Usuario no encontrado o inactivo: {}", username);
+            throw new IllegalArgumentException("Usuario no encontrado o inactivo.");
         }
 
-        // Create or update the credential using the builder
-        DatabaseCredential credential = DatabaseCredential.builder()
-                .id(existingCredentialOpt.map(DatabaseCredential::getId).orElse(null))  // Retain ID if it exists
-                .host(credentialRequestDto.getHost())
-                .port(credentialRequestDto.getPort())
-                .username(credentialRequestDto.getUsername())
-                .password(encryptedPassword)
-                .systemParameter(systemParameter)  // Assign the found system parameter
-                .comment(credentialRequestDto.getComment())
-                .isActive(true)
-                .createdAt(existingCredentialOpt.map(DatabaseCredential::getCreatedAt).orElse(null))  // Retain creation date if it exists
-                .build();
+        // Obtener el tipo de base de datos (SGBD)
+        SystemParameters systemParameter = systemParametersRepository
+                .findByNameAndIsActiveTrue(credentialRequestDto.getSystemParameter().getName())
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "Parámetro del sistema no encontrado: " + credentialRequestDto.getSystemParameter().getName()));
 
-        // Save the credential in the repository and return the result
+        // Buscar si ya existe una credencial para este usuario y tipo de SGBD
+        Optional<DatabaseCredential> existingCredentialOpt = databaseCredentialRepository
+                .findByUserAndSystemParameterAndIsActiveTrue(user, systemParameter);
+
+        DatabaseCredential credential;
+
+        if (existingCredentialOpt.isPresent()) {
+            // Reemplazar la credencial existente
+            credential = existingCredentialOpt.get();
+            log.info("Reemplazando la credencial existente para el usuario {} y el tipo de base de datos {}", username, systemParameter.getName());
+
+            credential.setHost(credentialRequestDto.getHost());
+            credential.setPort(credentialRequestDto.getPort());
+            credential.setUsername(credentialRequestDto.getUsername());
+            credential.setPassword(aesEncryptor.encrypt(credentialRequestDto.getPassword()));
+            credential.setComment(credentialRequestDto.getComment());
+            credential.setParamValue(null);
+        } else {
+            // Crear nueva credencial
+            log.info("Creando nueva credencial para el usuario {} y el tipo de base de datos {}", username, systemParameter.getName());
+            credential = DatabaseCredential.builder()
+                    .host(credentialRequestDto.getHost())
+                    .port(credentialRequestDto.getPort())
+                    .username(credentialRequestDto.getUsername())
+                    .password(aesEncryptor.encrypt(credentialRequestDto.getPassword()))
+                    .systemParameter(systemParameter)
+                    .comment(credentialRequestDto.getComment())
+                    .paramValue(null)
+                    .isActive(true)
+                    .user(user)
+                    .build();
+        }
+
+        // Guardar la credencial
         return databaseCredentialRepository.save(credential);
     }
 
+
+
     // Retrieve all credentials from the repository
-    public List<DatabaseCredential> getAllCredentials() {
-        List<DatabaseCredential> credentials = databaseCredentialRepository.findByIsActiveTrue();
+    public List<DatabaseCredential> getAllCredentials(String username) {
+        List<DatabaseCredential> credentials = databaseCredentialRepository.findByUser_UsernameAndIsActiveTrue(username);
 
         // Iterate over each credential to decrypt the password before returning it
         for (DatabaseCredential credential : credentials) {

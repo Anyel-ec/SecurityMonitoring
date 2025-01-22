@@ -11,11 +11,11 @@ import java.util.List;
  * Creation date: 02/01/2025
  */
 public interface DatabaseCredentialService {
-    DatabaseCredential createOrUpdateCredential(DatabaseCredentialRequestDto credentialRequestDto);
+    DatabaseCredential createOrUpdateCredential(DatabaseCredentialRequestDto credentialRequestDto, String username);
 
     DatabaseCredential getCredentialById(Long id);
 
     void deleteCredential(Long id);
 
-    List<DatabaseCredential> getAllCredentials();
+    List<DatabaseCredential> getAllCredentials(String username);
 }

@@ -2,6 +2,7 @@ package ec.edu.espe.security.monitoring.modules.features.credential.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import ec.edu.espe.security.monitoring.modules.core.initializer.models.SystemParameters;
+import ec.edu.espe.security.monitoring.modules.features.auth.model.UserInfo;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,7 +16,12 @@ import java.time.LocalDateTime;
  * Github: https://github.com/Anyel-ec
  * Creation date: 04/11/2024
  */
-
+@Table(
+        name = "database_credential",
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = {"user_id", "type_bd"})
+        }
+)
 @Builder
 @Entity
 @Data
@@ -36,13 +42,13 @@ public class DatabaseCredential {
 
 
     // Only BD
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "type_bd", referencedColumnName = "id")
     private SystemParameters systemParameter;
 
-    /*@ManyToOne
+    @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
-    private UserInfo user;*/
+    private UserInfo user;
 
     @Column(columnDefinition = "TEXT")
     private String comment;
