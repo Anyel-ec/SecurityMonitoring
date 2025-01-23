@@ -335,7 +335,7 @@ const Instalation = () => {
                     <div className="text-center">
                         <h2 className="text-2xl font-bold">Instalación Completa!</h2>
                         <img
-                            src="https://cdn-icons-png.flaticon.com/512/4685/4685238.png"
+                            src="https://i.postimg.cc/SNnGkdLC/check-2.png"
                             alt="Instalación Completa"
                             className="my-4 mx-auto"
                             style={{ maxWidth: "300px" }}
