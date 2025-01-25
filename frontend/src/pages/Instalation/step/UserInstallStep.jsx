@@ -13,6 +13,7 @@ export default function UserInstallStep({ values, errors, touched, handleBlur, h
                         name="name"
                         placeholder="Ingrese su nombre"
                         value={values.name}
+                        maxLength={50}
                         onChange={handleChange}
                         onBlur={() => handleBlur('name')}
                         className="form-input"
@@ -29,6 +30,7 @@ export default function UserInstallStep({ values, errors, touched, handleBlur, h
                         placeholder="Ingrese su apellido"
                         value={values.lastname}
                         onChange={handleChange}
+                        maxLength={50}
                         onBlur={() => handleBlur('lastname')}
                         className="form-input"
                     />
@@ -44,6 +46,7 @@ export default function UserInstallStep({ values, errors, touched, handleBlur, h
                         type="text"
                         id="company"
                         name="company"
+                        maxLength={50}
                         placeholder="Ingrese el nombre de la empresa"
                         value={values.company}
                         onChange={handleChange}
@@ -61,6 +64,7 @@ export default function UserInstallStep({ values, errors, touched, handleBlur, h
                         name="usuario"
                         placeholder="Ingrese un nombre de usuario"
                         value={values.usuario}
+                        maxLength={50}
                         onChange={handleChange}
                         onBlur={() => handleBlur('usuario')}
                         className="form-input"
@@ -80,6 +84,7 @@ export default function UserInstallStep({ values, errors, touched, handleBlur, h
                         placeholder="Ingrese una contraseña"
                         value={values.password}
                         onChange={handleChange}
+                        max={50}
                         onBlur={() => handleBlur('password')}
                         className="form-input"
                     />
@@ -95,6 +100,7 @@ export default function UserInstallStep({ values, errors, touched, handleBlur, h
                         placeholder="Repita la contraseña"
                         value={values.passwordConfirm}
                         onChange={handleChange}
+                        max={50}
                         onBlur={() => handleBlur('passwordConfirm')}
                         className="form-input"
                     />
@@ -113,6 +119,8 @@ export default function UserInstallStep({ values, errors, touched, handleBlur, h
                         placeholder="Ingrese un número de teléfono"
                         value={values.numberPhone}
                         onChange={handleChange}
+                        minLength={10}
+                        maxLength={10}
                         onBlur={() => handleBlur('numberPhone')}
                         className="form-input"
                     />
@@ -127,6 +135,8 @@ export default function UserInstallStep({ values, errors, touched, handleBlur, h
                         name="email"
                         placeholder="Ingrese un correo electrónico"
                         value={values.email}
+                        minLength={5}
+                        maxLength={50}
                         onChange={handleChange}
                         onBlur={() => handleBlur('email')}
                         className="form-input"
