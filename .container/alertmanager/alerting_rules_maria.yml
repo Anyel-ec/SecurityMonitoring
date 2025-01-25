@@ -24,6 +24,7 @@ groups:
           description: >-
             El uso promedio de CPU en el Exportador de MariaDB ha superado el
             80% en los últimos 5 minutos.
+            
   - name: Memory Usage Alerts
     rules:
       - alert: HighMemoryUsageMariadbExporter

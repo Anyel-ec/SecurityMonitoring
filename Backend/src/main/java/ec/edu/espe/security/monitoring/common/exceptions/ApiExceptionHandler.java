@@ -199,7 +199,4 @@ public class ApiExceptionHandler {
                 new JsonResponseDto(false, HttpStatus.UNAUTHORIZED.value(),
                         "El token JWT tiene un formato inválido. Verifica y vuelve a intentarlo.", null));
     }
-
-
-
 }

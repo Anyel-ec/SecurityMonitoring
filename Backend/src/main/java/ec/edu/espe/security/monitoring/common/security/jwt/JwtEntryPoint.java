@@ -25,7 +25,6 @@ public class JwtEntryPoint implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest req, HttpServletResponse res, AuthenticationException e)
             throws IOException {
-        log.error("Error no autorizado {}", e.getMessage());
         JsonResponseDto resp = new JsonResponseDto(Boolean.FALSE, HttpStatus.UNAUTHORIZED.value(), "Unauthorized", null);
         res.setContentType("application/json");
         res.setStatus(HttpStatus.UNAUTHORIZED.value());

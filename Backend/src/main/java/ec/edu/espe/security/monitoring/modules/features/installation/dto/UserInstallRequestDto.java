@@ -21,6 +21,7 @@ public class UserInstallRequestDto {
     private String password;
 
     @NotBlank(message = "El número de teléfono no puede estar en blanco")
+    @Size(min = 10, max = 10, message = "El número de teléfono debe tener 10 caracteres")
     private String numberPhone;
 
     @NotBlank(message = "El correo electrónico no puede estar en blanco")

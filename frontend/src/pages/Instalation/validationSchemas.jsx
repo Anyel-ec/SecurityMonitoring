@@ -73,7 +73,7 @@ export const userInstallValidationSchema = Yup.object().shape({
 
     numberPhone: Yup.string()
         .matches(/^\d+$/, 'El número de teléfono debe contener solo dígitos')
-        .min(7, 'El número de teléfono debe tener al menos 7 dígitos')
+        .min(10, 'El número de teléfono debe tener al menos 10 dígitos')
         .max(10, 'El número de teléfono no puede exceder los 10 dígitos')
         .required('El número de teléfono es requerido'),
 

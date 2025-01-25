@@ -30,7 +30,6 @@ public class RsaServiceImpl {
 
     public String loginCliente(String data) throws IllegalBlockSizeException, NoSuchPaddingException, BadPaddingException, NoSuchAlgorithmException, InvalidKeyException {
 
-        // Desencriptar los datos recibidos
         String decryptedPayload = rsaEncryptUtil.decrypt(data, environmentPrivateKey);
 
         return "in development....";
