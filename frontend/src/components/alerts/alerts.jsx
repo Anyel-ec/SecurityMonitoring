@@ -21,14 +21,12 @@ export const showErrorAlert = (title, message) => {
     title: title,
     // text: message,
     showConfirmButton: false,
-    timer: 3000,
+    timer: 4000,
   });
 };
 
 export const showErrorAlertMessage = (title, message) => {
     Swal.fire({
-      toast: true,
-      position: 'top-right',
       icon: 'error',
       title: title,
       text: message,  // Mostrar ahora el texto del error

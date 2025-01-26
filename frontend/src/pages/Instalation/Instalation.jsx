@@ -201,10 +201,12 @@ const Instalation = () => {
 
             console.log("Validación de exportadores exitosa:", response);
         } catch (error) {
-            console.error("Error en savePrometheusExporters:", error);
-            throw error; // Lanza el error para manejarlo en el botón
+            // Utilizamos la alerta que muestra el mensaje completo
+            showErrorAlertMessage("Error en la validación de exportadores", error.message || error.toString());
+            throw error; // Lanza el error para manejarlo en otro nivel si es necesario
         }
     };
+
 
 
 
@@ -406,7 +408,7 @@ const Instalation = () => {
                             ))}
                         </div>
 
-                        <div className="flex flex-wrap justify-center gap-2 mb-6">
+                        {/* <div className="flex flex-wrap justify-center gap-2 mb-6">
                             {tags.map((tag, index) => (
                                 <motion.div
                                     key={index}
@@ -423,7 +425,7 @@ const Instalation = () => {
                                     </div>
                                 </motion.div>
                             ))}
-                        </div>
+                        </div> */}
 
                         <button
                             onClick={() => setShowModal(false)}
