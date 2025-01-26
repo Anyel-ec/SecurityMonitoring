@@ -35,33 +35,33 @@ public class DatabaseCredentialServiceImpl implements DatabaseCredentialService 
 
     @Transactional
     public DatabaseCredential createOrUpdateCredential(DatabaseCredentialRequestDto credentialRequestDto, String username) {
-        // Verificar la conexión a la base de datos
+        // verificar la conexión a la base de datos
         if (!databaseUtils.testDatabaseConnection(credentialRequestDto)) {
             log.error("No se puede guardar las credenciales: No se pudo establecer conexión con la base de datos.");
             throw new IllegalArgumentException("Error: No se pudo conectar a la base de datos con las credenciales proporcionadas.");
         }
 
-        // Obtener el usuario actual
+        // get users by username and is active true
         UserInfo user = userInfoRepository.findByUsernameAndIsActiveTrue(username);
         if (user == null) {
             log.error("Usuario no encontrado o inactivo: {}", username);
             throw new IllegalArgumentException("Usuario no encontrado o inactivo.");
         }
 
-        // Obtener el tipo de base de datos (SGBD)
+        // find by name and is active true
         SystemParameters systemParameter = systemParametersRepository
                 .findByNameAndIsActiveTrue(credentialRequestDto.getSystemParameter().getName())
                 .orElseThrow(() -> new IllegalArgumentException(
                         "Parámetro del sistema no encontrado: " + credentialRequestDto.getSystemParameter().getName()));
 
-        // Buscar si ya existe una credencial para este usuario y tipo de SGBD
+        // search for an existing credential
         Optional<DatabaseCredential> existingCredentialOpt = databaseCredentialRepository
                 .findByUserAndSystemParameterAndIsActiveTrue(user, systemParameter);
 
         DatabaseCredential credential;
 
         if (existingCredentialOpt.isPresent()) {
-            // Reemplazar la credencial existente
+            // updatre existing credential
             credential = existingCredentialOpt.get();
             log.info("Reemplazando la credencial existente para el usuario {} y el tipo de base de datos {}", username, systemParameter.getName());
 
@@ -72,7 +72,7 @@ public class DatabaseCredentialServiceImpl implements DatabaseCredentialService 
             credential.setComment(credentialRequestDto.getComment());
             credential.setParamValue(null);
         } else {
-            // Crear nueva credencial
+            // create new credential
             log.info("Creando nueva credencial para el usuario {} y el tipo de base de datos {}", username, systemParameter.getName());
             credential = DatabaseCredential.builder()
                     .host(credentialRequestDto.getHost())
@@ -87,7 +87,7 @@ public class DatabaseCredentialServiceImpl implements DatabaseCredentialService 
                     .build();
         }
 
-        // Guardar la credencial
+        // save credential
         return databaseCredentialRepository.save(credential);
     }
 

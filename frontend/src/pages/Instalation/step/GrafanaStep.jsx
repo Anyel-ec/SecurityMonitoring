@@ -12,6 +12,7 @@ export default function GrafanaStep({ values, errors, touched, handleBlur, handl
                     placeholder="Ingrese un nombre de usuario"
                     value={values.grafanaAdmin}
                     onChange={handleChange}
+                    maxLength={20}
                     onBlur={() => handleBlur('grafanaAdmin')}
                     className="form-input"
                 />
@@ -24,6 +25,7 @@ export default function GrafanaStep({ values, errors, touched, handleBlur, handl
                     type="password"
                     id="grafanaPassword"
                     name="grafanaPassword"
+                    maxLength={20}
                     placeholder="Ingrese una contraseña"
                     value={values.grafanaPassword}
                     onChange={handleChange}
@@ -39,6 +41,7 @@ export default function GrafanaStep({ values, errors, touched, handleBlur, handl
                     type="password"
                     id="grafanaPasswordConfirm"
                     name="grafanaPasswordConfirm"
+                    maxLength={20}
                     placeholder="Repita la contraseña"
                     value={values.grafanaPasswordConfirm}
                     onChange={handleChange}
@@ -55,6 +58,7 @@ export default function GrafanaStep({ values, errors, touched, handleBlur, handl
                     id="grafanaLocalPort"
                     name="grafanaLocalPort"
                     placeholder="e.g., 3000"
+                    maxLength={5}
                     value={values.grafanaLocalPort}
                     onChange={handleChange}
                     onBlur={() => handleBlur('grafanaLocalPort')}
@@ -70,6 +74,7 @@ export default function GrafanaStep({ values, errors, touched, handleBlur, handl
                     id="grafanaDockerPort"
                     name="grafanaDockerPort"
                     placeholder="e.g., 3000"
+                    maxLength={5}
                     value={values.grafanaDockerPort}
                     onChange={handleChange}
                     onBlur={() => handleBlur('grafanaDockerPort')}

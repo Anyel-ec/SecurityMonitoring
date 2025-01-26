@@ -22,7 +22,6 @@ public class UserManagementController {
 
     private final UserManagementService userManagementService;
 
-    // Endpoint para crear un nuevo usuario
     @PostMapping("/create")
     public ResponseEntity<JsonResponseDto> createUser(
             @RequestHeader("Authorization") String authorizationHeader,
@@ -39,7 +38,7 @@ public class UserManagementController {
         }
     }
 
-    // Endpoint para obtener todos los usuarios
+
     @GetMapping
     public ResponseEntity<JsonResponseDto> getAllUsers(@RequestHeader("Authorization") String authorizationHeader) {
         try {
@@ -53,7 +52,6 @@ public class UserManagementController {
         }
     }
 
-    // Endpoint para actualizar un usuario existente
     @PutMapping("/update/{userId}")
     public ResponseEntity<JsonResponseDto> updateUser(
             @RequestHeader("Authorization") String authorizationHeader,
@@ -70,7 +68,6 @@ public class UserManagementController {
         }
     }
 
-    // Endpoint para eliminar un usuario
     @DeleteMapping("/delete/{userId}")
     public ResponseEntity<JsonResponseDto> deleteUser(
             @RequestHeader("Authorization") String authorizationHeader,

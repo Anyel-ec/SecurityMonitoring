@@ -2,6 +2,7 @@ package ec.edu.espe.security.monitoring.modules.features.auth.dto;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 import java.util.Set;
@@ -21,6 +22,7 @@ public class UserCreateDto {
     private String email;
 
     @NotBlank(message = "El teléfono no puede estar vacío")
+    @Size(min = 10, max = 10, message = "El teléfono debe tener 10 dígitos")
     private String phone;
 
     @NotBlank(message = "El nombre no puede estar vacío")

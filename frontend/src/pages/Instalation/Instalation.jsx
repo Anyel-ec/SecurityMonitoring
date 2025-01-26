@@ -335,14 +335,14 @@ const Instalation = () => {
             case 6:
                 return (
                     <div className="text-center">
-                        <h2 className="text-2xl font-bold">Instalación Completa!</h2>
+                        <h1 className="text-2xl font-bold">Instalación Completa!</h1>
                         <img
                             src="https://i.postimg.cc/SNnGkdLC/check-2.png"
                             alt="Instalación Completa"
                             className="my-4 mx-auto"
-                            style={{ maxWidth: "300px" }}
+                            style={{ maxWidth: "250px" }}
                         />
-                        <p className="mt-2">Su configuración está lista. Verificación de la configuración del panel y la fuente de datos de Grafana.</p>
+                        <p className="text-xl font-bold">Su configuración está lista. Verificación de la configuración del panel y la fuente de datos de Grafana.</p>
                     </div>
                 );
             default:

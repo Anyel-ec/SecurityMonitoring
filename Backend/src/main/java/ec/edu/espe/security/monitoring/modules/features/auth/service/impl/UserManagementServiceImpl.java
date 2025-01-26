@@ -81,7 +81,7 @@ public class UserManagementServiceImpl implements UserManagementService {
                 return new JsonResponseDto(false, HttpStatus.UNAUTHORIZED.value(), "No autorizado", null);
             }
 
-            List<UserInfo> users = userInfoRepository.findByIsActiveTrue();
+            List<UserInfo> users = userInfoRepository.findByIsActiveTrueAndUsernameNot(username);
             return new JsonResponseDto(true, HttpStatus.OK.value(), "Lista de usuarios obtenida con éxito", users);
         } catch (Exception e) {
             log.error("Error al obtener usuarios: {}", e.getMessage());

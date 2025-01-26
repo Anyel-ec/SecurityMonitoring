@@ -56,12 +56,18 @@ public class DatabaseCredentialController {
             // Save audit log
             auditLogService.saveAuditLogFromRequest(authorizationHeader, "CREATE_OR_UPDATE", HttpStatus.OK.value(), "Credential created or updated successfully", request, requestBody);
             return ResponseEntity.ok(new JsonResponseDto(true, 200, "Credential created successfully", credential));
+        } catch (IllegalArgumentException e) {
+            log.error("Validation error: {}", e.getMessage());
+
+            // Save audit log
+            auditLogService.saveAuditLogFromRequest(authorizationHeader, "CREATE_OR_UPDATE", HttpStatus.BAD_REQUEST.value(), e.getMessage(), request, null);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new JsonResponseDto(false, 400, e.getMessage(), null));
         } catch (Exception e) {
             log.error("Error creating credential: {}", e.getMessage());
 
             // Save audit log
             auditLogService.saveAuditLogFromRequest(authorizationHeader, "CREATE_OR_UPDATE", HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage(), request, null);
-            return ResponseEntity.status(500).body(new JsonResponseDto(false, 500, "Error creating credential - " + e.getMessage(), null));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new JsonResponseDto(false, 500, "Error creating credential - " + e.getMessage(), null));
         }
     }
 

@@ -14,8 +14,12 @@ const validationSchema = Yup.object().shape({
     email: Yup.string().email('Correo electrónico no válido').required('Correo electrónico es requerido').max(100, 'Máximo 100 caracteres'),
     phone: Yup.string()
         .matches(/^\d+$/, 'Solo números permitidos')
+        .typeError('Solo números permitidos')
+        .transform((value, originalValue) => (originalValue.trim() === '' ? NaN : value))
         .required('El número de teléfono es requerido')
-        .max(15, 'Máximo 15 caracteres'),
+        .min(10, 'Mínimo 10 caracteres')
+        .max(10, 'Máximo 10 caracteres'),
+
     name: Yup.string().required('El nombre es requerido').max(50, 'Máximo 50 caracteres'),
     lastname: Yup.string().required('El apellido es requerido').max(50, 'Máximo 50 caracteres'),
     company: Yup.string().required('La compañía es requerida').max(100, 'Máximo 100 caracteres'),
@@ -93,7 +97,7 @@ const UserModal = ({ isOpen, onClose, onSave, user }) => {
                                         } catch (error) {
                                             console.error("Error en onSave:", error);
                                             showErrorAlert(
-                                                "Error al guardar usuario",
+                                                "Error al guardar usuario", error.message ||
                                                 "Ocurrió un error al intentar guardar el usuario. Inténtalo de nuevo."
                                             );
                                         }

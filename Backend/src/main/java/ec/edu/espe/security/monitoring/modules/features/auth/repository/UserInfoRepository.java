@@ -2,6 +2,8 @@ package ec.edu.espe.security.monitoring.modules.features.auth.repository;
 
 import ec.edu.espe.security.monitoring.modules.features.auth.model.UserInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -21,6 +23,10 @@ public interface UserInfoRepository extends JpaRepository<UserInfo, Long> {
 
     // Finds an active user by their email
     UserInfo findByEmailAndIsActiveTrue(String email);
+
+    @Query("SELECT u FROM UserInfo u WHERE u.isActive = true AND u.username <> :excludedUsername")
+    List<UserInfo> findByIsActiveTrueAndUsernameNot(@Param("excludedUsername") String excludedUsername);
+
 
 }
 

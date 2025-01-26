@@ -12,6 +12,7 @@ export default function PrometheusStep({ values, errors, touched, handleBlur, ha
           placeholder="e.g., 3000"
           value={values.prometheusLocalPort}
           onChange={handleChange}
+          maxLength={5}
           onBlur={() => handleBlur('prometheusLocalPort')}
           className="form-input"
         />
@@ -25,6 +26,7 @@ export default function PrometheusStep({ values, errors, touched, handleBlur, ha
           id="prometheusDockerPort"
           name="prometheusDockerPort"
           placeholder="e.g., 3000"
+          maxLength={5}
           value={values.prometheusDockerPort}
           onChange={handleChange}
           onBlur={() => handleBlur('prometheusDockerPort')}
@@ -42,6 +44,7 @@ export default function PrometheusStep({ values, errors, touched, handleBlur, ha
           placeholder="e.g., 9093"
           value={values.alertmanagerLocalPort}
           onChange={handleChange}
+          maxLength={5}
           onBlur={() => handleBlur('alertmanagerLocalPort')}
           className="form-input"
         />
@@ -57,12 +60,13 @@ export default function PrometheusStep({ values, errors, touched, handleBlur, ha
           placeholder="e.g., 9093"
           value={values.alertmanagerDockerPort}
           onChange={handleChange}
+          maxLength={5}
           onBlur={() => handleBlur('alertmanagerDockerPort')}
           className="form-input"
         />
         {touched.alertmanagerDockerPort && errors.alertmanagerDockerPort && <p className="mt-1 text-sm text-red-500">{errors.alertmanagerDockerPort}</p>}
       </div>
-      
+
     </form>
   );
 }

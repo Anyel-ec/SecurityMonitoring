@@ -19,12 +19,12 @@ scrape_configs:
 
   - job_name: 'postgres'
     static_configs:
-      - targets: ['postgres-exporter:${EXPORT_POSTGRES_PORT_INTERNAL}']
+      - targets: ['postgres-exporter:9187']
 
   - job_name: 'mongo'
     static_configs:
-      - targets: ['mongo-exporter:${EXPORT_MONGO_PORT_INTERNAL}']
+      - targets: ['mongo-exporter:9216']
 
   - job_name: 'mariadb'
     static_configs:
-      - targets: ['mariadb-exporter:${EXPORT_MARIADB_PORT_INTERNAL}']
+      - targets: ['mariadb-exporter:9104']

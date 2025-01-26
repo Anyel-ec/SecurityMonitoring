@@ -15,6 +15,7 @@ export default function ExporterStep({ values, errors, touched, handleBlur, hand
               placeholder="5432"
               value={values.internalPortPostgres}
               onChange={handleChange}
+              maxLength={5}
               onBlur={() => handleBlur('internalPortPostgres')}
               className="form-input"
             />
@@ -29,6 +30,8 @@ export default function ExporterStep({ values, errors, touched, handleBlur, hand
               placeholder="5432"
               value={values.externalPortPostgres}
               onChange={handleChange}
+              maxLength={5}
+
               onBlur={() => handleBlur('externalPortPostgres')}
               className="form-input"
             />
@@ -45,6 +48,7 @@ export default function ExporterStep({ values, errors, touched, handleBlur, hand
               id="internalPortMariadb"
               name="internalPortMariadb"
               placeholder="3306"
+              maxLength={5}
               value={values.internalPortMariadb}
               onChange={handleChange}
               onBlur={() => handleBlur('internalPortMariadb')}
@@ -59,6 +63,7 @@ export default function ExporterStep({ values, errors, touched, handleBlur, hand
               id="externalPortMariadb"
               name="externalPortMariadb"
               placeholder="3306"
+              maxLength={5}
               value={values.externalPortMariadb}
               onChange={handleChange}
               onBlur={() => handleBlur('externalPortMariadb')}
@@ -79,6 +84,7 @@ export default function ExporterStep({ values, errors, touched, handleBlur, hand
               id="internalPortMongodb"
               name="internalPortMongodb"
               placeholder="27017"
+              maxLength={5}
               value={values.internalPortMongodb}
               onChange={handleChange}
               onBlur={() => handleBlur('internalPortMongodb')}
@@ -95,6 +101,7 @@ export default function ExporterStep({ values, errors, touched, handleBlur, hand
               placeholder="27020"
               value={values.externalPortMongodb}
               onChange={handleChange}
+              maxLength={5}
               onBlur={() => handleBlur('externalPortMongodb')}
               className="form-input"
             />
