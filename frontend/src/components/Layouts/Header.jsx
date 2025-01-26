@@ -12,6 +12,7 @@ import IconUser from '../Icon/IconUser';
 import IconLogout from '../Icon/IconLogout';
 import { useLogoutService } from '../../hooks/services/system/auth.service';
 import { useGlobalContext } from '../../hooks/contexts/global.context';
+import { hasRole } from '../../hooks/services/system/authUtils';
 
 const Header = () => {
     const location = useLocation();
@@ -205,14 +206,16 @@ const Header = () => {
                     </li>
 
 
-                    <li className="menu relative">
-                        <ul className="nav-link">
-                            <NavLink to="/gestion-usuarios" className="flex items-center">
-                                <i className="fa-solid fa-users"></i>
-                                <span className="px-1">{t('Gestionar usuarios')}</span>
-                            </NavLink>
-                        </ul>
-                    </li>
+                    {hasRole(['admin', 'superadmin']) && (
+                        <li className="menu relative">
+                            <ul className="nav-link">
+                                <NavLink to="/gestion-usuarios" className="flex items-center">
+                                    <i className="fa-solid fa-users"></i>
+                                    <span className="px-1">{t('Gestionar usuarios')}</span>
+                                </NavLink>
+                            </ul>
+                        </li>
+                    )}
 
                 </ul>
 

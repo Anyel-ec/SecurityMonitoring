@@ -4,6 +4,7 @@ import { Navigate } from 'react-router-dom';
 import PublicRoute from '../hooks/guards/PublicRoute';
 import PrivateRoute from '../hooks/guards/ProtectedRoute';
 import Users from '../pages/Authentication/users/users.jsx';
+import { hasRole } from '../hooks/services/system/authUtils.jsx';
 const ConfigAlert = lazy(() => import('../pages/ConfigAlert/ConfigAlert'));
 const Instalation = lazy(() => import('../pages/Instalation/Instalation'));
 const Home = lazy(() => import('../pages/Home/Home'));
@@ -13,6 +14,7 @@ const RecoveryPassword = lazy(() => import('../pages/Authentication/recovery-pas
 const Active = lazy(() => import('../pages/Activate/Activate.jsx'));
 const ERROR404 = lazy(() => import('../pages/Error/Error404'));
 const ERROR500 = lazy(() => import('../pages/Error/Error500'));
+
 // Componente para manejar redirecciones basadas en el estado de instalación
 const ProtectedRoute = ({ children, requiresInstallation }) => {
     const isInstalled = useInstallation();
@@ -136,9 +138,11 @@ const routes = [
         element: (
             <InstallationProvider>
                 <ProtectedRoute requiresInstallation={false}>
-                    <PrivateRoute
-                        element={<Users />}
-                    />
+                    {hasRole(['admin', 'superadmin']) ? (
+                        <PrivateRoute element={<Users />} />
+                    ) : (
+                        <Navigate to="/inicio" replace />
+                    )}
                 </ProtectedRoute>
             </InstallationProvider>
         ),
