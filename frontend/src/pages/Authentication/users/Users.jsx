@@ -14,17 +14,17 @@ import {
 import {
     showSuccessAlert,
     showErrorAlert,
-    showConfirmationAlert,
 } from '../../../components/alerts/Alerts';
+
 const Users = () => {
     const dispatch = useDispatch();
 
-    const [addUserModal, setAddUserModal] = useState(false);
+    const [isUserModalOpen, setIsUserModalOpen] = useState(false);
     const [users, setUsers] = useState([]);
     const [search, setSearch] = useState('');
     const [editingUser, setEditingUser] = useState(null);
 
-    const { content: fetchUsers, loading: loadingUsers } = useGetAllUsersService();
+    const { content: fetchUsers } = useGetAllUsersService();
     const { content: createUser } = useCreateUserService();
     const { content: updateUser } = useUpdateUserService();
     const { content: deleteUser } = useDeleteUserService();
@@ -49,7 +49,6 @@ const Users = () => {
         }
     }, [fetchUsers]);
 
-
     const filteredUsers = useMemo(() => {
         return users
             .filter((user) => user && user.username && user.email) // Verifica que las propiedades existan
@@ -57,7 +56,6 @@ const Users = () => {
                 `${user.username} ${user.email}`.toLowerCase().includes(search.toLowerCase())
             );
     }, [users, search]);
-
 
     const saveUser = async (values, { resetForm }) => {
         try {
@@ -68,25 +66,19 @@ const Users = () => {
 
             if (editingUser) {
                 await updateUser(editingUser.id, payload);
-                setUsers((prev) =>
-                    prev.map((user) =>
-                        user.id === editingUser.id ? { ...user, ...values } : user
-                    )
-                );
                 showSuccessAlert('Usuario actualizado', 'El usuario se actualizó correctamente.');
-
             } else {
                 const newUserResponse = await createUser(payload);
                 if (newUserResponse.success && newUserResponse.result) {
-                    setUsers((prev) => [newUserResponse.result, ...prev]);
                     showSuccessAlert('Usuario creado', 'El usuario se creó correctamente.');
                 } else {
                     showErrorAlert('Error al crear usuario', newUserResponse.message);
                     console.error('Error al crear usuario:', newUserResponse.message);
                 }
             }
-            resetForm(); // Utiliza resetForm directamente
-            setAddUserModal(false);
+            resetForm(); // Limpia el formulario
+            setIsUserModalOpen(false); // Cierra el modal
+            await loadUsers(); // Refresca la lista de usuarios
         } catch (error) {
             showErrorAlert('Error al guardar usuario', error.message || 'Ocurrió un error inesperado');
             console.error('Error al guardar usuario:', error);
@@ -95,7 +87,12 @@ const Users = () => {
 
     const editUser = (user) => {
         setEditingUser(user);
-        setAddUserModal(true);
+        setIsUserModalOpen(true);
+    };
+
+    const handleAddUser = () => {
+        setEditingUser(null); // Limpia el estado del usuario en edición
+        setIsUserModalOpen(true); // Abre el modal
     };
 
     const removeUser = async (user) => {
@@ -111,8 +108,8 @@ const Users = () => {
         if (result.isConfirmed) {
             try {
                 await deleteUser(user.id);
-                setUsers((prev) => prev.filter((u) => u.id !== user.id));
                 showSuccessAlert('Usuario eliminado', 'El usuario fue eliminado correctamente.');
+                await loadUsers(); // Refresca la lista de usuarios
             } catch (error) {
                 showErrorAlert(
                     'Error al eliminar usuario',
@@ -125,11 +122,11 @@ const Users = () => {
 
     return (
         <div>
-            <Header search={search} setSearch={setSearch} onAddUser={() => setAddUserModal(true)} />
+            <Header search={search} setSearch={setSearch} onAddUser={handleAddUser} />
             <UserTable users={filteredUsers} onEdit={editUser} onDelete={removeUser} />
             <UserModal
-                isOpen={addUserModal}
-                onClose={() => setAddUserModal(false)}
+                isOpen={isUserModalOpen}
+                onClose={() => setIsUserModalOpen(false)}
                 onSave={saveUser}
                 user={editingUser}
             />

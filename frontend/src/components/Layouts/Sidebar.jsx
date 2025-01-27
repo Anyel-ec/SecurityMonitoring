@@ -7,6 +7,7 @@ import { useState, useEffect } from 'react';
 import IconCaretsDown from '../Icon/IconCaretsDown';
 import IconMinus from '../Icon/IconMinus';
 import { useLogoutService } from '../../hooks/services/system/auth.service';
+import { hasRole } from '../../hooks/services/system/authUtils';
 
 const Sidebar = () => {
     const [currentMenu, setCurrentMenu] = useState('');
@@ -127,6 +128,17 @@ const Sidebar = () => {
                                     </div>
                                 </button>
                             </li>
+
+                            {hasRole(['admin', 'superadmin']) && (
+                                <li className="menu relative">
+                                    <ul className="nav-link">
+                                        <NavLink to="/gestion-usuarios" className="flex items-center">
+                                            <i className="fa-solid fa-users"></i>
+                                            <span className="px-1">{t('Gestionar usuarios')}</span>
+                                        </NavLink>
+                                    </ul>
+                                </li>
+                            )}
 
 
 

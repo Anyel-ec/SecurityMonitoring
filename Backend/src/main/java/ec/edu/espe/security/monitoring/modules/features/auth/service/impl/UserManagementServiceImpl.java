@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -93,21 +94,27 @@ public class UserManagementServiceImpl implements UserManagementService {
     @Transactional
     public JsonResponseDto updateUser(String token, Long userId, UserCreateDto userUpdateDto) {
         try {
+            log.info("Iniciando actualización para el usuario ID: {}", userId);
+
+            // Obtener el solicitante
             String username = jwtProvider.getNombreUsuarioFromToken(token);
             UserInfo requester = userInfoRepository.findByUsernameAndIsActiveTrue(username);
+            log.info("Usuario solicitante: {}", username);
 
             if (requester == null) {
                 return new JsonResponseDto(false, HttpStatus.UNAUTHORIZED.value(), "No autorizado", null);
             }
 
+            // Verificar si el usuario a actualizar existe
             Optional<UserInfo> userOptional = userInfoRepository.findById(userId);
             if (userOptional.isEmpty()) {
                 return new JsonResponseDto(false, HttpStatus.NOT_FOUND.value(), "Usuario no encontrado", null);
             }
 
             UserInfo userToUpdate = userOptional.get();
+            log.info("Usuario encontrado: {}", userToUpdate.getUsername());
 
-            // update user
+            // Actualizar campos
             userToUpdate.setUsername(userUpdateDto.getUsername());
             userToUpdate.setEmail(userUpdateDto.getEmail());
             userToUpdate.setPhone(userUpdateDto.getPhone());
@@ -115,20 +122,32 @@ public class UserManagementServiceImpl implements UserManagementService {
             userToUpdate.setLastname(userUpdateDto.getLastname());
             userToUpdate.setCompany(userUpdateDto.getCompany());
 
+            // Actualizar contraseña si se proporciona
             if (userUpdateDto.getPassword() != null && !userUpdateDto.getPassword().isEmpty()) {
                 userToUpdate.setPassword(passwordEncoder.encode(userUpdateDto.getPassword()));
+                log.info("Contraseña actualizada para el usuario: {}", userToUpdate.getUsername());
             }
 
+            // Actualizar roles
             List<UserRole> roles = userRoleRepository.findAllById(userUpdateDto.getRoles());
-            userToUpdate.setRoles(Set.copyOf(roles));
+            log.info("Roles asignados: {}", roles);
+            if (roles.isEmpty()) {
+                throw new IllegalArgumentException("No se encontraron roles válidos para los IDs proporcionados.");
+            }
+            userToUpdate.setRoles(new HashSet<>(roles)); // Utiliza un HashSet mutable
 
+            // Guardar el usuario actualizado
             userInfoRepository.save(userToUpdate);
+            log.info("Usuario actualizado con éxito: {}", userToUpdate.getUsername());
+
             return new JsonResponseDto(true, HttpStatus.OK.value(), "Usuario actualizado con éxito", userToUpdate);
         } catch (Exception e) {
-            log.error("Error al actualizar usuario: {}", e.getMessage());
+            log.error("Error al actualizar usuario: {}", e.getMessage(), e);
             return new JsonResponseDto(false, HttpStatus.INTERNAL_SERVER_ERROR.value(), "Error al procesar la solicitud", null);
         }
     }
+
+
 
     @Override
     public JsonResponseDto deleteUser(String token, Long userId) {

@@ -157,13 +157,13 @@ const UserModal = ({ isOpen, onClose, onSave, user }) => {
                                                 )}
                                                 <ErrorMessage name="roles" component="div" className="text-danger mt-1" />
                                             </div>
-                                            {values.isNewUser && (
+
                                                 <div className="col-span-2">
                                                     <label htmlFor="password">Contraseña</label>
                                                     <Field name="password" type="password" id="password" placeholder="Ingrese la contraseña" className="form-input" />
                                                     <ErrorMessage name="password" component="div" className="text-danger mt-1" />
                                                 </div>
-                                            )}
+
                                             <div className="flex justify-end items-center mt-8 col-span-2">
                                                 <button type="button" className="btn btn-outline-danger" onClick={onClose}>
                                                     Cancelar
