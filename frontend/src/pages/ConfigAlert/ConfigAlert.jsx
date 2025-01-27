@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import yaml from 'js-yaml';
 import { useAlertRulesService, useAlertRulesUpdateService } from '../../hooks/services/system/alert_rules.service';
-import { showErrorAlert, showSuccessAlert } from '../../components/alerts/alerts';
+import { showErrorAlert, showSuccessAlert } from '../../components/alerts/Alerts';
 import { useActivateDBService } from '../../hooks/services/system/activate_database.service';
+import {  runDockerInstallService } from '../../hooks/services/dockerService';
 const ConfigAlert = () => {
     const [databases, setDatabases] = useState(["Postgres", "Maria", "Mongo"]);
     const [selectedDatabase, setSelectedDatabase] = useState(null);
@@ -128,6 +129,7 @@ const ConfigAlert = () => {
             const response = await context_alertRulesUpdate(selectedDatabase, yamlData);
 
             if (response.httpCode === 200) {
+                runDockerInstallService();
                 showSuccessAlert(response.message, '');
             } else {
                 showErrorAlert(response.message, '');
@@ -214,15 +216,18 @@ const ConfigAlert = () => {
                                     />
                                 </div>
 
-                                <div className='flex flex-col gap-1'>
-                                    <label className="block font-bold mt-2">Severidad</label>
-                                    <input
-                                        type="text"
+                                <div>
+                                    <label className="block font-bold">Severidad</label>
+                                    <select
                                         value={config.severity}
                                         onChange={(e) => handleConfigChange(index, "severity", e.target.value)}
-                                        className="form-input block w-full"
-                                        placeholder="Severidad"
-                                    />
+                                        className="form-select mt-3"
+                                    >
+                                        <option value="critical">Critical - Atención inmediata</option>
+                                        <option value="warning">Warning - Condiciones anómalas</option>
+                                        <option value="info">Info - Informativa</option>
+                                        <option value="none">None - Sin clasificación</option>
+                                    </select>
                                 </div>
 
                                 <div className='flex flex-col gap-1 col-span-2'>

@@ -99,7 +99,7 @@ const Login = () => {
                                 </button>
                             </form>
                         </div>
-                        <p className="absolute bottom-6 w-full text-center dark:text-white">© {new Date().getFullYear()}.Security Monitoring Todos los Derechos Reservados.</p>
+                        <p className="absolute bottom-6 w-full text-center dark:text-white">© {new Date().getFullYear()}.Security Monitoring - Todos los Derechos Reservados.</p>
                     </div>
                 </div>
             </div>

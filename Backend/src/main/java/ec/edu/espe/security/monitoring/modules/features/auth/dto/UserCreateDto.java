@@ -34,7 +34,6 @@ public class UserCreateDto {
     @NotBlank(message = "La compañía no puede estar vacía")
     private String company;
 
-    @NotBlank(message = "La contraseña no puede estar vacía")
     private String password;
 
     @NotNull(message = "Debe asignar al menos un rol")

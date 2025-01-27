@@ -5,7 +5,7 @@ groups:
         expr: up{job="postgres"} == 0
         for: 10s
         labels:
-          severity: critical
+          severity: info
         annotations:
           summary: El Exportador de Postgres está caído
           description: El Exportador de Postgres ha estado caído por más de 1 minuto.
@@ -17,7 +17,7 @@ groups:
           * 1000) > 80
         for: 1m
         labels:
-          severity: warning
+          severity: info
         annotations:
           summary: Alto uso de CPU en el Exportador de Postgres
           description: >-
@@ -31,7 +31,7 @@ groups:
           > 500 * 1024 * 1024
         for: 1m
         labels:
-          severity: warning
+          severity: info
         annotations:
           summary: Alto uso de memoria en el Exportador de Postgres
           description: >-
@@ -43,7 +43,7 @@ groups:
         expr: pg_stat_activity_count{job="postgres", state="active"} != 0
         for: 1m
         labels:
-          severity: warning
+          severity: info
         annotations:
           summary: Conexiones activas en PostgreSQL detectadas
           description: >-
@@ -55,7 +55,7 @@ groups:
         expr: process_open_fds{instance="postgres-exporter:9187"} > 1000
         for: 1m
         labels:
-          severity: warning
+          severity: info
         annotations:
           summary: Alto número de File Descriptors abiertos en Postgres Exporter
           description: >-
@@ -67,7 +67,7 @@ groups:
         expr: sum(pg_stat_database_conflicts) > 10
         for: 1m
         labels:
-          severity: warning
+          severity: info
         annotations:
           summary: Conflictos en las consultas de PostgreSQL detectados
           description: >-
@@ -80,7 +80,7 @@ groups:
         expr: rate(pg_stat_user_tables_n_tup_del[5m]) > 100
         for: 1m
         labels:
-          severity: warning
+          severity: info
         annotations:
           summary: Alto número de operaciones de eliminación en PostgreSQL
           description: >-
@@ -92,7 +92,7 @@ groups:
         expr: rate(pg_stat_user_tables_n_tup_upd[5m]) > 100
         for: 1m
         labels:
-          severity: warning
+          severity: info
         annotations:
           summary: Alto número de operaciones de actualización en PostgreSQL
           description: >-
@@ -104,7 +104,7 @@ groups:
         expr: rate(pg_stat_user_tables_n_tup_ins[5m]) > 100
         for: 1m
         labels:
-          severity: warning
+          severity: info
         annotations:
           summary: Alto número de operaciones de inserción en PostgreSQL
           description: >-
@@ -116,21 +116,20 @@ groups:
         expr: rate(pg_stat_database_tup_returned{datname=~"$datname"}[5m]) > 1e6
         for: 1m
         labels:
-          severity: warning
+          severity: info
         annotations:
           summary: Alta tasa de datos recibidos en PostgreSQL
           description: >-
             Se ha detectado una tasa de más de 1 millón de tuplas por segundo
             devueltas en PostgreSQL para la base de datos $datname en los
             últimos 5 minutos. Revisa si esta actividad es normal.
-            
   - name: Data Sent Rate Alerts
     rules:
       - alert: HighDataSentRatePostgres
         expr: rate(pg_stat_database_blks_read[5m]) > 1e6
         for: 1m
         labels:
-          severity: warning
+          severity: info
         annotations:
           summary: Alta tasa de datos enviados en PostgreSQL
           description: >-
