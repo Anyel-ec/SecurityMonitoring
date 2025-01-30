@@ -18,12 +18,14 @@ import { toggleTheme } from '../../store/themeConfigSlice';
 import IconLaptop from '../../components/Icon/IconLaptop';
 import IconSun from '../../components/Icon/IconSun';
 import IconMoon from '../../components/Icon/IconMoon';
+import { Link } from 'react-router-dom';
 
 const Instalation = () => {
     const dispatch = useDispatch();
     useEffect(() => {
         dispatch(setPageTitle('Instalación'));
     });
+
     const [showModal, setShowModal] = useState(true);
     const [currentStep, setCurrentStep] = useState(1);
     const [darkMode, setDarkMode] = useState(false);
@@ -32,6 +34,27 @@ const Instalation = () => {
     const [isInstalling, setIsInstalling] = useState(false);
 
     const navigate = useNavigate();
+
+    useEffect(() => {
+        const handleKeyDown = (e) => {
+            if (showModal && e.code === "Space") {
+                e.preventDefault(); // Evita que la barra espaciadora haga scroll
+            }
+        };
+
+        if (showModal) {
+            document.body.style.overflow = "hidden"; // Evita el scroll
+            window.addEventListener("keydown", handleKeyDown); // Bloquea espacio
+        } else {
+            document.body.style.overflow = "auto"; // Restaura el scroll
+            window.removeEventListener("keydown", handleKeyDown);
+        }
+
+        return () => {
+            document.body.style.overflow = "auto"; // Asegura restaurar el scroll al desmontar
+            window.removeEventListener("keydown", handleKeyDown);
+        };
+    }, [showModal]);
 
     const handleModalClose = () => {
         setShowModal(false);
@@ -371,209 +394,210 @@ const Instalation = () => {
     const tags = ["MongoDB", "PostgreSQL", "MariaDB", "React", "Spring Boot", "Grafana"]
 
     return (
-        <div className="min-h-screen flex items-center justify-center">
-            {/* Modal de Bienvenida */}
-            {/* Modal de Bienvenida */}
-            {showModal && (
-                <div className="fixed inset-0 bg-opacity-80 flex items-center justify-center z-50">
-                    <motion.div
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ duration: 0.3 }}
-                        className="bg-white-900 rounded-lg shadow-lg max-w-4xl w-full p-8 border border-gray-100"
-                    >
-                        <h2 className="text-3xl font-bold mb-4 bg-gradient-to-r from-dark to-pink-600 bg-clip-text text-dark text-center">
-                            Bienvenido a la Herramienta de Monitoreo
-                        </h2>
-                        <p className="text-gray-400 leading-relaxed mb-6">
-                            Esta herramienta está diseñada para ofrecer una solución integral para el monitoreo de bases de datos.
-                            Descubre cómo gestionar y visualizar tus métricas con facilidad utilizando nuestras tecnologías avanzadas.
-                        </p>
+        <div className='border border-red-500'>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                            {features.map((feature, index) => (
-                                <motion.div
-                                    key={index}
-                                    initial={{ opacity: 0, scale: 0.9 }}
-                                    animate={{ opacity: 1, scale: 1 }}
-                                    transition={{ duration: 0.3, delay: index * 0.1 }}
-                                    className="border-gray-700 rounded-lg p-4 hover:bg-gray-750 transition-colors duration-300 flex items-start space-x-4"
-                                >
-                                    <i className={`${feature.icon} text-dark-400 text-2xl`}></i>
-                                    <div>
-                                        <h3 className="font-semibold text-lg mb-2">{feature.title}</h3>
-                                        <p className="text-gray-400 text-sm">{feature.description}</p>
-                                    </div>
-                                </motion.div>
-                            ))}
-                        </div>
-
-                        {/* <div className="flex flex-wrap justify-center gap-2 mb-6">
-                            {tags.map((tag, index) => (
-                                <motion.div
-                                    key={index}
-                                    initial={{ opacity: 0, scale: 0.8 }}
-                                    animate={{ opacity: 1, scale: 1 }}
-                                    transition={{ duration: 0.3, delay: index * 0.05 }}
-                                    className="relative group"
-                                >
-                                    <span className="bg-gray-100 text-dark border border-purple-100 px-3 py-1 rounded-full hover:bg-dark hover:text-white transition-colors duration-300">
-                                        {tag}
-                                    </span>
-                                    <div className="absolute bottom-full mb-2 left-1/2 transform -translate-x-1/2 bg-gray-700 text-white text-sm px-3 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">
-                                        Tecnología soportada
-                                    </div>
-                                </motion.div>
-                            ))}
-                        </div> */}
-
+            <header className='flex items-center justify-between px-6 pt-2'>
+                {/* Agregar el título principal */}
+                <Link to="" className="main-logo flex items-center shrink-0 ">
+                    <img className="w-8 ltr:-ml-1 rtl:-mr-1 inline" src="/assets/images/logo.png" alt="logo" />
+                    <span className="text-xl ltr:ml-1.5 rtl:mr-1.5 pl-3 mt-2 font-semibold align-middle hidden md:inline dark:text-white-light transition-all duration-300">Security Monitoring</span>
+                </Link>
+                {/* Theme Configuration */}
+                <div className=" ">
+                    {themeConfig.theme === 'light' && (
                         <button
-                            onClick={() => setShowModal(false)}
-                            className="w-full py-3 bg-dark from-purple-600 to-pink-600 text-white font-bold rounded-md shadow-md hover:from-purple-700 hover:to-pink-700 transition duration-300"
+                            className="flex items-center p-2 rounded-full bg-white-light/40 dark:bg-dark/40 hover:text-primary hover:bg-white-light/90 dark:hover:bg-dark/60"
+                            onClick={() => dispatch(toggleTheme('dark'))}
                         >
-                            Continuar
+                            <IconSun />
                         </button>
-                    </motion.div>
+                    )}
+                    {themeConfig.theme === 'dark' && (
+                        <button
+                            className="flex items-center p-2 rounded-full bg-white-light/40 dark:bg-dark/40 hover:text-primary hover:bg-white-light/90 dark:hover:bg-dark/60"
+                            onClick={() => dispatch(toggleTheme('system'))}
+                        >
+                            <IconMoon />
+                        </button>
+                    )}
+                    {themeConfig.theme === 'system' && (
+                        <button
+                            className="flex items-center p-2 rounded-full bg-white-light/40 dark:bg-dark/40 hover:text-primary hover:bg-white-light/90 dark:hover:bg-dark/60"
+                            onClick={() => dispatch(toggleTheme('light'))}
+                        >
+                            <IconLaptop />
+                        </button>
+                    )}
                 </div>
-            )}
-
-            {/* Contenido Principal */}
-            {!showModal && (
-                <>
-                    {/* Agregar el título principal */}
-
-                    {/* Theme Configuration */}
-                    <div className="fixed top-6 right-6">
-                        {themeConfig.theme === 'light' && (
-                            <button
-                                className="flex items-center p-2 rounded-full bg-white-light/40 dark:bg-dark/40 hover:text-primary hover:bg-white-light/90 dark:hover:bg-dark/60"
-                                onClick={() => dispatch(toggleTheme('dark'))}
-                            >
-                                <IconSun />
-                            </button>
-                        )}
-                        {themeConfig.theme === 'dark' && (
-                            <button
-                                className="flex items-center p-2 rounded-full bg-white-light/40 dark:bg-dark/40 hover:text-primary hover:bg-white-light/90 dark:hover:bg-dark/60"
-                                onClick={() => dispatch(toggleTheme('system'))}
-                            >
-                                <IconMoon />
-                            </button>
-                        )}
-                        {themeConfig.theme === 'system' && (
-                            <button
-                                className="flex items-center p-2 rounded-full bg-white-light/40 dark:bg-dark/40 hover:text-primary hover:bg-white-light/90 dark:hover:bg-dark/60"
-                                onClick={() => dispatch(toggleTheme('light'))}
-                            >
-                                <IconLaptop />
-                            </button>
-                        )}
-                    </div>
-
-
-                    <div className="flex flex-col w-full h-screen max-w-6xl p-8">
-                        {/* Progress Steps */}
-                        <div className="text-center my-8">
-                            <h1 className="text-4xl font-bold text-blue-600 mb-2">Parámetros de Instalación del Sistema</h1>
-                            <p className="text-gray-500 text-lg">
-                                Configure los parámetros necesarios para la instalación del sistema de monitoreo.
+            </header>
+            <div className="min-h-screen flex items-center justify-center">
+                {/* Modal de Bienvenida */}
+                {showModal && (
+                    <div className="fixed inset-0 bg-opacity-80 flex items-center justify-center z-50">
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.9 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ duration: 0.3 }}
+                            className="bg-white-900 rounded-lg shadow-lg max-w-4xl w-full p-8 border border-gray-100"
+                        >
+                            <h2 className="text-3xl font-bold mb-4 bg-gradient-to-r from-dark to-pink-600 bg-clip-text text-dark text-center">
+                                Bienvenido a la Herramienta de Monitoreo
+                            </h2>
+                            <p className="text-gray-400 leading-relaxed mb-6">
+                                Esta herramienta está diseñada para ofrecer una solución integral para el monitoreo de bases de datos.
+                                Descubre cómo gestionar y visualizar tus métricas con facilidad utilizando nuestras tecnologías avanzadas.
                             </p>
-                        </div>
-                        <div className="relative mb-12 mt-10">
-                            {/* Connecting Lines */}
 
-                            <div className="absolute top-5 dark:bg-dark left-0 right-0 h-[2px] bg-blue-300">
-                                <div
-                                    className="h-full bg-blue-600 transition-all duration-300 ease-in-out"
-                                    style={{ width: `${((currentStep - 1) / (steps.length - 1)) * 100}%` }}
-                                />
-                                <div>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                                {features.map((feature, index) => (
+                                    <motion.div
+                                        key={index}
+                                        initial={{ opacity: 0, scale: 0.9 }}
+                                        animate={{ opacity: 1, scale: 1 }}
+                                        transition={{ duration: 0.3, delay: index * 0.1 }}
+                                        className="border-gray-700 rounded-lg p-4 hover:bg-gray-750 transition-colors duration-300 flex items-start space-x-4"
+                                    >
+                                        <i className={`${feature.icon} text-dark-400 text-2xl`}></i>
+                                        <div>
+                                            <h3 className="font-semibold text-lg mb-2">{feature.title}</h3>
+                                            <p className="text-gray-400 text-sm">{feature.description}</p>
+                                        </div>
+                                    </motion.div>
+                                ))}
+                            </div>
 
+                            <div className="bg-gray-100 rounded-lg p-6 mb-6">
+                                <h3 className="font-semibold text-lg mb-2">Proceso de Instalación</h3>
+                                <p className="text-gray-600 text-sm mb-4">
+                                    A continuación, te guiaremos a través del proceso de instalación y configuración de los siguientes
+                                    componentes:
+                                </p>
+                                <ul className="list-disc list-inside text-gray-600 text-sm">
+                                    <li>Usuario administrador</li>
+                                    <li>Grafana para visualización de datos</li>
+                                    <li>Prometheus para recolección de métricas</li>
+                                    <li>Alertmanager para gestión de alertas</li>
+                                    <li>Exportadores para diferentes fuentes de datos</li>
+                                </ul>
+                            </div>
+
+                            <button
+                                onClick={() => setShowModal(false)}
+                                className="w-full py-3 bg-dark from-purple-600 to-pink-600 text-white font-bold rounded-md shadow-md hover:from-purple-700 hover:to-pink-700 transition duration-300"
+                            >
+                                Continuar
+                            </button>
+                        </motion.div>
+                    </div>
+                )}
+
+                {/* Contenido Principal */}
+                {!showModal && (
+                    <>
+                        <div className="flex flex-col w-full h-screen max-w-6xl p-8">
+                            {/* Progress Steps */}
+                            <div className="text-center my-4">
+                                <h1 className="text-3xl font-bold text-blue-600">Parámetros de Instalación del Sistema</h1>
+                                <p className="text-gray-500 text-ld">
+                                    Configure los parámetros necesarios para la instalación del sistema de monitoreo.
+                                </p>
+                            </div>
+                            <div className="relative mb-8 mt-10">
+                                {/* Connecting Lines */}
+
+                                <div className="absolute top-5 dark:bg-dark left-0 right-0 h-[2px] bg-blue-300">
+                                    <div
+                                        className="h-full bg-blue-600 transition-all duration-300 ease-in-out"
+                                        style={{ width: `${((currentStep - 1) / (steps.length - 1)) * 100}%` }}
+                                    />
+                                    <div>
+
+                                    </div>
+                                </div>
+
+
+                                {/* Steps */}
+                                <div className="flex justify-between relative z-10">
+                                    {steps.map((step, index) => (
+                                        <div key={index} className="flex flex-col items-center">
+
+                                            <div
+                                                className={`w-10 h-10 rounded-full flex items-center justify-center text-lg font-bold mb-2 ${currentStep > step.number
+                                                    ? 'bg-blue-600 text-white'
+                                                    : currentStep === step.number
+                                                        ? 'bg-blue-600 text-white'
+                                                        : 'bg-white dark:bg-dark text-blue-600 dark:text-blue-300 border-2 border-blue-300'
+                                                    } transition-all duration-300`}
+                                            >
+                                                {step.number}
+                                            </div>
+                                            <span className="text-xs font-semibold uppercase tracking-wider whitespace-nowrap dark:text-blue-600 text-blue-500">
+                                                {step.title}
+                                            </span>
+                                        </div>
+                                    ))}
                                 </div>
                             </div>
 
-
-                            {/* Steps */}
-                            <div className="flex justify-between relative z-10">
-                                {steps.map((step, index) => (
-                                    <div key={index} className="flex flex-col items-center">
-
-                                        <div
-                                            className={`w-10 h-10 rounded-full flex items-center justify-center text-lg font-bold mb-2 ${currentStep > step.number
-                                                ? 'bg-blue-600 text-white'
-                                                : currentStep === step.number
-                                                    ? 'bg-blue-600 text-white'
-                                                    : 'bg-white dark:bg-dark text-blue-600 dark:text-blue-300 border-2 border-blue-300'
-                                                } transition-all duration-300`}
-                                        >
-                                            {step.number}
-                                        </div>
-                                        <span className="text-xs font-semibold uppercase tracking-wider whitespace-nowrap dark:text-blue-600 text-blue-500">
-                                            {step.title}
-                                        </span>
-                                    </div>
-                                ))}
+                            {/* Content Area */}
+                            <div className="panel p-5 mb-auto">
+                                <AnimatePresence mode="wait">
+                                    <motion.div
+                                        key={currentStep}
+                                        initial={{ opacity: 0, y: 20 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        exit={{ opacity: 0, y: -20 }}
+                                        transition={{ duration: 0.5 }}
+                                    >
+                                        {renderStepContent()}
+                                    </motion.div>
+                                </AnimatePresence>
                             </div>
-                        </div>
 
-                        {/* Content Area */}
-                        <div className="panel p-5 mb-auto">
-                            <AnimatePresence mode="wait">
-                                <motion.div
-                                    key={currentStep}
-                                    initial={{ opacity: 0, y: 20 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    exit={{ opacity: 0, y: -20 }}
-                                    transition={{ duration: 0.5 }}
-                                >
-                                    {renderStepContent()}
-                                </motion.div>
-                            </AnimatePresence>
-                        </div>
-
-                        {/* Navigation Buttons */}
-                        <div className="flex justify-end mt-5">
-                            {currentStep > 1 && currentStep < steps.length && (
+                            {/* Navigation Buttons */}
+                            <div className="flex justify-end mb-5">
+                                {currentStep > 1 && currentStep < steps.length && (
+                                    <button
+                                        onClick={prevStep}
+                                        className="px-6 py-2 mr-4 btn btn-outline-primary rounded-md hover:bg-white hover:text-primary transition-colors duration-300"
+                                    >
+                                        Anterior
+                                    </button>
+                                )}
                                 <button
-                                    onClick={prevStep}
-                                    className="px-6 py-2 mr-4 btn btn-outline-primary rounded-md hover:bg-white hover:text-primary transition-colors duration-300"
-                                >
-                                    Anterior
-                                </button>
-                            )}
-                            <button
-                                onClick={async () => {
-                                    if (currentStep === 4) {
-                                        console.log("Validando los exportadores de Prometheus...");
+                                    onClick={async () => {
+                                        if (currentStep === 4) {
+                                            console.log("Validando los exportadores de Prometheus...");
 
-                                        try {
-                                            // Ejecuta el método para validar y guardar los exportadores
-                                            await savePrometheusExporters();
+                                            try {
+                                                // Ejecuta el método para validar y guardar los exportadores
+                                                await savePrometheusExporters();
 
-                                            // Si no hay errores, avanza al paso 5
-                                            console.log("Exportadores validados correctamente, avanzando al paso 5...");
-                                            setCurrentStep(5);
-                                            runDockerAndCheckStatus();
-                                        } catch (error) {
-                                            // Maneja errores durante la validación de exportadores
-                                            console.error("Error en la validación de exportadores:", error);
+                                                // Si no hay errores, avanza al paso 5
+                                                console.log("Exportadores validados correctamente, avanzando al paso 5...");
+                                                setCurrentStep(5);
+                                                runDockerAndCheckStatus();
+                                            } catch (error) {
+                                                // Maneja errores durante la validación de exportadores
+                                                console.error("Error en la validación de exportadores:", error);
+                                            }
+                                        } else {
+                                            nextStep(); // Continúa con el flujo normal para otros pasos
                                         }
-                                    } else {
-                                        nextStep(); // Continúa con el flujo normal para otros pasos
-                                    }
-                                }}
-                                disabled={currentStep === 5 && isInstalling}
-                                className={`btn btn-primary transition-colors duration-300 ${currentStep === 5 && isInstalling ? 'opacity-50 cursor-not-allowed' : ''
-                                    }`}
-                            >
-                                {currentStep === 4 ? 'Instalar' : currentStep < 5 ? 'Siguiente' : 'Finalizar'}
-                            </button>
+                                    }}
+                                    disabled={currentStep === 5 && isInstalling}
+                                    className={`btn btn-primary transition-colors duration-300 ${currentStep === 5 && isInstalling ? 'opacity-50 cursor-not-allowed' : ''
+                                        }`}
+                                >
+                                    {currentStep === 4 ? 'Instalar' : currentStep < 5 ? 'Siguiente' : 'Finalizar'}
+                                </button>
+
+                            </div>
 
                         </div>
-
-                    </div>
-                </>
-            )}
+                    </>
+                )}
+            </div>
         </div>
     );
 }

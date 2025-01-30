@@ -140,9 +140,9 @@ export const savePrometheusInstallService = async (prometheusInstallData) => {
             // Capturar error 422 con mensaje y puerto rechazado
             if (error.response.status === 422 && error.response.data.result) {
                 const errorMessages = error.response.data.result
-                    .map(err => `${err.message} (Puerto: ${err.rejectedValue})`)
-                    .join('\n');
-                throw new Error(errorMessages);
+                    .map(err => `${err.message} (Puerto: ${err.rejectedValue}), <br>`)
+                    .join(", ");
+                    throw new Error(errorMessages);
             }
             throw new Error(error.response.data.message || 'Error al guardar la instalación de Prometheus y Alertmanager');
         } else {
