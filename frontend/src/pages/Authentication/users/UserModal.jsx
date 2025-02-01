@@ -26,10 +26,6 @@ const validationSchema = Yup.object().shape({
     roles: Yup.array()
         .min(1, 'Debes asignar al menos un rol')
         .required('El rol es requerido'),
-    password: Yup.string().when('isNewUser', {
-        is: true,
-        then: Yup.string().required('La contraseña es requerida').min(8, 'Mínimo 8 caracteres')
-    }),
 });
 
 const UserModal = ({ isOpen, onClose, onSave, user }) => {
@@ -84,7 +80,6 @@ const UserModal = ({ isOpen, onClose, onSave, user }) => {
                                                 user.roles.some((role) => role.id === option.value)
                                             )
                                             : [],
-                                        password: '',
                                         isNewUser: !user,
                                     }}
                                     enableReinitialize={true}
@@ -158,11 +153,7 @@ const UserModal = ({ isOpen, onClose, onSave, user }) => {
                                                 <ErrorMessage name="roles" component="div" className="text-danger mt-1" />
                                             </div>
 
-                                                <div className="col-span-2">
-                                                    <label htmlFor="password">Contraseña</label>
-                                                    <Field name="password" type="password" id="password" placeholder="Ingrese la contraseña" className="form-input" />
-                                                    <ErrorMessage name="password" component="div" className="text-danger mt-1" />
-                                                </div>
+
 
                                             <div className="flex justify-end items-center mt-8 col-span-2">
                                                 <button type="button" className="btn btn-outline-danger" onClick={onClose}>
