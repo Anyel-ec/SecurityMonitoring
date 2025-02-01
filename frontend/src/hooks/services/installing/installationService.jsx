@@ -140,7 +140,7 @@ export const savePrometheusInstallService = async (prometheusInstallData) => {
             // Capturar error 422 con mensaje y puerto rechazado
             if (error.response.status === 422 && error.response.data.result) {
                 const errorMessages = error.response.data.result
-                    .map(err => `${err.message} (Puerto: ${err.rejectedValue}), <br>`)
+                    .map(err => `${err.message} (Puerto: ${err.rejectedValue})`)
                     .join(", ");
                     throw new Error(errorMessages);
             }

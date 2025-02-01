@@ -7,7 +7,9 @@ import ec.edu.espe.security.monitoring.modules.features.auth.model.UserInfo;
 import ec.edu.espe.security.monitoring.modules.features.auth.model.UserRole;
 import ec.edu.espe.security.monitoring.modules.features.auth.repository.UserInfoRepository;
 import ec.edu.espe.security.monitoring.modules.features.auth.repository.UserRoleRepository;
+import ec.edu.espe.security.monitoring.modules.features.auth.service.interfaces.MailService;
 import ec.edu.espe.security.monitoring.modules.features.auth.service.interfaces.UserManagementService;
+import ec.edu.espe.security.monitoring.modules.features.auth.utils.PasswordUtil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +35,7 @@ public class UserManagementServiceImpl implements UserManagementService {
     private final UserRoleRepository userRoleRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtProvider jwtProvider;
+    private final MailService mailService;
 
     @Override
     public JsonResponseDto createUser(String token, UserCreateDto userCreateDto) {
@@ -40,9 +43,21 @@ public class UserManagementServiceImpl implements UserManagementService {
             String creatorUsername = jwtProvider.getNombreUsuarioFromToken(token);
             UserInfo creator = userInfoRepository.findByUsernameAndIsActiveTrue(creatorUsername);
 
+
             if (creator == null) {
                 return new JsonResponseDto(false, HttpStatus.UNAUTHORIZED.value(), "No autorizado", null);
             }
+
+            if (userInfoRepository.findByUsernameAndIsActiveTrue(userCreateDto.getUsername()) != null) {
+                return new JsonResponseDto(false, HttpStatus.BAD_REQUEST.value(), "El nombre de usuario ya está en uso", null);
+            }
+            if (userInfoRepository.findByEmailAndIsActiveTrue(userCreateDto.getEmail()) != null) {
+                return new JsonResponseDto(false, HttpStatus.BAD_REQUEST.value(), "El correo ya está en uso", null);
+            }
+            if (userInfoRepository.findByPhoneAndIsActiveTrue(userCreateDto.getPhone()) != null) {
+                return new JsonResponseDto(false, HttpStatus.BAD_REQUEST.value(), "El número de teléfono ya está en uso", null);
+            }
+
 
             // verify if the creator has the necessary permissions
             int creatorHierarchy = creator.getRoles().stream().mapToInt(UserRole::getHierarchy).min().orElse(Integer.MAX_VALUE);
@@ -59,23 +74,22 @@ public class UserManagementServiceImpl implements UserManagementService {
                     .name(userCreateDto.getName())
                     .lastname(userCreateDto.getLastname())
                     .company(userCreateDto.getCompany())
-                    .password(passwordEncoder.encode(userCreateDto.getPassword()))
-                    .roles(Set.copyOf(assignedRoles))
+                    .roles(new HashSet<>(userRoleRepository.findAllById(userCreateDto.getRoles())))
                     .firstLogin(true)
                     .isActive(true)
                     .build();
-            // Generar y asignar contraseña
-            String plainPassword = generatePassword(newUser.getName(), newUser.getLastname(), newUser.getCompany());
+            String plainPassword = PasswordUtil.generatePassword(newUser.getUsername(), newUser.getCompany(), newUser.getPhone());
             newUser.setPassword(passwordEncoder.encode(plainPassword));
             userInfoRepository.save(newUser);
 
-            // Enviar credenciales por correo
+            // send email
             mailService.sendNewUserEmail(newUser, plainPassword);
 
             userInfoRepository.save(newUser);
             return new JsonResponseDto(true, HttpStatus.CREATED.value(), "Usuario creado con éxito", newUser);
         } catch (Exception e) {
             log.error("Error al crear usuario: {}", e.getMessage());
+            log.error("Objeto: {}", e);
             return new JsonResponseDto(false, HttpStatus.INTERNAL_SERVER_ERROR.value(), "Error al procesar la solicitud", null);
         }
     }

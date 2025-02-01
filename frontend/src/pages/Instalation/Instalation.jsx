@@ -365,7 +365,7 @@ const Instalation = () => {
                             className="my-4 mx-auto"
                             style={{ maxWidth: "250px" }}
                         />
-                        <p className="text-xl font-bold">Su configuración está lista. Verificación de la configuración del panel y la fuente de datos de Grafana.</p>
+                        <p className="text-xl">Su configuración está lista. Verificación de la configuración del panel y la fuente de datos de Grafana.</p>
                     </div>
                 );
             default:

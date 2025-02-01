@@ -1,9 +1,6 @@
 package ec.edu.espe.security.monitoring.modules.features.auth.utils;
 
-import ec.edu.espe.security.monitoring.modules.features.auth.repository.UserInfoRepository;
-import ec.edu.espe.security.monitoring.modules.features.auth.service.interfaces.MailService;
 import lombok.experimental.UtilityClass;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.Random;
 
@@ -15,16 +12,16 @@ import java.util.Random;
 @UtilityClass
 public class PasswordUtil {
     private static final String SYMBOLS = "@#$%&*";
-    private static final int PASSWORD_LENGTH = 10;
+    private static final int PASSWORD_LENGTH = 15;
 
-    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     private static final Random RANDOM = new Random();
-    public String generatePassword(String name, String lastname, String company) {
-        String initials = (name.charAt(0) + lastname.substring(0, 1) + company.charAt(0)).toUpperCase();
-        String symbol = String.valueOf(SYMBOLS.charAt(RANDOM.nextInt(SYMBOLS.length())));
-        String numbers = String.valueOf(RANDOM.nextInt(90) + 10);
-        String password = initials + symbol + numbers;
 
-        return password.length() > PASSWORD_LENGTH ? password.substring(0, PASSWORD_LENGTH) : password;
+    public String generatePassword(String username, String company, String phone) {
+        String initials = username.substring(0, Math.min(4, username.length())).toUpperCase();
+        String symbol = String.valueOf(SYMBOLS.charAt(RANDOM.nextInt(SYMBOLS.length())));
+        String companyPart = company.substring(0, Math.min(3, company.length())).toUpperCase();
+        String lastFourDigits = phone.length() >= 4 ? phone.substring(phone.length() - 4) : "0000";
+        String password = initials + symbol + companyPart + lastFourDigits;
+        return password.length() < PASSWORD_LENGTH ? password + "X".repeat(PASSWORD_LENGTH - password.length()) : password;
     }
 }

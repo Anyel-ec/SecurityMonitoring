@@ -43,7 +43,7 @@ groups:
         expr: pg_stat_activity_count{job="postgres", state="active"} != 0
         for: 1m
         labels:
-          severity: info
+          severity: warning
         annotations:
           summary: Conexiones activas en PostgreSQL detectadas
           description: >-

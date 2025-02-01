@@ -41,6 +41,7 @@ public class UserInfo {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
+    @JsonIgnore
     private Set<PasswordRecovery> passwordRecoveries = new HashSet<>();
 
     @JsonIgnore

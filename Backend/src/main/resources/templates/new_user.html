@@ -43,14 +43,20 @@
     .info p {
       margin-bottom: 10px;
     }
-    .username, .password {
+    .password-box {
       background-color: #e8f4fd;
       border-radius: 6px;
-      padding: 10px;
+      padding: 15px;
       display: inline-block;
       font-size: 18px;
       font-weight: bold;
       color: #3498db;
+      text-align: center;
+      width: 100%;
+    }
+    .username{
+        font-weight: bold;
+        color: #3498db;
     }
     .footer {
       background-color: #f4f7f9;
@@ -78,7 +84,8 @@
       <p>Estimado/a <strong>{{name}} {{lastname}}</strong>,</p>
       <p>Te informamos que has iniciado el proceso con éxito.</p>
       <p>Tu nombre de usuario para acceder al sistema es: <span class="username">{{username}}</span></p>
-      <p>Tu contraseña temporal es: <span class="password">{{password}}</span></p>
+      <p>Tu contraseña temporal es:</p>
+      <div class="password-box">{{password}}</div>
       <p>Por favor, cambia tu contraseña al ingresar al sistema por primera vez.</p>
       <p>Saludos cordiales,<br>Equipo Académico</p>
     </div>

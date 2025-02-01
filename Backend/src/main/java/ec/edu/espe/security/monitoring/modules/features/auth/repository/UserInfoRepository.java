@@ -27,6 +27,7 @@ public interface UserInfoRepository extends JpaRepository<UserInfo, Long> {
     @Query("SELECT u FROM UserInfo u WHERE u.isActive = true AND u.username <> :excludedUsername")
     List<UserInfo> findByIsActiveTrueAndUsernameNot(@Param("excludedUsername") String excludedUsername);
 
-
+    // Finds an active user by their phone number
+    UserInfo findByPhoneAndIsActiveTrue(String phone);
 }
 

@@ -21,7 +21,7 @@ export const showErrorAlert = (title, message) => {
     title: title,
     // text: message,
     showConfirmButton: false,
-    timer: 4000,
+    timer: 5000,
   });
 };
 
