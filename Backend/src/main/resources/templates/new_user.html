@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inicio de Sesión - Credenciales Temporales</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f4f7f9;
+      color: #333;
+      line-height: 1.6;
+    }
+    .container {
+      max-width: 600px;
+      margin: 20px auto;
+      background-color: #ffffff;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    }
+    .header {
+      background-color: #3498db;
+      color: #ffffff;
+      text-align: center;
+      padding: 20px;
+    }
+    .header h1 {
+      font-size: 28px;
+      margin-bottom: 10px;
+    }
+    .content {
+      padding: 30px;
+    }
+    .info {
+      margin-bottom: 20px;
+    }
+    .info p {
+      margin-bottom: 10px;
+    }
+    .username, .password {
+      background-color: #e8f4fd;
+      border-radius: 6px;
+      padding: 10px;
+      display: inline-block;
+      font-size: 18px;
+      font-weight: bold;
+      color: #3498db;
+    }
+    .footer {
+      background-color: #f4f7f9;
+      text-align: center;
+      padding: 15px;
+      font-size: 14px;
+      color: #888;
+    }
+    @media only screen and (max-width: 600px) {
+      .container {
+        width: 100%;
+        margin: 0;
+        border-radius: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>INICIO DE SESIÓN EXITOSO</h1>
+  </div>
+  <div class="content">
+    <div class="info">
+      <p>Estimado/a <strong>{{name}} {{lastname}}</strong>,</p>
+      <p>Te informamos que has iniciado el proceso con éxito.</p>
+      <p>Tu nombre de usuario para acceder al sistema es: <span class="username">{{username}}</span></p>
+      <p>Tu contraseña temporal es: <span class="password">{{password}}</span></p>
+      <p>Por favor, cambia tu contraseña al ingresar al sistema por primera vez.</p>
+      <p>Saludos cordiales,<br>Equipo Académico</p>
+    </div>
+  </div>
+  <div class="footer">
+    <p>&copy; 2025 Equipo Académico. Todos los derechos reservados.</p>
+  </div>
+</div>
+</body>
+</html>

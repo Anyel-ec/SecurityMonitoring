@@ -41,6 +41,43 @@ public class MailServiceImpl implements MailService {
     private int otpExpirationMinutes;
 
     @Override
+    public void sendNewUserEmail(UserInfo user, String password) {
+        try {
+            // Cargar la plantilla de correo
+            InputStream inputStream = new ClassPathResource("templates/new_user.html").getInputStream();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+            StringBuilder emailContent = new StringBuilder();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                emailContent.append(line).append("\n");
+            }
+
+            // Reemplazar las variables en la plantilla
+            String emailBody = emailContent.toString()
+                    .replace("{{name}}", user.getName())
+                    .replace("{{lastname}}", user.getLastname())
+                    .replace("{{username}}", user.getUsername())
+                    .replace("{{password}}", password);
+
+            // Configurar el correo
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+            helper.setTo(user.getEmail());
+            helper.setSubject("Credenciales de acceso al sistema");
+            helper.setText(emailBody, true);
+
+            // Enviar el correo
+            mailSender.send(message);
+            log.info("Correo de credenciales enviado correctamente a: {}", user.getEmail());
+
+        } catch (Exception e) {
+            log.error("Error al enviar el correo de credenciales: {}", e.getMessage(), e);
+            throw new IllegalStateException("No se pudo enviar el correo de credenciales.", e);
+        }
+    }
+
+
+    @Override
     public void sendRecoveryEmail(UserInfo user, String otp) {
         try {
             // upload the email template

@@ -43,10 +43,13 @@ public class UserRole {
     @Column(columnDefinition = "boolean default true")
     private Boolean isActive;
 
+
+
     public UserRole(String name, String description, int hierarchy, Boolean isActive) {
         this.name = name;
         this.description = description;
         this.hierarchy = hierarchy;
         this.isActive = isActive;
     }
+
 }

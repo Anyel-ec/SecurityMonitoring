@@ -36,6 +36,9 @@ public class UserInfo {
     private String lastname;
     private String company;
 
+    @Column(columnDefinition = "boolean default false")
+    private boolean firstLogin;
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private Set<PasswordRecovery> passwordRecoveries = new HashSet<>();

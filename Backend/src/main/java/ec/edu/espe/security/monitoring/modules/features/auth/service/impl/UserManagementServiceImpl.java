@@ -61,8 +61,16 @@ public class UserManagementServiceImpl implements UserManagementService {
                     .company(userCreateDto.getCompany())
                     .password(passwordEncoder.encode(userCreateDto.getPassword()))
                     .roles(Set.copyOf(assignedRoles))
+                    .firstLogin(true)
                     .isActive(true)
                     .build();
+            // Generar y asignar contraseña
+            String plainPassword = generatePassword(newUser.getName(), newUser.getLastname(), newUser.getCompany());
+            newUser.setPassword(passwordEncoder.encode(plainPassword));
+            userInfoRepository.save(newUser);
+
+            // Enviar credenciales por correo
+            mailService.sendNewUserEmail(newUser, plainPassword);
 
             userInfoRepository.save(newUser);
             return new JsonResponseDto(true, HttpStatus.CREATED.value(), "Usuario creado con éxito", newUser);

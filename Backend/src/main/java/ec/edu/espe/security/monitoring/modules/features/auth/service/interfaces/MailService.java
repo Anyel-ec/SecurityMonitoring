@@ -9,4 +9,6 @@ import ec.edu.espe.security.monitoring.modules.features.auth.model.UserInfo;
  */
 public interface MailService {
     void sendRecoveryEmail(UserInfo user, String otp);
+    void sendNewUserEmail(UserInfo user, String password);
+
 }
