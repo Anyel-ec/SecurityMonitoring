@@ -5,6 +5,7 @@ import PublicRoute from '../hooks/guards/PublicRoute';
 import PrivateRoute from '../hooks/guards/ProtectedRoute';
 import Users from '../pages/Authentication/users/users.jsx';
 import { hasRole } from '../hooks/services/system/authUtils.jsx';
+import ChangedPassword from '../pages/Authentication/password/ChangedPassword.jsx';
 const ConfigAlert = lazy(() => import('../pages/ConfigAlert/ConfigAlert'));
 const Instalation = lazy(() => import('../pages/Instalation/Instalation'));
 const Home = lazy(() => import('../pages/Home/Home'));
@@ -143,6 +144,18 @@ const routes = [
                     ) : (
                         <Navigate to="/inicio" replace />
                     )}
+                </ProtectedRoute>
+            </InstallationProvider>
+        ),
+    },
+    {
+        path: '/cambio-contrasena',
+        element: (
+            <InstallationProvider>
+                <ProtectedRoute requiresInstallation={false}>
+                    <PrivateRoute
+                        element={<ChangedPassword />}
+                    />
                 </ProtectedRoute>
             </InstallationProvider>
         ),
