@@ -15,7 +15,7 @@
       "type": "grafana",
       "id": "grafana",
       "name": "Grafana",
-      "version": "11.4.0"
+      "version": "11.3.1"
     },
     {
       "type": "datasource",
@@ -138,7 +138,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "11.4.0",
+      "pluginVersion": "11.3.1",
       "targets": [
         {
           "datasource": {
@@ -222,7 +222,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "11.4.0",
+      "pluginVersion": "11.3.1",
       "targets": [
         {
           "datasource": {
@@ -306,7 +306,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "11.4.0",
+      "pluginVersion": "11.3.1",
       "targets": [
         {
           "datasource": {
@@ -398,7 +398,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "11.4.0",
+      "pluginVersion": "11.3.1",
       "targets": [
         {
           "datasource": {
@@ -406,7 +406,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "pg_stat_activity_count{datname=~\"$datname\", state=\"active\"} !=0",
+          "expr": "sum(pg_stat_activity_count)",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -466,7 +466,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "11.4.0",
+      "pluginVersion": "11.3.1",
       "targets": [
         {
           "datasource": {
@@ -474,7 +474,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "mysql_global_status_threads_connected{instance=\"mariadb-exporter:9104\", job=\"mariadb\"}",
+          "expr": "mysql_global_status_threads_running",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -534,7 +534,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "11.4.0",
+      "pluginVersion": "11.3.1",
       "targets": [
         {
           "datasource": {
@@ -652,7 +652,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.4.0",
+      "pluginVersion": "11.3.1",
       "targets": [
         {
           "datasource": {
@@ -754,7 +754,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.4.0",
+      "pluginVersion": "11.3.1",
       "targets": [
         {
           "datasource": {
@@ -856,7 +856,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.4.0",
+      "pluginVersion": "11.3.1",
       "targets": [
         {
           "datasource": {
@@ -971,7 +971,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.4.0",
+      "pluginVersion": "11.3.1",
       "targets": [
         {
           "datasource": {
@@ -1073,7 +1073,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.4.0",
+      "pluginVersion": "11.3.1",
       "targets": [
         {
           "datasource": {
@@ -1175,7 +1175,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.4.0",
+      "pluginVersion": "11.3.1",
       "targets": [
         {
           "datasource": {
@@ -1291,7 +1291,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.4.0",
+      "pluginVersion": "11.3.1",
       "targets": [
         {
           "datasource": {
@@ -1394,7 +1394,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.4.0",
+      "pluginVersion": "11.3.1",
       "targets": [
         {
           "datasource": {
@@ -1497,7 +1497,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.4.0",
+      "pluginVersion": "11.3.1",
       "targets": [
         {
           "datasource": {
@@ -1612,7 +1612,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.4.0",
+      "pluginVersion": "11.3.1",
       "targets": [
         {
           "datasource": {
@@ -1713,7 +1713,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.4.0",
+      "pluginVersion": "11.3.1",
       "targets": [
         {
           "datasource": {
@@ -1814,7 +1814,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.4.0",
+      "pluginVersion": "11.3.1",
       "targets": [
         {
           "datasource": {
@@ -1928,7 +1928,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.4.0",
+      "pluginVersion": "11.3.1",
       "targets": [
         {
           "datasource": {
@@ -2029,7 +2029,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.4.0",
+      "pluginVersion": "11.3.1",
       "targets": [
         {
           "datasource": {
@@ -2130,7 +2130,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.4.0",
+      "pluginVersion": "11.3.1",
       "targets": [
         {
           "datasource": {
@@ -2245,7 +2245,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.4.0",
+      "pluginVersion": "11.3.1",
       "targets": [
         {
           "datasource": {
@@ -2347,7 +2347,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.4.0",
+      "pluginVersion": "11.3.1",
       "targets": [
         {
           "datasource": {
@@ -2449,7 +2449,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.4.0",
+      "pluginVersion": "11.3.1",
       "targets": [
         {
           "datasource": {
@@ -2563,7 +2563,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.4.0",
+      "pluginVersion": "11.3.1",
       "targets": [
         {
           "datasource": {
@@ -2677,7 +2677,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.4.0",
+      "pluginVersion": "11.3.1",
       "targets": [
         {
           "datasource": {
@@ -2791,7 +2791,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.4.0",
+      "pluginVersion": "11.3.1",
       "targets": [
         {
           "datasource": {
@@ -2918,7 +2918,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.4.0",
+      "pluginVersion": "11.3.1",
       "targets": [
         {
           "datasource": {
@@ -3019,7 +3019,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.4.0",
+      "pluginVersion": "11.3.1",
       "targets": [
         {
           "datasource": {
@@ -3120,7 +3120,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.4.0",
+      "pluginVersion": "11.3.1",
       "targets": [
         {
           "datasource": {
@@ -3236,7 +3236,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.4.0",
+      "pluginVersion": "11.3.1",
       "targets": [
         {
           "datasource": {
@@ -3339,7 +3339,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.4.0",
+      "pluginVersion": "11.3.1",
       "targets": [
         {
           "datasource": {
@@ -3442,7 +3442,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.4.0",
+      "pluginVersion": "11.3.1",
       "targets": [
         {
           "datasource": {
@@ -3521,8 +3521,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -3624,8 +3623,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -3727,8 +3725,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -3882,6 +3879,6 @@
   "timezone": "browser",
   "title": "Postgres + Maria + Mongo",
   "uid": "fe6hmwui4a134b",
-  "version": 46,
+  "version": 9,
   "weekStart": ""
 }
