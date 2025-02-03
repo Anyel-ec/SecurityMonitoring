@@ -94,7 +94,7 @@ public class MyCnfFileGenerator {
             writer.write("user=" + user + "\n");
             writer.write("password=" + password + "\n");
             writer.write("host=host.docker.internal\n");
-            writer.write("port=3306\n");
+            writer.write("port=3307\n");
             log.info("Archivo .my.cnf creado exitosamente en la ruta: {}", absolutePath);
         } catch (IOException e) {
             log.error("Error al escribir el archivo .my.cnf: {}", e.getMessage());

@@ -58,13 +58,16 @@ services:
       - --config.my-cnf=/cfg/.my.cnf
       - --mysqld.address=${MARIADB_HOST}:${MARIADB_PORT}
       - --collect.info_schema.processlist
-
+      - --collect.global_status
+      - --collect.info_schema.tables
+      - --collect.info_schema.innodb_metrics
     volumes:
       - ".my.cnf:/cfg/.my.cnf"
     ports:
       - "${EXPORT_MARIADB_PORT_EXTERNAL}:${EXPORT_MARIADB_PORT_INTERNAL}"
     networks:
       - monitoring
+
 
 networks:
   monitoring:
