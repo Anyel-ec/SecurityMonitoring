@@ -11,7 +11,12 @@ export const GlobalProvider = ({ children }) => {
         username: null,
         email: null,
         phone: null,
+        name: null,
+        lastname: null,
+        company: null,
+        firstLogin: null,
         createdAt: null,
+        isActive: null,
         roles: [],
     });
 
@@ -34,7 +39,12 @@ export const GlobalProvider = ({ children }) => {
                         username: response.result.username,
                         email: response.result.email,
                         phone: response.result.phone,
+                        name: response.result.name,
+                        lastname: response.result.lastname,
+                        company: response.result.company,
+                        firstLogin: response.result.firstLogin,
                         createdAt: response.result.createdAt,
+                        isActive: response.result.isActive,
                         roles: response.result.roles || [],
                     });
                 } else {
@@ -48,7 +58,12 @@ export const GlobalProvider = ({ children }) => {
                     username: null,
                     email: null,
                     phone: null,
+                    name: null,
+                    lastname: null,
+                    company: null,
+                    firstLogin: null,
                     createdAt: null,
+                    isActive: null,
                     roles: [],
                 });
             } finally {
