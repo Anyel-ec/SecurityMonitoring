@@ -57,6 +57,8 @@ services:
     command:
       - --config.my-cnf=/cfg/.my.cnf
       - --mysqld.address=${MARIADB_HOST}:${MARIADB_PORT}
+      - --collect.info_schema.processlist
+
     volumes:
       - ".my.cnf:/cfg/.my.cnf"
     ports:
