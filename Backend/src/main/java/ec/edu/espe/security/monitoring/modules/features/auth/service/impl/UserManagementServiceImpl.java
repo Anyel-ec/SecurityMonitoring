@@ -85,7 +85,6 @@ public class UserManagementServiceImpl implements UserManagementService {
             // send email
             mailService.sendNewUserEmail(newUser, plainPassword);
 
-            userInfoRepository.save(newUser);
             return new JsonResponseDto(true, HttpStatus.CREATED.value(), "Usuario creado con éxito", newUser);
         } catch (Exception e) {
             log.error("Error al crear usuario: {}", e.getMessage());
@@ -97,7 +96,7 @@ public class UserManagementServiceImpl implements UserManagementService {
     @Override
     public JsonResponseDto getAllUsers(String token) {
         try {
-            String username = jwtProvider.getNombreUsuarioFromToken(token);
+            String username = jwtProvider.getNombreUsuarioFromToken(token); //anyel
             UserInfo requester = userInfoRepository.findByUsernameAndIsActiveTrue(username);
 
             if (requester == null) {

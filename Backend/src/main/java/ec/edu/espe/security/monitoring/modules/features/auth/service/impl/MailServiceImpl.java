@@ -43,7 +43,7 @@ public class MailServiceImpl implements MailService {
     @Override
     public void sendNewUserEmail(UserInfo user, String password) {
         try {
-            // Cargar la plantilla de correo
+            // load template
             InputStream inputStream = new ClassPathResource("templates/new_user.html").getInputStream();
             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
             StringBuilder emailContent = new StringBuilder();
@@ -52,21 +52,21 @@ public class MailServiceImpl implements MailService {
                 emailContent.append(line).append("\n");
             }
 
-            // Reemplazar las variables en la plantilla
+            // replace the placeholders with the actual values
             String emailBody = emailContent.toString()
                     .replace("{{name}}", user.getName())
                     .replace("{{lastname}}", user.getLastname())
                     .replace("{{username}}", user.getUsername())
                     .replace("{{password}}", password);
 
-            // Configurar el correo
+            // config the email
             MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
             helper.setTo(user.getEmail());
             helper.setSubject("Credenciales de acceso al sistema");
             helper.setText(emailBody, true);
 
-            // Enviar el correo
+            // send email
             mailSender.send(message);
             log.info("Correo de credenciales enviado correctamente a: {}", user.getEmail());
 
