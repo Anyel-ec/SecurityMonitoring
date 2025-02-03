@@ -1053,8 +1053,8 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 8,
-        "w": 8,
+        "h": 10,
+        "w": 24,
         "x": 0,
         "y": 35
       },
@@ -1088,97 +1088,7 @@
           "legendFormat": "Postgres",
           "range": true,
           "refId": "A"
-        }
-      ],
-      "title": "Postgres",
-      "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisBorderShow": false,
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "barWidthFactor": 0.6,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "insertNulls": false,
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
         },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 8,
-        "x": 8,
-        "y": 35
-      },
-      "id": 47,
-      "options": {
-        "legend": {
-          "calcs": [
-            "lastNotNull",
-            "mean",
-            "min",
-            "max"
-          ],
-          "displayMode": "table",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "pluginVersion": "11.3.1",
-      "targets": [
         {
           "datasource": {
             "type": "prometheus",
@@ -1186,100 +1096,12 @@
           },
           "editorMode": "code",
           "expr": "mysql_global_status_commands_total{command=\"delete\"}",
-          "legendFormat": "{{command}}",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "MariaDB",
           "range": true,
-          "refId": "A"
-        }
-      ],
-      "title": "MariaDB",
-      "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisBorderShow": false,
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "barWidthFactor": 0.6,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "insertNulls": false,
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
+          "refId": "B"
         },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 8,
-        "x": 16,
-        "y": 35
-      },
-      "id": 48,
-      "options": {
-        "legend": {
-          "calcs": [
-            "lastNotNull",
-            "mean",
-            "min",
-            "max"
-          ],
-          "displayMode": "table",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "pluginVersion": "11.3.1",
-      "targets": [
         {
           "datasource": {
             "type": "prometheus",
@@ -1287,12 +1109,14 @@
           },
           "editorMode": "code",
           "expr": "mongodb_op_counters_total{type=\"delete\"}",
-          "legendFormat": "{{type}}",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "MongoDB",
           "range": true,
-          "refId": "A"
+          "refId": "C"
         }
       ],
-      "title": "MongoDB",
+      "title": "Postgres",
       "type": "timeseries"
     },
     {
@@ -1301,7 +1125,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 43
+        "y": 45
       },
       "id": 41,
       "panels": [],
@@ -1375,7 +1199,7 @@
         "h": 8,
         "w": 24,
         "x": 0,
-        "y": 44
+        "y": 46
       },
       "id": 38,
       "options": {
@@ -1444,7 +1268,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 52
+        "y": 54
       },
       "id": 21,
       "panels": [],
@@ -1500,8 +1324,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1516,7 +1339,7 @@
         "h": 9,
         "w": 8,
         "x": 0,
-        "y": 53
+        "y": 55
       },
       "id": 22,
       "options": {
@@ -1602,8 +1425,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1618,7 +1440,7 @@
         "h": 9,
         "w": 8,
         "x": 8,
-        "y": 53
+        "y": 55
       },
       "id": 23,
       "options": {
@@ -1704,8 +1526,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1720,7 +1541,7 @@
         "h": 9,
         "w": 8,
         "x": 16,
-        "y": 53
+        "y": 55
       },
       "id": 24,
       "options": {
@@ -1763,7 +1584,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 62
+        "y": 64
       },
       "id": 25,
       "panels": [],
@@ -1834,7 +1655,7 @@
         "h": 6,
         "w": 24,
         "x": 0,
-        "y": 63
+        "y": 65
       },
       "id": 26,
       "options": {
@@ -1947,7 +1768,7 @@
         "h": 5,
         "w": 24,
         "x": 0,
-        "y": 69
+        "y": 71
       },
       "id": 27,
       "options": {
@@ -2060,7 +1881,7 @@
         "h": 6,
         "w": 24,
         "x": 0,
-        "y": 74
+        "y": 76
       },
       "id": 28,
       "options": {
@@ -2115,7 +1936,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 80
+        "y": 82
       },
       "id": 49,
       "panels": [],
@@ -2185,7 +2006,7 @@
         "h": 8,
         "w": 8,
         "x": 0,
-        "y": 81
+        "y": 83
       },
       "id": 43,
       "options": {
@@ -2285,7 +2106,7 @@
         "h": 8,
         "w": 8,
         "x": 8,
-        "y": 81
+        "y": 83
       },
       "id": 44,
       "options": {
@@ -2385,7 +2206,7 @@
         "h": 8,
         "w": 8,
         "x": 16,
-        "y": 81
+        "y": 83
       },
       "id": 45,
       "options": {
@@ -2428,7 +2249,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 89
+        "y": 91
       },
       "id": 29,
       "panels": [],
@@ -2500,7 +2321,7 @@
         "h": 8,
         "w": 8,
         "x": 0,
-        "y": 90
+        "y": 92
       },
       "id": 31,
       "options": {
@@ -2602,7 +2423,7 @@
         "h": 8,
         "w": 8,
         "x": 8,
-        "y": 90
+        "y": 92
       },
       "id": 36,
       "options": {
@@ -2704,7 +2525,7 @@
         "h": 8,
         "w": 8,
         "x": 16,
-        "y": 90
+        "y": 92
       },
       "id": 32,
       "options": {
@@ -2747,7 +2568,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 98
+        "y": 100
       },
       "id": 37,
       "panels": [],
@@ -2819,7 +2640,7 @@
         "h": 8,
         "w": 8,
         "x": 0,
-        "y": 99
+        "y": 101
       },
       "id": 34,
       "options": {
@@ -2921,7 +2742,7 @@
         "h": 8,
         "w": 8,
         "x": 8,
-        "y": 99
+        "y": 101
       },
       "id": 33,
       "options": {
@@ -3023,7 +2844,7 @@
         "h": 8,
         "w": 8,
         "x": 16,
-        "y": 99
+        "y": 101
       },
       "id": 35,
       "options": {
@@ -3084,8 +2905,8 @@
         "auto_count": 200,
         "auto_min": "1s",
         "current": {
-          "text": "1m",
-          "value": "1m"
+          "text": "5s",
+          "value": "5s"
         },
         "label": "Interval",
         "name": "interval",
@@ -3096,12 +2917,12 @@
             "value": "1s"
           },
           {
-            "selected": false,
+            "selected": true,
             "text": "5s",
             "value": "5s"
           },
           {
-            "selected": true,
+            "selected": false,
             "text": "1m",
             "value": "1m"
           },
@@ -3161,6 +2982,6 @@
   "timezone": "browser",
   "title": "Postgres + Maria + Mongo",
   "uid": "fe6hmwui4a134b",
-  "version": 23,
+  "version": 26,
   "weekStart": ""
 }
