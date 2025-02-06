@@ -62,10 +62,7 @@ public class AlertRulesServiceImpl implements AlertRulesService {
         // write content to file
         Files.writeString(filePath, yamlContent);
 
-        // restart alertmanager container
-        DockerCommandUtil.restartContainer("container-alertmanager-1");
 
-        log.error("Se reinicio el contenedor de alertmanager");
     }
 
 }

@@ -2,6 +2,7 @@ package ec.edu.espe.security.monitoring.modules.features.alert.controller;
 
 import ec.edu.espe.security.monitoring.common.dto.JsonResponseDto;
 import ec.edu.espe.security.monitoring.modules.features.alert.services.AlertRulesService;
+import ec.edu.espe.security.monitoring.modules.features.alert.utils.DockerCommandUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -42,6 +43,12 @@ public class AlertRulesController {
         try {
             String yamlContent = body.get("yamlContent");
             alertRulesService.updateAlertRules(filename, yamlContent);
+            // restart alertmanager container
+            DockerCommandUtil.restartContainer("container-alertmanager-1");
+            // restart alertmanager container
+            DockerCommandUtil.restartContainer("container-prometheus-1");
+
+            log.error("Se reinicio el contenedor de alertmanager y prometheus");
             return ResponseEntity.ok(new JsonResponseDto(true, HttpStatus.OK.value(), "Reglas actualizadas con éxito.", null));
         } catch (Exception e) {
             log.error("Error al actualizar las reglas: {}", e.getMessage(), e);
