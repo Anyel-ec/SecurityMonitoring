@@ -825,7 +825,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "avg(rate(process_resident_memory_bytes{instance=\"mongo-exporter:9216\"}[5m]))",
+          "expr": "avg(rate(process_resident_memory_bytes{instance=\"mongo-exporter:9216\", job=\"mongo\"}[5m]))",
           "hide": false,
           "instant": false,
           "legendFormat": "MongoDB",
@@ -1040,8 +1040,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1050,7 +1049,32 @@
             ]
           }
         },
-        "overrides": []
+        "overrides": [
+          {
+            "__systemRef": "hideSeriesFrom",
+            "matcher": {
+              "id": "byNames",
+              "options": {
+                "mode": "exclude",
+                "names": [
+                  "MongoDB"
+                ],
+                "prefix": "All except:",
+                "readOnly": true
+              }
+            },
+            "properties": [
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": true
+                }
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 10,
@@ -1084,7 +1108,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "pg_stat_database_tup_deleted{datname=\"northwind\"}",
+          "expr": "rate(pg_stat_database_tup_deleted{datname=\"northwind\"}[5m])\r\n",
           "legendFormat": "Postgres",
           "range": true,
           "refId": "A"
@@ -1095,7 +1119,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "mysql_global_status_commands_total{command=\"delete\"}",
+          "expr": "rate(mysql_global_status_commands_total{command=\"delete\"}[5m])",
           "hide": false,
           "instant": false,
           "legendFormat": "MariaDB",
@@ -1108,7 +1132,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "mongodb_op_counters_total{type=\"delete\"}",
+          "expr": "rate(mongodb_op_counters_total{type=\"delete\"}[5m])",
           "hide": false,
           "instant": false,
           "legendFormat": "MongoDB",
@@ -1183,8 +1207,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1326,8 +1349,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1467,8 +1489,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1609,14 +1630,14 @@
         "auto_count": 200,
         "auto_min": "1s",
         "current": {
-          "text": "1s",
-          "value": "1s"
+          "text": "1m",
+          "value": "1m"
         },
         "label": "Interval",
         "name": "interval",
         "options": [
           {
-            "selected": true,
+            "selected": false,
             "text": "1s",
             "value": "1s"
           },
@@ -1626,7 +1647,7 @@
             "value": "5s"
           },
           {
-            "selected": false,
+            "selected": true,
             "text": "1m",
             "value": "1m"
           },
@@ -1686,6 +1707,6 @@
   "timezone": "browser",
   "title": "Postgres + Maria + Mongo",
   "uid": "fe6hmwui4a134b",
-  "version": 46,
+  "version": 48,
   "weekStart": ""
 }

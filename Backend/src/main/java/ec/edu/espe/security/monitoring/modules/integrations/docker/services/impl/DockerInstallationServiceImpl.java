@@ -100,6 +100,7 @@ public class DockerInstallationServiceImpl implements DockerInstallationService 
                     "up", "-d"
             );
 
+
             // config environment variables for active installations
             for (InstallationConfig config : activeInstallations) {
                 String decryptedPassword = DockerEnvironmentUtil.decryptPassword(config.getPassword(), aesEncryptor);
@@ -110,10 +111,14 @@ public class DockerInstallationServiceImpl implements DockerInstallationService 
             dockerComposeProcessBuilder.inheritIO().start().waitFor();
             log.info("Docker Compose ejecutado exitosamente desde el volumen compartido.");
 
+            //restart alertmanager and prometheus
+
         } catch (IOException | InterruptedException e) {
             log.error("Error al ejecutar Docker Compose: {}", e.getMessage());
             Thread.currentThread().interrupt();
             throw new IllegalStateException("Error al ejecutar Docker Compose con configuraciones activas", e);
         }
     }
+
+
 }

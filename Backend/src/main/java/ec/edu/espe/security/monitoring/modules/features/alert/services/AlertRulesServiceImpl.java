@@ -1,5 +1,6 @@
 package ec.edu.espe.security.monitoring.modules.features.alert.services;
 
+import ec.edu.espe.security.monitoring.modules.features.alert.utils.DockerCommandUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -60,6 +61,11 @@ public class AlertRulesServiceImpl implements AlertRulesService {
 
         // write content to file
         Files.writeString(filePath, yamlContent);
+
+        // restart alertmanager container
+        DockerCommandUtil.restartContainer("container-alertmanager-1");
+
+        log.error("Se reinicio el contenedor de alertmanager");
     }
 
 }
