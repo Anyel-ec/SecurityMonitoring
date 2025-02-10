@@ -52,7 +52,7 @@ groups:
   - name: Open File Descriptors Alerts
     rules:
       - alert: HighOpenFileDescriptorsPostgres
-        expr: process_open_fds{instance="postgres-exporter:9187"} > 1000
+        expr: process_open_fds{instance="postgres-exporter:9187"} > 10
         for: 1m
         labels:
           severity: info

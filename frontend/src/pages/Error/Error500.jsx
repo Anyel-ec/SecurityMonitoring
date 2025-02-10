@@ -19,8 +19,8 @@ const Error500 = () => {
                         alt="500"
                         className="mx-auto -mt-10 w-full max-w-xs object-cover md:-mt-14 md:max-w-xl"
                     />
-                    <p className="mt-5 text-base dark:text-white">Error Interno!</p>
-                    <Link to="/" className="btn btn-gradient mx-auto !mt-7 w-max border-0 uppercase shadow-none">
+                            Error Interno! Por favor, verifique que los servicios estén levantados, tanto en Docker como en el microservicio.
+                          <Link to="/" className="btn btn-gradient mx-auto !mt-7 w-max border-0 uppercase shadow-none">
                         Inicio
                     </Link>
                 </div>
