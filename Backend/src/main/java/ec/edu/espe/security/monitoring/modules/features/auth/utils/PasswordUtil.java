@@ -15,7 +15,7 @@ public class PasswordUtil {
     private static final int PASSWORD_LENGTH = 15;
 
     private static final Random RANDOM = new Random();
-
+    //todo: mas corto, estudiante@ tres numeros ramdon
     public String generatePassword(String username, String company, String phone) {
         String initials = username.substring(0, Math.min(4, username.length())).toUpperCase();
         String symbol = String.valueOf(SYMBOLS.charAt(RANDOM.nextInt(SYMBOLS.length())));

@@ -2,13 +2,14 @@ package ec.edu.espe.security.monitoring.modules.integrations.grafana.controllers
 
 import ec.edu.espe.security.monitoring.common.dto.JsonResponseDto;
 import ec.edu.espe.security.monitoring.modules.integrations.grafana.services.interfaces.GrafanaDatasourceService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
+@Tag(name = "Operaciones Grafana", description = "Endpoint para la creación de una datasource de Prometheus en Grafana.")
 @RequiredArgsConstructor
 @Slf4j
 @RestController

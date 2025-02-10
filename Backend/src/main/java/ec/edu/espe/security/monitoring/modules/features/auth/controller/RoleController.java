@@ -1,6 +1,7 @@
 package ec.edu.espe.security.monitoring.modules.features.auth.controller;
 import ec.edu.espe.security.monitoring.common.dto.JsonResponseDto;
 import ec.edu.espe.security.monitoring.modules.features.auth.service.interfaces.RoleService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
  * Github: https://github.com/Anyel-ec
  * Creation date: 17/01/2025
  */
+@Tag(name = "Gestión de Roles", description = "Endpoints para la administración de roles de usuario")
 @Slf4j
 @RequiredArgsConstructor
 @RestController

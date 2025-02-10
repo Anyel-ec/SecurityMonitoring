@@ -4,6 +4,7 @@ import ec.edu.espe.security.monitoring.common.dto.JsonResponseDto;
 import ec.edu.espe.security.monitoring.modules.features.auth.dto.VerifyRecoveryCodeRequestDto;
 import ec.edu.espe.security.monitoring.modules.features.auth.model.UserInfo;
 import ec.edu.espe.security.monitoring.modules.features.auth.service.interfaces.RecoveryService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -20,6 +21,8 @@ import java.util.Map;
  * Github: https://github.com/Anyel-ec
  * Creation date: 13/01/2025
  */
+@Tag(name = "Recuperación de contraseña", description = "Endpoints para la recuperación de cuentas de usuario")
+
 @Slf4j
 @RequiredArgsConstructor
 @RestController

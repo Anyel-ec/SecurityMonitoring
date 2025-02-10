@@ -3,6 +3,7 @@ package ec.edu.espe.security.monitoring.modules.features.auth.controller;
 import ec.edu.espe.security.monitoring.common.dto.JsonResponseDto;
 import ec.edu.espe.security.monitoring.modules.features.auth.dto.UserCreateDto;
 import ec.edu.espe.security.monitoring.modules.features.auth.service.interfaces.UserManagementService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
  * Github: https://github.com/Anyel-ec
  * Creation date: 16/01/2025
  */
+@Tag(name = "Gestión de Usuarios", description = "Endpoints para la administración de usuarios del sistema")
+
 @Slf4j
 @RequiredArgsConstructor
 @RestController

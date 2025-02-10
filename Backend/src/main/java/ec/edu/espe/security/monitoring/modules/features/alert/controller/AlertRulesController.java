@@ -3,6 +3,7 @@ package ec.edu.espe.security.monitoring.modules.features.alert.controller;
 import ec.edu.espe.security.monitoring.common.dto.JsonResponseDto;
 import ec.edu.espe.security.monitoring.modules.features.alert.services.AlertRulesService;
 import ec.edu.espe.security.monitoring.modules.features.alert.utils.DockerCommandUtil;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -15,7 +16,7 @@ import java.util.Map;
  * Github: https://github.com/Anyel-ec
  * Creation date: 14/01/2025
  */
-
+@Tag(name = "Reglas de Alertas", description = "Endpoints para gestionar reglas de alertas en Prometheus y Alertmanager")
 @Slf4j
 @RequiredArgsConstructor
 @RestController

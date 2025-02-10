@@ -1,6 +1,7 @@
 package ec.edu.espe.security.monitoring.modules.features.credential.controllers;
 import ec.edu.espe.security.monitoring.common.dto.JsonResponseDto;
 import ec.edu.espe.security.monitoring.modules.integrations.docker.utils.MyCnfFileGenerator;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
  * Github: https://github.com/Anyel-ec
  * Creation date: 04/11/2024
  */
-
+@Tag(name = "Generación de Archivo .my.cnf", description = "Endpoint para generar el archivo .my.cnf con configuraciones predeterminadas")
 @Slf4j
 @RestController
 @RequiredArgsConstructor

@@ -7,6 +7,7 @@ import ec.edu.espe.security.monitoring.common.dto.JsonResponseDto;
 import ec.edu.espe.security.monitoring.modules.features.credential.models.DatabaseCredential;
 import ec.edu.espe.security.monitoring.modules.core.audit.services.AuditLogService;
 import ec.edu.espe.security.monitoring.modules.features.credential.services.DatabaseCredentialService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -21,6 +22,7 @@ import java.util.List;
  * Github: https://github.com/Anyel-ec
  * Creation date: 04/11/2024
  */
+@Tag(name = "Credenciales de Base de Datos", description = "Endpoints para la gestión de credenciales de base de datos del sistema")
 
 @Slf4j
 @AllArgsConstructor

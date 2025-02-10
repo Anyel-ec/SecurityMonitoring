@@ -4,6 +4,7 @@ import ec.edu.espe.security.monitoring.common.dto.JsonResponseDto;
 import ec.edu.espe.security.monitoring.modules.features.auth.dto.ProfileDto;
 import ec.edu.espe.security.monitoring.modules.features.auth.dto.ProfilePasswordDto;
 import ec.edu.espe.security.monitoring.modules.features.auth.service.interfaces.ProfileService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
  * Github: https://github.com/Anyel-ec
  * Creation date: 10/01/2025
  */
+@Tag(name = "Perfil", description = "Endpoints para la gestión del perfil de usuario")
 @Slf4j
 @RequiredArgsConstructor
 @RestController

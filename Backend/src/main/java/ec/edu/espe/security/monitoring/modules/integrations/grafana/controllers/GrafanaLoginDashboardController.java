@@ -2,6 +2,7 @@ package ec.edu.espe.security.monitoring.modules.integrations.grafana.controllers
 
 import ec.edu.espe.security.monitoring.common.dto.JsonResponseDto;
 import ec.edu.espe.security.monitoring.modules.integrations.grafana.services.interfaces.GrafanaLoginService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -10,7 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
-
+@Tag(name = "Operaciones de Login en Grafana", description = "Endpoints para gestionar el inicio de sesión y acceso al dashboard de Grafana.")
 @RequiredArgsConstructor
 @Slf4j
 @RestController

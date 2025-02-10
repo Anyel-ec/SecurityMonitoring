@@ -5,6 +5,7 @@ import ec.edu.espe.security.monitoring.modules.features.credential.dto.DatabaseC
 import ec.edu.espe.security.monitoring.common.dto.JsonResponseDto;
 import ec.edu.espe.security.monitoring.modules.core.audit.services.AuditLogServiceImpl;
 import ec.edu.espe.security.monitoring.modules.features.credential.utils.DatabaseUtils;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
  * Github: https://github.com/Anyel-ec
  * Creation date: 04/11/2024
  */
-
+@Tag(name = "Prueba de Conexión a la Base de Datos", description = "Endpoint para probar la conexión a la base de datos con las credenciales proporcionadas")
 @Slf4j
 @AllArgsConstructor
 @RestController

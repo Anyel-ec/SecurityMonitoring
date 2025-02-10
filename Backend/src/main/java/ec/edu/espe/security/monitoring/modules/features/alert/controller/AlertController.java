@@ -2,6 +2,7 @@ package ec.edu.espe.security.monitoring.modules.features.alert.controller;
 
 import ec.edu.espe.security.monitoring.common.dto.JsonResponseDto;
 import ec.edu.espe.security.monitoring.modules.features.alert.services.AlertService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
  * Github: https://github.com/Anyel-ec
  * Creation date: 04/01/2025
  */
+@Tag(name = "Alertas", description = "Endpoints para gestionar reglas de alertas en el sistema de monitoreo.")
 
 @RestController
 @RequestMapping("/api/v1/alert")
