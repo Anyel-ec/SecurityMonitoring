@@ -91,4 +91,19 @@ public class AuthController {
         }
         return ResponseEntity.badRequest().body(new JsonResponseDto(false, 400, "Encabezado Authorization no encontrado o malformado.", null));
     }
+
+    @PatchMapping("/disable-first-login")
+    public ResponseEntity<JsonResponseDto> disableFirstLogin(
+            @RequestHeader("Authorization") String authorizationHeader) {
+        log.info("Disabling first login for user");
+        try {
+            String token = authorizationHeader.replace("Bearer ", "");
+            JsonResponseDto response = authService.disableFirstLogin(token);
+            return ResponseEntity.status(response.httpCode()).body(response);
+        } catch (Exception e) {
+            log.error("Error al deshabilitar primer inicio de sesión: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new JsonResponseDto(false, HttpStatus.INTERNAL_SERVER_ERROR.value(), "Error al procesar la solicitud", null));
+        }
+    }
 }

@@ -29,6 +29,7 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder encoder;
     private final JwtProvider jwtProvider;
     private final JwtRevokedToken jwtRevokedToken;
+    private final UserInfoRepository userInfoRepository;
 
     // Retrieves all active users from the database
     @Override
@@ -105,6 +106,33 @@ public class AuthServiceImpl implements AuthService {
         } catch (Exception e) {
             log.error("Error al revocar el token: {}", e.getMessage());
             return new JsonResponseDto(false, HttpStatus.INTERNAL_SERVER_ERROR.value(), "Error al revocar el token.", null);
+        }
+    }
+
+    @Override
+    public JsonResponseDto disableFirstLogin(String token) {
+        try {
+            // Obtener el nombre de usuario desde el token
+            String username = jwtProvider.getNombreUsuarioFromToken(token);
+            UserInfo user = userInfoRepository.findByUsernameAndIsActiveTrue(username);
+
+            if (user == null) {
+                return new JsonResponseDto(false, HttpStatus.NOT_FOUND.value(), "Usuario no encontrado", null);
+            }
+
+            // Verificar si el usuario ya ha deshabilitado el primer login
+            if (!user.isFirstLogin()) {
+                return new JsonResponseDto(false, HttpStatus.BAD_REQUEST.value(), "El usuario ya ha iniciado sesión antes", null);
+            }
+
+            // Cambiar el estado de firstLogin a false
+            user.setFirstLogin(false);
+            userInfoRepository.save(user);
+
+            return new JsonResponseDto(true, HttpStatus.OK.value(), "Primer inicio de sesión deshabilitado con éxito", null);
+        } catch (Exception e) {
+            log.error("Error al deshabilitar primer inicio de sesión: {}", e.getMessage());
+            return new JsonResponseDto(false, HttpStatus.INTERNAL_SERVER_ERROR.value(), "Error al procesar la solicitud", null);
         }
     }
 

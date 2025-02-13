@@ -5,6 +5,7 @@ import { url_auth } from '../static/useApiUrl';
 // Función para iniciar sesión
 export const useAuthService = () => {
 
+
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
@@ -35,6 +36,41 @@ export const useAuthService = () => {
 
     return { content, loading, error };
 };
+// Función para deshabilitar el primer inicio de sesión
+export const useDisableFirstLogin = () => {
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+
+    const content = async () => {
+        setLoading(true);
+        setError(null);
+
+        try {
+            const token = localStorage.getItem('token');
+
+            if (!token) {
+                throw new Error("No se encontró el token en localStorage.");
+            }
+
+            const response = await axiosInstance.patch(`${url_auth}/disable-first-login`, {}, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+
+            const result = response.data;
+            setLoading(false);
+            return result;
+
+        } catch (error) {
+            const errorMessage = error.response ? error.response.data.message : error.message;
+            setError(errorMessage);
+            setLoading(false);
+            return { success: false, message: errorMessage };
+        }
+    };
+
+    return { content, loading, error };
+};
+
 
 // Función para obtener los detalles del usuario
 export const useDetailsUserService = () => {
@@ -142,4 +178,6 @@ export const useVerifyToken = () => {
 
     return { isValid };
 };
+
+
 
