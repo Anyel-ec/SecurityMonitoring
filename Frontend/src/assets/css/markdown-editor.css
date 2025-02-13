@@ -1,0 +1,26 @@
+.dark .markdown-editor .editor-toolbar i.separator {
+    border-color: #888ea8;
+    border-right: none;
+}
+
+.dark .markdown-editor .EasyMDEContainer .CodeMirror,
+.dark .markdown-editor .editor-preview {
+    background-color: #121e32;
+}
+
+.markdown-editor .editor-toolbar,
+.markdown-editor .EasyMDEContainer .CodeMirror{
+    border-color: #ccc;
+    color: #0e1726;
+}
+.dark .markdown-editor .editor-toolbar,
+.dark .markdown-editor .EasyMDEContainer .CodeMirror {
+    border-color: #17263c;
+    color: #888ea8 !important;
+}
+
+.dark .markdown-editor .editor-toolbar button.active, .editor-toolbar button:hover {
+    background-color: transparent !important;
+    border-color: transparent !important;
+    color: #4361ee;
+}

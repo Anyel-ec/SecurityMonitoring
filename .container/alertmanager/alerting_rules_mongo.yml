@@ -11,7 +11,7 @@ groups:
           description: El Exportador de Mongo ha estado caído por más de 1 minuto.
   - name: CPU Usage Alerts
     rules:
-      - alert: HighCPUUsageMongoExporter
+      - alert: ExportadorAltoUsCPUMongoDB
         expr: >-
           avg(rate(process_cpu_seconds_total{instance="mongo-exporter:9216"}[5m])
           * 1000) > 5
@@ -25,7 +25,7 @@ groups:
             en los últimos 5 minutos.
   - name: Memory Usage Alerts
     rules:
-      - alert: HighMemoryUsageMongoExporter
+      - alert: ExportadorAltoUsoMemoriaMongoDB
         expr: >-
           avg(rate(process_resident_memory_bytes{instance="mongo-exporter:9216"}[5m]))
           > 1 * 1024 * 1024

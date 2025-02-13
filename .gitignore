@@ -5,3 +5,4 @@ postgres_data/
 alertmanager.yml
 .my.cnf
 Frontend-v1.rar
+sonar-project.properties

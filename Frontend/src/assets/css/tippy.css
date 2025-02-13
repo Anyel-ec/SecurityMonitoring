@@ -1,0 +1,55 @@
+.tippy-box[data-theme~='primary'] {
+    background-color: #4361ee;
+}
+
+.tippy-box[data-theme~='primary'][data-placement^='top'] > .tippy-arrow::before {
+    border-top-color: #4361ee;
+}
+
+.tippy-box[data-theme~='success'] {
+    background-color: #00ab55;
+}
+
+.tippy-box[data-theme~='success'][data-placement^='top'] > .tippy-arrow::before {
+    border-top-color: #00ab55;
+}
+
+.tippy-box[data-theme~='info'] {
+    background-color: #2196f3;
+}
+
+.tippy-box[data-theme~='info'][data-placement^='top'] > .tippy-arrow::before {
+    border-top-color: #2196f3;
+}
+
+.tippy-box[data-theme~='danger'] {
+    background-color: #e7515a;
+}
+
+.tippy-box[data-theme~='danger'][data-placement^='top'] > .tippy-arrow::before {
+    border-top-color: #e7515a;
+}
+
+.tippy-box[data-theme~='warning'] {
+    background-color: #e2a03f;
+}
+
+.tippy-box[data-theme~='warning'][data-placement^='top'] > .tippy-arrow::before {
+    border-top-color: #e2a03f;
+}
+
+.tippy-box[data-theme~='secondary'] {
+    background-color: #805dca;
+}
+
+.tippy-box[data-theme~='secondary'][data-placement^='top'] > .tippy-arrow::before {
+    border-top-color: #805dca;
+}
+
+.tippy-box[data-theme~='dark'] {
+    background-color: #3b3f5c;
+}
+
+.tippy-box[data-theme~='dark'][data-placement^='top'] > .tippy-arrow::before {
+    border-top-color: #3b3f5c;
+}
