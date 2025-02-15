@@ -660,7 +660,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "avg(rate(process_cpu_seconds_total{instance=\"postgres-exporter:9187\"}[5m]) * 1000)",
+          "expr": "avg(rate(process_cpu_seconds_total{instance=\"postgres-exporter:9187\"}[1m]) * 1000)",
           "legendFormat": "Postgres",
           "range": true,
           "refId": "A"
@@ -671,7 +671,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "avg(rate(process_cpu_seconds_total{instance=\"mariadb-exporter:9104\"}[5m]) * 1000)",
+          "expr": "avg(rate(process_cpu_seconds_total{instance=\"mariadb-exporter:9104\"}[1m]) * 1000)",
           "hide": false,
           "instant": false,
           "legendFormat": "MariaDB",
@@ -684,7 +684,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "avg(rate(process_cpu_seconds_total{instance=\"mongo-exporter:9216\"}[5m]) * 1000)",
+          "expr": "avg(rate(process_cpu_seconds_total{instance=\"mongo-exporter:9216\"}[1m]) * 1000)",
           "hide": false,
           "instant": false,
           "legendFormat": "MongoDB",
@@ -801,7 +801,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "avg(rate(process_resident_memory_bytes{instance=\"postgres-exporter:9187\"}[5m]))",
+          "expr": "avg(rate(process_resident_memory_bytes{instance=\"postgres-exporter:9187\"}[1m]))",
           "legendFormat": "Postgres",
           "range": true,
           "refId": "A"
@@ -812,7 +812,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "avg(rate(process_resident_memory_bytes{instance=\"mariadb-exporter:9104\"}[5m]))",
+          "expr": "avg(rate(process_resident_memory_bytes{instance=\"mariadb-exporter:9104\"}[1m]))",
           "hide": false,
           "instant": false,
           "legendFormat": "MariaDB",
@@ -825,7 +825,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "avg(rate(process_resident_memory_bytes{instance=\"mongo-exporter:9216\", job=\"mongo\"}[5m]))",
+          "expr": "avg(rate(process_resident_memory_bytes{instance=\"mongo-exporter:9216\", job=\"mongo\"}[1m]))",
           "hide": false,
           "instant": false,
           "legendFormat": "MongoDB",
@@ -1084,7 +1084,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "rate(pg_stat_database_tup_deleted{datname=\"northwind\"}[5m])\r\n",
+          "expr": "rate(pg_stat_database_tup_deleted{datname=\"northwind\"}[1m])\r\n",
           "legendFormat": "Postgres",
           "range": true,
           "refId": "A"
@@ -1095,7 +1095,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "rate(mysql_global_status_commands_total{command=\"delete\"}[5m])",
+          "expr": "rate(mysql_global_status_commands_total{command=\"delete\"}[1m])",
           "hide": false,
           "instant": false,
           "legendFormat": "MariaDB",
@@ -1108,7 +1108,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "rate(mongodb_op_counters_total{type=\"delete\"}[5m])",
+          "expr": "rate(mongodb_op_counters_total{type=\"delete\"}[1m])",
           "hide": false,
           "instant": false,
           "legendFormat": "MongoDB",
@@ -1227,7 +1227,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "pg_stat_database_tup_updated{datname=\"northwind\"}",
+          "expr": "rate(pg_stat_database_tup_updated{datname=\"northwind\"}[1m])",
           "legendFormat": "Postgres",
           "range": true,
           "refId": "A"
@@ -1238,7 +1238,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "mysql_global_status_commands_total{command='update'}",
+          "expr": "rate(mysql_global_status_commands_total{command='update'}[1m])",
           "hide": false,
           "instant": false,
           "legendFormat": "MariaDB",
@@ -1251,7 +1251,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "mongodb_op_counters_total{type=\"update\"}",
+          "expr": "rate(mongodb_op_counters_total{type=\"update\"}[1m])",
           "hide": false,
           "instant": false,
           "legendFormat": "MongoDB",
@@ -1370,7 +1370,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "pg_stat_database_tup_inserted{datname=\"northwind\"}",
+          "expr": "rate(pg_stat_database_tup_inserted{datname=\"northwind\"}[1m])",
           "legendFormat": "Postgres",
           "range": true,
           "refId": "A"
@@ -1381,7 +1381,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "mysql_global_status_commands_total{command=\"insert\"}",
+          "expr": "rate(mysql_global_status_commands_total{command=\"insert\"}[1m])",
           "hide": false,
           "instant": false,
           "legendFormat": "MariaDB",
@@ -1394,7 +1394,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "mongodb_op_counters_total{type=\"insert\"}",
+          "expr": "rate(mongodb_op_counters_total{type=\"insert\"}[1m])",
           "hide": false,
           "instant": false,
           "legendFormat": "MongoDB",
@@ -1495,7 +1495,9 @@
           ],
           "displayMode": "table",
           "placement": "right",
-          "showLegend": true
+          "showLegend": true,
+          "sortBy": "Name",
+          "sortDesc": false
         },
         "tooltip": {
           "mode": "multi",
@@ -1510,7 +1512,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "irate(pg_stat_database_xact_commit{datname=~\"northwind\", instance=\"postgres-exporter:9187\",job=\"postgres\"}[5m])",
+          "expr": "irate(pg_stat_database_xact_commit{datname=~\"northwind\", instance=\"postgres-exporter:9187\",job=\"postgres\"}[1m])",
           "legendFormat": "commit Postgres",
           "range": true,
           "refId": "A"
@@ -1521,7 +1523,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "irate(pg_stat_database_xact_rollback{datname=\"northwind\", instance=\"postgres-exporter:9187\"}[5m])",
+          "expr": "irate(pg_stat_database_xact_rollback{datname=\"northwind\", instance=\"postgres-exporter:9187\"}[1m])",
           "hide": false,
           "instant": false,
           "legendFormat": "rollback Postgres",
@@ -1534,7 +1536,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "irate(mysql_global_status_commands_total{command=\"commit\"}[5m])",
+          "expr": "irate(mysql_global_status_commands_total{command=\"commit\"}[1m])",
           "hide": false,
           "instant": false,
           "legendFormat": "rollback MariaDB",
@@ -1547,7 +1549,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "irate(mysql_global_status_commands_total{command=\"rollback\"}[5m])",
+          "expr": "irate(mysql_global_status_commands_total{command=\"rollback\"}[1m])",
           "hide": false,
           "instant": false,
           "legendFormat": "rollback MariaDB",
@@ -1560,7 +1562,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "irate(mongodb_mongod_wiredtiger_transactions_total{type=\"committed\"}[5m])",
+          "expr": "irate(mongodb_mongod_wiredtiger_transactions_total{type=\"committed\"}[1m])",
           "hide": false,
           "instant": false,
           "legendFormat": "commit MongoDB",
@@ -1573,7 +1575,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "irate(mongodb_mongod_wiredtiger_transactions_total{type=\"rolledback\"}[5m])",
+          "expr": "irate(mongodb_mongod_wiredtiger_transactions_total{type=\"rolledback\"}[1m])",
           "hide": false,
           "instant": false,
           "legendFormat": "rollback MongoDB",
@@ -1686,6 +1688,6 @@
   "timezone": "browser",
   "title": "Postgres + Maria + Mongo",
   "uid": "fe6hmwui4a134b",
-  "version": 2,
+  "version": 8,
   "weekStart": ""
 }

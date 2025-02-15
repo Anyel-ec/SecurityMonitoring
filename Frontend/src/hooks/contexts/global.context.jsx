@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { useDetailsUserService } from '../services/system/auth.service';
+import { useDetailsUserService } from '../services/system/Auth.service';
 
 // Crear el contexto
 const GlobalContext = createContext(null);
@@ -47,7 +47,6 @@ export const GlobalProvider = ({ children }) => {
                         isActive: response.result.isActive,
                         roles: response.result.roles || [],
                     });
-                    console.log('User details:', response.result);
                 } else {
                     throw new Error(response.message || 'Error al obtener los detalles del usuario');
                 }
