@@ -1,5 +1,5 @@
 groups:
-  - name: Exporter Alerts
+  - name: AlertasDelExportador
     rules:
       - alert: MariadbExporterCaido
         expr: up{job="mariadb"} == 0
@@ -9,10 +9,10 @@ groups:
         annotations:
           summary: El Exportador de MariaDB está caído
           description: El Exportador de MariaDB ha estado caído por más de 10s min
-  - name: Active Connections Alerts
+  - name: AlertasDeConexionesActivas
     rules:
-      - alert: 'HighActiveConnectionsMariaDB '
-        expr: mysql_global_status_threads_connected  > 3
+      - alert: ConexionesActivasAltasMariaDB
+        expr: mysql_global_status_threads_connected > 3
         for: 1m
         labels:
           severity: warning
@@ -21,9 +21,9 @@ groups:
           description: >-
             El número de conexiones activas en MariaDB ha superado las 3
             conexiones en los últimos 60 segundos.
-  - name: CPU Usage Alerts
+  - name: AlertasDeUsoDeCPU
     rules:
-      - alert: HighCPUUsageMariadbExporter
+      - alert: AltoUsoDeCPUMariaDBExporter
         expr: >-
           avg(rate(process_cpu_seconds_total{instance="mariadb-exporter:9104"}[5m])
           * 1000) > 5
@@ -35,9 +35,9 @@ groups:
           description: >-
             El uso promedio de CPU en el Exportador de MariaDB ha superado el 5%
             en los últimos 5 minutos.
-  - name: Memory Usage Alerts
+  - name: AlertasDeUsoDeMemoria
     rules:
-      - alert: HighMemoryUsageMariadbExporter
+      - alert: AltoUsoDeMemoriaMariaDBExporter
         expr: >-
           avg(rate(process_resident_memory_bytes{instance="mariadb-exporter:9104"}[5m]))
           > 1 * 1024 * 1024
@@ -49,9 +49,9 @@ groups:
           description: >-
             El uso promedio de RAM en el Exportador de MariaDB ha superado los 1
             MB en los últimos 5 minutos.
-  - name: Open File Descriptors Alerts
+  - name: AlertasDeFileDescriptorsAbiertos
     rules:
-      - alert: HighOpenFileDescriptorsMariaDB
+      - alert: FileDescriptorsAbiertosAltosMariaDB
         expr: process_open_fds{instance="mariadb-exporter:9104"} > 1000
         for: 1m
         labels:
@@ -61,35 +61,35 @@ groups:
           description: >-
             El número de File Descriptors abiertos por el exportador de MariaDB
             ha superado los 1000 en los últimos 60 segundos.
-  - name: MariaDB Operations Alerts
+  - name: AlertasDeOperacionesMariaDB
     rules:
-      - alert: 'HighDeleteOperationsMariaDB '
+      - alert: OperacionesDeEliminacionAltasMariaDB
         expr: rate(mysql_global_status_commands_total{command="delete"}[5m]) > 100
         for: 1m
         labels:
           severity: warning
         annotations:
-          summary: Alto número de operaciones de eliminación en MySQL
+          summary: Alto número de operaciones de eliminación en MariaDB
           description: >-
             Se han detectado más de 100 operaciones de eliminación por segundo
             en MariaDB en los últimos 5 minutos.
-      - alert: 'HighUpdateOperationsMariaDB '
+      - alert: OperacionesDeActualizacionAltasMariaDB
         expr: rate(mysql_global_status_commands_total{command="update"}[5m]) > 100
         for: 1m
         labels:
           severity: critical
         annotations:
-          summary: 'Alto número de operaciones de actualización en MariaDB '
+          summary: Alto número de operaciones de actualización en MariaDB
           description: >-
             Se han detectado más de 100 operaciones de actualización por segundo
             en MariaDB en los últimos 5 minutos.
-      - alert: 'HighInsertOperationsMariaDB '
+      - alert: OperacionesDeInsercionAltasMariaDB
         expr: rate(mysql_global_status_commands_total{command="insert"}[5m]) > 100
         for: 1m
         labels:
           severity: critical
         annotations:
-          summary: 'Alto número de operaciones de inserción en MariaDB '
+          summary: Alto número de operaciones de inserción en MariaDB
           description: >-
             Se han detectado más de 100 operaciones de inserción por segundo en
             MariaDB en los últimos 5 minutos.

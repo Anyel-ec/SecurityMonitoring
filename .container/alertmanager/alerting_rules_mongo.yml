@@ -1,17 +1,17 @@
 groups:
-  - name: Exporter Alerts
+  - name: AlertasDelExportador
     rules:
-      - alert: MongoExporterCaido
+      - alert: ExportadorDeMongoCaido
         expr: up{job="mongo"} == 0
         for: 10s
         labels:
           severity: critical
         annotations:
-          summary: El Exportador de Mongo esta caido
-          description: El Exportador de Mongo ha estado caído por más de 1 minuto.
-  - name: CPU Usage Alerts
+          summary: ElExportadorDeMongoEstaCaido
+          description: El exportador de Mongo ha estado caído por más de 1 minuto.
+  - name: AlertasDeUsoDeCPU
     rules:
-      - alert: ExportadorAltoUsCPUMongoDB
+      - alert: ExportadorAltoUsoDeCPUMongoDB
         expr: >-
           avg(rate(process_cpu_seconds_total{instance="mongo-exporter:9216"}[5m])
           * 1000) > 5
@@ -19,13 +19,13 @@ groups:
         labels:
           severity: warning
         annotations:
-          summary: Alto uso de CPU en el Exportador de Mongo
+          summary: AltoUsoDeCPUEnElExportadorDeMongo
           description: >-
-            El uso promedio de CPU en el Exportador de Mongo ha superado el 5%
+            El uso promedio de CPU en el exportador de Mongo ha superado el 5%
             en los últimos 5 minutos.
-  - name: Memory Usage Alerts
+  - name: AlertasDeUsoDeMemoria
     rules:
-      - alert: ExportadorAltoUsoMemoriaMongoDB
+      - alert: ExportadorAltoUsoDeMemoriaMongoDB
         expr: >-
           avg(rate(process_resident_memory_bytes{instance="mongo-exporter:9216"}[5m]))
           > 1 * 1024 * 1024
@@ -33,66 +33,64 @@ groups:
         labels:
           severity: warning
         annotations:
-          summary: Alto uso de memoria en el Exportador de Mongo
+          summary: AltoUsoDeMemoriaEnElExportadorDeMongo
           description: >-
-            El uso promedio de RAM en el Exportador de Mongo ha superado los 1
-            MB en los últimos 5 minutos.
-  - name: Active Connections Alerts
+            El uso promedio de RAM en el exportador de Mongo ha superado 1 MB
+            en los últimos 5 minutos.
+  - name: AlertasDeConexionesActivas
     rules:
-      - alert: HighActiveConnectionsMongoDB
+      - alert: ConexionesActivasAltasMongoDB
         expr: >-
-          mongodb_connections{instance="mongo-exporter:9216", state="current"} >
-          3
+          mongodb_connections{instance="mongo-exporter:9216", state="current"} > 3
         for: 1m
         labels:
           severity: warning
         annotations:
-          summary: Muchas conexiones activas en MongoDB
+          summary: MuchasConexionesActivasEnMongoDB
           description: >-
-            El número de conexiones activas en MongoDB ha superado las 3 en
-            los últimos 60 segundos.
-  - name: Open File Descriptors Alerts
+            El número de conexiones activas en MongoDB ha superado las 3
+            en los últimos 60 segundos.
+  - name: AlertasDeFileDescriptorsAbiertos
     rules:
-      - alert: HighOpenFileDescriptorsMongo
+      - alert: FileDescriptorsAbiertosAltosMongoDB
         expr: process_open_fds{instance="mongo-exporter:9216"} > 1000
         for: 1m
         labels:
           severity: warning
         annotations:
-          summary: Alto número de File Descriptors abiertos en MongoDB Exporter
+          summary: AltoNumeroDeFileDescriptorsAbiertosEnMongoDBExportador
           description: >-
             El número de File Descriptors abiertos por el exportador de MongoDB
             ha superado los 1000 en los últimos 60 segundos.
-  - name: MongoDB Operations Alerts
+  - name: AlertasDeOperacionesMongoDB
     rules:
-      - alert: HighDeleteOperationsMongoDB
+      - alert: OperacionesDeEliminacionAltasMongoDB
         expr: rate(mongodb_op_counters_total{type="delete"}[5m]) > 100
         for: 1m
         labels:
           severity: warning
         annotations:
-          summary: Alto número de operaciones de eliminación en MongoDB
+          summary: AltoNumeroDeOperacionesDeEliminacionEnMongoDB
           description: >-
             Se han detectado más de 100 operaciones de eliminación por segundo
             en MongoDB en los últimos 5 minutos.
-      - alert: HighUpdateOperationsMongoDB
+      - alert: OperacionesDeActualizacionAltasMongoDB
         expr: rate(mongodb_op_counters_total{type="update"}[5m]) > 100
         for: 1m
         labels:
           severity: warning
         annotations:
-          summary: Alto número de operaciones de actualización en MongoDB
+          summary: AltoNumeroDeOperacionesDeActualizacionEnMongoDB
           description: >-
             Se han detectado más de 100 operaciones de actualización por segundo
             en MongoDB en los últimos 5 minutos.
-      - alert: HighInsertOperationsMongoDB
+      - alert: OperacionesDeInsercionAltasMongoDB
         expr: rate(mongodb_op_counters_total{type="insert"}[5m]) > 100
         for: 1m
         labels:
           severity: warning
         annotations:
-          summary: Alto número de operaciones de inserción en MongoDB
+          summary: AltoNumeroDeOperacionesDeInsercionEnMongoDB
           description: >-
-            Se han detectado más de 100 operaciones de inserción por segundo en
-            MongoDB en los últimos 5 minutos.
-            
+            Se han detectado más de 100 operaciones de inserción por segundo en MongoDB
+            en los últimos 5 minutos.

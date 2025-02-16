@@ -115,7 +115,7 @@ receivers:
                       <h1>Security Monitoring</h1>
                   </div>
                   <div class="content">
-                      <h2>ALERTMANAGER NOTIFICATION</h2>
+                      <h2>Notificaciones de Alertas</h2>
                       {{ range .Alerts }}
                           <div class="alert">
                               <strong>{{ .Annotations.summary }}</strong>
@@ -124,8 +124,8 @@ receivers:
                       {{ end }}
                   </div>
                   <div class="footer">
-                      <span>&copy; 2023 Security Monitoring</span>
-                      <span>All rights reserved</span>
+                      <span>&copy; 2025 Security Monitoring</span>
+                      <span> - Reservados todos los derechos</span>
                   </div>
               </div>
           </body>

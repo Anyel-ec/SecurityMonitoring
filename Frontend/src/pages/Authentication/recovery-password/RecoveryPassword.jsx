@@ -20,7 +20,7 @@ const RecoveryPassword = () => {
   const [timeCode, setTimeCode] = useState('');
   useEffect(() => {
     if (changeComponent === 1) {
-      setTitle('Recuperar Cuenta')
+      setTitle('Recuperar contraseña')
       setSubtitle('Ingrese su correo electrónico para recuperar su contraseña')
     } else if (changeComponent === 2) {
       setTitle('Ingresar Código')

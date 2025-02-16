@@ -92,7 +92,7 @@ const Login = () => {
                                 </div>
 
                                 <div className='w-full text-center'>
-                                    <Link to="/recuperar-clave" className="text-sm text-dark dark:text-[#fff]">¿Olvidó su contraseña?</Link>
+                                    <Link to="/recuperar-clave" className="text-sm text-dark dark:text-[#fff]">Recuperar contraseña</Link>
                                 </div>
                                 <button type="submit" className="btn btn-dark !mt-6 w-full border-0 uppercase shadow-[0_10px_20px_-10px_rgba(67,97,238,0.44)]">
                                     Ingresar
