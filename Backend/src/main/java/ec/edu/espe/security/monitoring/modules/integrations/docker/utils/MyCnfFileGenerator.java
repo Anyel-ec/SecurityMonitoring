@@ -55,7 +55,7 @@ public class MyCnfFileGenerator {
             return;
         }
 
-        writeMyCnfFile(absolutePath, credential.getUsername(), decryptedPassword);
+        writeMyCnfFile(absolutePath, credential.getUsername(), decryptedPassword, credential.getHost(), String.valueOf(credential.getPort()));
     }
 
     private String getAbsolutePath() {
@@ -88,18 +88,23 @@ public class MyCnfFileGenerator {
         return databaseCredentialRepository.findBySystemParameterAndIsActive(existingParam.get(), true);
     }
 
-    public void writeMyCnfFile(String absolutePath, String user, String password) {
+    public void writeMyCnfFile(String absolutePath, String user, String password, String host, String port) {
+        if (host.equals("127.0.0.1") || host.equals("localhost")) {
+            host = "host.docker.internal";
+        }
         try (FileWriter writer = new FileWriter(absolutePath)) {
-            writer.write("[client]\n");
-            writer.write("user=" + user + "\n");
-            writer.write("password=" + password + "\n");
-            writer.write("host=host.docker.internal\n");
-            writer.write("port=3307\n");
+            String content = String.format(
+                    "[client]%nuser=%s%npassword=%s%nhost=%s%nport=%s%n",
+                    user, password, host, port
+            );
+            writer.write(content);
             log.info("Archivo .my.cnf creado exitosamente en la ruta: {}", absolutePath);
         } catch (IOException e) {
             log.error("Error al escribir el archivo .my.cnf: {}", e.getMessage());
         }
     }
+
+
     public static void main(String[] args) {
         // Genera 32 bytes de clave (256 bits)
         SecureRandom secureRandom = new SecureRandom();

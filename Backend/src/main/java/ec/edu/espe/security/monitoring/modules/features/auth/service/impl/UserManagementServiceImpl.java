@@ -78,7 +78,7 @@ public class UserManagementServiceImpl implements UserManagementService {
                     .firstLogin(true)
                     .isActive(true)
                     .build();
-            String plainPassword = PasswordUtil.generatePassword(newUser.getUsername(), newUser.getCompany(), newUser.getPhone());
+            String plainPassword = PasswordUtil.generatePassword(newUser.getUsername());
             newUser.setPassword(passwordEncoder.encode(plainPassword));
             userInfoRepository.save(newUser);
 

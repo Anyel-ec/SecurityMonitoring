@@ -11,17 +11,11 @@ import java.util.Random;
  */
 @UtilityClass
 public class PasswordUtil {
-    private static final String SYMBOLS = "@#$%&*";
-    private static final int PASSWORD_LENGTH = 15;
-
     private static final Random RANDOM = new Random();
-    //todo: mas corto, estudiante@ tres numeros ramdon
-    public String generatePassword(String username, String company, String phone) {
-        String initials = username.substring(0, Math.min(4, username.length())).toUpperCase();
-        String symbol = String.valueOf(SYMBOLS.charAt(RANDOM.nextInt(SYMBOLS.length())));
-        String companyPart = company.substring(0, Math.min(3, company.length())).toUpperCase();
-        String lastFourDigits = phone.length() >= 4 ? phone.substring(phone.length() - 4) : "0000";
-        String password = initials + symbol + companyPart + lastFourDigits;
-        return password.length() < PASSWORD_LENGTH ? password + "X".repeat(PASSWORD_LENGTH - password.length()) : password;
+
+    public String generatePassword(String username) {
+        String initials = username.substring(0, Math.min(4, username.length())).toLowerCase();
+        int randomNumbers = RANDOM.nextInt(900) + 100; // Genera un número aleatorio de 3 dígitos (100-999)
+        return initials + "@" + randomNumbers;
     }
 }
