@@ -4,7 +4,7 @@ services:
 
   grafana:
     image: grafana/grafana:11.3.1
-
+    restart: unless-stopped
     ports:
       - "${GRAFANA_PORT_EXTERNAL}:${GRAFANA_PORT_INTERNAL}"
     environment:
@@ -17,6 +17,8 @@ services:
 
   prometheus:
     image: prom/prometheus
+    restart: unless-stopped
+
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
       - ./alertmanager/alerting_rules_maria.yml:/etc/prometheus/alerting_rules_maria.yml:ro
@@ -30,6 +32,7 @@ services:
 
   alertmanager:
     image: prom/alertmanager
+    restart: unless-stopped
     volumes:
       - ./alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml
     ports:
@@ -39,6 +42,8 @@ services:
 
   postgres-exporter:
     image: quay.io/prometheuscommunity/postgres-exporter
+    restart: unless-stopped
+
     environment:
       DATA_SOURCE_NAME: "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}?sslmode=disable"
     ports:
@@ -48,6 +53,7 @@ services:
 
   mongo-exporter:
     image: ssheehy/mongodb-exporter:latest
+    restart: unless-stopped
     environment:
       MONGODB_URI: "${MONGODB_URI}"
     ports:
@@ -57,6 +63,7 @@ services:
   
   mariadb-exporter:
     image: prom/mysqld-exporter
+    restart: unless-stopped
     command:
       - --config.my-cnf=/cfg/.my.cnf
       - --mysqld.address=${MARIADB_HOST}:${MARIADB_PORT}
@@ -70,7 +77,6 @@ services:
       - "${EXPORT_MARIADB_PORT_EXTERNAL}:${EXPORT_MARIADB_PORT_INTERNAL}"
     networks:
       - monitoring
-
 
 networks:
   monitoring:

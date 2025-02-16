@@ -846,7 +846,7 @@
       },
       "id": 12,
       "panels": [],
-      "title": "Open File Descriptors",
+      "title": "Descriptores de archivos abiertos",
       "type": "row"
     },
     {
@@ -1183,8 +1183,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1326,8 +1325,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1467,8 +1465,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1688,6 +1685,6 @@
   "timezone": "browser",
   "title": "Postgres + Maria + Mongo",
   "uid": "fe6hmwui4a134b",
-  "version": 8,
+  "version": 2,
   "weekStart": ""
 }
