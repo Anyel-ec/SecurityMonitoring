@@ -51,7 +51,6 @@ export default function useLogin() {
         const result = await content(username, password);
         console.log("handleSubmit: resultado del login", result);
         if (result && result.httpCode === 200) {
-            // Retornamos el resultado (donde result.result es el token)
             return result;
         } else {
             setErrorResponse(result?.message || "Error en la autenticación");

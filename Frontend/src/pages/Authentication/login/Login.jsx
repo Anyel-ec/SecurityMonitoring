@@ -53,15 +53,13 @@ const Login = () => {
       localStorage.removeItem('temp_token'); // Eliminamos el token temporal
       if (detailsResult && detailsResult.httpCode === 200) {
         if (detailsResult.result.firstLogin === true) {
-          console.log("onSubmit: firstLogin activo, mostrando modal");
           setShowPrivacyModal(true);
-        } else {
-          console.log("onSubmit: firstLogin inactivo, guardando token y redirigiendo");
-          localStorage.setItem('token', loginResult.result);
+        } else {          localStorage.setItem('token', loginResult.result);
           navigate('/');
+          window.location.reload();
         }
       } else {
-        console.log("onSubmit: error al obtener detalles del usuario", detailsResult);
+        console.log("onSubmit:  al obtener detalles del usuario", detailsResult);
       }
     } else {
       console.log("onSubmit: error en la autenticación", loginResult);

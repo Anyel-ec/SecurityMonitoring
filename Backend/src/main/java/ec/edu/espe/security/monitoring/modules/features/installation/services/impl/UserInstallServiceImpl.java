@@ -63,6 +63,7 @@ public class UserInstallServiceImpl implements UserInstallService {
                         .name(userInstallRequestDto.getName())
                         .lastname(userInstallRequestDto.getLastname())
                         .company(userInstallRequestDto.getCompany())
+                        .firstLogin(true)
                         .isActive(true)
                         .build();
             }
