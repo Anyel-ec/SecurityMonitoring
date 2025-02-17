@@ -50,6 +50,7 @@ public class UserInstallServiceImpl implements UserInstallService {
                 user.setName(userInstallRequestDto.getName());
                 user.setLastname(userInstallRequestDto.getLastname());
                 user.setCompany(userInstallRequestDto.getCompany());
+                user.setFirstLogin(true);
                 user.setIsActive(true);
             } else {
                 // Crear nuevo usuario

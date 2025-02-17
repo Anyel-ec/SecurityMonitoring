@@ -92,7 +92,7 @@ public class AuthController {
         return ResponseEntity.badRequest().body(new JsonResponseDto(false, 400, "Encabezado Authorization no encontrado o malformado.", null));
     }
 
-    @PatchMapping("/disable-first-login")
+    @PostMapping("/disable-first-login")
     public ResponseEntity<JsonResponseDto> disableFirstLogin(
             @RequestHeader("Authorization") String authorizationHeader) {
         log.info("Disabling first login for user");

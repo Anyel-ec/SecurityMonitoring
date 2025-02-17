@@ -223,10 +223,10 @@ const ConfigAlert = () => {
                                         onChange={(e) => handleConfigChange(index, "severity", e.target.value)}
                                         className="form-select mt-3"
                                     >
-                                        <option value="critical">Critical - Atención inmediata</option>
-                                        <option value="warning">Warning - Condiciones anómalas</option>
-                                        <option value="info">Info - Informativa</option>
-                                        <option value="none">None - Sin clasificación</option>
+                                        <option value="critical">Atención inmediata</option>
+                                        <option value="warning">Condiciones anómalas</option>
+                                        <option value="info">Informativa</option>
+                                        <option value="none">Sin clasificación</option>
                                     </select>
                                 </div>
 

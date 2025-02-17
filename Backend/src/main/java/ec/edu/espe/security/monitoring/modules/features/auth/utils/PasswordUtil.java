@@ -14,8 +14,15 @@ public class PasswordUtil {
     private static final Random RANDOM = new Random();
 
     public String generatePassword(String username) {
-        String initials = username.substring(0, Math.min(4, username.length())).toLowerCase();
-        int randomNumbers = RANDOM.nextInt(900) + 100; // Genera un número aleatorio de 3 dígitos (100-999)
+        if (username == null || username.isEmpty()) {
+            throw new IllegalArgumentException("El nombre de usuario no puede ser nulo o vacío");
+        }
+
+        String initials = username.substring(0, Math.min(8, username.length())).toLowerCase();
+        initials = initials.substring(0, 1).toUpperCase() + initials.substring(1);
+
+        int randomNumbers = RANDOM.nextInt(900) + 100;
         return initials + "@" + randomNumbers;
     }
+
 }

@@ -143,3 +143,35 @@ export const useVerifyToken = () => {
     return { isValid };
 };
 
+// Función para deshabilitar el primer inicio de sesión
+export const useDisableFirstLoginService = () => {
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+
+    const content = async (token) => {
+        setLoading(true);
+        setError(null);
+        try {
+            const response = await axiosInstance.post(
+                `${url_auth}/disable-first-login`,
+                null, // No se envía cuerpo
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+            const result = response.data;
+            setLoading(false);
+            return result;
+        } catch (error) {
+            const errorMessage = error.response ? error.response.data.message : error.message;
+            setError(errorMessage);
+            setLoading(false);
+            return { success: false, message: errorMessage };
+        }
+    };
+
+    return { content, loading, error };
+};
+
