@@ -9,7 +9,7 @@ groups:
         annotations:
           summary: El Exportador de MariaDB está caído
           description: El Exportador de MariaDB ha estado caído por más de 10s min
-  - name: AlertasDeConexionesActivas
+  - name: AlertasConexionesActivas
     rules:
       - alert: ConexionesActivasAltasMariaDB
         expr: mysql_global_status_threads_connected > 3
@@ -21,7 +21,7 @@ groups:
           description: >-
             El número de conexiones activas en MariaDB ha superado las 3
             conexiones en los últimos 60 segundos.
-  - name: AlertasDeUsoDeCPU
+  - name: AlertasUsoCPU
     rules:
       - alert: AltoUsoDeCPUMariaDBExporter
         expr: >-
@@ -35,7 +35,7 @@ groups:
           description: >-
             El uso promedio de CPU en el Exportador de MariaDB ha superado el 5%
             en los últimos 5 minutos.
-  - name: AlertasDeUsoDeMemoria
+  - name: AlertasUsoDeMemoria
     rules:
       - alert: AltoUsoDeMemoriaMariaDBExporter
         expr: >-
@@ -49,7 +49,7 @@ groups:
           description: >-
             El uso promedio de RAM en el Exportador de MariaDB ha superado los 1
             MB en los últimos 5 minutos.
-  - name: AlertasDeFileDescriptorsAbiertos
+  - name: AlertasFileDescriptorsAbiertos
     rules:
       - alert: FileDescriptorsAbiertosAltosMariaDB
         expr: process_open_fds{instance="mariadb-exporter:9104"} > 1000
@@ -61,7 +61,7 @@ groups:
           description: >-
             El número de File Descriptors abiertos por el exportador de MariaDB
             ha superado los 1000 en los últimos 60 segundos.
-  - name: AlertasDeOperacionesMariaDB
+  - name: AlertasOperacionesMariaDB
     rules:
       - alert: OperacionesDeEliminacionAltasMariaDB
         expr: rate(mysql_global_status_commands_total{command="delete"}[5m]) > 100

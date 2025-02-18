@@ -9,7 +9,7 @@ groups:
         annotations:
           summary: ElExportadorDeMongoEstaCaido
           description: El exportador de Mongo ha estado caído por más de 1 minuto.
-  - name: AlertasDeUsoDeCPU
+  - name: AlertasUsoDeCPU
     rules:
       - alert: ExportadorAltoUsoDeCPUMongoDB
         expr: >-
@@ -23,7 +23,7 @@ groups:
           description: >-
             El uso promedio de CPU en el exportador de Mongo ha superado el 5%
             en los últimos 5 minutos.
-  - name: AlertasDeUsoDeMemoria
+  - name: AlertasUsoDeMemoria
     rules:
       - alert: ExportadorAltoUsoDeMemoriaMongoDB
         expr: >-
@@ -37,7 +37,7 @@ groups:
           description: >-
             El uso promedio de RAM en el exportador de Mongo ha superado 1 MB
             en los últimos 5 minutos.
-  - name: AlertasDeConexionesActivas
+  - name: AlertasConexionesActivas
     rules:
       - alert: ConexionesActivasAltasMongoDB
         expr: >-
@@ -50,7 +50,7 @@ groups:
           description: >-
             El número de conexiones activas en MongoDB ha superado las 3
             en los últimos 60 segundos.
-  - name: AlertasDeFileDescriptorsAbiertos
+  - name: AlertasFileDescriptorsAbiertos
     rules:
       - alert: FileDescriptorsAbiertosAltosMongoDB
         expr: process_open_fds{instance="mongo-exporter:9216"} > 1000
@@ -62,7 +62,7 @@ groups:
           description: >-
             El número de File Descriptors abiertos por el exportador de MongoDB
             ha superado los 1000 en los últimos 60 segundos.
-  - name: AlertasDeOperacionesMongoDB
+  - name: AlertasOperacionesMongoDB
     rules:
       - alert: OperacionesDeEliminacionAltasMongoDB
         expr: rate(mongodb_op_counters_total{type="delete"}[5m]) > 100
@@ -75,22 +75,20 @@ groups:
             Se han detectado más de 100 operaciones de eliminación por segundo
             en MongoDB en los últimos 5 minutos.
       - alert: OperacionesDeActualizacionAltasMongoDB
-        expr: rate(mongodb_op_counters_total{type="update"}[5m]) > 100
+        expr: mongodb_op_counters_total{type="update"} > 100
         for: 1m
         labels:
           severity: warning
         annotations:
           summary: AltoNumeroDeOperacionesDeActualizacionEnMongoDB
           description: >-
-            Se han detectado más de 100 operaciones de actualización por segundo
-            en MongoDB en los últimos 5 minutos.
+            Se han detectado más de 100 operaciones de actualización en MongoDB
       - alert: OperacionesDeInsercionAltasMongoDB
-        expr: rate(mongodb_op_counters_total{type="insert"}[5m]) > 100
+        expr: mongodb_op_counters_total{type="insert"}) > 100
         for: 1m
         labels:
           severity: warning
         annotations:
           summary: AltoNumeroDeOperacionesDeInsercionEnMongoDB
           description: >-
-            Se han detectado más de 100 operaciones de inserción por segundo en MongoDB
-            en los últimos 5 minutos.
+            Se han detectado más de 100 operaciones de inserción en MongoDB

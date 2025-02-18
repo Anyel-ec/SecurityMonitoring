@@ -40,7 +40,7 @@ groups:
   - name: AlertasDeConexionesActivas
     rules:
       - alert: ConexionesActivasPostgres
-        expr: sum(pg_stat_activity_count) > 3
+        expr: sum(pg_stat_activity_count) > 13
         for: 1m
         labels:
           severity: warning
@@ -64,36 +64,33 @@ groups:
   - name: AlertasDeOperacionesDeEliminacion
     rules:
       - alert: OperacionesDeEliminacionAltasPostgres
-        expr: rate(pg_stat_user_tables_n_tup_del[5m]) > 100
+        expr: pg_stat_user_tables_n_tup_del > 100
         for: 1m
         labels:
           severity: info
         annotations:
           summary: AltoNumeroDeOperacionesDeEliminacionEnPostgres
           description: >-
-            Se han detectado más de 100 eliminaciones por segundo en PostgreSQL
-            en los últimos 5 minutos.
+            Se han detectado más de 100 eliminaciones  en PostgreSQL
   - name: AlertasDeOperacionesDeActualizacion
     rules:
       - alert: OperacionesDeActualizacionAltasPostgres
-        expr: rate(pg_stat_user_tables_n_tup_upd[5m]) > 100
+        expr: pg_stat_user_tables_n_tup_upd > 100
         for: 1m
         labels:
           severity: info
         annotations:
           summary: AltoNumeroDeOperacionesDeActualizacionEnPostgres
           description: >-
-            Se han detectado más de 100 operaciones de actualización por segundo
-            en PostgreSQL en los últimos 5 minutos.
-  - name: AlertasDeOperacionesDeInsercion
+            Se han detectado más de 100 operaciones de actualización en PostgreSQL.
+  - name: AlertasOperacionesInsercion
     rules:
       - alert: OperacionesDeInsercionAltasPostgres
-        expr: rate(pg_stat_user_tables_n_tup_ins[5m]) > 100
+        expr: pg_stat_user_tables_n_tup_ins > 100
         for: 1m
         labels:
           severity: info
         annotations:
           summary: AltoNumeroDeOperacionesDeInsercionEnPostgres
           description: >-
-            Se han detectado más de 100 operaciones de inserción por segundo en
-            PostgreSQL en los últimos 5 minutos.
+            Se han detectado más de 100 operaciones de inserción en PostgreSQL en los últimos 5 minutos.

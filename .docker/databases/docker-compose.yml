@@ -4,6 +4,7 @@ services:
 
   postgresql_db:
     image: postgres:latest
+    restart: unless-stopped
     volumes:
       - postgres_data:/var/lib/postgresql/data
     environment:
@@ -16,6 +17,7 @@ services:
     image: mariadb:latest
     volumes:
       - mariadb_data:/var/lib/mysql
+    restart: unless-stopped
     environment:
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
@@ -27,6 +29,7 @@ services:
     image: mongo:latest
     volumes:
       - mongodb_data:/data/db
+    restart: unless-stopped
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
