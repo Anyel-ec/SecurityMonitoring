@@ -52,7 +52,7 @@ groups:
   - name: AlertasFileDescriptorsAbiertos
     rules:
       - alert: FileDescriptorsAbiertosAltosMariaDB
-        expr: process_open_fds{instance="mariadb-exporter:9104"} > 1000
+        expr: process_open_fds{instance="mariadb-exporter:9104"} > 3
         for: 1m
         labels:
           severity: info
@@ -60,36 +60,33 @@ groups:
           summary: Alto número de File Descriptors abiertos en MariaDB Exporter
           description: >-
             El número de File Descriptors abiertos por el exportador de MariaDB
-            ha superado los 1000 en los últimos 60 segundos.
+            ha superado los 3 en los últimos 60 segundos.
   - name: AlertasOperacionesMariaDB
     rules:
       - alert: OperacionesDeEliminacionAltasMariaDB
-        expr: rate(mysql_global_status_commands_total{command="delete"}[5m]) > 100
+        expr: mysql_global_status_commands_total{command="delete"} > 100
         for: 1m
         labels:
           severity: warning
         annotations:
           summary: Alto número de operaciones de eliminación en MariaDB
           description: >-
-            Se han detectado más de 100 operaciones de eliminación por segundo
-            en MariaDB en los últimos 5 minutos.
+            Se han detectado más de 100 operaciones de eliminación en MariaDB
       - alert: OperacionesDeActualizacionAltasMariaDB
-        expr: rate(mysql_global_status_commands_total{command="update"}[5m]) > 100
+        expr: mysql_global_status_commands_total{command="update"} > 100
         for: 1m
         labels:
           severity: critical
         annotations:
           summary: Alto número de operaciones de actualización en MariaDB
           description: >-
-            Se han detectado más de 100 operaciones de actualización por segundo
-            en MariaDB en los últimos 5 minutos.
+            Se han detectado más de 100 operaciones de actualización   en MariaDB
       - alert: OperacionesDeInsercionAltasMariaDB
-        expr: rate(mysql_global_status_commands_total{command="insert"}[5m]) > 100
+        expr: mysql_global_status_commands_total{command="insert"} > 100
         for: 1m
         labels:
           severity: critical
         annotations:
           summary: Alto número de operaciones de inserción en MariaDB
           description: >-
-            Se han detectado más de 100 operaciones de inserción por segundo en
-            MariaDB en los últimos 5 minutos.
+            Se han detectado más de 100 operaciones de inserción en   MariaDB
