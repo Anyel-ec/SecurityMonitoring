@@ -1,0 +1,676 @@
+{
+    "expediente": "61294",
+    "ruc": "1792261848001",
+    "fechaConstitucion": "2010-07-13",
+    "nacionalidad": "ECUADOR",
+    "plazoSocial": "2060-07-13",
+    "oficinaControl": "QUITO",
+    "provincia": "PICHINCHA                                         ",
+    "canton": "QUITO                                   ",
+    "ciudad": "QUITO                                             ",
+    "parroquia": "",
+    "calle": "Alonso de Torres",
+    "numero": "LC 08",
+    "interseccion": "AV DEL PARQUE",
+    "ciudadela": "",
+    "conjunto": "",
+    "edificio": "CENTRO COMERCIAL EL BOSQUE",
+    "barrio": "El Bosque",
+    "kilometro": "",
+    "camino": "",
+    "piso": "C 08",
+    "bloque": "",
+    "referencia": "DIAGONAL A MUEBLES COLINEAL",
+    "casilleroPostal": "",
+    "celular": "0996540804",
+    "telefono1": "023922169   ",
+    "telefono2": "023963110",
+    "sitioWeb": "www.securitydata.net.ec",
+    "correo1": "contabilidad@securitydata.net.ec",
+    "correo2": "carlos.delgado@securitydata.net.ec",
+    "esProveedorEstado": "NO",
+    "ofreceServicioRemesa": "NO",
+    "vendeCredito": "NO",
+    "perteneceMV": "NO",
+    "essociedadInteresPublico": "NO",
+    "esCompaniaBIC": "NO",
+    "anioDesdeBIC": "NO APLICA",
+    "areasImpactoBIC": "NO APLICA",
+    "disposicionJudicial": "NINGUNA",
+    "fechaActualizacionSocietaria": "2024-11-21 16:17:50",
+    "capitalSuscrito": "1.200.000,00",
+    "capitalAutorizado": "0,00",
+    "valorNominalAcciones": "10,0000",
+    "listaAccionistas": [
+        {
+            "id": "1791380150001",
+            "nombre": "J-R ELECTRIC SUPPLY CIA.",
+            "pais": "ECUADOR",
+            "nacionalidad": "NACIONAL",
+            "participacion": "288.000,0000",
+            "detalle": "N"
+        },
+        {
+            "id": "0991327371001",
+            "nombre": "TELCONET S.A.",
+            "pais": "ECUADOR",
+            "nacionalidad": "NACIONAL",
+            "participacion": "480.000,0000",
+            "detalle": "N"
+        },
+        {
+            "id": "0992712805001",
+            "nombre": "TORSONUL S.A.",
+            "pais": "ECUADOR",
+            "nacionalidad": "NACIONAL",
+            "participacion": "432.000,0000",
+            "detalle": "N"
+        }
+    ],
+    "administradores": [
+        {
+            "identificacion": "0907168991",
+            "nombre": "SANTANA VILLAMAR CESAR NAPOLEON",
+            "nacionalidad": "ECUADOR",
+            "cargo": "GERENTE GENERAL",
+            "fechaNombramiento": "2024-08-05",
+            "periodo": "2",
+            "numeroRegistroMercantil": "13372",
+            "fechaRegistroMercantil": "2024-08-14",
+            "rL_O_ADM": "RL"
+        },
+        {
+            "identificacion": "1703837862",
+            "nombre": "KROCHIN LAPENTTY IGOR",
+            "nacionalidad": "ECUADOR",
+            "cargo": "PRESIDENTE",
+            "fechaNombramiento": "2024-08-05",
+            "periodo": "2",
+            "numeroRegistroMercantil": "18130",
+            "fechaRegistroMercantil": "2024-11-18",
+            "rL_O_ADM": "ADM"
+        }
+    ],
+    "administradorAnterios": [
+        {
+            "identificacion": "0907168991",
+            "nombre": "SANTANA VILLAMAR CESAR NAPOLEON",
+            "nacionalidad": "ECUADOR",
+            "cargo": "GERENTE GENERAL",
+            "fechaNombramiento": "2022-02-11",
+            "periodo": "2",
+            "numeroRegistroMercantil": "3691",
+            "fechaRegistroMercantil": "2022-02-28",
+            "rL_O_ADM": "RL"
+        },
+        {
+            "identificacion": "0907168991",
+            "nombre": "SANTANA VILLAMAR CESAR NAPOLEON",
+            "nacionalidad": "ECUADOR",
+            "cargo": "GERENTE GENERAL",
+            "fechaNombramiento": "2020-02-11",
+            "periodo": "2",
+            "numeroRegistroMercantil": "3795",
+            "fechaRegistroMercantil": "2020-02-14",
+            "rL_O_ADM": "RL"
+        },
+        {
+            "identificacion": "1802235067",
+            "nombre": "AREVALO MEJIA ROOSEVELT EFRAIN",
+            "nacionalidad": "ECUADOR",
+            "cargo": "GERENTE GENERAL",
+            "fechaNombramiento": "2018-07-08",
+            "periodo": "2",
+            "numeroRegistroMercantil": "19471",
+            "fechaRegistroMercantil": "2018-12-06",
+            "rL_O_ADM": "RL"
+        },
+        {
+            "identificacion": "1802235067",
+            "nombre": "AREVALO MEJIA ROOSEVELT EFRAIN",
+            "nacionalidad": "ECUADOR",
+            "cargo": "GERENTE GENERAL",
+            "fechaNombramiento": "2016-07-08",
+            "periodo": "2",
+            "numeroRegistroMercantil": "12167",
+            "fechaRegistroMercantil": "2016-08-16",
+            "rL_O_ADM": "RL"
+        },
+        {
+            "identificacion": "1802235067",
+            "nombre": "AREVALO MEJIA ROOSEVELT EFRAIN",
+            "nacionalidad": "ECUADOR",
+            "cargo": "GERENTE GENERAL",
+            "fechaNombramiento": "2014-07-15",
+            "periodo": "2",
+            "numeroRegistroMercantil": "10476",
+            "fechaRegistroMercantil": "2014-07-30",
+            "rL_O_ADM": "RL"
+        }
+    ],
+    "actoJuridicos": [
+        {
+            "nombre": "CONSTITUCIÓN",
+            "numeroResolucion": "2770",
+            "fechaResolucion": "2010-07-09",
+            "numeroRegistroMercantil": "2246",
+            "fechaRegistroMercantil": "2010-07-13",
+            "fechaIngreso": "2010-07-19"
+        },
+        {
+            "nombre": "AUMENTO DE CAPITAL",
+            "numeroResolucion": "",
+            "fechaResolucion": "",
+            "numeroRegistroMercantil": "7885",
+            "fechaRegistroMercantil": "2021-05-04",
+            "fechaIngreso": "2021-06-03"
+        },
+        {
+            "nombre": "AUMENTO DE CAPITAL",
+            "numeroResolucion": "",
+            "fechaResolucion": "",
+            "numeroRegistroMercantil": "22746",
+            "fechaRegistroMercantil": "2021-12-01",
+            "fechaIngreso": "2023-05-03"
+        },
+        {
+            "nombre": "AUMENTO DE CAPITAL",
+            "numeroResolucion": "",
+            "fechaResolucion": "",
+            "numeroRegistroMercantil": "15837",
+            "fechaRegistroMercantil": "2023-09-21",
+            "fechaIngreso": "2023-10-05"
+        },
+        {
+            "nombre": "AUMENTO DE CAPITAL",
+            "numeroResolucion": "",
+            "fechaResolucion": "",
+            "numeroRegistroMercantil": "2702",
+            "fechaRegistroMercantil": "2024-02-20",
+            "fechaIngreso": "2024-05-28"
+        }
+    ],
+    "cco": {
+        "companyName": null,
+        "ruc": null,
+        "expediente": null,
+        "legalRepresentative": null,
+        "capitalSocial": null,
+        "legalStatus": null,
+        "obligationCompliance": null
+    },
+    "documentosGenerales": null,
+    "documentosJuridicos": null,
+    "documentosEconomicos": null,
+    "valoresPagados": null,
+    "beneficiarioFinals": [
+        {
+            "numero": "1.",
+            "identificacion": "1791380150001",
+            "nombre": "J-R ELECTRIC SUPPLY CIA.",
+            "nacionalidad": "ECUADOR",
+            "tipoInversion": "NACIONAL",
+            "valor": "288.000,0000",
+            "restriccion": "N"
+        },
+        {
+            "numero": "2.",
+            "identificacion": "0991327371001",
+            "nombre": "TELCONET S.A.",
+            "nacionalidad": "ECUADOR",
+            "tipoInversion": "NACIONAL",
+            "valor": "480.000,0000",
+            "restriccion": "N"
+        },
+        {
+            "numero": "2.1.",
+            "identificacion": "0905396180",
+            "nombre": "TOPIC GRANADOS MARION TOMISLAV",
+            "nacionalidad": "ECUADOR",
+            "tipoInversion": "NACIONAL",
+            "valor": "",
+            "restriccion": ""
+        },
+        {
+            "numero": "3.",
+            "identificacion": "0992712805001",
+            "nombre": "TORSONUL S.A.",
+            "nacionalidad": "ECUADOR",
+            "tipoInversion": "NACIONAL",
+            "valor": "432.000,0000",
+            "restriccion": "N"
+        },
+        {
+            "numero": "3.1.",
+            "identificacion": "0911462240",
+            "nombre": "OYOLA MONROY ALEXANDRA MARIBEL",
+            "nacionalidad": "ECUADOR",
+            "tipoInversion": "NACIONAL",
+            "valor": "",
+            "restriccion": ""
+        },
+        {
+            "numero": "3.2.",
+            "identificacion": "1726497868",
+            "nombre": "SANTANA OYOLA CESAR ANDRES",
+            "nacionalidad": "ECUADOR",
+            "tipoInversion": "NACIONAL",
+            "valor": "",
+            "restriccion": ""
+        },
+        {
+            "numero": "3.3.",
+            "identificacion": "1723422000",
+            "nombre": "SANTANA OYOLA DANIEL ALEJANDRO",
+            "nacionalidad": "ECUADOR",
+            "tipoInversion": "NACIONAL",
+            "valor": "",
+            "restriccion": ""
+        },
+        {
+            "numero": "3.4.",
+            "identificacion": "1727370197",
+            "nombre": "SANTANA OYOLA LEONARDO DAVID",
+            "nacionalidad": "ECUADOR",
+            "tipoInversion": "NACIONAL",
+            "valor": "",
+            "restriccion": ""
+        },
+        {
+            "numero": "3.5.",
+            "identificacion": "0907168991",
+            "nombre": "SANTANA VILLAMAR CESAR NAPOLEON",
+            "nacionalidad": "ECUADOR",
+            "tipoInversion": "NACIONAL",
+            "valor": "",
+            "restriccion": ""
+        }
+    ],
+    "listakardexAccionistas": [
+        {
+            "no": "1",
+            "identificacion": "0991327371001",
+            "tipoIdentificacion": "RUC",
+            "nombre": "TELCONET S.A.",
+            "transaccion": "SUSCRIPCIÓN POR CONSTITUCIÓN",
+            "fechaRegistro": "2010/07/19 13:25:21",
+            "fechaResolucion": "2010/07/09",
+            "tipoInversion": "NACIONAL",
+            "valor": "4.000,0000",
+            "fechaEnLibros": ""
+        },
+        {
+            "no": "2",
+            "identificacion": "1791380150001",
+            "tipoIdentificacion": "RUC",
+            "nombre": "J-R ELECTRIC SUPPLY CIA.",
+            "transaccion": "SUSCRIPCIÓN POR CONSTITUCIÓN",
+            "fechaRegistro": "2010/07/19 13:25:21",
+            "fechaResolucion": "2010/07/09",
+            "tipoInversion": "NACIONAL",
+            "valor": "6.000,0000",
+            "fechaEnLibros": ""
+        },
+        {
+            "no": "",
+            "identificacion": "",
+            "tipoIdentificacion": "",
+            "nombre": "",
+            "transaccion": "",
+            "fechaRegistro": "",
+            "fechaResolucion": "SUBTOTAL DEL MOVIMIENTO:",
+            "tipoInversion": "CONSTITUCIÓN",
+            "valor": "10.000,0000",
+            "fechaEnLibros": ""
+        },
+        {
+            "no": "3",
+            "identificacion": "1791380150001",
+            "tipoIdentificacion": "RUC",
+            "nombre": "J-R ELECTRIC SUPPLY CIA.",
+            "transaccion": "VENTA",
+            "fechaRegistro": "2015/05/19 12:37:03",
+            "fechaResolucion": "",
+            "tipoInversion": "NACIONAL",
+            "valor": "-3.600,0000",
+            "fechaEnLibros": "2015/04/22"
+        },
+        {
+            "no": "4",
+            "identificacion": "0907168991",
+            "tipoIdentificacion": "CEDULA",
+            "nombre": "SANTANA VILLAMAR CESAR NAPOLEON",
+            "transaccion": "COMPRA",
+            "fechaRegistro": "2015/05/19 12:37:03",
+            "fechaResolucion": "",
+            "tipoInversion": "NACIONAL",
+            "valor": "3.600,0000",
+            "fechaEnLibros": "2015/04/22"
+        },
+        {
+            "no": "",
+            "identificacion": "",
+            "tipoIdentificacion": "",
+            "nombre": "",
+            "transaccion": "",
+            "fechaRegistro": "",
+            "fechaResolucion": "SUBTOTAL DEL MOVIMIENTO:",
+            "tipoInversion": "TRANSFERENCIA DE ACCIONES",
+            "valor": "0,0000",
+            "fechaEnLibros": ""
+        },
+        {
+            "no": "5",
+            "identificacion": "0907168991",
+            "tipoIdentificacion": "CEDULA",
+            "nombre": "SANTANA VILLAMAR CESAR NAPOLEON",
+            "transaccion": "VENTA",
+            "fechaRegistro": "2017/03/23 12:59:08",
+            "fechaResolucion": "",
+            "tipoInversion": "NACIONAL",
+            "valor": "-3.600,0000",
+            "fechaEnLibros": "2017/03/14"
+        },
+        {
+            "no": "6",
+            "identificacion": "0992712805001",
+            "tipoIdentificacion": "RUC",
+            "nombre": "TORSONUL S.A.",
+            "transaccion": "COMPRA",
+            "fechaRegistro": "2017/03/23 12:59:08",
+            "fechaResolucion": "",
+            "tipoInversion": "NACIONAL",
+            "valor": "3.600,0000",
+            "fechaEnLibros": "2017/03/14"
+        },
+        {
+            "no": "",
+            "identificacion": "",
+            "tipoIdentificacion": "",
+            "nombre": "",
+            "transaccion": "",
+            "fechaRegistro": "",
+            "fechaResolucion": "SUBTOTAL DEL MOVIMIENTO:",
+            "tipoInversion": "TRANSFERENCIA DE ACCIONES",
+            "valor": "0,0000",
+            "fechaEnLibros": ""
+        },
+        {
+            "no": "7",
+            "identificacion": "1791380150001",
+            "tipoIdentificacion": "RUC",
+            "nombre": "J-R ELECTRIC SUPPLY CIA.",
+            "transaccion": "SUSCRIPCIÓN POR AUMENTO",
+            "fechaRegistro": "2021/06/03 15:29:34",
+            "fechaResolucion": "",
+            "tipoInversion": "NACIONAL",
+            "valor": "42.960,0000",
+            "fechaEnLibros": ""
+        },
+        {
+            "no": "8",
+            "identificacion": "0991327371001",
+            "tipoIdentificacion": "RUC",
+            "nombre": "TELCONET S.A.",
+            "transaccion": "SUSCRIPCIÓN POR AUMENTO",
+            "fechaRegistro": "2021/06/03 15:29:34",
+            "fechaResolucion": "",
+            "tipoInversion": "NACIONAL",
+            "valor": "71.600,0000",
+            "fechaEnLibros": ""
+        },
+        {
+            "no": "9",
+            "identificacion": "0992712805001",
+            "tipoIdentificacion": "RUC",
+            "nombre": "TORSONUL S.A.",
+            "transaccion": "SUSCRIPCIÓN POR AUMENTO",
+            "fechaRegistro": "2021/06/03 15:29:34",
+            "fechaResolucion": "",
+            "tipoInversion": "NACIONAL",
+            "valor": "64.440,0000",
+            "fechaEnLibros": ""
+        },
+        {
+            "no": "",
+            "identificacion": "",
+            "tipoIdentificacion": "",
+            "nombre": "",
+            "transaccion": "",
+            "fechaRegistro": "",
+            "fechaResolucion": "SUBTOTAL DEL MOVIMIENTO:",
+            "tipoInversion": "AUMENTO DE CAPITAL",
+            "valor": "179.000,0000",
+            "fechaEnLibros": ""
+        },
+        {
+            "no": "10",
+            "identificacion": "1791380150001",
+            "tipoIdentificacion": "RUC",
+            "nombre": "J-R ELECTRIC SUPPLY CIA.",
+            "transaccion": "SUSCRIPCIÓN POR AUMENTO",
+            "fechaRegistro": "2023/05/03 10:20:15",
+            "fechaResolucion": "",
+            "tipoInversion": "NACIONAL",
+            "valor": "42.000,0000",
+            "fechaEnLibros": ""
+        },
+        {
+            "no": "11",
+            "identificacion": "0991327371001",
+            "tipoIdentificacion": "RUC",
+            "nombre": "TELCONET S.A.",
+            "transaccion": "SUSCRIPCIÓN POR AUMENTO",
+            "fechaRegistro": "2023/05/03 10:20:15",
+            "fechaResolucion": "",
+            "tipoInversion": "NACIONAL",
+            "valor": "70.000,0000",
+            "fechaEnLibros": ""
+        },
+        {
+            "no": "12",
+            "identificacion": "0992712805001",
+            "tipoIdentificacion": "RUC",
+            "nombre": "TORSONUL S.A.",
+            "transaccion": "SUSCRIPCIÓN POR AUMENTO",
+            "fechaRegistro": "2023/05/03 10:20:15",
+            "fechaResolucion": "",
+            "tipoInversion": "NACIONAL",
+            "valor": "63.000,0000",
+            "fechaEnLibros": ""
+        },
+        {
+            "no": "",
+            "identificacion": "",
+            "tipoIdentificacion": "",
+            "nombre": "",
+            "transaccion": "",
+            "fechaRegistro": "",
+            "fechaResolucion": "SUBTOTAL DEL MOVIMIENTO:",
+            "tipoInversion": "AUMENTO DE CAPITAL",
+            "valor": "175.000,0000",
+            "fechaEnLibros": ""
+        },
+        {
+            "no": "13",
+            "identificacion": "1791380150001",
+            "tipoIdentificacion": "RUC",
+            "nombre": "J-R ELECTRIC SUPPLY CIA.",
+            "transaccion": "SUSCRIPCIÓN POR AUMENTO",
+            "fechaRegistro": "2023/10/05 15:34:41",
+            "fechaResolucion": "",
+            "tipoInversion": "NACIONAL",
+            "valor": "80.640,0000",
+            "fechaEnLibros": ""
+        },
+        {
+            "no": "14",
+            "identificacion": "0991327371001",
+            "tipoIdentificacion": "RUC",
+            "nombre": "TELCONET S.A.",
+            "transaccion": "SUSCRIPCIÓN POR AUMENTO",
+            "fechaRegistro": "2023/10/05 15:34:41",
+            "fechaResolucion": "",
+            "tipoInversion": "NACIONAL",
+            "valor": "134.400,0000",
+            "fechaEnLibros": ""
+        },
+        {
+            "no": "15",
+            "identificacion": "0992712805001",
+            "tipoIdentificacion": "RUC",
+            "nombre": "TORSONUL S.A.",
+            "transaccion": "SUSCRIPCIÓN POR AUMENTO",
+            "fechaRegistro": "2023/10/05 15:34:41",
+            "fechaResolucion": "",
+            "tipoInversion": "NACIONAL",
+            "valor": "120.960,0000",
+            "fechaEnLibros": ""
+        },
+        {
+            "no": "",
+            "identificacion": "",
+            "tipoIdentificacion": "",
+            "nombre": "",
+            "transaccion": "",
+            "fechaRegistro": "",
+            "fechaResolucion": "SUBTOTAL DEL MOVIMIENTO:",
+            "tipoInversion": "AUMENTO DE CAPITAL",
+            "valor": "336.000,0000",
+            "fechaEnLibros": ""
+        },
+        {
+            "no": "16",
+            "identificacion": "1791380150001",
+            "tipoIdentificacion": "RUC",
+            "nombre": "J-R ELECTRIC SUPPLY CIA.",
+            "transaccion": "SUSCRIPCIÓN POR AUMENTO",
+            "fechaRegistro": "2024/05/28 16:34:10",
+            "fechaResolucion": "",
+            "tipoInversion": "NACIONAL",
+            "valor": "120.000,0000",
+            "fechaEnLibros": ""
+        },
+        {
+            "no": "17",
+            "identificacion": "0991327371001",
+            "tipoIdentificacion": "RUC",
+            "nombre": "TELCONET S.A.",
+            "transaccion": "SUSCRIPCIÓN POR AUMENTO",
+            "fechaRegistro": "2024/05/28 16:34:10",
+            "fechaResolucion": "",
+            "tipoInversion": "NACIONAL",
+            "valor": "200.000,0000",
+            "fechaEnLibros": ""
+        },
+        {
+            "no": "18",
+            "identificacion": "0992712805001",
+            "tipoIdentificacion": "RUC",
+            "nombre": "TORSONUL S.A.",
+            "transaccion": "SUSCRIPCIÓN POR AUMENTO",
+            "fechaRegistro": "2024/05/28 16:34:10",
+            "fechaResolucion": "",
+            "tipoInversion": "NACIONAL",
+            "valor": "180.000,0000",
+            "fechaEnLibros": ""
+        },
+        {
+            "no": "",
+            "identificacion": "",
+            "tipoIdentificacion": "",
+            "nombre": "",
+            "transaccion": "",
+            "fechaRegistro": "",
+            "fechaResolucion": "SUBTOTAL DEL MOVIMIENTO:",
+            "tipoInversion": "AUMENTO DE CAPITAL",
+            "valor": "500.000,0000",
+            "fechaEnLibros": ""
+        },
+        {
+            "no": "",
+            "identificacion": "",
+            "tipoIdentificacion": "",
+            "nombre": "",
+            "transaccion": "",
+            "fechaRegistro": "",
+            "fechaResolucion": "",
+            "tipoInversion": "TOTAL DEL KÁRDEX DE SOCIOS / ACCIONISTAS:",
+            "valor": "1.200.000,0000",
+            "fechaEnLibros": ""
+        }
+    ],
+    "informacionAnuals": [
+        {
+            "anio": "2023",
+            "codigoDocumento": "3.1.1",
+            "nombreDocumento": "Balance / Estado de Situación Financiera",
+            "fechaPresentacion": "2024-05-06",
+            "pdfLink": "#"
+        },
+        {
+            "anio": "2023",
+            "codigoDocumento": "3.1.2",
+            "nombreDocumento": "Auditoria Externa",
+            "fechaPresentacion": "2024-05-06",
+            "pdfLink": "#"
+        },
+        {
+            "anio": "2023",
+            "codigoDocumento": "3.1.3",
+            "nombreDocumento": "Nómina de Socios / Accionistas",
+            "fechaPresentacion": "2024-05-06",
+            "pdfLink": "#"
+        },
+        {
+            "anio": "2023",
+            "codigoDocumento": "3.1.5",
+            "nombreDocumento": "Informe de Gerente",
+            "fechaPresentacion": "2024-05-06",
+            "pdfLink": "#"
+        },
+        {
+            "anio": "2023",
+            "codigoDocumento": "3.1.6",
+            "nombreDocumento": "Informe de Comisario",
+            "fechaPresentacion": "2024-05-06",
+            "pdfLink": "#"
+        },
+        {
+            "anio": "2023",
+            "codigoDocumento": "3.1.8",
+            "nombreDocumento": "Nómina de Administradores",
+            "fechaPresentacion": "2024-05-06",
+            "pdfLink": "#"
+        },
+        {
+            "anio": "2023",
+            "codigoDocumento": "3.1.9",
+            "nombreDocumento": "RUC",
+            "fechaPresentacion": "2024-05-06",
+            "pdfLink": "#"
+        },
+        {
+            "anio": "2023",
+            "codigoDocumento": "3.1.A",
+            "nombreDocumento": "Estado de Resultado Integral",
+            "fechaPresentacion": "2024-05-06",
+            "pdfLink": "#"
+        },
+        {
+            "anio": "2023",
+            "codigoDocumento": "3.1.B",
+            "nombreDocumento": "Estado de Cambios en el Patrimonio",
+            "fechaPresentacion": "2024-05-06",
+            "pdfLink": "#"
+        },
+        {
+            "anio": "2023",
+            "codigoDocumento": "3.1.C",
+            "nombreDocumento": "Estado de Flujos de Efectivo",
+            "fechaPresentacion": "2024-05-06",
+            "pdfLink": "#"
+        }
+    ],
+    "razonSocial": "61294 - 1792261848001 - SECURITY DATA SEGURIDAD EN DATOS Y FIRMA DIGITAL S.A."
+}

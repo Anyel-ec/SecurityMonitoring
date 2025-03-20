@@ -47,7 +47,7 @@ groups:
         annotations:
           summary: ConexionesActivasEnPostgresDetectadas
           description: >-
-            Se han detectado más de 3 conexiones activas en PostgreSQL en los
+            Se han detectado más de 13 conexiones activas en PostgreSQL en los
             últimos 60 segundos.
   - name: AlertasDeFileDescriptorsAbiertos
     rules:
@@ -60,7 +60,7 @@ groups:
           summary: AltoNumeroDeFileDescriptorsAbiertosEnPostgresExportador
           description: >-
             El número de File Descriptors abiertos por el Exportador de Postgres
-            ha superado los 1000 en los últimos 60 segundos.
+            ha superado los 10 en los últimos 60 segundos.
   - name: AlertasDeOperacionesDeEliminacion
     rules:
       - alert: OperacionesDeEliminacionAltasPostgres

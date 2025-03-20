@@ -1,10 +1,5 @@
 package ec.edu.espe.security.monitoring.models;
 
-/*
- * Author: Anyel EC
- * Github: https://github.com/Anyel-ec
- * Creation date: 02/01/2025
- */
 import ec.edu.espe.security.monitoring.modules.features.auth.model.UserInfo;
 import ec.edu.espe.security.monitoring.modules.features.auth.model.UserRole;
 import org.junit.jupiter.api.Test;
@@ -18,7 +13,6 @@ class UserInfoTest {
 
     @Test
     void testUserInfoBuilderAndAttributes() {
-        // Create roles for the user
         UserRole adminRole = UserRole.builder()
                 .name("Admin")
                 .description("Administrator role")
@@ -29,8 +23,8 @@ class UserInfoTest {
         Set<UserRole> roles = new HashSet<>();
         roles.add(adminRole);
 
-        // Create the user with the builder constructor
         UserInfo user = UserInfo.builder()
+                .id(1L)
                 .username("johndoe")
                 .email("johndoe@example.com")
                 .phone("123456789")
@@ -39,7 +33,7 @@ class UserInfoTest {
                 .roles(roles)
                 .build();
 
-        // Verify the attributes
+        assertEquals(1L, user.getId());
         assertEquals("johndoe", user.getUsername());
         assertEquals("johndoe@example.com", user.getEmail());
         assertEquals("123456789", user.getPhone());
@@ -49,10 +43,21 @@ class UserInfoTest {
     }
 
     @Test
+    void testEqualsAndHashCode() {
+        UserInfo user1 = UserInfo.builder().id(1L).build();
+        UserInfo user2 = UserInfo.builder().id(1L).build();
+        UserInfo user3 = UserInfo.builder().id(2L).build();
+
+        assertEquals(user1, user2); // Mismo ID -> Deben ser iguales
+        assertNotEquals(user1, user3); // ID diferente -> Deben ser distintos
+        assertEquals(user1.hashCode(), user2.hashCode()); // Mismo ID -> Mismo hash
+        assertNotEquals(user1.hashCode(), user3.hashCode()); // Diferente ID -> Diferente hash
+    }
+
+    @Test
     void testDefaultValues() {
         UserInfo user = new UserInfo();
 
-        // Verify default values
         assertNull(user.getUsername());
         assertNull(user.getEmail());
         assertNull(user.getPhone());
@@ -65,13 +70,14 @@ class UserInfoTest {
     @Test
     void testSettersAndGetters() {
         UserInfo user = new UserInfo();
+        user.setId(2L);
         user.setUsername("janedoe");
         user.setEmail("janedoe@example.com");
         user.setPhone("987654321");
         user.setPassword("anotherPassword123");
         user.setIsActive(false);
 
-        // Verify setters and getters
+        assertEquals(2L, user.getId());
         assertEquals("janedoe", user.getUsername());
         assertEquals("janedoe@example.com", user.getEmail());
         assertEquals("987654321", user.getPhone());

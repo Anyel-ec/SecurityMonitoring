@@ -86,6 +86,22 @@ class SystemParametersTest {
     }
 
     @Test
+    void testSystemParametersConstructorWithPrometheusInstall() {
+        // Create an object using the missing constructor
+        SystemParameters parameters = new SystemParameters("prometheusInstall", true);
+
+        // Verify the attributes
+        assertEquals("prometheusInstall", parameters.getName());
+        assertTrue(parameters.isActive());
+
+        // The other attributes should be null or have default values
+        assertNull(parameters.getId());
+        assertNull(parameters.getDescription());
+        assertNull(parameters.getParamValue());
+    }
+
+
+    @Test
     void testValidationForValidName() {
         // Configure the validator
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
