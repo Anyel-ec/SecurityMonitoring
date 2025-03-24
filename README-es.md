@@ -91,7 +91,6 @@ Puedes acceder al manual del administrador aquí:
 
 Puedes acceder al manual del administrador aquí:  
 📄 [Manual del Usuario (PDF)](docs/manual/User%20Manual.pdf) 
----
 
 ## Tecnologías Utilizadas  
 

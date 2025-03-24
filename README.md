@@ -89,7 +89,7 @@ You can access the developer manual here:
 
 You can access the user manual here:  
 📄 [User Manual (PDF)](docs/manual/User%20Manual.pdf) 
----
+
 
 ## Technologies Used  
 
