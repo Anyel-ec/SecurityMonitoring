@@ -82,13 +82,16 @@ The backend is developed using **Spring Boot** and leverages **Prometheus** and 
 Inside the `docs/manual` folder, you will find the corresponding manuals.  
 You can access the administrator manual here:  
 📄 [Administrator Manual (PDF)](docs/manual/Administrator%20Manual.pdf)
-
+You can access the developer manual here:  
+📄 [Developer Manual (PDF)](docs/manual/Developer%20Manual.pdf)
+You can access the user manual here:  
+📄 [User Manual (PDF)](docs/manual/User%20Manual.pdf)
 ---
 
 ## Technologies Used  
 
 - **Frontend**: React (built with Vite), React Bootstrap for dynamic form design.  
-- **Backend**: Spring Boot (in development).  
+- **Backend**: Spring Boot.  
 - **Monitoring and Visualization**: Grafana and Prometheus.  
 - **Database Management Systems**: MongoDB, PostgreSQL, MariaDB, and H2 Database.  
 - **Containers**: Docker and Docker Compose for service orchestration.  
@@ -134,7 +137,7 @@ If you wish to contribute to this project, please open an issue or submit a pull
 
 ## License
 
-This project is licensed under the [Apache License 2.0](LICENSE).
+This project is licensed under the [BSD 3-Clause "New" or "Revised" License](LICENSE).
 
 ## Team and Project Information
 

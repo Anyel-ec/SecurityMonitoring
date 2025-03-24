@@ -83,8 +83,11 @@ El backend está desarrollado con **Spring Boot** y utiliza **Prometheus** y **G
 
 Dentro de la carpeta `docs/manual` se encuentran los manuales correspondientes.  
 Puedes acceder al manual del administrador aquí:  
-📄 [Manual del Administrador (PDF)](docs/manual/Administrator%20Manual.pdf)
-
+📄 [Manual del Administrador (PDF)](docs/manual/Developer%20Manual.pdf) 
+Puedes acceder al manual del administrador aquí:  
+📄 [Manual del Desarrollador (PDF)](docs/manual/Administrator%20Manual.pdf) 
+Puedes acceder al manual del administrador aquí:  
+📄 [Manual del Usuario (PDF)](docs/manual/User%20Manual.pdf)
 ---
 
 ## Tecnologías Utilizadas  
@@ -123,7 +126,7 @@ Es importante tener **Docker iniciado** para continuar con el proceso.
 ### 4. Ejecutar el Backend  
 - Dirígete a la carpeta `Backend`  
 - Asegúrate de que las dependencias del archivo `pom.xml` se descarguen correctamente  
-- Ejecuta el proyecto desde tu entorno de desarrollo o con Maven/Gradle  
+- Ejecuta el proyecto desde tu entorno de desarrollo  con Maven
 
 ### 5. Consultar el Manual del Administrador  
 Para más detalles sobre la configuración y administración del sistema, puedes revisar el siguiente documento:  
@@ -136,7 +139,7 @@ Si deseas contribuir a este proyecto, puedes abrir un **issue** o enviar un **pu
 
 ## Licencia  
 
-Este proyecto está licenciado bajo la [Licencia Apache 2.0](LICENSE).  
+Este proyecto está licenciado bajo la [BSD 3-Clause "New" or "Revised" License](LICENSE).  
 
 ## Equipo e Información del Proyecto  
 
@@ -145,7 +148,3 @@ Herramienta open source para el monitoreo dinámico de tres bases de datos: **Mo
 **Gerente del Proyecto: Ing. Luis Chica, Mgtr** - [Perfil de GitHub](https://github.com/LuisChica18)  
 
 **Desarrollador: Ing. Angel Patiño** - [Perfil de GitHub](https://github.com/Anyel-ec)  
-
----
-
-Déjame saber si necesitas algún ajuste. 🚀
