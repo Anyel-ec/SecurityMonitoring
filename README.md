@@ -80,10 +80,13 @@ The backend is developed using **Spring Boot** and leverages **Prometheus** and 
 # Developer, Administrator, and User Manuals
 
 Inside the `docs/manual` folder, you will find the corresponding manuals.  
+
 You can access the administrator manual here:  
 📄 [Administrator Manual (PDF)](docs/manual/Administrator%20Manual.pdf) 
+
 You can access the developer manual here:   
 📄 [Developer Manual (PDF)](docs/manual/Developer%20Manual.pdf) 
+
 You can access the user manual here:  
 📄 [User Manual (PDF)](docs/manual/User%20Manual.pdf) 
 ---
