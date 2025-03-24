@@ -76,39 +76,57 @@ The backend is developed using **Spring Boot** and leverages **Prometheus** and 
 ### Grafana Dashboards - MongoDB + MariaDB/MySQL + PostgreSQL  
 ![Alt text](docs/images/release/combinado.png)
 
+
+# Developer, Administrator, and User Manuals
+
+Inside the `docs/manual` folder, you will find the corresponding manuals.  
+You can access the administrator manual here:  
+📄 [Administrator Manual (PDF)](docs/manual/Administrator%20Manual.pdf)
+
 ---
 
-## Installation and Usage
+## Technologies Used  
 
-### 1. Clone the Repository
+- **Frontend**: React (built with Vite), React Bootstrap for dynamic form design.  
+- **Backend**: Spring Boot (in development).  
+- **Monitoring and Visualization**: Grafana and Prometheus.  
+- **Database Management Systems**: MongoDB, PostgreSQL, MariaDB, and H2 Database.  
+- **Containers**: Docker and Docker Compose for service orchestration.  
+
+---
+
+## Installation and Usage  
+
+### 1. Clone the Repository  
 
 ```bash
 git clone https://github.com/Anyel-ec/SecurityMonitoring
 cd SecurityMonitoring
 ```
 
-### 2. Run the Services with Docker Compose
+### 2. Run Docker  
+Make sure **Docker is running** before proceeding with the setup.  
 
-```bash
-docker-compose up -d
-```
+### 3. Run the Frontend  
+- Navigate to the `Frontend` folder  
+- Install dependencies:  
+  ```bash
+  npm install
+  ```
+- Then start the project with:  
+  ```bash
+  npm run dev
+  ```
 
-This will launch the following services:
-- **Grafana**: Accessible at `http://localhost:3000` (username: `admin`, password: `admin`).
-- **Prometheus**: Accessible at `http://localhost:9090`.
-- **PostgreSQL Exporter**: Accessible at `http://localhost:9187`.
+### 4. Run the Backend  
+- Navigate to the `Backend` folder  
+- Make sure all dependencies from `pom.xml` are downloaded  
+- Run the project using your development environment or via Maven/Gradle  
 
-### 3. Configure Grafana
+### 5. Refer to the Administrator Manual  
+For more detailed setup and system administration instructions, please check the following document:  
+📘 [Administrator Manual (PDF)](docs/manual/Administrator%20Manual.pdf)
 
-1. Access **Grafana** at `http://localhost:3000`.
-2. Log in using the credentials (`admin/admin`).
-3. Add **Prometheus** as a data source:
-   - URL: `http://prometheus:9090`.
-4. Import the relevant dashboard to visualize the metrics for the configured databases.
-
-### 4. Next Steps
-
-The next step in development is to improve the integration with the databases, as well as automate the creation of dashboards in Grafana.
 
 ## Contributions
 

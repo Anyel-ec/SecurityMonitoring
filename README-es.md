@@ -75,15 +75,27 @@ El backend está desarrollado con **Spring Boot** y utiliza **Prometheus** y **G
 
 ### Paneles de control en Grafana - MongoDB + MariaDB/MySQL + PostgreSQL  
 ![Alt text](docs/images/release/combinado.png)
+¡Claro! Aquí tienes tu texto corregido, con redacción clara, tildes, buena estructura y con el enlace al PDF vinculado correctamente para que puedan acceder al manual:
 
+---
+
+# Manuales de Desarrollador, Administrador y Usuario
+
+Dentro de la carpeta `docs/manual` se encuentran los manuales correspondientes.  
+Puedes acceder al manual del administrador aquí:  
+📄 [Manual del Administrador (PDF)](docs/manual/Administrator%20Manual.pdf)
+
+---
 
 ## Tecnologías Utilizadas  
 
 - **Frontend**: React (creado con Vite), React Bootstrap para el diseño de formularios dinámicos.  
-- **Backend**: Spring Boot (en desarrollo).  
+- **Backend**: Spring Boot.
 - **Monitoreo y Visualización**: Grafana y Prometheus.  
-- **Sistemas de Gestion de Bases de Datos**: MongoDB, PostgreSQL y MariaDB.  
+- **Sistemas de Gestión de Bases de Datos**: MongoDB, PostgreSQL, MariaDB y H2 Database.  
 - **Contenedores**: Docker y Docker Compose para la orquestación de servicios.  
+
+---
 
 ## Instalación y Uso  
 
@@ -92,7 +104,30 @@ El backend está desarrollado con **Spring Boot** y utiliza **Prometheus** y **G
 ```bash
 git clone https://github.com/Anyel-ec/SecurityMonitoring
 cd SecurityMonitoring
-```  
+```
+
+### 2. Ejecutar Docker  
+Es importante tener **Docker iniciado** para continuar con el proceso.  
+
+### 3. Ejecutar el Frontend  
+- Dirígete a la carpeta `Frontend`  
+- Instala las dependencias:  
+  ```bash
+  npm install
+  ```
+- Luego ejecuta el proyecto:  
+  ```bash
+  npm run dev
+  ```
+
+### 4. Ejecutar el Backend  
+- Dirígete a la carpeta `Backend`  
+- Asegúrate de que las dependencias del archivo `pom.xml` se descarguen correctamente  
+- Ejecuta el proyecto desde tu entorno de desarrollo o con Maven/Gradle  
+
+### 5. Consultar el Manual del Administrador  
+Para más detalles sobre la configuración y administración del sistema, puedes revisar el siguiente documento:  
+📘 [Manual del Administrador (PDF)](docs/manual/Administrator%20Manual.pdf)
 
 
 ## Contribuciones  
