@@ -1,102 +1,82 @@
-# Open Source Tool for Monitoring MariaDB, PostgreSQL, and MongoDB Databases Using Prometheus and Grafana
+# Open Source Tool for Monitoring MariaDB, PostgreSQL, and MongoDB Databases with Prometheus and Grafana  
 
-This project aims to develop an open-source tool for dynamic monitoring of three databases: **MongoDB**, **PostgreSQL**, and **MariaDB/MySQL**. The tool allows users to specify connection credentials through a web interface in **React** and, subsequently, visualize custom dashboards in **Grafana** for one or several databases combined.
+This project aims to develop an **open-source** tool for the dynamic monitoring of three databases: **MongoDB**, **PostgreSQL**, and **MariaDB/MySQL**. The tool allows users to specify connection credentials through a **React** web interface and view personalized dashboards in **Grafana** for one or multiple combined databases.  
 
-The backend is built with **Spring Boot** and uses **Prometheus** and **Grafana** to collect and visualize the selected database metrics.
+The backend is developed using **Spring Boot** and leverages **Prometheus** and **Grafana** to collect and visualize metrics from the selected databases.  
 
-## Project Status
+## **Select Language:**
+- [Español (Spanish)](README-es.md)
+- [English](README.md)
 
-This project is under development. So far, the following has been implemented:
-- A **React** interface for entering database connection credentials.
-- Integration of **Docker Compose** with services for Grafana, Prometheus, and exporters for **PostgreSQL**, **MongoDB**, and **MariaDB**.
-- Initial monitoring and visualization configuration in **Grafana**.
+## Features  
 
-## Technologies Used
+1. **Database Connection Configuration**:  
+   - Users can specify credentials to connect **MongoDB**, **PostgreSQL**, and **MariaDB** via a dynamic form in the React application.  
+   - Supports combinations of different databases: for example, monitoring only **MongoDB**, **PostgreSQL**, or **MariaDB**, or combinations such as **MongoDB + PostgreSQL**.  
 
-- **Frontend**: React (created with Vite), React Bootstrap for designing dynamic forms.
-- **Backend**: Spring Boot (under development).
-- **Monitoring and Visualization**: Grafana and Prometheus.
-- **Databases**: MongoDB, PostgreSQL, and MariaDB.
-- **Containers**: Docker and Docker Compose for service orchestration.
+2. **Dynamic Monitoring**:  
+   - The **Spring Boot** backend receives the credentials provided by the user and configures the database connections.  
+   - Metrics are collected with **Prometheus** and visualized in **Grafana**.  
 
-## Features
+3. **Grafana Visualization**:  
+   - Preconfigured **Grafana** dashboards that activate according to the databases selected by the user.  
 
-1. **Database Connection Configuration**:
-    - Users can specify credentials to connect to **MongoDB**, **PostgreSQL**, and **MariaDB** via a dynamic form in the React app.
-    - Allows for combinations of different databases: for example, monitoring only **MongoDB**, **PostgreSQL**, or **MariaDB**, or combinations like **MongoDB+PostgreSQL**.
+4. **Notification Sending**:  
+   - Notifications are sent using **Alertmanager**.  
 
-2. **Dynamic Monitoring**:
-    - The **Spring Boot** backend receives the credentials provided by the user and configures the database connections.
-    - Metrics are collected using **Prometheus** and visualized through **Grafana**.
+## Results  
+### Welcome  
+![Alt text](docs/images/release/bienvenido.png)  
 
-3. **Visualization in Grafana**:
-    - Preconfigured dashboards in **Grafana** that are activated based on the databases selected by the user.
+### Installation of admin user, Grafana, Prometheus, and other components  
+![Alt text](docs/images/release/instalacion.png)  
 
-## Docker Compose Configuration (`docker-compose.yml`)
+### Login  
+![Alt text](docs/images/release/login_blanco.png)  
 
-The `docker-compose.yml` file is configured to start the necessary services for monitoring the databases and visualizing them in Grafana. Below is the current configuration:
+### Login (Dark mode)  
+![Alt text](docs/images/release/login.png)  
 
-```yaml
-version: '3'
+### Password recovery (Dark mode)  
+![Alt text](docs/images/release/recuperar_password.png)  
 
-services:
-  grafana:
-    image: grafana/grafana
-    ports:
-      - "${GRAFANA_PORT_EXTERNAL}:${GRAFANA_PORT_INTERNAL}"
-    environment:
-      GF_SECURITY_ADMIN_USER: "${GRAFANA_USER}"
-      GF_SECURITY_ADMIN_PASSWORD: "${GRAFANA_PASSWORD}"
-    volumes:
-      - grafana_storage:/var/lib/grafana
-    networks:
-      - monitoring
+### Credential management for Database Management Systems  
+![Alt text](docs/images/release/gestion%20de%20credenciales.png)  
 
-  prometheus:
-    image: prom/prometheus
-    volumes:
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro 
-    ports:
-      - "${PROMETHEUS_PORT_EXTERNAL}:${PROMETHEUS_PORT_INTERNAL}"
-    networks:
-      - monitoring
+### Alert activation for Database Management Systems  
+![Alt text](docs/images/release/activar%20alertas.png)  
 
-  postgres-exporter:
-    image: quay.io/prometheuscommunity/postgres-exporter
-    environment:
-      DATA_SOURCE_NAME: "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}?sslmode=disable"
-    ports:
-      - "${EXPORT_POSTGRES_PORT_EXTERNAL}:${EXPORT_POSTGRES_PORT_INTERNAL}"
-    networks:
-      - monitoring
+### Alert modification  
+![Alt text](docs/images/release/modificar%20alertas.png)  
 
-networks:
-  monitoring:
-    driver: bridge
+### Alert notifications triggered by rule conditions  
+![Alt text](docs/images/release/alertas.png)  
 
-volumes:
-  grafana_storage:
-```
+### User management  
+![Alt text](docs/images/release/gestion_usuarios.png)  
 
-This `docker-compose.yml` file configures and exposes the **Grafana**, **Prometheus**, and **Postgres Exporter** services. Ensure that the environment variables (`GRAFANA_USER`, `GRAFANA_PASSWORD`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, etc.) are properly defined in your environment or `.env` file.
+### User management (full system supports dark mode)  
+![Alt text](docs/images/release/modo%20oscuro.png)  
 
-## Prometheus Configuration (`prometheus.yml`)
+### User creation  
+![Alt text](docs/images/release/modo%20oscuro.png)  
 
-The `prometheus.yml` file is configured to monitor services for MongoDB, PostgreSQL, and MariaDB through their respective exporters.
+### User creation email received  
+![Alt text](docs/images/release/creacion%20correo.png)  
 
-```yaml
-global:
-  scrape_interval: 5s
+### Grafana Dashboards - PostgreSQL  
+![Alt text](docs/images/release/postgres.png)  
 
-scrape_configs:
-  - job_name: 'prometheus'
-    static_configs:
-      - targets: ['prometheus:9090']
+### Grafana Dashboards - MariaDB/MySQL  
+![Alt text](docs/images/release/mysql.png)  
 
-  - job_name: 'postgres'
-    static_configs:
-      - targets: ['postgres-exporter:9187']
-```
+### Grafana Dashboards - MongoDB  
+![Alt text](docs/images/release/mongodb.png)  
+
+### Grafana Dashboards - MongoDB + MariaDB/MySQL + PostgreSQL  
+![Alt text](docs/images/release/combinado.png)
+
+---
 
 ## Installation and Usage
 
